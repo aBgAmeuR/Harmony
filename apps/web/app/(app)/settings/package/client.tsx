@@ -41,7 +41,6 @@ export const Client = ({
       status: "pending" | "processing" | "done" | "error";
     }[]
   >([]);
-  const queryClient = useQueryClient();
 
   const setProgress = (progress: number) => {
     setProcessingProgress(progress);
