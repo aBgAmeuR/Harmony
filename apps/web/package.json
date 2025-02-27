@@ -12,6 +12,7 @@
   "dependencies": {
     "@repo/ui": "*",
     "@tanstack/react-query": "^5.62.7",
+    "@uploadthing/react": "^7.3.0",
     "date-fns": "^4.1.0",
     "fflate": "^0.8.2",
     "light-date": "^1.2.0",
@@ -23,6 +24,7 @@
     "react-dom": "19.0.0",
     "react-wrap-balancer": "^1.1.1",
     "recharts": "^2.14.1",
+    "uploadthing": "^7.5.2",
     "zustand": "^5.0.2"
   },
   "devDependencies": {
