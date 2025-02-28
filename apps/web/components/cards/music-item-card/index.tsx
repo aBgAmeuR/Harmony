@@ -1,3 +1,4 @@
+import { AspectRatio } from "@repo/ui/aspect-ratio";
 import { cn } from "@repo/ui/lib/utils";
 
 import { MusicItemCardAction as Action } from "./action";
@@ -25,12 +26,14 @@ export const MusicItemCard = ({
     >
       {layout === "grid" ? (
         <>
-          <Image
-            src={item.image}
-            alt={item.name}
-            href={item.href}
-            layout={layout}
-          />
+          <AspectRatio>
+            <Image
+              src={item.image}
+              alt={item.name}
+              href={item.href}
+              layout={layout}
+            />
+          </AspectRatio>
           <Content item={item} />
           <Stats stat1={item.stat1} stat2={item.stat2} layout={layout} />
         </>
