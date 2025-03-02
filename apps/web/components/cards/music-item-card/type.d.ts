@@ -1,9 +1,9 @@
 export type MusicItemCardProps = {
   item: {
     id: string;
+    name: string;
     href: string;
     image?: string;
-    name: string;
     artists?: string;
     stat1?: string;
     stat2?: string;

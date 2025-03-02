@@ -6,9 +6,11 @@ type MusicItemCardActionProps = {
 };
 
 export const MusicItemCardAction = ({ href }: MusicItemCardActionProps) => (
-  <Link href={href || "#"} passHref>
-    <button className="flex items-center hover:translate-x-0.5 duration-100 cursor-pointer">
-      <ChevronRight />
-    </button>
+  <Link
+    href={href || "#"}
+    passHref
+    className="flex items-center hover:translate-x-0.5 duration-100 cursor-pointer"
+  >
+    <ChevronRight />
   </Link>
 );

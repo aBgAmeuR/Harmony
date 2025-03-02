@@ -17,25 +17,38 @@ import { TrackList } from "./track-list";
 type TracksAlbumListsProps = {
   sessionId?: string;
   artistId: string;
+  limitTracks?: number;
+  limitAlbums?: number;
+  showAll?: boolean;
 };
 
 export const TracksAlbumLists = async ({
   sessionId,
   artistId,
+  limitTracks,
+  limitAlbums,
+  showAll = false,
 }: TracksAlbumListsProps) => {
   const artistData = await getArtistDetails(sessionId, artistId);
   if (!artistData) return notFound();
 
+  const tracks = showAll
+    ? artistData.tracks
+    : artistData.tracks.slice(0, limitTracks);
+  const albums = showAll
+    ? artistData.albums
+    : artistData.albums.slice(0, limitAlbums);
+
   return (
-    <>
-      <TrackList tracks={artistData.tracks} />
-      <AlbumList albums={artistData.albums} />
-    </>
+    <div className="flex flex-col gap-8">
+      <TrackList tracks={tracks} />
+      <AlbumList albums={albums} />
+    </div>
   );
 };
 
 export const TracksAlbumsListsSkeleton = () => (
-  <>
+  <div className="flex flex-col gap-8">
     <Carousel
       opts={{
         align: "start",
@@ -75,5 +88,5 @@ export const TracksAlbumsListsSkeleton = () => (
         <ListSkeleton length={10} showRank />
       </div>
     </div>
-  </>
+  </div>
 );

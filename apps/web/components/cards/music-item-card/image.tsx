@@ -1,4 +1,3 @@
-
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { cn } from "@repo/ui/lib/utils";
 import { Music2 } from "lucide-react";
@@ -7,14 +6,14 @@ type MusicItemCardImageProps = {
   src?: string;
   alt?: string;
   href?: string;
-  layout: "list" | "grid";
+  layout?: "list" | "grid";
 };
 
 export const MusicItemCardImage = ({
   src,
   alt,
   href,
-  layout,
+  layout = "list",
 }: MusicItemCardImageProps) => (
   <Avatar
     className={cn(

@@ -4,43 +4,40 @@ import { Info } from "lucide-react";
 
 import { MusicItemCard } from "~/components/cards/music-item-card";
 
-type Album = {
-  id: string;
-  href: string;
-  image: string;
-  name: string;
-  artists: string;
-  stat1: string;
-  stat2: string;
-};
-
 type AlbumListProps = {
-  albums: Album[];
+  albums: Array<{
+    id: string;
+    href: string;
+    image: string;
+    name: string;
+    artists: string;
+    stat1: string;
+    stat2: string;
+  }>;
 };
 
 export const AlbumList = ({ albums }: AlbumListProps) => (
   <div>
-    <h2 className="text-xl font-bold">Top Albums</h2>
-    <p className="text-sm text-muted-foreground mb-4">
-      Here are your top albums
-    </p>
+    <div className="flex flex-col gap-2 mb-4">
+      <h2 className="text-xl font-bold">Top Albums</h2>
+      <p className="text-sm text-muted-foreground">
+        Here are your top albums from this artist
+      </p>
+    </div>
     <div className="flex flex-col">
       {albums.map((item, index) => (
-        <div key={`${item.id}-${index}}`} className="flex flex-col">
-          <MusicItemCard
-            item={item}
-            rank={index + 1}
-            actionHref={`/detail/artist/${item.id}?back=/rankings/artists`}
-          />
+        <div key={`${item.id}-${index}`}>
+          <MusicItemCard item={item} rank={index + 1} showAction={false} />
           {index < albums.length - 1 && <Separator />}
         </div>
       ))}
       {albums.length === 0 && (
         <Alert variant="info">
           <Info className="size-4" />
-          <AlertTitle>No album found</AlertTitle>
+          <AlertTitle>No albums found</AlertTitle>
           <AlertDescription>
-            You haven't listened to any music during this period
+            You haven't listened to any albums from this artist during this
+            period
           </AlertDescription>
         </Alert>
       )}

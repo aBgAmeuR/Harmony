@@ -4,6 +4,7 @@
   "globalEnv": ["DATABASE_URL", "APP_MAINTENANCE", "DEMO_ID"],
   "tasks": {
     "build": {
+      "cache": false,
       "dependsOn": ["^generate", "^build"],
       "inputs": ["$TURBO_DEFAULT", ".env", ".env.local"],
       "outputs": ["dist/**", ".next/**", "!.next/cache/**"],
@@ -50,9 +51,7 @@
     "e2e:test": {
       "dependsOn": ["^build"]
     },
-    "start": {
-      "dependsOn": ["^build"]
-    },
+    "start": {},
     "ci": {
       "dependsOn": ["^build", "^e2e:test", "^lint"]
     }
