@@ -1,7 +1,6 @@
 "use server";
 
 import { prisma } from "@repo/database";
-import { format, localeFormat } from "light-date";
 
 type MonthlyStats = {
   month: string;
@@ -20,111 +19,114 @@ export const getArtistStatsAction = async (
 ) => {
   if (!userId) return null;
 
-  const artistTracks = await prisma.track.findMany({
-    where: {
-      userId,
-      artistIds: { has: artistId },
-    },
-    orderBy: { timestamp: "asc" },
-    select: { msPlayed: true, timestamp: true },
-  });
+  try {
+    // Execute all queries in a single transaction
+    const [monthlyStats, hourlyStats, [{ totalMinutes, totalStreams }]] =
+      await prisma.$transaction([
+        prisma.$queryRaw<
+          {
+            month: string;
+            year: number;
+            month_num: number;
+            minutes: number;
+            streams: number;
+          }[]
+        >`
+        SELECT
+          TO_CHAR(timestamp, 'Mon') AS month,
+          EXTRACT(YEAR FROM timestamp) AS year,
+          EXTRACT(MONTH FROM timestamp) AS month_num,
+          ROUND(SUM("msPlayed")::numeric / 1000 / 60) AS minutes,
+          COUNT(*) AS streams
+        FROM "Track"
+        WHERE "userId" = ${userId}
+          AND ${artistId} = ANY("artistIds")
+        GROUP BY month, year, month_num
+        ORDER BY year, month_num
+      `,
+        prisma.$queryRaw<
+          {
+            hour: number;
+            minutes: number;
+          }[]
+        >`
+        SELECT
+          EXTRACT(HOUR FROM timestamp) AS hour,
+          ROUND(SUM("msPlayed")::numeric / 1000 / 60) AS minutes
+        FROM "Track"
+        WHERE "userId" = ${userId}
+          AND ${artistId} = ANY("artistIds")
+        GROUP BY hour
+        ORDER BY hour
+      `,
+        prisma.$queryRaw<
+          {
+            totalMinutes: number;
+            totalStreams: number;
+          }[]
+        >`
+        SELECT
+          ROUND(SUM("msPlayed")::numeric / 1000 / 60) AS "totalMinutes",
+          COUNT(*) AS "totalStreams"
+        FROM "Track"
+        WHERE "userId" = ${userId}
+          AND ${artistId} = ANY("artistIds")
+      `,
+      ]);
 
-  if (artistTracks.length === 0) return null;
+    if (monthlyStats.length === 0) return null;
 
-  // Calculate total stats
-  const totalMinutes = Math.round(
-    Number(
-      artistTracks.reduce((sum, track) => sum + track.msPlayed, BigInt(0)),
-    ) /
-      1000 /
-      60,
-  );
-  const totalStreams = artistTracks.length;
-
-  // Calculate monthly trends
-  const monthlyTrends = aggregateMonthlyStats(artistTracks);
-  const timeDistribution = aggregateHourlyStats(artistTracks);
-
-  // Find top month
-  const topMonth = findTopMonth(monthlyTrends);
-
-  // Calculate averages
-  const monthlyAverageStreams = Math.round(totalStreams / monthlyTrends.length);
-  const monthlyAverageMinutes = Math.round(totalMinutes / monthlyTrends.length);
-
-  // Calculate progress to next milestone (next 100 streams)
-  const nextMilestone = Math.ceil(totalStreams / 100) * 100;
-  const streamProgress = (totalStreams % 100) / 100;
-
-  return {
-    totalMinutes,
-    totalStreams,
-    monthlyTrends,
-    timeDistribution,
-    topMonth,
-    monthlyAverageStreams,
-    monthlyAverageMinutes,
-    streamProgress,
-  };
-};
-
-function aggregateMonthlyStats(
-  tracks: {
-    timestamp: Date;
-    msPlayed: bigint;
-  }[],
-): MonthlyStats[] {
-  const monthlyData: Record<string, { minutes: number; streams: number }> = {};
-
-  tracks.forEach((track) => {
-    const month = formatDate(track.timestamp);
-    if (!monthlyData[month]) {
-      monthlyData[month] = { minutes: 0, streams: 0 };
-    }
-    monthlyData[month].minutes += Math.round(
-      Number(track.msPlayed) / 1000 / 60,
+    // Format monthly trends
+    const monthlyTrends: MonthlyStats[] = monthlyStats.map(
+      ({ month, year, minutes, streams }) => ({
+        month: `${month} ${year}`,
+        minutes: Number(minutes),
+        streams: Number(streams),
+      }),
     );
-    monthlyData[month].streams += 1;
-  });
 
-  return Object.entries(monthlyData).map(([month, stats]) => ({
-    month,
-    ...stats,
-  }));
-}
+    // Format hourly stats (ensure all 24 hours are represented)
+    const timeDistribution: HourlyStats[] = Array.from(
+      { length: 24 },
+      (_, i) => {
+        const hour = i.toString().padStart(2, "0");
+        const foundHour = hourlyStats.find((stat) => Number(stat.hour) === i);
+        return {
+          hour,
+          minutes: foundHour ? Number(foundHour.minutes) : 0,
+        };
+      },
+    );
 
-function aggregateHourlyStats(
-  tracks: {
-    timestamp: Date;
-    msPlayed: bigint;
-  }[],
-): HourlyStats[] {
-  const hourlyData: Record<string, number> = {};
+    // Find top month
+    const topMonth = monthlyTrends.reduce(
+      (max, current) => (current.streams > (max?.streams || 0) ? current : max),
+      monthlyTrends[0],
+    );
 
-  // Initialize all hours to 0
-  for (let i = 0; i < 24; i++) {
-    hourlyData[i.toString().padStart(2, "0")] = 0;
+    // Calculate averages
+    const monthlyAverageStreams = Math.round(
+      Number(totalStreams) / monthlyTrends.length,
+    );
+    const monthlyAverageMinutes = Math.round(
+      Number(totalMinutes) / monthlyTrends.length,
+    );
+
+    // Calculate progress to next milestone (next 100 streams)
+    const streamProgress = (Number(totalStreams) % 100) / 100;
+
+    return {
+      totalMinutes: Number(totalMinutes),
+      totalStreams: Number(totalStreams),
+      monthlyTrends,
+      timeDistribution,
+      topMonth,
+      monthlyAverageStreams,
+      monthlyAverageMinutes,
+      streamProgress,
+    };
+  } catch (error) {
+    console.error("Failed to fetch artist stats:", error);
+    return null;
   }
-
-  tracks.forEach((track) => {
-    const hour = format(track.timestamp, "{HH}");
-    hourlyData[hour] += Math.round(Number(track.msPlayed) / 1000 / 60);
-  });
-
-  return Object.entries(hourlyData)
-    .map(([hour, minutes]) => ({
-      hour,
-      minutes,
-    }))
-    .sort((a, b) => a.hour.localeCompare(b.hour));
-}
-
-function findTopMonth(monthlyTrends: MonthlyStats[]) {
-  return monthlyTrends.reduce(
-    (max, current) => (current.streams > (max?.streams || 0) ? current : max),
-    monthlyTrends[0],
-  );
-}
-
-const formatDate = (date: Date) =>
-  `${localeFormat(date, "{MMM}")} ${format(date, "{yyyy}")}`;
+};

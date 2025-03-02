@@ -2,7 +2,7 @@
 
 import { prisma } from "@repo/database";
 import { spotify } from "@repo/spotify";
-import { format, localeFormat } from "light-date";
+import { Track } from "@repo/spotify/types";
 
 export type MonthlyTrackData = {
   month: string;
@@ -27,191 +27,173 @@ export const getMonthlyTopTracksAction = async (
   if (!userId || !artistId) return [];
 
   try {
-    // Get all tracks for the artist from the user's history
-    const artistTracks = await prisma.track.findMany({
-      where: {
-        userId,
-        artistIds: { has: artistId },
-      },
-      select: {
-        msPlayed: true,
-        timestamp: true,
-        spotifyId: true,
-      },
-      orderBy: {
-        timestamp: "desc",
-      },
-    });
+    // Fetch monthly top tracks data with SQL-based aggregation
+    const monthlyTracksData: {
+      month: string;
+      spotifyId: string;
+      msPlayed: bigint;
+      count: bigint;
+      rank: number;
+    }[] = await prisma.$queryRaw`
+      WITH monthly_tracks AS (
+        SELECT
+          TO_CHAR(timestamp, 'Mon YYYY') AS month,
+          EXTRACT(YEAR FROM timestamp) AS year,
+          EXTRACT(MONTH FROM timestamp) AS month_num,
+          "spotifyId",
+          SUM("msPlayed") AS "msPlayed",
+          COUNT(*) AS count
+        FROM "Track"
+        WHERE "userId" = ${userId}
+          AND ${artistId} = ANY("artistIds")
+        GROUP BY month, year, month_num, "spotifyId"
+      ),
+      ranked_tracks AS (
+        SELECT
+          month,
+          "spotifyId",
+          "msPlayed",
+          count,
+          RANK() OVER (PARTITION BY month ORDER BY count DESC, "msPlayed" DESC) AS rank
+        FROM monthly_tracks
+      )
+      SELECT 
+        month,
+        "spotifyId",
+        "msPlayed",
+        count,
+        rank
+      FROM ranked_tracks
+      WHERE rank <= ${limit}
+      ORDER BY 
+        TO_DATE(month, 'Mon YYYY') DESC,
+        rank ASC
+    `;
 
-    if (!artistTracks.length) return [];
+    if (!monthlyTracksData.length) return [];
 
-    // Group tracks by month
-    const tracksByMonth: Record<
+    // Get unique months from data
+    const monthsSet = new Set<string>();
+    const trackIdsByMonth: Record<string, string[]> = {};
+    const trackDataMap: Record<
       string,
-      Record<string, { msPlayed: bigint; count: number }>
+      Record<string, { msPlayed: bigint; count: number; rank: number }>
     > = {};
 
-    artistTracks.forEach((track) => {
-      const month = formatDate(track.timestamp);
-      if (!tracksByMonth[month]) {
-        tracksByMonth[month] = {};
-      }
+    // Collect all unique track IDs across all months
+    const allTrackIds = new Set<string>();
 
-      if (!tracksByMonth[month][track.spotifyId]) {
-        tracksByMonth[month][track.spotifyId] = {
-          msPlayed: BigInt(0),
-          count: 0,
-        };
-      }
+    // Organize data by month
+    monthlyTracksData.forEach(({ month, spotifyId, msPlayed, count, rank }) => {
+      monthsSet.add(month);
+      allTrackIds.add(spotifyId);
 
-      tracksByMonth[month][track.spotifyId].msPlayed += track.msPlayed;
-      tracksByMonth[month][track.spotifyId].count += 1;
+      if (!trackIdsByMonth[month]) {
+        trackIdsByMonth[month] = [];
+      }
+      trackIdsByMonth[month].push(spotifyId);
+
+      if (!trackDataMap[month]) {
+        trackDataMap[month] = {};
+      }
+      trackDataMap[month][spotifyId] = {
+        msPlayed,
+        count: Number(count),
+        rank,
+      };
     });
 
-    // Calculate rankings for all months
-    const monthlyRankings: Record<string, Record<string, number>> = {};
-
-    Object.entries(tracksByMonth).forEach(([month, trackMap]) => {
-      const sortedTracks = Object.entries(trackMap).sort(
-        ([, a], [, b]) => b.count - a.count,
-      );
-
-      monthlyRankings[month] = {};
-      sortedTracks.forEach(([trackId], index) => {
-        monthlyRankings[month][trackId] = index + 1;
-      });
-    });
-
-    // Sort months chronologically for comparing rankings
-    const sortedMonths = Object.keys(tracksByMonth).sort((a, b) => {
+    // Get previous month rankings for trend calculation
+    const months = Array.from(monthsSet).sort((a, b) => {
       const dateA = parseMonthString(a);
       const dateB = parseMonthString(b);
-      return dateA.getTime() - dateB.getTime();
+      return dateB.getTime() - dateA.getTime(); // Sort in reverse chronological order
     });
 
-    // Process each month to get top tracks with ranking trends
-    const results = await Promise.all(
-      sortedMonths.map(async (month, monthIndex) => {
-        const trackMap = tracksByMonth[month];
+    // Create a map of tracks to their previous month ranking
+    const previousRankMap: Record<string, Record<string, number>> = {};
+    months.forEach((month, i) => {
+      if (i < months.length - 1) {
+        const nextMonth = months[i + 1];
+        previousRankMap[nextMonth] = {};
 
-        // Get top tracks for the month based on play count
-        const topTrackIds = Object.entries(trackMap)
-          .sort(([, a], [, b]) => b.count - a.count)
-          .slice(0, limit)
-          .map(([id]) => id);
+        const currentMonthTracks = trackDataMap[month];
+        Object.entries(currentMonthTracks).forEach(([trackId, { rank }]) => {
+          previousRankMap[nextMonth][trackId] = rank;
+        });
+      }
+    });
 
-        if (topTrackIds.length === 0) {
-          return { month, tracks: [] };
+    // Fetch all track details in a single API call
+    const uniqueTrackIds = Array.from(allTrackIds);
+    let allTrackDetails: Track[] = [];
+
+    try {
+      allTrackDetails = await spotify.tracks.list(uniqueTrackIds);
+    } catch (spotifyError) {
+      console.error("Failed to fetch Spotify tracks data:", spotifyError);
+      allTrackDetails = [];
+    }
+
+    // Create a map of track details for quick lookup
+    const trackDetailsMap: Record<string, Track> = {};
+    allTrackDetails.forEach((track) => {
+      if (track && track.id) {
+        trackDetailsMap[track.id] = track;
+      }
+    });
+
+    // Process each month's data using the pre-fetched track details
+    const results = months.map((month) => {
+      const trackIds = trackIdsByMonth[month] || [];
+
+      if (!trackIds.length) {
+        return { month, tracks: [] };
+      }
+
+      // Map track details with play statistics and trends
+      const tracks = trackIds.map((id) => {
+        const trackDetail = trackDetailsMap[id];
+        const stats = trackDataMap[month][id];
+        const previousRank = previousRankMap[month]?.[id];
+
+        // Calculate trend
+        let trend: "up" | "down" | "same" | "new" = "new";
+
+        if (previousRank !== undefined) {
+          if (previousRank < stats.rank) {
+            trend = "down";
+          } else if (previousRank > stats.rank) {
+            trend = "up";
+          } else {
+            trend = "same";
+          }
         }
 
-        // Get previous month for trend comparison
-        const previousMonth =
-          monthIndex > 0 ? sortedMonths[monthIndex - 1] : null;
-
-        const previousMonthRankings = previousMonth
-          ? monthlyRankings[previousMonth]
-          : {};
-
-        try {
-          // Fetch track details from Spotify API
-          const uniqueTopTrackIds = Array.from(new Set(topTrackIds));
-          const trackDetails = await spotify.tracks.list(uniqueTopTrackIds);
-
-          // Map track details with play statistics and trends
-          const tracks = topTrackIds.map((id, currentRank) => {
-            const trackDetail = trackDetails.find((t) => t.id === id);
-            const stats = trackMap[id];
-
-            // Calculate trend
-            let trend: "up" | "down" | "same" | "new" = "new";
-            let previousRank: number | undefined = undefined;
-
-            if (previousMonth && previousMonthRankings[id]) {
-              previousRank = previousMonthRankings[id];
-
-              if (previousRank < currentRank + 1) {
-                trend = "down";
-              } else if (previousRank > currentRank + 1) {
-                trend = "up";
-              } else {
-                trend = "same";
-              }
-            }
-
-            return {
-              id,
-              name: trackDetail?.name || `Unknown Track (${id.slice(0, 8)})`,
-              image: trackDetail?.album?.images[0]?.url,
-              artists:
-                trackDetail?.artists?.map((a) => a.name).join(", ") ||
-                "Unknown Artist",
-              album: trackDetail?.album?.name || "Unknown Album",
-              plays: stats.count,
-              minutes: Math.round(Number(stats.msPlayed) / (1000 * 60)),
-              trend,
-              previousRank,
-            };
-          });
-
-          return { month, tracks };
-        } catch (spotifyError) {
-          console.error(
-            `Failed to fetch Spotify tracks data for ${month}:`,
-            spotifyError,
-          );
-
-          // Fallback with minimal information when Spotify API fails
-          const tracks = topTrackIds.map((id, currentRank) => {
-            // Calculate trend
-            let trend: "up" | "down" | "same" | "new" = "new";
-            let previousRank: number | undefined = undefined;
-
-            if (previousMonth && previousMonthRankings[id]) {
-              previousRank = previousMonthRankings[id];
-
-              if (previousRank < currentRank + 1) {
-                trend = "down";
-              } else if (previousRank > currentRank + 1) {
-                trend = "up";
-              } else {
-                trend = "same";
-              }
-            }
-
-            return {
-              id,
-              name: `Track ${id.slice(0, 8)}...`,
-              artists: "Artist information unavailable",
-              album: "Album information unavailable",
-              plays: trackMap[id].count,
-              minutes: Math.round(Number(trackMap[id].msPlayed) / (1000 * 60)),
-              trend,
-              previousRank,
-            };
-          });
-
-          return { month, tracks };
-        }
-      }),
-    );
-
-    // Sort by date (most recent first)
-    return results
-      .filter((month) => month.tracks.length > 0)
-      .sort((a, b) => {
-        const dateA = parseMonthString(a.month);
-        const dateB = parseMonthString(b.month);
-        return dateB.getTime() - dateA.getTime();
+        return {
+          id,
+          name: trackDetail?.name || `Unknown Track (${id.slice(0, 8)})`,
+          image: trackDetail?.album?.images[0]?.url,
+          artists:
+            trackDetail?.artists?.map((a) => a.name).join(", ") ||
+            "Unknown Artist",
+          album: trackDetail?.album?.name || "Unknown Album",
+          plays: stats.count,
+          minutes: Math.round(Number(stats.msPlayed) / (1000 * 60)),
+          trend,
+          previousRank,
+        };
       });
+
+      return { month, tracks };
+    });
+
+    return results.filter((month) => month.tracks.length > 0);
   } catch (error) {
     console.error("Failed to fetch monthly top tracks:", error);
     return [];
   }
 };
-
-// Helper to format dates consistently
-const formatDate = (date: Date): string =>
-  `${localeFormat(date, "{MMM}")} ${format(date, "{yyyy}")}`;
 
 // Helper to parse month strings back to dates for sorting
 const parseMonthString = (monthStr: string): Date => {

@@ -14,7 +14,6 @@ import {
   ArtistStatsSummaryWrapper,
   QuickInsightsWrapper,
 } from "./components/data-wrappers";
-import { MonthlyTopTracksSkeleton } from "./components/monthly-top-tracks-skeleton";
 import { MonthlyTopTracksWrapper } from "./components/monthly-top-tracks-wrapper";
 import { QuickInsightsSkeleton } from "./components/quick-insights-skeleton";
 import {
