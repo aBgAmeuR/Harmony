@@ -13,7 +13,7 @@
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@types/node": "^22",
-    "@types/react": "19.0.1",
+    "@types/react": "19.0.10",
     "autoprefixer": "^10",
     "postcss": "^8",
     "postcss-load-config": "^6",
@@ -66,6 +66,8 @@
     "./*": "./src/components/ui/*.tsx"
   },
   "overrides": {
-    "react-is": "19.0.1"
+    "react-is": "19.0.1",
+    "@types/react": "19.0.10",
+    "@types/react-dom": "19.0.4"
   }
 }
