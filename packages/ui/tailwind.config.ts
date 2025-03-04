@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import containerQuery from "@tailwindcss/container-queries";
-// @ts-expect-error
 import tailwindcssMotion from "tailwindcss-motion";
 
 const config = {
@@ -83,6 +82,10 @@ const config = {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      flexBasis: {
+        '1/7': '14.2857143%',
+        '1/8': '12.5%',
       },
       keyframes: {
         "accordion-down": {

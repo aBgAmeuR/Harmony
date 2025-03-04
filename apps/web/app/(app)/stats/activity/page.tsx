@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import { auth } from "@repo/auth";
 
 import { AppHeader } from "~/components/app-header";

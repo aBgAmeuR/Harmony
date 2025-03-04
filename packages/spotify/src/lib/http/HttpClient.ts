@@ -56,7 +56,8 @@ export class HttpClient {
       const response = await fetch(url, {
         ...options,
         headers,
-        next: { revalidate: 3600 }
+        next: { revalidate: 3600 },
+        cache: 'force-cache'
       });
 
       if (response.ok) {

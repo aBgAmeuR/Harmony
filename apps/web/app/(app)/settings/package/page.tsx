@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import { auth } from "@repo/auth";
 import { signOut } from "@repo/auth/actions";
 import { Button } from "@repo/ui/button";

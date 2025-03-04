@@ -1,10 +1,10 @@
 "use client";
 
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import { signOut } from "@repo/auth/actions";
 import { Button } from "@repo/ui/button";
 import { AlertCircle, ArrowRight } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Icons } from "~/components/icons";
 import { ThemeToggle } from "~/components/theme-toggle";
@@ -13,7 +13,7 @@ type ErrorType = "Configuration" | "AccessDenied" | "Verification" | "Default";
 
 type ErrorProps = {
   error: Error & { digest?: string };
-  reset: () => void;
+  reset?: () => void;
 };
 
 const authErrorMessages: Record<ErrorType, string> = {
@@ -35,9 +35,10 @@ export default function Error({ error, reset }: ErrorProps) {
   );
 }
 
-function ErrorContent({ error, reset }: ErrorProps) {
+function ErrorContent({ error }: ErrorProps) {
   const searchParams = useSearchParams();
   const errorParams = searchParams.get("error") as ErrorType | null;
+  const router = useRouter();
 
   const errorMessage = errorParams
     ? authErrorMessages[errorParams]
@@ -58,7 +59,7 @@ function ErrorContent({ error, reset }: ErrorProps) {
             Error Code: <span>{errorParams || error.digest || "Unknown"}</span>
           </p>
           <div className="flex gap-2 justify-center">
-            <Button onClick={() => reset()}>Try again</Button>
+            <Button onClick={() => router.refresh()}>Try again</Button>
             <Button
               className="group"
               variant="ghost"
