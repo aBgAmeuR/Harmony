@@ -1,7 +1,6 @@
 import type { Config } from "tailwindcss";
 import tailwindcssAnimate from "tailwindcss-animate";
 import containerQuery from "@tailwindcss/container-queries";
-// @ts-expect-error
 import tailwindcssMotion from "tailwindcss-motion";
 
 const config = {

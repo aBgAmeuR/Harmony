@@ -1,4 +1,4 @@
-import { Suspense } from "react";
+import React, { Suspense } from "react";
 import { Button } from "@repo/ui/button";
 import {
   Card,

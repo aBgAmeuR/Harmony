@@ -1,5 +1,3 @@
-"use client";
-
 import { Alert } from "@repo/ui/alert";
 import { Card, CardContent, CardHeader } from "@repo/ui/card";
 import { Skeleton } from "@repo/ui/skeleton";

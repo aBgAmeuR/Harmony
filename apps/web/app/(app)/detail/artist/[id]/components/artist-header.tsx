@@ -1,12 +1,14 @@
-import { Suspense } from "react";
-import { spotify } from "@repo/spotify";
+import React, { Suspense } from "react";
 import { Button } from "@repo/ui/button";
 import { NumberFlow } from "@repo/ui/number";
 import { Skeleton } from "@repo/ui/skeleton";
 import { ExternalLink } from "lucide-react";
 import { notFound } from "next/navigation";
 
-import { getArtistStatsAction } from "~/actions/get-artist-stats-action";
+import {
+  getArtistDetails,
+  getArtistStatsAction,
+} from "~/actions/get-artist-stats-action";
 
 type ArtistHeaderProps = {
   artistId: string;
@@ -14,7 +16,7 @@ type ArtistHeaderProps = {
 };
 
 export async function ArtistHeader({ artistId, userId }: ArtistHeaderProps) {
-  const artist = await spotify.artists.get(artistId);
+  const artist = await getArtistDetails(artistId);
   if (!artist) return notFound();
 
   return (

@@ -1,4 +1,4 @@
-import { type PropsWithChildren, Suspense } from "react";
+import React, { type PropsWithChildren, Suspense } from "react";
 import { auth } from "@repo/auth";
 import { cn } from "@repo/ui/lib/utils";
 import { ScrollArea } from "@repo/ui/scroll-area";

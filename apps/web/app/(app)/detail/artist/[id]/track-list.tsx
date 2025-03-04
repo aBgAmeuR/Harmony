@@ -25,7 +25,7 @@ type TrackListProps = {
   tracks: Track[];
 };
 
-export const TrackList: FC<TrackListProps> = ({ tracks }) => (
+export const TrackList = ({ tracks }: TrackListProps) => (
   <div>
     <Carousel
       opts={{
