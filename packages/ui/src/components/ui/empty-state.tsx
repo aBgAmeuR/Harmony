@@ -7,12 +7,7 @@ interface EmptyStateProps {
   title: string
   description: string
   icons?: LucideIcon[]
-  action?: {
-    label: string
-    onClick: () => void
-    disabled?: boolean
-    loading?: boolean
-  }
+  action?: React.ReactNode
   action2?: React.ReactNode
   className?: string
   children?: React.ReactNode
@@ -64,23 +59,7 @@ export function EmptyState({
       <h2 className="text-foreground font-medium mt-6">{title}</h2>
       <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line">{description}</p>
       <div className="flex justify-center gap-2 items-center mt-4">
-        {action && (
-          <Button
-            onClick={action.onClick}
-            variant="default"
-            className={cn(
-              "shadow-sm active:shadow-none"
-            )}
-            disabled={action.disabled ? true : undefined}
-          >
-            {action.loading ? (
-              <>
-                <LoaderCircle className="size-4 animate-spin" />
-                Processing...
-              </>
-            ) : action.label}
-          </Button>
-        )}
+        {action}
         {action2}
       </div>
       {children}

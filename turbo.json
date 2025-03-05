@@ -1,7 +1,7 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": [".env"],
-  "globalEnv": ["DATABASE_URL", "APP_MAINTENANCE", "DEMO_ID"],
+  "globalEnv": ["DATABASE_URL", "APP_MAINTENANCE", "DEMO_ID", "UPLOADTHING_TOKEN"],
   "tasks": {
     "build": {
       "dependsOn": ["^generate", "^build"],
