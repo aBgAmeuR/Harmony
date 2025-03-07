@@ -7,13 +7,14 @@ import {
   RatelimitError 
 } from '../errors';
 import { SpotifyConfig } from '../../types/SpotifyConfig';
+import { Logger } from '../Logger';
 
 export class HttpClient {
   private baseURL = 'https://api.spotify.com/v1';
   private auth: AuthManager;
 
-  constructor(protected config: SpotifyConfig) {
-    this.auth = new AuthManager(config);
+  constructor(protected config: SpotifyConfig, private logger: Logger) {
+    this.auth = new AuthManager(config, logger);
   }
 
   /**
@@ -48,10 +49,7 @@ export class HttpClient {
     });
 
     try {
-      if (this.config.debug) {
-        const truncatedUrl = url.length > 100 ? `${url.substring(0, 100)}...` : url;
-        console.log(`Making request to: ${truncatedUrl}`);
-      }
+      this.logger.log(`Making request to: ${url.length > 100 ? `${url.substring(0, 100)}...` : url}`);
 
       const response = await fetch(url, {
         ...options,
@@ -67,9 +65,7 @@ export class HttpClient {
       if (response.status === 429) {
         const retryAfter = Number(response.headers.get('retry-after')) || 1;
         
-        if (this.config.debug) {
-          console.log(`Rate limited, retrying in ${retryAfter}s`);
-        }
+        this.logger.log(`Rate limited, retrying in ${retryAfter}s`);
 
         await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
         return this.request(path, options, query);
