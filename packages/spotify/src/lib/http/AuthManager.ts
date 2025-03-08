@@ -2,6 +2,7 @@ import { prisma } from "@repo/database";
 import { AuthError } from "../errors";
 import { auth } from "@repo/auth";
 import { SpotifyConfig } from "../../types/SpotifyConfig";
+import { Logger } from "../Logger";
 
 interface SpotifyTokenResponse {
   access_token: string;
@@ -11,8 +12,9 @@ interface SpotifyTokenResponse {
 
 export class AuthManager {
   private baseUrl = "https://accounts.spotify.com/api";
+  private refreshPromise: Promise<string> | null = null;
 
-  constructor(private config: SpotifyConfig) {}
+  constructor(private config: SpotifyConfig, private logger: Logger) {}
 
   /**
    * Get the Basic auth header for Spotify API
@@ -59,20 +61,20 @@ export class AuthManager {
     });
 
     if (!response.ok) {
-      const stack = await response.text();
-      if (!stack.includes("invalid_grant") && !stack.includes("Refresh token revoked")) {
+      // Lire le corps de la réponse une seule fois
+      const responseText = await response.text();
+      
+      if (!responseText.includes("invalid_grant") && !responseText.includes("Refresh token revoked")) {
         return null;
-      };
+      }
       
       throw new AuthError("Failed to refresh access token", {
-        stack: await response.text(),
+        stack: responseText,
         data: { status: response.status, statusText: response.statusText },
       });
     }
 
-    if (this.config.debug) {
-      console.log("TOKEN REFRESHED");
-    }
+    this.logger.log("TOKEN REFRESHED");
 
     return await response.json();
   }
@@ -81,6 +83,12 @@ export class AuthManager {
    * Get a valid access token for the user, refreshing if necessary
    */
   async getToken(): Promise<string> {
+    // If there's already a refresh in progress, wait for it to complete
+    if (this.refreshPromise) {
+      this.logger.log("TOKEN REFRESH IN PROGRESS, WAITING...");
+      return this.refreshPromise;
+    }
+
     const session = await auth();
 
     if (!session?.user?.id) {
@@ -104,9 +112,21 @@ export class AuthManager {
       return account.access_token;
     }
 
-    if (this.config.debug) {
-      console.log("REFRESHING TOKEN");
+    // Create a refresh promise that other calls can wait for
+    try {
+      this.refreshPromise = this.refreshTokenAndUpdate(account);
+      return await this.refreshPromise;
+    } finally {
+      // Clear the promise when done, regardless of success or failure
+      this.refreshPromise = null;
     }
+  }
+
+  /**
+   * Refresh the token and update in database
+   */
+  private async refreshTokenAndUpdate(account: any): Promise<string> {
+    this.logger.log("REFRESHING TOKEN");
 
     // Refresh the token
     const data = await this.refreshToken(account.refresh_token);
