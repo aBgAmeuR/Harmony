@@ -1,31 +1,19 @@
 "use client";
 
-import { PropsWithChildren, useRef, useState, useTransition } from "react";
+import { PropsWithChildren, useTransition } from "react";
 import { signOut } from "@repo/auth/actions";
-import { Button, buttonVariants } from "@repo/ui/button";
+import { Button } from "@repo/ui/button";
 import { EmptyState } from "@repo/ui/empty-state";
-import { Progress } from "@repo/ui/progress";
+import { cn } from "@repo/ui/lib/utils";
 import { useQueryClient } from "@tanstack/react-query";
-import {
-  AlertCircle,
-  Check,
-  CloudUpload,
-  Files,
-  HelpCircle,
-  History,
-  Loader2,
-  Package,
-  UploadCloud,
-} from "lucide-react";
+import { CloudUpload, Files, HelpCircle, Package } from "lucide-react";
 import { toast } from "sonner";
 
-import { processUploadedZipFile } from "~/services/upload-processing";
-import { UploadButton, UploadDropzone } from "~/lib/uploadthing";
+import { UploadButton } from "~/lib/uploadthing";
+import { verifPackage } from "~/services/packages/verif-package";
 
 import { DocsModal } from "./docs-modal";
 import { HistoryModal } from "./history-modal";
-import { verifPackage } from "~/services/packages/verif-package";
-import { cn } from "@repo/ui/lib/utils";
 
 type ClientProps = PropsWithChildren<{
   isDemo?: boolean;
@@ -38,18 +26,7 @@ export const Client = ({
   children,
 }: ClientProps) => {
   const queryClient = useQueryClient();
-  const [processingProgress, setProcessingProgress] = useState(0);
   const [inTransition, startTransition] = useTransition();
-  const [filesQueue, setFilesQueue] = useState<
-    {
-      filename: string;
-      status: "pending" | "processing" | "done" | "error";
-    }[]
-  >([]);
-
-  const setProgress = (progress: number) => {
-    setProcessingProgress(progress);
-  };
 
   return (
     <EmptyState
@@ -68,39 +45,36 @@ export const Client = ({
           }}
           endpoint="spotifyPackageUploader"
           onBeforeUploadBegin={async (files) => {
-            if (await verifPackage(files)) {
-              return files;
-            }
-            return []
+            if (await verifPackage(files)) return files;
+            return [];
           }}
           onUploadError={(error: Error) => {
-            // Do something with the error.
-            alert(`ERROR! ${error.message}`);
+            toast.error("Error uploading package: " + error.message);
           }}
-          // onClientUploadComplete={(res) => {
-          //   // if (res && res.length > 0) {
-          //   //   const { ufsUrl } = res[0];
-
-          //   //   // Use the file URL to process the uploaded ZIP file
-          //   //   startTransition(async () => {
-          //   //     const result = await processUploadedZipFile(ufsUrl, setProgress);
-
-          //   //     if (result.message === "error") {
-          //   //       toast.error(result.error);
-          //   //       return;
-          //   //     }
-
-          //   //     toast.success("Package processed successfully!");
-          //   //     queryClient.clear();
-          //   //     // Sign out and redirect to refresh the session with new data
-          //   //     await signOut({ redirect: true, redirectTo: "/settings/package" });
-          //   //   });
-          //   // }
-          // }}
           onClientUploadComplete={(res) => {
-            // Do something with the response
-            console.log("Files: ", res);
-            alert("Upload Completed");
+            if (res && res.length > 0) {
+              const { serverData } = res[0];
+              startTransition(async () => {
+                const res = await fetch("/api/package/new", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(serverData),
+                });
+                const json = await res.json();
+
+                if (res.status !== 200) {
+                  toast.error(json.message);
+                } else {
+                  toast.success("Package processed successfully!");
+                  queryClient.clear();
+                  // Sign out and redirect to refresh the session with new data
+                  await signOut({
+                    redirect: true,
+                    redirectTo: "/settings/package",
+                  });
+                }
+              });
+            }
           }}
         />
       }
@@ -116,31 +90,6 @@ export const Client = ({
       {!inTransition && hasPackage && !isDemo && (
         <HistoryModal>{children}</HistoryModal>
       )}
-
-      {filesQueue.length > 0 ? (
-        <div className="mt-4 space-y-4">
-          <Progress value={processingProgress} />
-          <div className="space-y-2">
-            {filesQueue.map((file, index) => (
-              <div key={index} className="flex items-center gap-2">
-                {file.status === "pending" && (
-                  <AlertCircle className="size-4 text-muted-foreground" />
-                )}
-                {file.status === "processing" && (
-                  <Loader2 className="size-4 animate-spin text-primary" />
-                )}
-                {file.status === "done" && (
-                  <Check className="size-4 text-primary" />
-                )}
-                {file.status === "error" && (
-                  <AlertCircle className="size-4 text-destructive" />
-                )}
-                <span className="text-sm">{file.filename.split("/")[1]}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ) : null}
     </EmptyState>
   );
 };
