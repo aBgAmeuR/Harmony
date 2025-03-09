@@ -6,8 +6,11 @@ import type { Metadata } from "next";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Inter } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
 
 import { Providers } from "~/components/providers/providers";
+import { ourFileRouter } from "~/app/api/uploadthing/core";
 
 import Error from "./error";
 
@@ -51,6 +54,7 @@ export default function RootLayout({
           className={cn(inter.className, "antialiased")}
         >
           <ErrorBoundary errorComponent={Error}>
+            <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
             <Providers>{children}</Providers>
           </ErrorBoundary>
           <Toaster richColors closeButton />

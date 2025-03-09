@@ -63,14 +63,16 @@ model Track {
 }
 
 model Package {
-  id         String   @id @default(uuid())
-  spotify_id String
-  fileName   String   @default("package.zip")
-  fileSize   String   @default("0")
-  user       User     @relation(fields: [userId], references: [id])
-  userId     String
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id           String   @id @default(uuid())
+  spotify_id   String?
+  tempFileLink String?
+  uploadStatus String   @default("pending")
+  fileName     String   @default("package.zip")
+  fileSize     String   @default("0")
+  user         User     @relation(fields: [userId], references: [id])
+  userId       String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }
 
 enum TimeRangeStats {
