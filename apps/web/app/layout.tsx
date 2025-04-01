@@ -21,6 +21,8 @@ export const metadata: Metadata = {
     "Harmony is a web app that helps you visualize your Spotify data.",
 };
 
+export const experimental_ppr = true
+
 export default function RootLayout({
   children,
 }: Readonly<{

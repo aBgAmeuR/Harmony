@@ -10,6 +10,13 @@ const nextConfig: NextConfig = {
   },
   transpilePackages: ["@repo/ui"],
   env: { DATABASE_URL: process.env.DATABASE_URL },
+  experimental: {
+    staleTimes: {
+      dynamic: 30,
+      static: 180,
+    },
+    ppr: 'incremental',
+  },
 };
 
 export default nextConfig;
