@@ -14,7 +14,7 @@ import {
   TooltipTrigger,
 } from "@repo/ui/tooltip";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
+import { useSession } from "@repo/auth";
 
 import {
   getTimeRangeStatsAction,

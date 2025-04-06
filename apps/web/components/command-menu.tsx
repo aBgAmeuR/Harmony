@@ -26,7 +26,7 @@ import {
   SunMedium,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { signOut } from "@repo/auth";
 import { useTheme } from "next-themes";
 
 import { useUserPreferences } from "~/lib/store";
@@ -147,7 +147,7 @@ export function CommandMenu({
               onSelect={() =>
                 runCommand(() =>
                   signOut({
-                    callbackUrl: "/",
+                    redirectTo: "/",
                   }),
                 )
               }

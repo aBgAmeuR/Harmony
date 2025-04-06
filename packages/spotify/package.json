@@ -15,10 +15,10 @@
     }
   },
   "devDependencies": {
-    "@repo/auth": "*",
-    "@repo/database": "*",
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@repo/auth": "workspace:*",
+    "@repo/database": "workspace:*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "eslint": "^8",
     "typescript": "^5"
   }

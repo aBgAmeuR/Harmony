@@ -37,8 +37,7 @@ import {
   Moon,
   SunMedium,
 } from "lucide-react";
-import { User } from "next-auth";
-import { signOut } from "next-auth/react";
+import { signOut, type User } from "@repo/auth";
 import { useTheme } from "next-themes";
 
 import { useMounted } from "~/hooks/use-mounted";
@@ -62,7 +61,7 @@ export function NavUser({ user }: NavUserProps) {
     if (deleteConfirmation === user.name) {
       // await deleteUserAction();
       await signOut({
-        callbackUrl: "/",
+        redirectTo: "/",
       });
     }
   };
@@ -129,7 +128,7 @@ export function NavUser({ user }: NavUserProps) {
                   size="sm"
                   onClick={() =>
                     signOut({
-                      callbackUrl: "/",
+                      redirectTo: "/",
                     })
                   }
                 >

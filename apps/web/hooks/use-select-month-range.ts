@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useSession } from "next-auth/react";
+import { useSession } from "@repo/auth";
 
 import { getMinMaxDateRangeAction } from "~/actions/get-min-max-date-range-action";
 import {

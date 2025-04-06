@@ -3,9 +3,15 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
+      "@/*": ["./*"],
       "@ui/*": ["./src/*"],
-      "@repo/ui/*": ["./src/*"]
-    }
+      "@repo/ui/*": ["../../packages/ui/src/*"]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": ["src"],
   "exclude": ["node_modules"]

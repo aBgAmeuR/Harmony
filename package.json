@@ -1,8 +1,6 @@
 {
+  "name": "harmony",
   "private": true,
-  "prisma": {
-    "schema": "packages/database/prisma/schema.prisma"
-  },
   "scripts": {
     "build": "turbo run build",
     "db:migrate:deploy": "turbo run db:migrate:deploy",
@@ -13,7 +11,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "generate": "turbo run generate",
     "lint": "turbo run lint",
-    "ui": "npm run -w @repo/ui ui --",
+    "ui": "pnpm --filter @repo/ui run ui",
     "studio": "turbo run studio",
     "dev:test": "turbo run dev:test",
     "e2e:test": "turbo run e2e:test",
@@ -26,17 +24,15 @@
     "tsx": "4.19.2",
     "turbo": "^2.4.4"
   },
-  "engines": {
-    "node": ">=18"
-  },
-  "name": "harmony",
   "dependencies": {
     "@prisma/client": "^6.0.1",
     "dotenv": "^16.4.7"
   },
-  "packageManager": "npm@10.9.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+  "prisma": {
+    "schema": "packages/database/prisma/schema.prisma"
+  },
+  "packageManager": "pnpm@10.7.1",
+  "engines": {
+    "node": ">=20"
+  }
 }

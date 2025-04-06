@@ -7,9 +7,9 @@
     "next-auth": "^5.0.0-beta.24"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/database": "*",
-    "@repo/typescript-config": "*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/database": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "@types/node": "^22",
     "@types/react": "19.0.1",
     "typescript": "^5"

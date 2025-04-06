@@ -5,7 +5,7 @@ import { signOut } from "@repo/auth/actions";
 import { Button } from "@repo/ui/button";
 import { useQueryClient } from "@tanstack/react-query";
 import { FileArchive, LoaderCircle, Upload, X } from "lucide-react";
-import { toast } from "sonner";
+import { toast } from "@repo/ui/sonner";
 
 import { filesProcessing } from "~/services/file-processing";
 

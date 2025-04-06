@@ -8,11 +8,11 @@
   },
   "dependencies": {
     "start-server-and-test": "^2",
-    "web": "*"
+    "web": "workspace:*"
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
     "eslint": "^8",
     "typescript": "^5",
     "@playwright/test": "^1"

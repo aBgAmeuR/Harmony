@@ -1,26 +1,10 @@
 import { cn } from "@repo/ui/lib/utils"
 
-function Skeleton({
-  className,
-  ...props
-}: React.HTMLAttributes<HTMLDivElement>) {
-  if (props.children) {
-    return (
-      <div
-        className={cn("animate-pulse rounded-md bg-primary/10", className)}
-        {...props}
-      >
-        <div className="invisible">
-          {props.children}
-          </div>
-      </div>
-    )
-  }
-
-
+function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("animate-pulse rounded-md bg-primary/10", className)}
+      data-slot="skeleton"
+      className={cn("bg-accent animate-pulse rounded-md", className)}
       {...props}
     />
   )

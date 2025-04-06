@@ -1,5 +1,5 @@
 import { PropsWithChildren } from "react";
-import { SessionProvider } from "next-auth/react";
+import { SessionProvider } from "@repo/auth";
 
 import { QueryClientProvider } from "./query-client-provider";
 import { ThemeProvider } from "./theme-provider";

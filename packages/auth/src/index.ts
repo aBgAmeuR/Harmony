@@ -2,6 +2,7 @@ import { handlers, signIn, signOut, auth } from "./auth";
 import NextAuth, { type Session, type User } from "next-auth";
 
 import authConfig from "./auth.config";
+import { SessionProvider, useSession } from "next-auth/react";
 
 const middleware = NextAuth(authConfig).auth(async (req) => {
   if (
@@ -26,4 +27,4 @@ const middleware = NextAuth(authConfig).auth(async (req) => {
   }
 });
 
-export { handlers, signIn, signOut, auth, middleware, Session, User };
+export { handlers, signIn, signOut, auth, middleware, Session, User, SessionProvider, useSession };
