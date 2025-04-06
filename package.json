@@ -23,7 +23,8 @@
     "turbo": "^2.4.4"
   },
   "dependencies": {
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "dotenv-cli": "^8.0.0"
   },
   "prisma": {
     "schema": "packages/database/prisma/schema.prisma"
