@@ -189,7 +189,7 @@ export const Demo = () => {
                   <TopStatsCards demoData={data.topStats} />
                   <div className="flex flex-col md:flex-row gap-4">
                     <TimeListenedChart
-                      data={data.timeListened}
+                      data={new Promise((resolve) => resolve(data.timeListened))}
                       className="flex-1"
                     />
                     <ListeningPatternChart data={data.listeningPattern} />

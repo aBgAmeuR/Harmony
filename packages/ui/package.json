@@ -16,6 +16,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "tailwindcss": "^4.0.8",
+    "tailwindcss-motion": "^1.1.0",
     "typescript": "^5"
   },
   "dependencies": {

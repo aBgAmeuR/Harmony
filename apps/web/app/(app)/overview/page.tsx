@@ -46,10 +46,7 @@ export default function OverviewPage() {
 
 const TimeListenedChartWrapper = async () => {
   const session = await auth();
-  const data = await getMonthlyData(session?.user?.id);
-  if (!data) return null;
-
-  return <TimeListenedChart data={data} className="flex-1" />;
+  return <TimeListenedChart data={getMonthlyData(session?.user?.id)} className="flex-1" />;
 };
 
 const ListeningPatternChartWrapper = async () => {

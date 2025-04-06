@@ -8,22 +8,13 @@ importers:
 
   .:
     dependencies:
-      '@prisma/client':
-        specifier: ^6.0.1
-        version: 6.5.0(prisma@6.5.0(typescript@5.5.4))(typescript@5.5.4)
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
     devDependencies:
-      dotenv-cli:
-        specifier: ^7.4.4
-        version: 7.4.4
       prettier:
         specifier: ^3.4.2
         version: 3.5.3
-      prisma:
-        specifier: ^6.4.1
-        version: 6.5.0(typescript@5.5.4)
       tsx:
         specifier: 4.19.2
         version: 4.19.2
@@ -134,7 +125,7 @@ importers:
         specifier: 2.7.2
         version: 2.7.2(@prisma/client@6.5.0(prisma@6.5.0(typescript@5.5.4))(typescript@5.5.4))
       next-auth:
-        specifier: ^5.0.0-beta.24
+        specifier: ^5.0.0-beta.25
         version: 5.0.0-beta.25(next@15.3.0-canary.39(@playwright/test@1.51.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
     devDependencies:
       '@repo/database':
@@ -212,6 +203,9 @@ importers:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../config-typescript
+      '@types/node':
+        specifier: ^22.14.0
+        version: 22.14.0
       eslint:
         specifier: ^8
         version: 8.57.1
@@ -223,7 +217,7 @@ importers:
         version: 6.0.1
       tsup:
         specifier: ^8.3.5
-        version: 8.4.0(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.2)(typescript@5.5.4)(yaml@2.7.1)
+        version: 8.4.0(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.2)(typescript@5.5.4)
       tsx:
         specifier: 4.19.2
         version: 4.19.2
@@ -426,6 +420,9 @@ importers:
       tailwindcss:
         specifier: ^4.0.8
         version: 4.1.3
+      tailwindcss-motion:
+        specifier: ^1.1.0
+        version: 1.1.0(tailwindcss@4.1.3)
       typescript:
         specifier: ^5
         version: 5.5.4
@@ -3217,14 +3214,6 @@ packages:
   dot-case@2.1.1:
     resolution: {integrity: sha512-HnM6ZlFqcajLsyudHq7LeeLDr2rFAVYtDv/hV5qchQEidSck8j9OPUsXY9KwJv/lHMtYlX4DjRQqwFYa+0r8Ug==}
 
-  dotenv-cli@7.4.4:
-    resolution: {integrity: sha512-XkBYCG0tPIes+YZr4SpfFv76SQrV/LeCE8CI7JSEMi3VR9MvTihCGTOtbIexD6i2mXF+6px7trb1imVCXSNMDw==}
-    hasBin: true
-
-  dotenv-expand@10.0.0:
-    resolution: {integrity: sha512-GopVGCpVS1UKH75VKHGuQFqS1Gusej0z4FyQkPdwjil2gNIv+LNsqBlboOzpJFZKVT95GkCyWJbBSdFEFUWI2A==}
-    engines: {node: '>=12'}
-
   dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
     engines: {node: '>=12'}
@@ -5478,6 +5467,11 @@ packages:
   tailwind-merge@3.1.0:
     resolution: {integrity: sha512-aV27Oj8B7U/tAOMhJsSGdWqelfmudnGMdXIlMnk1JfsjwSjts6o8HyfN7SFH3EztzH4YH8kk6GbLTHzITJO39Q==}
 
+  tailwindcss-motion@1.1.0:
+    resolution: {integrity: sha512-0lK6rA4+367ffJdi1TtB72GlMCxJi2TP/xRiHc6An5pZSlU6WfIHhSvLxpcGilGZfBrOqc2q4woH1DEP/lCNbQ==}
+    peerDependencies:
+      tailwindcss: '>=3.0.0 || insiders'
+
   tailwindcss@4.1.3:
     resolution: {integrity: sha512-2Q+rw9vy1WFXu5cIxlvsabCwhU2qUwodGq03ODhLJ0jW4ek5BUtoCsnLB0qG+m8AHgEsSJcJGDSDe06FXlP74g==}
 
@@ -5845,11 +5839,6 @@ packages:
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
-
-  yaml@2.7.1:
-    resolution: {integrity: sha512-10ULxpnOCQXxJvBgxsn9ptjq6uviG/htZKk9veJGhlqn3w/DxQ631zFF+nlQXLwmImeS5amR2dl2U8sg6U9jsQ==}
-    engines: {node: '>= 14'}
-    hasBin: true
 
   yargs-parser@21.1.1:
     resolution: {integrity: sha512-tVpsJW7DdjecAiFpbIB1e3qxIQsE6NoPc5/eTdrbbIC4h0LVsWhnoa3g+m2HclBIujHzsxZ4VJVA+GUuc2/LBw==}
@@ -7686,7 +7675,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.17.30
+      '@types/node': 22.14.0
 
   '@types/graceful-fs@4.1.9':
     dependencies:
@@ -7739,7 +7728,7 @@ snapshots:
 
   '@types/through@0.0.33':
     dependencies:
-      '@types/node': 20.17.30
+      '@types/node': 22.14.0
 
   '@types/tinycolor2@1.4.6': {}
 
@@ -8695,15 +8684,6 @@ snapshots:
   dot-case@2.1.1:
     dependencies:
       no-case: 2.3.2
-
-  dotenv-cli@7.4.4:
-    dependencies:
-      cross-spawn: 7.0.6
-      dotenv: 16.4.7
-      dotenv-expand: 10.0.0
-      minimist: 1.2.8
-
-  dotenv-expand@10.0.0: {}
 
   dotenv@16.0.3: {}
 
@@ -10804,14 +10784,13 @@ snapshots:
 
   possible-typed-array-names@1.1.0: {}
 
-  postcss-load-config@6.0.1(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.2)(yaml@2.7.1):
+  postcss-load-config@6.0.1(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.2):
     dependencies:
       lilconfig: 3.1.3
     optionalDependencies:
       jiti: 2.4.2
       postcss: 8.5.3
       tsx: 4.19.2
-      yaml: 2.7.1
 
   postcss@8.4.31:
     dependencies:
@@ -11565,6 +11544,10 @@ snapshots:
 
   tailwind-merge@3.1.0: {}
 
+  tailwindcss-motion@1.1.0(tailwindcss@4.1.3):
+    dependencies:
+      tailwindcss: 4.1.3
+
   tailwindcss@4.1.3: {}
 
   tapable@2.2.1: {}
@@ -11682,7 +11665,7 @@ snapshots:
 
   tslib@2.8.1: {}
 
-  tsup@8.4.0(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.2)(typescript@5.5.4)(yaml@2.7.1):
+  tsup@8.4.0(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.2)(typescript@5.5.4):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.25.2)
       cac: 6.7.14
@@ -11692,7 +11675,7 @@ snapshots:
       esbuild: 0.25.2
       joycon: 3.1.1
       picocolors: 1.1.1
-      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.2)(yaml@2.7.1)
+      postcss-load-config: 6.0.1(jiti@2.4.2)(postcss@8.5.3)(tsx@4.19.2)
       resolve-from: 5.0.0
       rollup: 4.39.0
       source-map: 0.8.0-beta.0
@@ -12015,9 +11998,6 @@ snapshots:
   y18n@5.0.8: {}
 
   yallist@3.1.1: {}
-
-  yaml@2.7.1:
-    optional: true
 
   yargs-parser@21.1.1: {}
 

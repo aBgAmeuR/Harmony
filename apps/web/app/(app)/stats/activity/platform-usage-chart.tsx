@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
   Card,
   CardContent,
@@ -23,32 +24,35 @@ import { getMsPlayedInHours } from "~/lib/utils";
 
 import { getMonthlyPlatformData } from "./get-data";
 
-type Data = NonNullable<Awaited<ReturnType<typeof getMonthlyPlatformData>>>;
+type DataPromise = ReturnType<typeof getMonthlyPlatformData>;
 
 type PlatformUsageChartProps = {
-  data: Data;
+  data: DataPromise;
 };
 
 const chartConfig = {
   web: {
     label: "Web",
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
   mobile: {
     label: "Mobile",
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-2)",
   },
   desktop: {
     label: "Desktop",
-    color: "hsl(var(--chart-3))",
+    color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
 
 const msToHours = (ms: number) => ms / 1000 / 60 / 60;
 
 export function PlatformUsageChart({
-  data: chartData,
+  data: dataPromise,
 }: PlatformUsageChartProps) {
+  const chartData = React.use(dataPromise);
+  if (!chartData) return null;
+
   return (
     <Card>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">

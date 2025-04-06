@@ -3,8 +3,7 @@
 import { useTransition } from "react";
 import { signIn } from "@repo/auth/actions";
 import { Button, buttonVariants } from "@repo/ui/button";
-import { cn } from "@repo/ui/lib/utils";
-import { VariantProps } from "class-variance-authority";
+import { cn, VariantProps } from "@repo/ui/lib/utils";
 import { LoaderCircle } from "lucide-react";
 
 type GetDemoBtnProps = {

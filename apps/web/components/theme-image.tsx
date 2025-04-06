@@ -1,10 +1,10 @@
 "use client";
 
-import { VariantProps } from "class-variance-authority";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 
 import { useMounted } from "~/hooks/use-mounted";
+import { VariantProps } from "@repo/ui/lib/utils";
 
 type ThemeImageProps = {
   lightSrc: string;

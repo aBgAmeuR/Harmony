@@ -23,6 +23,9 @@ import {
 } from "./time-listened-chart";
 
 export default async function StatsActivityPage() {
+  const session = await auth();
+  const userId = session?.user?.id;
+
   return (
     <>
       <AppHeader items={["Package", "Stats", "Activity"]}>
@@ -30,39 +33,15 @@ export default async function StatsActivityPage() {
       </AppHeader>
       <div className="flex flex-1 flex-col gap-4 p-4 max-w-6xl w-full mx-auto">
         <Suspense fallback={<TimeListenedChartSkeleton />}>
-          <TimeListenedChartWrapper />
+          <TimeListenedChart data={getMonthlyData(userId)} />
         </Suspense>
         <Suspense fallback={<PlatformUsageChartSkeleton />}>
-          <PlatformUsageChartWrapper />
+          <PlatformUsageChart data={getMonthlyPlatformData(userId)} />
         </Suspense>
         <Suspense fallback={<FirstTimeEvolutionChartsSkeleton />}>
-          <FirstTimeEvolutionChartsWrapper />
+          <FirstTimeEvolutionCharts data={getFirstTimeListenedData(userId)} />
         </Suspense>
       </div>
     </>
   );
 }
-
-const TimeListenedChartWrapper = async () => {
-  const session = await auth();
-  const data = await getMonthlyData(session?.user?.id);
-  if (!data) return null;
-
-  return <TimeListenedChart data={data} />;
-};
-
-const PlatformUsageChartWrapper = async () => {
-  const session = await auth();
-  const data = await getMonthlyPlatformData(session?.user?.id);
-  if (!data) return null;
-
-  return <PlatformUsageChart data={data} />;
-};
-
-const FirstTimeEvolutionChartsWrapper = async () => {
-  const session = await auth();
-  const data = await getFirstTimeListenedData(session?.user.id);
-  if (!data) return null;
-
-  return <FirstTimeEvolutionCharts data={data} />;
-};

@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
       static: 180,
     },
     ppr: 'incremental',
+    dynamicIO: true,
+    useCache: true,
   },
 };
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { PropsWithChildren, useState } from "react";
+import { PropsWithChildren, Suspense, useState } from "react";
 import {
   QueryClient,
   QueryClientProvider as Provider,
@@ -9,5 +9,5 @@ import {
 export const QueryClientProvider = ({ children }: PropsWithChildren) => {
   const [queryClient] = useState(() => new QueryClient());
 
-  return <Provider client={queryClient}>{children}</Provider>;
+  return <Suspense><Provider client={queryClient}>{children}</Provider></Suspense>;
 };

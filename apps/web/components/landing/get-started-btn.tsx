@@ -6,11 +6,11 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@repo/ui/tooltip";
-import { type VariantProps } from "class-variance-authority";
 import { TriangleAlert } from "lucide-react";
 import Link from "next/link";
 
 import { Icons } from "../icons";
+import { VariantProps } from "@repo/ui/lib/utils";
 
 type GetStartedBtnProps = PropsWithChildren<{
   className?: string;

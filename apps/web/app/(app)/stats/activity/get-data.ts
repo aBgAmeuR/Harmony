@@ -2,8 +2,7 @@
 
 import { prisma } from "@repo/database";
 import { format, localeFormat } from "light-date";
-
-import { getMonthRangeAction } from "~/actions/month-range-actions";
+import { getMonthRange } from "~/lib/utils-server";
 
 const formatMonth = (date: Date) =>
   `${localeFormat(date, "{MMM}")} ${format(date, "{yyyy}")}`;
@@ -11,7 +10,7 @@ const formatMonth = (date: Date) =>
 const aggregateData = (
   items: Array<{ timestamp: Date }>,
   // eslint-disable-next-line no-unused-vars
-  keyExtractor: (item: any) => string,
+  keyExtractor: (item: any) => string
 ) => {
   const aggregated = items.reduce<Record<string, number>>((acc, item) => {
     const key = keyExtractor(item);
@@ -32,9 +31,10 @@ const aggregateData = (
 };
 
 export const getMonthlyData = async (userId: string | undefined) => {
+  "use cache";
   if (!userId) return null;
 
-  const monthRange = await getMonthRangeAction();
+  const monthRange = await getMonthRange(userId, false);
   if (!monthRange) return null;
 
   const tracks = await prisma.$queryRaw<
@@ -71,9 +71,10 @@ export const getMonthlyData = async (userId: string | undefined) => {
 };
 
 export const getMonthlyPlatformData = async (userId: string | undefined) => {
+  "use cache";
   if (!userId) return null;
 
-  const monthRange = await getMonthRangeAction();
+  const monthRange = await getMonthRange(userId, false);
   if (!monthRange) return null;
 
   const platforms = await prisma.$queryRaw<
@@ -103,7 +104,7 @@ export const getMonthlyPlatformData = async (userId: string | undefined) => {
     const platformKey = (
       Object.keys(PLATFORMS) as Array<keyof typeof PLATFORMS>
     ).find((key) =>
-      PLATFORMS[key].some((p) => platform.platform.toLowerCase().includes(p)),
+      PLATFORMS[key].some((p) => platform.platform.toLowerCase().includes(p))
     );
 
     if (!platformKey) return;
@@ -115,14 +116,14 @@ export const getMonthlyPlatformData = async (userId: string | undefined) => {
     const currentMsPlayed = platformsMap.get(platformKey) ?? 0;
     platformsMap.set(
       platformKey,
-      currentMsPlayed + Number(platform.totalmsplayed),
+      currentMsPlayed + Number(platform.totalmsplayed)
     );
   });
 
   const platformsLength = Array.from(platformsMap.values()).length;
   const totalMsPlayed = Array.from(platformsMap.values()).reduce(
     (acc, msPlayed) => acc + msPlayed,
-    0,
+    0
   );
 
   const average = totalMsPlayed / platformsLength;
@@ -135,7 +136,7 @@ export const getMonthlyPlatformData = async (userId: string | undefined) => {
       }
       return acc;
     },
-    { key: "", value: 0 },
+    { key: "", value: 0 }
   );
 
   return {
@@ -154,9 +155,10 @@ export const getMonthlyPlatformData = async (userId: string | undefined) => {
 };
 
 export const getFirstTimeListenedData = async (userId: string | undefined) => {
+  "use cache";
   if (!userId) return null;
 
-  const monthRange = await getMonthRangeAction();
+  const monthRange = await getMonthRange(userId, false);
   if (!monthRange) return null;
 
   const firstPlays = await prisma.track.findMany({
@@ -174,7 +176,7 @@ export const getFirstTimeListenedData = async (userId: string | undefined) => {
   if (firstPlays.length === 0) return null;
 
   const tracksData = aggregateData(firstPlays, (track) =>
-    new Date(track.timestamp).toISOString().slice(0, 7),
+    new Date(track.timestamp).toISOString().slice(0, 7)
   );
 
   const albumsData = aggregateData(
@@ -184,10 +186,10 @@ export const getFirstTimeListenedData = async (userId: string | undefined) => {
           if (!acc[play.albumId]) acc[play.albumId] = play;
           return acc;
         },
-        {},
-      ),
+        {}
+      )
     ),
-    (play) => new Date(play.timestamp).toISOString().slice(0, 7),
+    (play) => new Date(play.timestamp).toISOString().slice(0, 7)
   );
 
   const artistsData = aggregateData(
@@ -198,14 +200,14 @@ export const getFirstTimeListenedData = async (userId: string | undefined) => {
         const key = play.artistIds.join(",");
         if (!acc[key]) acc[key] = play;
         return acc;
-      }, {}),
+      }, {})
     ),
-    (play) => new Date(play.timestamp).toISOString().slice(0, 7),
+    (play) => new Date(play.timestamp).toISOString().slice(0, 7)
   );
 
   const filterData = (
     data: Array<{ key: string; value: number }>,
-    monthRange: { dateStart: Date; dateEnd: Date },
+    monthRange: { dateStart: Date; dateEnd: Date }
   ) =>
     data.filter((item) => {
       const date = new Date(item.key);

@@ -54,4 +54,4 @@ export default {
     newUser: "/",
     verifyRequest: "/",
   },
-} satisfies NextAuthConfig;
+} as NextAuthConfig;

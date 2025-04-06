@@ -1,5 +1,6 @@
 "use client";
 
+import * as React from "react";
 import {
   Card,
   CardContent,
@@ -18,10 +19,10 @@ import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import { getFirstTimeListenedData } from "./get-data";
 
-type Data = NonNullable<Awaited<ReturnType<typeof getFirstTimeListenedData>>>;
+type DataPromise = ReturnType<typeof getFirstTimeListenedData>;
 
 type FirstTimeEvolutionChartsProps = {
-  data: Data;
+  data: DataPromise;
 };
 
 const renderLineChart = (
@@ -85,8 +86,11 @@ const renderLineChart = (
 );
 
 export function FirstTimeEvolutionCharts({
-  data: chartData,
+  data: dataPromise,
 }: FirstTimeEvolutionChartsProps) {
+  const chartData = React.use(dataPromise);
+  if (!chartData) return null;
+
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
       <Card>
@@ -99,7 +103,7 @@ export function FirstTimeEvolutionCharts({
         <CardContent>
           {renderLineChart(
             chartData.tracks.data,
-            "hsl(var(--chart-1))",
+            "var(--chart-1)",
             "first-time-evolution",
             "Tracks",
           )}
@@ -115,7 +119,7 @@ export function FirstTimeEvolutionCharts({
         <CardContent>
           {renderLineChart(
             chartData.albums.data,
-            "hsl(var(--chart-2))",
+            "var(--chart-2)",
             "first-time-evolution",
             "Albums",
           )}
@@ -131,7 +135,7 @@ export function FirstTimeEvolutionCharts({
         <CardContent>
           {renderLineChart(
             chartData.artists.data,
-            "hsl(var(--chart-3))",
+            "var(--chart-3)",
             "first-time-evolution",
             "Artists",
           )}

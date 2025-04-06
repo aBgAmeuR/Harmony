@@ -52,7 +52,7 @@ export const ShuffleHabitChart = ({
         >
           <ChartTooltip
             cursor={false}
-            content={<ChartTooltipContent hideLabel numberFlow />}
+            content={<ChartTooltipContent hideLabel />}
           />
           <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
             <Label

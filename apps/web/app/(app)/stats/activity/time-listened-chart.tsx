@@ -25,17 +25,18 @@ import { getMsPlayedInHours } from "~/lib/utils";
 
 import { getMonthlyData } from "./get-data";
 
-type Data = NonNullable<Awaited<ReturnType<typeof getMonthlyData>>>;
+type DataPromise = ReturnType<typeof getMonthlyData>;
+type Data = NonNullable<Awaited<DataPromise>>;
 
 type TimeListenedChartProps = {
-  data: Data;
+  data: DataPromise;
   className?: string;
 };
 
 const chartConfig = {
   month: {
     label: "month",
-    color: "hsl(var(--chart-1)) ",
+    color: "var(--chart-1) ",
   },
 } satisfies ChartConfig;
 
@@ -47,9 +48,12 @@ const calculatePercentageChange = (current: number, previous: number) => {
 };
 
 export function TimeListenedChart({
-  data: chartData,
+  data: dataPromise,
   className,
 }: TimeListenedChartProps) {
+  const chartData = React.use(dataPromise);
+  if (!chartData) return null;
+
   return (
     <Card className={className}>
       <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">

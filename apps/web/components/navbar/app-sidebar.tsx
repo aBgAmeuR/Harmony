@@ -13,10 +13,9 @@ import {
 } from "@repo/ui/sidebar";
 import { Skeleton } from "@repo/ui/skeleton";
 import { ChevronsUpDown } from "lucide-react";
-import { User } from "next-auth";
 
 import { NavMain } from "~/components/navbar/nav-main";
-
+import { User } from "@repo/auth";
 import { CommandMenu } from "../command-menu";
 import { NavHeader } from "./nav-header";
 import { NavSecondary } from "./nav-secondary";
