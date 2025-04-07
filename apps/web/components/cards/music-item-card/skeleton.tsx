@@ -1,7 +1,13 @@
+"use client";
+
+import { useId } from "react";
 import { Skeleton } from "@repo/ui/skeleton";
 
-const getRandomWidth = (min: number, max: number) =>
-  Math.floor(Math.random() * (max - min + 1)) + min;
+const useRandomWidth = (min: number, max: number) => {
+  const id = useId();
+  const hash = Array.from(id).reduce((acc, char) => acc + char.charCodeAt(0), 0);
+  return min + (hash % (max - min));
+};
 
 type CardSkeletonProps = {
   showRank: boolean;
@@ -14,6 +20,11 @@ export const CardSkeleton = ({
   index,
   layout = "list",
 }: CardSkeletonProps) => {
+  const titleWidth = useRandomWidth(50, 130);
+  const subtitleWidth = useRandomWidth(50, 130);
+  const largeTitleWidth = useRandomWidth(150, 350);
+  const largeSubtitleWidth = useRandomWidth(150, 350);
+
   if (layout === "grid")
     return (
       <article className="flex flex-col items-start space-y-2 h-full">
@@ -21,11 +32,11 @@ export const CardSkeleton = ({
         <div className="w-full inline-flex flex-col gap-1">
           <Skeleton
             className="h-4"
-            style={{ maxWidth: `${getRandomWidth(50, 130)}px` }}
+            style={{ maxWidth: `${titleWidth}px` }}
           />
           <Skeleton
             className="h-4"
-            style={{ maxWidth: `${getRandomWidth(50, 130)}px` }}
+            style={{ maxWidth: `${subtitleWidth}px` }}
           />
         </div>
         <div className="flex flex-row items-end justify-between w-full">
@@ -48,11 +59,11 @@ export const CardSkeleton = ({
       <div className="flex-1 space-y-1">
         <Skeleton
           className="h-4"
-          style={{ maxWidth: `${getRandomWidth(150, 350)}px` }}
+          style={{ maxWidth: `${largeTitleWidth}px` }}
         />
         <Skeleton
           className="h-4"
-          style={{ maxWidth: `${getRandomWidth(150, 350)}px` }}
+          style={{ maxWidth: `${largeSubtitleWidth}px` }}
         />
       </div>
     </article>

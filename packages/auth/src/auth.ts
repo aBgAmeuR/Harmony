@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import NextAuth, { type DefaultSession } from "next-auth";
+import NextAuth, { NextAuthResult, type DefaultSession } from "next-auth";
 
 import { prisma } from "@repo/database";
 import authConfig from "./auth.config";
@@ -18,10 +18,15 @@ declare module "next-auth" {
   }
 }
 
-export const { handlers, signIn, signOut, auth } = NextAuth({
+const result = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt"
   },
   ...authConfig
 });
+
+export const handlers: NextAuthResult['handlers'] = result.handlers;
+export const auth: NextAuthResult['auth'] = result.auth;
+export const signIn: NextAuthResult['signIn'] = result.signIn;
+export const signOut: NextAuthResult['signOut'] = result.signOut;

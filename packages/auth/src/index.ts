@@ -4,7 +4,7 @@ import NextAuth, { type Session, type User } from "next-auth";
 import authConfig from "./auth.config";
 import { SessionProvider, useSession } from "next-auth/react";
 
-const middleware = NextAuth(authConfig).auth(async (req) => {
+const middleware: any = NextAuth(authConfig).auth(async (req) => {
   if (
     process.env.APP_MAINTENANCE === "true" &&
     req.nextUrl.pathname !== "/" &&
