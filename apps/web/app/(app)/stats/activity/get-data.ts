@@ -31,7 +31,6 @@ const aggregateData = (
 };
 
 export const getMonthlyData = async (userId: string | undefined) => {
-  "use cache";
   if (!userId) return null;
 
   const monthRange = await getMonthRange(userId, false);
@@ -71,7 +70,6 @@ export const getMonthlyData = async (userId: string | undefined) => {
 };
 
 export const getMonthlyPlatformData = async (userId: string | undefined) => {
-  "use cache";
   if (!userId) return null;
 
   const monthRange = await getMonthRange(userId, false);
@@ -155,7 +153,6 @@ export const getMonthlyPlatformData = async (userId: string | undefined) => {
 };
 
 export const getFirstTimeListenedData = async (userId: string | undefined) => {
-  "use cache";
   if (!userId) return null;
 
   const monthRange = await getMonthRange(userId, false);
