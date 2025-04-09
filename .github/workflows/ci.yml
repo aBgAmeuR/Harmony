@@ -11,10 +11,13 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: "npm"
-      - run: npm ci
+          cache: "pnpm"
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - run: pnpm install --frozen-lockfile
       - run: npx playwright install chromium
-      - run: npm run ci
+      - run: pnpm run ci
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
           AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
