@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Inter } from "next/font/google";
 import { ViewTransitions } from "next-view-transitions";
+import NextTopLoader from 'nextjs-toploader';
 
 import { Providers } from "~/components/providers/providers";
 
@@ -52,6 +53,7 @@ export default function RootLayout({
           // vaul-drawer-wrapper=""
           className={cn(inter.className, "antialiased")}
         >
+          <NextTopLoader />
           <ErrorBoundary errorComponent={Error}>
             <Providers>{children}</Providers>
           </ErrorBoundary>
