@@ -16,7 +16,7 @@
   --card-foreground: oklch(0.141 0.005 285.823);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.77, 0.53, 148.67);
+  --primary: oklch(0.77 0.2124 148.67);
   --primary-foreground: oklch(0.982 0.018 155.826);
   --secondary: oklch(0.967 0.001 286.375);
   --secondary-foreground: oklch(0.21 0.006 285.885);
@@ -28,11 +28,11 @@
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.723 0.219 149.579);
-  --chart-1: oklch(0.68.9, 0.46.75, 148.921);
-  --chart-2: oklch(0.39.4, 0.24.5, 149.512);
-  --chart-3: oklch(0.46, 0.30.75, 148.867);
-  --chart-4: oklch(0.31.4, 0.17.5, 149.799);
-  --chart-5: oklch(0.22.4, 0.8.5, 153.629);
+  --chart-1: oklch(0.68.9 0.46.75 148.921);
+  --chart-2: oklch(0.39.4 0.24.5 149.512);
+  --chart-3: oklch(0.46 0.30.75 148.867);
+  --chart-4: oklch(0.31.4 0.17.5 149.799);
+  --chart-5: oklch(0.22.4 0.8.5 153.629);
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.141 0.005 285.823);
   --sidebar-primary: oklch(0.723 0.219 149.579);
@@ -50,7 +50,7 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.21 0.006 285.885);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.77, 0.53, 148.67);
+  --primary: oklch(0.77 0.2124 148.67);
   --primary-foreground: oklch(0.393 0.095 152.535);
   --secondary: oklch(0.274 0.006 286.033);
   --secondary-foreground: oklch(0.985 0 0);
@@ -62,11 +62,11 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.527 0.154 150.069);
-  --chart-1: oklch(0.68.9, 0.46.75, 148.921);
-  --chart-2: oklch(0.39.4, 0.24.5, 149.512);
-  --chart-3: oklch(0.46, 0.30.75, 148.867);
-  --chart-4: oklch(0.31.4, 0.17.5, 149.799);
-  --chart-5: oklch(0.22.4, 0.8.5, 153.629);
+  --chart-1: oklch(0.68.9 0.46.75 148.921);
+  --chart-2: oklch(0.39.4 0.24.5 149.512);
+  --chart-3: oklch(0.46 0.30.75 148.867);
+  --chart-4: oklch(0.31.4 0.17.5 149.799);
+  --chart-5: oklch(0.22.4 0.8.5 153.629);
   --sidebar: oklch(0.21 0.006 285.885);
   --sidebar-foreground: oklch(0.985 0 0);
   --sidebar-primary: oklch(0.696 0.17 162.48);
@@ -157,15 +157,15 @@
   }
   
   @keyframes appear {
-    0 {
+    0% {
       opacity: 0;
       transform: translateY(1rem);
       filter: blur(0.5rem);
     }
-    50 {
+    50% {
       filter: blur(0);
     }
-    100 {
+    100% {
       opacity: 1;
       transform: translateY(0);
       filter: blur(0);
@@ -173,15 +173,15 @@
   }
   
   @keyframes appear-left {
-    0 {
+    0% {
       opacity: 0;
       transform: translateX(-1rem);
       filter: blur(0.5rem);
     }
-    50 {
+    50% {
       filter: blur(0);
     }
-    100 {
+    100% {
       opacity: 1;
       transform: translateX(0);
       filter: blur(0);
@@ -189,15 +189,15 @@
   }
   
   @keyframes appear-right {
-    0 {
+    0% {
       opacity: 0;
       transform: translateX(1rem);
       filter: blur(0.5rem);
     }
-    50 {
+    50% {
       filter: blur(0);
     }
-    100 {
+    100% {
       opacity: 1;
       transform: translateX(0);
       filter: blur(0);
@@ -205,15 +205,15 @@
   }
   
   @keyframes appear-zoom {
-    0 {
+    0% {
       opacity: 0;
       transform: scale(0.85);
       filter: blur(0.5rem);
     }
-    50 {
+    50% {
       filter: blur(0);
     }
-    100 {
+    100% {
       opacity: 1;
       transform: scale(1);
       filter: blur(0);
@@ -221,52 +221,52 @@
   }
   
   @keyframes pulse-hover {
-    0 {
+    0% {
       opacity: 1;
       transform: translateY(0);
     }
-    50 {
+    50% {
       opacity: 0.5;
       transform: translateY(-1rem);
     }
-    100 {
+    100% {
       opacity: 1;
       transform: translateY(0);
     }
   }
   
   @keyframes hover {
-    0 {
+    0% {
       transform: translateY(0) translateX(0);
     }
-    50 {
+    50% {
       transform: translateY(-1rem) translateX(1rem);
     }
-    100 {
+    100% {
       transform: translateY(0) translateX(0);
     }
   }
   
   @keyframes hover-reverse {
-    0 {
+    0% {
       transform: translateY(0) translateX(0);
     }
-    50 {
+    50% {
       transform: translateY(1rem) translateX(1rem);
     }
-    100 {
+    100% {
       transform: translateY(0) translateX(0);
     }
   }
   
   @keyframes pulse-fade {
-    0 {
+    0% {
       opacity: 1;
     }
-    50 {
+    50% {
       opacity: 0.3;
     }
-    100 {
+    100% {
       opacity: 1;
     }
   }

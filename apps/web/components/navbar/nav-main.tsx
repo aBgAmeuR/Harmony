@@ -19,8 +19,8 @@ import {
 } from "@repo/ui/sidebar";
 import { ChevronRight, type LucideIcon } from "lucide-react";
 import { PrefetchKind } from "next/dist/client/components/router-reducer/router-reducer-types";
-import { usePathname, useRouter } from "next/navigation";
-import { Link } from "next-view-transitions";
+import { usePathname } from "next/navigation";
+import { useRouter } from 'nextjs-toploader/app';
 
 type Item = {
   title: string;
@@ -85,17 +85,19 @@ export function NavMain({ label, items, disable }: NavMainProps) {
                               className="group-data-[collapsible=icon]:!size-auto"
                             >
                               {!disable ? (
-                                <Link
-                                  href={subItem.url}
+                                <button
                                   onMouseEnter={() => {
-                                    router.prefetch(item.url, {
+                                    router.prefetch(subItem.url, {
                                       kind: PrefetchKind.FULL,
                                     });
+                                  }}
+                                  onClick={() => {
+                                    router.push(subItem.url);
                                   }}
                                 >
                                   {subItem.icon && <subItem.icon />}
                                   <span>{subItem.title}</span>
-                                </Link>
+                                </button>
                               ) : (
                                 <div>
                                   {subItem.icon && <subItem.icon />}

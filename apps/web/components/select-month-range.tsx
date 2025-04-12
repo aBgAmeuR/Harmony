@@ -13,6 +13,7 @@ import { useMounted } from "~/hooks/use-mounted";
 import { useSelectMonthRange } from "~/hooks/use-select-month-range";
 
 import { formatDate, MonthRangePicker } from "./month-range-picker";
+import { Skeleton } from "@repo/ui/skeleton";
 
 export const SelectMonthRange = () => {
   const isMounted = useMounted();
@@ -74,3 +75,5 @@ export const SelectMonthRange = () => {
     />
   );
 };
+
+export const SelectMonthRangeSkeleton = () => <Skeleton className="w-[220px] h-9 rounded-md" />;

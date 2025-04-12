@@ -61,7 +61,7 @@ const features = [
 export function Features() {
   return (
     <section className="py-12 sm:py-16 md:py-20 px-4">
-      <div className="max-w-screen-xl mx-auto">
+      <div className="max-w-screen-xl w-full mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-12 animate-appear opacity-0 delay-200">
           Discover Harmony's Features
         </h2>

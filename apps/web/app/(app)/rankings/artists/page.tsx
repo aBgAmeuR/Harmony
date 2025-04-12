@@ -1,3 +1,4 @@
+import { Main } from "@repo/ui/components/main";
 import React, { Suspense } from "react";
 
 import { AppHeader } from "~/components/app-header";
@@ -11,11 +12,9 @@ export default function RankingsArtistsPage() {
       <AppHeader items={["Package", "Rankings", "Artists"]}>
         <SelectMonthRange />
       </AppHeader>
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <Suspense fallback={<ListSkeleton />}>
-          <MusicList type="rankingArtists" />
-        </Suspense>
-      </div>
+      <Main>
+        <MusicList type="rankingArtists" />
+      </Main>
     </>
   );
 }

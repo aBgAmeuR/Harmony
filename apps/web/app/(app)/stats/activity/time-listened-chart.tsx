@@ -24,6 +24,7 @@ import {
 import { getMsPlayedInHours } from "~/lib/utils";
 
 import { getMonthlyData } from "./get-data";
+import { cn } from "@repo/ui/lib/utils";
 
 type DataPromise = ReturnType<typeof getMonthlyData>;
 type Data = NonNullable<Awaited<DataPromise>>;
@@ -55,8 +56,8 @@ export function TimeListenedChart({
   if (!chartData) return null;
 
   return (
-    <Card className={className}>
-      <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
+    <Card className={cn("pt-0", className)}>
+      <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row [.border-b]:pb-0">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-5">
           <CardTitle>Time Listened Over Months</CardTitle>
           <CardDescription>

@@ -54,8 +54,8 @@ export function PlatformUsageChart({
   if (!chartData) return null;
 
   return (
-    <Card>
-      <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
+    <Card className="pt-0">
+      <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row [.border-b]:pb-0">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-5">
           <CardTitle>Platform Usage Over Time</CardTitle>
           <CardDescription>Showing platform usage statistics</CardDescription>

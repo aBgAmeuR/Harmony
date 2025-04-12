@@ -8,7 +8,7 @@ import { Navbar } from "~/components/landing/navbar";
 
 export default async function HomePage() {
   return (
-    <div className="flex h-screen w-screen flex-col">
+    <div className="flex min-h-screen h-full flex-col">
       <Navbar />
       <Hero />
       <Demo />

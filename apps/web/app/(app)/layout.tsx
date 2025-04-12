@@ -7,6 +7,7 @@ import { cookies } from "next/headers";
 import { AppSidebar } from "~/components/navbar/app-sidebar";
 
 import Error from "../error";
+import NextTopLoader from "nextjs-toploader";
 
 export default async function AppLayout({
   children,
@@ -21,7 +22,16 @@ export default async function AppLayout({
     <ErrorBoundary errorComponent={Error}>
       <SidebarProvider defaultOpen={sideBarState === "true"}>
         <AppSidebar user={session?.user} />
-        <SidebarInset>{children}</SidebarInset>
+        <SidebarInset>
+          <NextTopLoader
+            color="#5be990"
+            crawl={true}
+            showSpinner={false}
+            height={2}
+            zIndex={9}
+          />
+          {children}
+        </SidebarInset>
       </SidebarProvider>
     </ErrorBoundary>
   );

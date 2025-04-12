@@ -1,9 +1,9 @@
 import React, { Suspense } from "react";
 
 import { AppHeader } from "~/components/app-header";
-import { ListSkeleton } from "~/components/list-skeleton";
 import { MusicList } from "~/components/lists/music-list";
 import { SelectMonthRange } from "~/components/select-month-range";
+import { Main } from "@repo/ui/components/main";
 
 export default function RankingsTracksPage() {
   return (
@@ -11,11 +11,9 @@ export default function RankingsTracksPage() {
       <AppHeader items={["Package", "Rankings", "Tracks"]}>
         <SelectMonthRange />
       </AppHeader>
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-        <Suspense fallback={<ListSkeleton />}>
-          <MusicList type="rankingTracks" />
-        </Suspense>
-      </div>
+      <Main>
+        <MusicList type="rankingTracks" />
+      </Main>
     </>
   );
 }

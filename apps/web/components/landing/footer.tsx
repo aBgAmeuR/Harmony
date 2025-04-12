@@ -11,7 +11,7 @@ export const Footer = () => {
 
   return (
     <footer className="w-full bg-background px-4 pt-4">
-      <div className="mx-auto max-w-screen-xl">
+      <div className="mx-auto w-full max-w-screen-xl">
         <div className="bg-background pb-4 text-foreground">
           <div className="flex flex-col items-center justify-between gap-4 border-t pt-4 text-xs text-muted-foreground sm:flex-col md:flex-row">
             <p>

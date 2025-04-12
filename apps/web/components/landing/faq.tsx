@@ -1,6 +1,5 @@
-// import * as AccordionPrimitive from "@radix-ui/react-accordion";
-import { Accordion, AccordionContent, AccordionItem } from "@repo/ui/accordion";
-import { Music, Plus, RefreshCw, Share2, Shield, Zap } from "lucide-react";
+import { AccordionIcons } from "@repo/ui/components/accordion-icons";
+import { Music, RefreshCw, Share2, Shield, Zap } from "lucide-react";
 
 const items = [
   {
@@ -43,43 +42,11 @@ const items = [
 export function FAQ() {
   return (
     <section className="py-12 sm:py-16 md:py-20 px-4">
-      <div className="max-w-3xl mx-auto">
+      <div className="max-w-3xl w-full mx-auto">
         <h2 className="text-2xl md:text-3xl font-bold text-center mb-8 sm:mb-10 md:mb-12 animate-appear opacity-0 delay-500">
           Frequently Asked Questions
         </h2>
-        <Accordion
-          type="single"
-          collapsible
-          className="w-full animate-appear opacity-0 delay-700"
-          defaultValue="3"
-        >
-          {items.map((item) => (
-            <AccordionItem value={item.id} key={item.id} className="py-2">
-              {/* <AccordionPrimitive.Header className="flex">
-                <AccordionPrimitive.Trigger className="flex flex-1 items-center justify-between py-2 text-left text-sm sm:text-base md:text-[15px] font-semibold leading-6 transition-all [&>svg>path:last-child]:origin-center [&>svg>path:last-child]:transition-all [&>svg>path:last-child]:duration-200 [&[data-state=open]>svg>path:last-child]:rotate-90 [&[data-state=open]>svg>path:last-child]:opacity-0 [&[data-state=open]>svg]:rotate-180">
-                  <span className="flex items-center gap-3">
-                    <item.icon
-                      size={16}
-                      strokeWidth={2}
-                      className="shrink-0 opacity-60"
-                      aria-hidden="true"
-                    />
-                    <span>{item.title}</span>
-                  </span>
-                  <Plus
-                    size={16}
-                    strokeWidth={2}
-                    className="shrink-0 opacity-60 transition-transform duration-200"
-                    aria-hidden="true"
-                  />
-                </AccordionPrimitive.Trigger>
-              </AccordionPrimitive.Header> */}
-              <AccordionContent className="pb-2 ps-7 text-sm sm:text-base text-muted-foreground">
-                {item.content}
-              </AccordionContent>
-            </AccordionItem>
-          ))}
-        </Accordion>
+        <AccordionIcons items={items} className="animate-appear opacity-0 delay-500" />
       </div>
     </section>
   );

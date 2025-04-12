@@ -33,7 +33,7 @@ export const NumbersStatsCards = async () => {
           </div>
           <Clock className="size-8 opacity-75" />
         </div>
-        <p className="mt-4 text-sm opacity-75">
+        <p className="mt-1 text-sm opacity-75">
           <NumberFlow
             value={Math.round(msToHours(data.listeningTime) / 24)}
             prefix="That's about "
@@ -85,7 +85,7 @@ export const NumbersStatsCards = async () => {
       </Card>
 
       {/* Different Artists */}
-      <Card className="p-6 flex items-center space-x-4">
+      <Card className="p-6 flex flex-row items-center space-x-4">
         <Users className="size-12 text-indigo-500" />
         <div>
           <p className="text-sm text-muted-foreground">Different Artists</p>
