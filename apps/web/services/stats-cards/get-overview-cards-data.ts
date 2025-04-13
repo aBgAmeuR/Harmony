@@ -43,24 +43,24 @@ export const getOverviewCardsData = async (userId: string | undefined) => {
     },
   });
 
-  const mostActiveDayQuery = prisma.track.groupBy({
-    by: ["timestamp"],
-    _sum: { msPlayed: true },
-    _count: { _all: true },
-    where: {
-      userId,
-      timestamp: {
-        gte: monthRange.dateStart,
-        lt: monthRange.dateEnd,
-      },
-    },
-    orderBy: {
-      _sum: {
-        msPlayed: "desc",
-      },
-    },
-    take: 1,
-  });
+  const mostActiveDayQuery = prisma.$queryRaw<
+    {
+      day: string; // Change to string to represent date without time
+      totalmsplayed: number;
+      totalcount: number;
+    }[]
+  >`
+    SELECT 
+      TO_CHAR(timestamp, 'YYYY-MM-DD') AS day,
+      SUM("msPlayed") as totalmsplayed,
+      COUNT(*) as totalcount
+    FROM "Track"
+    WHERE "userId" = ${userId}
+      AND timestamp BETWEEN ${monthRange.dateStart} AND ${monthRange.dateEnd}
+    GROUP BY day
+    ORDER BY totalmsplayed DESC
+    LIMIT 1
+  `;
 
   const [listeningTime, totalPlays, uniqueArtists, mostActiveDay] =
     await Promise.all([
@@ -74,6 +74,9 @@ export const getOverviewCardsData = async (userId: string | undefined) => {
     totalPlays /
     ((monthRange.dateEnd.getTime() - monthRange.dateStart.getTime()) /
       (1000 * 60 * 60 * 24));
+  
+  console.log("mostActiveDay", mostActiveDay);
+  
 
   return {
     listeningTime: Number(listeningTime?._sum?.msPlayed) || 0,
@@ -81,9 +84,10 @@ export const getOverviewCardsData = async (userId: string | undefined) => {
     totalPlaysPerDay: Math.round(totalPlaysPerDay) || 0,
     uniqueArtists: uniqueArtists.length || 0,
     mostActiveDay: {
-      day: mostActiveDay[0]?.timestamp,
-      timePlayed: Number(mostActiveDay[0]?._sum?.msPlayed) || 0,
-      totalPlayed: mostActiveDay[0]?._count?._all || 0,
+      // The result from raw query will have a different structure
+      day: mostActiveDay[0]?.day ? new Date(mostActiveDay[0].day) : null,
+      timePlayed: Number(mostActiveDay[0]?.totalmsplayed) || 0,
+      totalPlayed: Number(mostActiveDay[0]?.totalcount) || 0,
     },
   };
 };

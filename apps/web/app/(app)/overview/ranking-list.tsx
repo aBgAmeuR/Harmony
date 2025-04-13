@@ -12,6 +12,7 @@ import { ArrowRight } from "lucide-react";
 import { ListSkeleton } from "~/components/list-skeleton";
 import { MusicList } from "~/components/lists/music-list";
 import { musicListConfig } from "~/components/lists/music-list/config";
+import { cn } from "@repo/ui/lib/utils";
 
 const options = {
   dashboardArtists: {
@@ -42,7 +43,7 @@ export const RankingList = ({
   const { label, description, href } = options[type];
 
   return (
-    <Card className={className}>
+    <Card className={cn("pb-2", className)}>
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <div className="space-y-1.5">
           <CardTitle>{label}</CardTitle>
@@ -60,7 +61,7 @@ export const RankingList = ({
           </a>
         </Button>
       </CardHeader>
-      <CardContent className="pb-2">
+      <CardContent>
         <Suspense fallback={<ListSkeleton length={5} />}>
           <MusicList type={type} listLength={5} demoData={demoData} />
         </Suspense>

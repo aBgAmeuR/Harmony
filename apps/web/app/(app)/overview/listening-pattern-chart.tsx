@@ -8,6 +8,7 @@ import {
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { NumberFlow } from "@repo/ui/components/number";
+import { cn } from "@repo/ui/lib/utils";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Brain } from "lucide-react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
@@ -42,7 +43,7 @@ export function ListeningPatternChart({
   className,
 }: ListeningPatternChartProps) {
   return (
-    <Card className={className}>
+    <Card className={cn("pb-0", className)}>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium">
           Listening Patterns
