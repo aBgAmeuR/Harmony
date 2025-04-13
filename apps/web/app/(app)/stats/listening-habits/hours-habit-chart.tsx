@@ -16,7 +16,7 @@ import { getHoursHabit } from "./get-charts-data";
 const chartConfig = {
   msPlayed: {
     label: "Listening Time",
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
 } satisfies ChartConfig;
 

@@ -1,13 +1,6 @@
 "use client";
 
 import * as React from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
 import { ChartConfig, ChartContainer, ChartTooltip } from "@repo/ui/chart";
 import { NumberFlow } from "@repo/ui/number";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -20,11 +13,12 @@ import {
   ReferenceLine,
   XAxis,
 } from "recharts";
+import { cn } from "@repo/ui/lib/utils";
 
+import { ChartCard, ChartCardSkeleton } from "~/components/charts"; // Import the new components
 import { getMsPlayedInHours } from "~/lib/utils";
 
 import { getMonthlyData } from "./get-data";
-import { cn } from "@repo/ui/lib/utils";
 
 type DataPromise = ReturnType<typeof getMonthlyData>;
 type Data = NonNullable<Awaited<DataPromise>>;
@@ -55,55 +49,57 @@ export function TimeListenedChart({
   const chartData = React.use(dataPromise);
   if (!chartData) return null;
 
+  const headerContent = (
+    <>
+      <span className="text-xs text-muted-foreground">
+        Average time listened
+      </span>
+      <span className="text-lg font-bold leading-none sm:text-xl">
+        <NumberFlow
+          value={msToHours(chartData.average).toFixed(2)}
+          suffix=" hours"
+        />
+      </span>
+    </>
+  );
+
+  const chart = (
+    <ChartContainer config={chartConfig} className="aspect-[10/3] w-full">
+      <BarChart accessibilityLayer data={chartData.data}>
+        <CartesianGrid vertical={false} />
+        <XAxis
+          dataKey="month"
+          tickLine={false}
+          axisLine={false}
+          tickMargin={8}
+        />
+        <ChartTooltip
+          content={(props) => (
+            <CustomTooltip {...props} chartData={chartData} />
+          )}
+          cursor={true}
+        />
+        <Bar dataKey="value" fill="var(--color-month)" radius={4} />
+        <ReferenceLine
+          y={chartData.average}
+          stroke="red"
+          strokeDasharray="3 3"
+        >
+          <Label value="Average" position="insideTopLeft" fill="red" />
+        </ReferenceLine>
+      </BarChart>
+    </ChartContainer>
+  );
+
   return (
-    <Card className={cn("pt-0", className)}>
-      <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row [.border-b]:pb-0">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-5">
-          <CardTitle>Time Listened Over Months</CardTitle>
-          <CardDescription>
-            Showing total time listened in hours over the months
-          </CardDescription>
-        </div>
-        <div className="flex flex-col justify-center border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-6 sm:py-0">
-          <span className="text-xs text-muted-foreground">
-            Average time listened
-          </span>
-          <span className="text-lg font-bold leading-none sm:text-xl">
-            <NumberFlow
-              value={msToHours(chartData.average).toFixed(2)}
-              suffix=" hours"
-            />
-          </span>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="aspect-[10/3] w-full">
-          <BarChart accessibilityLayer data={chartData.data}>
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey="month"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-            />
-            <ChartTooltip
-              content={(props) => (
-                <CustomTooltip {...props} chartData={chartData} />
-              )}
-              cursor={true}
-            />
-            <Bar dataKey="value" fill="var(--color-month)" radius={4} />
-            <ReferenceLine
-              y={chartData.average}
-              stroke="red"
-              strokeDasharray="3 3"
-            >
-              <Label value="Average" position="insideTopLeft" fill="red" />
-            </ReferenceLine>
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+    <ChartCard
+      title="Time Listened Over Months"
+      description="Showing total time listened in hours over the months"
+      chart={chart}
+      headerContent={headerContent}
+      className={className}
+      cardContentClassName="pt-6"
+    />
   );
 }
 
@@ -112,30 +108,25 @@ export const TimeListenedChartSkeleton = ({
 }: {
   className?: string;
 }) => {
+  const headerContentSkeleton = (
+    <>
+      <span className="text-xs text-muted-foreground">
+        Average time listened
+      </span>
+      <span className="text-lg font-bold leading-none sm:text-xl">
+        <Skeleton className="py-px">101,46 hours</Skeleton>
+      </span>
+    </>
+  );
+
   return (
-    <Card className={className}>
-      <CardHeader className="flex flex-col items-stretch space-y-0 border-b p-0 sm:flex-row">
-        <div className="flex flex-1 flex-col justify-center gap-1 px-6 py-5 sm:py-5">
-          <CardTitle>Time Listened Over Months</CardTitle>
-          <CardDescription>
-            Showing total time listened in hours over the months
-          </CardDescription>
-        </div>
-        <div className="flex flex-col justify-center border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-6 sm:py-0">
-          <span className="text-xs text-muted-foreground">
-            Average time listened
-          </span>
-          <span className="text-lg font-bold leading-none sm:text-xl">
-            <Skeleton className="py-px">101,46 hours</Skeleton>
-          </span>
-        </div>
-      </CardHeader>
-      <CardContent>
-        <div className="size-full aspect-[10/3] pt-6">
-          <Skeleton className="size-full" />
-        </div>
-      </CardContent>
-    </Card>
+    <ChartCardSkeleton
+      title="Time Listened Over Months"
+      description="Showing total time listened in hours over the months"
+      headerContentSkeleton={headerContentSkeleton}
+      chartHeightClassName="aspect-[10/3]"
+      className={className}
+    />
   );
 };
 

@@ -2,20 +2,14 @@
 
 import * as React from "react";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@repo/ui/card";
-import {
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
 import { NumberFlow } from "@repo/ui/number";
-import { Skeleton } from "@repo/ui/skeleton";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
+
+import { ChartCard, ChartCardSkeleton } from "~/components/charts"; // Import the new components
 
 import { getFirstTimeListenedData } from "./get-data";
 
@@ -93,54 +87,42 @@ export function FirstTimeEvolutionCharts({
 
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Tracks Evolution</CardTitle>
-          <CardDescription>
-            Evolution of tracks listened to for the first time.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {renderLineChart(
-            chartData.tracks.data,
-            "var(--chart-1)",
-            "first-time-evolution",
-            "Tracks",
-          )}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Albums Evolution</CardTitle>
-          <CardDescription>
-            Evolution of albums listened to for the first time.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {renderLineChart(
-            chartData.albums.data,
-            "var(--chart-2)",
-            "first-time-evolution",
-            "Albums",
-          )}
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Artists Evolution</CardTitle>
-          <CardDescription>
-            Evolution of artists listened to for the first time.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {renderLineChart(
-            chartData.artists.data,
-            "var(--chart-3)",
-            "first-time-evolution",
-            "Artists",
-          )}
-        </CardContent>
-      </Card>
+      <ChartCard
+        title="Tracks Evolution"
+        description="Evolution of tracks listened to for the first time."
+        chart={renderLineChart(
+          chartData.tracks.data,
+          "var(--chart-1)",
+          "first-time-evolution",
+          "Tracks",
+        )}
+        cardContentClassName="p-0"
+        showSeparator={false}
+      />
+      <ChartCard
+        title="Albums Evolution"
+        description="Evolution of albums listened to for the first time."
+        chart={renderLineChart(
+          chartData.albums.data,
+          "var(--chart-2)",
+          "first-time-evolution",
+          "Albums",
+        )}
+        cardContentClassName="p-0"
+        showSeparator={false}
+      />
+      <ChartCard
+        title="Artists Evolution"
+        description="Evolution of artists listened to for the first time."
+        chart={renderLineChart(
+          chartData.artists.data,
+          "hsl(var(--chart-3))",
+          "first-time-evolution",
+          "Artists",
+        )}
+        cardContentClassName="p-0"
+        showSeparator={false}
+      />
     </div>
   );
 }
@@ -148,39 +130,24 @@ export function FirstTimeEvolutionCharts({
 export const FirstTimeEvolutionChartsSkeleton = () => {
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <Card>
-        <CardHeader>
-          <CardTitle>Tracks Evolution</CardTitle>
-          <CardDescription>
-            Evolution of tracks listened to for the first time.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="aspect-video" />
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Albums Evolution</CardTitle>
-          <CardDescription>
-            Evolution of albums listened to for the first time.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="aspect-video" />
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <CardTitle>Artists Evolution</CardTitle>
-          <CardDescription>
-            Evolution of artists listened to for the first time
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Skeleton className="aspect-video" />
-        </CardContent>
-      </Card>
+      <ChartCardSkeleton
+        title="Tracks Evolution"
+        description="Evolution of tracks listened to for the first time."
+        chartHeightClassName="aspect-video"
+        showSeparator={false}
+      />
+      <ChartCardSkeleton
+        title="Albums Evolution"
+        description="Evolution of albums listened to for the first time."
+        chartHeightClassName="aspect-video"
+        showSeparator={false}
+      />
+      <ChartCardSkeleton
+        title="Artists Evolution"
+        description="Evolution of artists listened to for the first time"
+        chartHeightClassName="aspect-video"
+        showSeparator={false}
+      />
     </div>
   );
 };

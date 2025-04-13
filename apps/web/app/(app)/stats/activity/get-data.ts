@@ -60,6 +60,8 @@ export const getMonthlyData = async (userId: string | undefined) => {
 
   const average = totalMsPlayed / tracks.length;
 
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
   return {
     data: Object.entries(data).map(([key, value]) => ({
       month: key,
