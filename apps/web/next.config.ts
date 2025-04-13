@@ -1,4 +1,9 @@
 import type { NextConfig } from "next";
+import bundleAnalyzer from "@next/bundle-analyzer";
+
+const withBundleAnalyzer = bundleAnalyzer({
+  enabled: true,
+})
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
@@ -16,9 +21,11 @@ const nextConfig: NextConfig = {
       static: 180,
     },
     ppr: 'incremental',
+    reactCompiler: true,
     // dynamicIO: true,
     // useCache: true,
   },
 };
 
-export default nextConfig;
+const config: NextConfig = withBundleAnalyzer(nextConfig);
+export default config;

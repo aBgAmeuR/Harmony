@@ -21,10 +21,11 @@ import {
   TimeListenedChart,
   TimeListenedChartSkeleton,
 } from "./time-listened-chart";
+import { extractUserInfo } from "~/lib/utils";
 
 export default async function StatsActivityPage() {
   const session = await auth();
-  const userId = session?.user?.id;
+  const { userId, isDemo } = extractUserInfo(session);
 
   return (
     <>
@@ -33,13 +34,13 @@ export default async function StatsActivityPage() {
       </AppHeader>
       <div className="flex flex-1 flex-col gap-4 p-4 max-w-6xl w-full mx-auto">
         <Suspense fallback={<TimeListenedChartSkeleton />}>
-          <TimeListenedChart data={getMonthlyData(userId)} />
+          <TimeListenedChart data={getMonthlyData(userId, isDemo)} />
         </Suspense>
         <Suspense fallback={<PlatformUsageChartSkeleton />}>
-          <PlatformUsageChart data={getMonthlyPlatformData(userId)} />
+          <PlatformUsageChart data={getMonthlyPlatformData(userId, isDemo)} />
         </Suspense>
         <Suspense fallback={<FirstTimeEvolutionChartsSkeleton />}>
-          <FirstTimeEvolutionCharts data={getFirstTimeListenedData(userId)} />
+          <FirstTimeEvolutionCharts data={getFirstTimeListenedData(userId, isDemo)} />
         </Suspense>
       </div>
     </>

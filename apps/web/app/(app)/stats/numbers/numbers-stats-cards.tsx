@@ -1,7 +1,7 @@
 import { auth } from "@repo/auth";
 import { Badge } from "@repo/ui/badge";
 import { Card } from "@repo/ui/card";
-import { NumberFlow, NumbersFlowDate } from "@repo/ui/number";
+import { NumberFlow, NumbersFlowDate } from "@repo/ui/components/number";
 import { Progress } from "@repo/ui/progress";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Calendar, Clock, FastForward, Users } from "lucide-react";

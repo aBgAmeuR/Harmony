@@ -13,11 +13,11 @@ import { getShuffleHabit } from "./get-charts-data";
 const chartConfig = {
   shuffled: {
     label: "Shuffled",
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
   notShuffled: {
     label: "Not Shuffled",
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-4)",
   },
 } satisfies ChartConfig;
 

@@ -6,7 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { NumberFlow } from "@repo/ui/number";
+import { NumberFlow } from "@repo/ui/components/number";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
 import { ChartCard, ChartCardSkeleton } from "~/components/charts"; // Import the new components
@@ -35,38 +35,11 @@ const renderLineChart = (
     className="aspect-video size-full"
   >
     <LineChart accessibilityLayer data={data} syncId={syncId}>
-      <CartesianGrid vertical={false} />
+      <CartesianGrid vertical={false} strokeDasharray="3 3" />
       <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
       <ChartTooltip
-        content={
-          <ChartTooltipContent
-            labelFormatter={(value) => {
-              return new Date(value).toLocaleDateString("en-US", {
-                month: "long",
-                year: "numeric",
-              });
-            }}
-            formatter={(value, name, item) => (
-              <div>
-                <div className="flex items-center gap-1">
-                  <div
-                    className="size-2.5 shrink-0 rounded-[2px] bg-[--color-bg]"
-                    style={
-                      {
-                        "--color-bg": `var(--color-${item.dataKey})`,
-                      } as React.CSSProperties
-                    }
-                  />
-                  <div className="font-normal">{tooltipLabel}</div>
-                  <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-                    <NumberFlow value={value.toString()} />
-                  </div>
-                </div>
-              </div>
-            )}
-          />
-        }
-        cursor={false}
+        content={(props) => <CustomTooltip {...props} label={tooltipLabel} />}
+        cursor={true}
       />
       <Line
         dataKey="value"
@@ -97,7 +70,9 @@ export function FirstTimeEvolutionCharts({
           "Tracks",
         )}
         cardContentClassName="p-0"
+        className="justify-between"
         showSeparator={false}
+        paddingHeaderContent={true}
       />
       <ChartCard
         title="Albums Evolution"
@@ -109,19 +84,23 @@ export function FirstTimeEvolutionCharts({
           "Albums",
         )}
         cardContentClassName="p-0"
+        className="justify-between"
         showSeparator={false}
+        paddingHeaderContent={true}
       />
       <ChartCard
         title="Artists Evolution"
         description="Evolution of artists listened to for the first time."
         chart={renderLineChart(
           chartData.artists.data,
-          "hsl(var(--chart-3))",
+          "var(--chart-3)",
           "first-time-evolution",
           "Artists",
         )}
         cardContentClassName="p-0"
+        className="justify-between"
         showSeparator={false}
+        paddingHeaderContent={true}
       />
     </div>
   );
@@ -135,19 +114,60 @@ export const FirstTimeEvolutionChartsSkeleton = () => {
         description="Evolution of tracks listened to for the first time."
         chartHeightClassName="aspect-video"
         showSeparator={false}
+        className="justify-between"
+        paddingHeaderContent={true}
       />
       <ChartCardSkeleton
         title="Albums Evolution"
         description="Evolution of albums listened to for the first time."
         chartHeightClassName="aspect-video"
         showSeparator={false}
+        className="justify-between"
+        paddingHeaderContent={true}
       />
       <ChartCardSkeleton
         title="Artists Evolution"
         description="Evolution of artists listened to for the first time"
         chartHeightClassName="aspect-video"
         showSeparator={false}
+        className="justify-between"
+        paddingHeaderContent={true}
       />
+    </div>
+  );
+};
+
+type CustomTooltipProps = {
+  payload?: any[];
+  label: string;
+};
+
+const CustomTooltip = ({ payload, label }: CustomTooltipProps) => {
+  if (!payload || payload.length === 0) return null;
+  const currentData = payload[0].payload;
+
+  return (
+    <div className="text-xs flex flex-col bg-background shadow-lg rounded-md border overflow-hidden">
+      <div className="border-b p-2 flex justify-between items-center gap-4">
+        <p>{currentData.month}</p>
+      </div>
+      <div className="flex flex-col gap-1.5 px-3 py-2">
+        {payload.map((item, index) => (
+          <div key={index} className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-1 truncate">
+              <span
+                className="size-2.5 shrink-0 rounded-xs"
+                style={{ "backgroundColor": item.color } as React.CSSProperties}
+                aria-hidden="true"
+              />
+              <p className="truncate text-muted-foreground">{label}</p>
+            </div>
+            <div className="font-medium">
+              <NumberFlow value={item.value} />
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

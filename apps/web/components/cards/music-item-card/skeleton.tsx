@@ -1,12 +1,11 @@
 "use client";
 
-import { useId } from "react";
 import { Skeleton } from "@repo/ui/skeleton";
 
-const useRandomWidth = (min: number, max: number) => {
-  const id = useId();
-  const hash = Array.from(id).reduce((acc, char) => acc + char.charCodeAt(0), 0);
-  return min + (hash % (max - min));
+const useRandomWidth = (index: number, min: number, max: number) => {
+  const seed = index * 9973;
+  const pseudoRandom = Math.abs(Math.sin(seed) * 10000) % 1;
+  return Math.floor(min + pseudoRandom * (max - min));
 };
 
 type CardSkeletonProps = {
@@ -20,10 +19,10 @@ export const CardSkeleton = ({
   index,
   layout = "list",
 }: CardSkeletonProps) => {
-  const titleWidth = useRandomWidth(50, 130);
-  const subtitleWidth = useRandomWidth(50, 130);
-  const largeTitleWidth = useRandomWidth(150, 350);
-  const largeSubtitleWidth = useRandomWidth(150, 350);
+  const titleWidth = useRandomWidth(index, 50, 130);
+  const subtitleWidth = useRandomWidth(index + 50, 50, 130);
+  const largeTitleWidth = useRandomWidth(index + 100, 150, 350);
+  const largeSubtitleWidth = useRandomWidth(index + 150, 150, 350);
 
   if (layout === "grid")
     return (

@@ -20,6 +20,7 @@ import {
   getTimeRangeStatsAction,
   setTimeRangeStatsAction,
 } from "~/actions/time-range-stats-actions";
+import { Skeleton } from "@repo/ui/skeleton";
 
 const SELECT_OPTIONS = [
   { label: "Short Term", value: "short_term" },
@@ -103,3 +104,5 @@ export const SelectTimeRange = () => {
     </TooltipProvider>
   );
 };
+
+export const SelectTimeRangeSkeleton = () => <Skeleton className="w-[180px] h-9 rounded-md" />;

@@ -9,7 +9,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { NumberFlow } from "@repo/ui/number";
+import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
@@ -69,7 +69,6 @@ export function PlatformUsageChart({
   const chart = (
     <ChartContainer config={chartConfig} className="aspect-[10/3] size-full">
       <AreaChart data={chartData.data}>
-        {/* ... defs and other chart elements ... */}
         <defs>
           <linearGradient id="fillWeb" x1="0" y1="0" x2="0" y2="1">
             <stop
@@ -108,7 +107,7 @@ export function PlatformUsageChart({
             />
           </linearGradient>
         </defs>
-        <CartesianGrid vertical={false} />
+        <CartesianGrid vertical={false} strokeDasharray="3 3" />
         <XAxis
           dataKey="month"
           tickLine={false}
@@ -132,41 +131,8 @@ export function PlatformUsageChart({
           }}
         />
         <ChartTooltip
-          cursor={false}
-          content={
-            <ChartTooltipContent
-              labelFormatter={(value) => {
-                return new Date(value).toLocaleDateString("en-US", {
-                  month: "long",
-                  year: "numeric",
-                });
-              }}
-              formatter={(value, name, item) => (
-                <div>
-                  <div className="flex items-center gap-1">
-                    <div
-                      className="size-2.5 shrink-0 rounded-[2px] bg-[--color-bg]"
-                      style={
-                        {
-                          "--color-bg": `var(--color-${item.dataKey})`,
-                        } as React.CSSProperties
-                      }
-                    />
-                    <div className="font-normal">{name}</div>
-                    <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-                      <NumberFlow
-                        value={getMsPlayedInHours(value.toString())}
-                      />
-                      <span className="font-normal text-muted-foreground">
-                        hours
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-              indicator="dot"
-            />
-          }
+          content={(props) => <CustomTooltip {...props} />}
+          cursor={true}
         />
         <Area
           type="monotone"
@@ -223,5 +189,39 @@ export const PlatformUsageChartSkeleton = () => {
       headerContentSkeleton={headerContentSkeleton}
       chartHeightClassName="aspect-[10/3]"
     />
+  );
+};
+
+type CustomTooltipProps = {
+  payload?: any[];
+};
+
+const CustomTooltip = ({ payload }: CustomTooltipProps) => {
+  if (!payload || payload.length === 0) return null;
+  const currentData = payload[0].payload;
+
+  return (
+    <div className="text-xs flex flex-col bg-background shadow-lg rounded-md border overflow-hidden">
+      <div className="border-b p-2 flex justify-between items-center gap-4">
+        <p>{currentData.month}</p>
+      </div>
+      <div className="flex flex-col gap-1.5 px-3 py-2">
+        {payload.map((item, index) => (
+          <div key={index} className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-1 truncate">
+              <span
+                className="size-2.5 shrink-0 rounded-xs"
+                style={{ "backgroundColor": item.color } as React.CSSProperties}
+                aria-hidden="true"
+              />
+              <p className="truncate text-muted-foreground">{item.name}</p>
+            </div>
+            <div className="font-medium">
+              <NumberFlow value={getMsPlayedInHours(item.value)} suffix="h" />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };

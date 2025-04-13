@@ -1,21 +1,19 @@
 "use client";
 
-import * as React from "react";
 import { ChartConfig, ChartContainer, ChartTooltip } from "@repo/ui/chart";
-import { NumberFlow } from "@repo/ui/number";
+import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
-import { TrendingDown, TrendingUp } from "lucide-react";
+import * as React from "react";
 import {
   Bar,
   BarChart,
   CartesianGrid,
   Label,
   ReferenceLine,
-  XAxis,
+  XAxis
 } from "recharts";
-import { cn } from "@repo/ui/lib/utils";
 
-import { ChartCard, ChartCardSkeleton } from "~/components/charts"; // Import the new components
+import { ChartCard, ChartCardSkeleton } from "~/components/charts";
 import { getMsPlayedInHours } from "~/lib/utils";
 
 import { getMonthlyData } from "./get-data";
@@ -66,7 +64,7 @@ export function TimeListenedChart({
   const chart = (
     <ChartContainer config={chartConfig} className="aspect-[10/3] w-full">
       <BarChart accessibilityLayer data={chartData.data}>
-        <CartesianGrid vertical={false} />
+        <CartesianGrid vertical={false} strokeDasharray="3 3" />
         <XAxis
           dataKey="month"
           tickLine={false}
@@ -74,9 +72,7 @@ export function TimeListenedChart({
           tickMargin={8}
         />
         <ChartTooltip
-          content={(props) => (
-            <CustomTooltip {...props} chartData={chartData} />
-          )}
+          content={(props) => <CustomTooltip {...props} chartData={chartData} />}
           cursor={true}
         />
         <Bar dataKey="value" fill="var(--color-month)" radius={4} />
@@ -146,54 +142,42 @@ const CustomTooltip = ({ payload, chartData }: CustomTooltipProps) => {
   const percentageChange = previousData
     ? calculatePercentageChange(currentData.value, previousData.value)
     : 0;
-  const differenceFromAverage = currentData.value - chartData.average;
 
   return (
-    <div className="flex flex-col gap-1 p-2 bg-background shadow-lg rounded-md">
-      <div className="font-medium">{currentData.month}</div>
-      <div className="flex items-center gap-1">
-        <div
-          className="size-2.5 shrink-0 rounded-[2px] bg-[--color-bg]"
-          style={
-            {
-              "--color-bg": `var(--color-month)`,
-            } as React.CSSProperties
-          }
-        />
-        <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-          <NumberFlow value={getMsPlayedInHours(currentData.value)} />
-          <span className="font-normal text-muted-foreground">hours</span>
-        </div>
-      </div>
-      {previousData && (
-        <div className="flex items-center gap-1">
-          <span className="font-normal text-muted-foreground">
-            From previous month
-          </span>
-          {percentageChange > 0 ? (
-            <TrendingUp className="text-green-500 size-3.5" />
-          ) : (
-            <TrendingDown className="text-red-500 size-3.5" />
-          )}
-          <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-            <NumberFlow
-              value={Math.abs(percentageChange).toFixed(2)}
-              prefix={percentageChange > 0 ? "+" : "-"}
-            />
-            <span className="font-normal text-muted-foreground">%</span>
+    <div className="text-xs flex flex-col bg-background shadow-lg rounded-md border overflow-hidden">
+      <div className="border-b p-2 flex justify-between items-center gap-4">
+        <p>{currentData.month}</p>
+        {previousData && (
+          <div className="flex items-center h-4">
+            {percentageChange >= 0 ? (
+              <NumberFlow
+                value={Math.abs(percentageChange).toFixed(2)}
+                prefix={percentageChange > 0 ? "+" : "-"}
+                suffix="%"
+                className="font-medium text-emerald-700 dark:text-emerald-500"
+              />
+            ) : (
+              <NumberFlow
+                value={Math.abs(percentageChange).toFixed(2)}
+                prefix={percentageChange > 0 ? "+" : "-"}
+                suffix="%"
+                className="font-medium text-red-700 dark:text-red-500"
+              />
+            )}
           </div>
-        </div>
-      )}
-      <div className="flex items-center gap-1 text-xs text-muted-foreground">
-        <span className="font-normal text-muted-foreground">
-          Diff from average
-        </span>
-        <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-          <NumberFlow
-            value={getMsPlayedInHours(Math.abs(differenceFromAverage))}
-            prefix={differenceFromAverage > 0 ? "+" : "-"}
+        )}
+      </div>
+      <div className="flex items-center justify-between space-x-4 px-3 py-2">
+        <div className="flex items-center space-x-1 truncate">
+          <span
+            className="size-2.5 shrink-0 rounded-xs"
+            style={{ "backgroundColor": "var(--color-month)" } as React.CSSProperties}
+            aria-hidden="true"
           />
-          <span className="font-normal text-muted-foreground">hours</span>
+          <p className="truncate text-muted-foreground">Time listened</p>
+        </div>
+        <div className="font-medium">
+          <NumberFlow value={getMsPlayedInHours(currentData.value)} suffix="h" />
         </div>
       </div>
     </div>

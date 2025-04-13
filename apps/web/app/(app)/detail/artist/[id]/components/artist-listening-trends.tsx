@@ -40,27 +40,27 @@ type ArtistListeningTrendsProps = {
 const chartConfig = {
   minutes: {
     label: "Minutes",
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
   streams: {
     label: "Streams",
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-2)",
   },
   time: {
     label: "Time",
-    color: "hsl(var(--chart-3))",
+    color: "var(--chart-3)",
   },
   ratio: {
     label: "Minutes per Stream",
-    color: "hsl(var(--chart-4))",
+    color: "var(--chart-4)",
   },
   avgRatio: {
     label: "Average",
-    color: "hsl(var(--chart-5))",
+    color: "var(--chart-5)",
   },
   barRatio: {
     label: "Bar Chart",
-    color: "hsl(var(--chart-4) / 0.3)",
+    color: "var(--chart-4) / 0.3",
   },
 } satisfies ChartConfig;
 

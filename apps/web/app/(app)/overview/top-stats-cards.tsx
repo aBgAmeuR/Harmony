@@ -1,6 +1,6 @@
 import { auth } from "@repo/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { NumberFlow, NumbersFlowDate } from "@repo/ui/number";
+import { NumberFlow, NumbersFlowDate } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Clock, Headphones, Music, Users } from "lucide-react";
 

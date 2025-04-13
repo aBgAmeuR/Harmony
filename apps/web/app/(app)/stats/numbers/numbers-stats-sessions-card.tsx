@@ -1,6 +1,6 @@
 import { auth } from "@repo/auth";
 import { Card } from "@repo/ui/card";
-import { NumberFlow } from "@repo/ui/number";
+import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { getNumbersSessionStats } from "~/actions/get-numbers-session-stats-action";

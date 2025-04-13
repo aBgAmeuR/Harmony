@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@repo/ui/button";
-import { NumberFlow } from "@repo/ui/number";
+import { NumberFlow } from "@repo/ui/components/number";
 import { Clock, ExternalLink, Music } from "lucide-react";
 
 import { getTrendColorClass, TrendBadge, TrendType } from "./trend-badge";

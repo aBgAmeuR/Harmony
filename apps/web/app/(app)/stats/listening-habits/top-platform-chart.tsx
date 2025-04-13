@@ -6,7 +6,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@repo/ui/chart";
-import { NumberFlow } from "@repo/ui/number";
+import { NumberFlow } from "@repo/ui/components/number";
 import { Label, Pie, PieChart } from "recharts";
 
 import { getMsPlayedInHours } from "~/lib/utils";
@@ -16,7 +16,7 @@ import { getTopPlatforms } from "./get-charts-data";
 const chartConfig = {
   // msPlayed: {
   //   label: "Listening Time",
-  //   color: "hsl(var(--chart-2))",
+  //   color: "var(--chart-2)",
   // },
 } satisfies ChartConfig;
 
@@ -28,11 +28,10 @@ type TopPlatformChartProps = {
 
 const colorData = (data: Data) => {
   const colors = [
-    "hsl(var(--chart-1))",
-    "hsl(var(--chart-2))",
-    "hsl(var(--chart-3))",
-    "hsl(var(--chart-4))",
-    "hsl(var(--chart-5))",
+    "var(--chart-1)",
+    "var(--chart-2)",
+    "var(--chart-3)",
+    "var(--chart-4)",
   ];
 
   return data?.map((item, index) => ({
@@ -58,35 +57,15 @@ export const TopPlatformChart = ({
     >
       <PieChart margin={{ top: -10, left: -10, right: -10, bottom: -10 }}>
         <ChartTooltip
-          cursor={false}
-          content={
-            <ChartTooltipContent
-              hideLabel
-              formatter={(value, name, item) => (
-                <div className="flex flex-col gap-1">
-                  <div className="font-medium">{item.payload.platform}</div>
-                  <div className="flex items-center gap-1">
-                    <div
-                      className="size-2.5 shrink-0 rounded-[2px] bg-[--color-bg]"
-                      style={
-                        {
-                          "--color-bg": item.payload?.fill,
-                        } as React.CSSProperties
-                      }
-                    />
-                    <div className="ml-auto flex items-baseline gap-0.5 font-mono font-medium tabular-nums text-foreground">
-                      <NumberFlow
-                        value={getMsPlayedInHours(value.toString())}
-                      />
-                      <span className="font-normal text-muted-foreground">
-                        hours
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
+          content={(props) => (
+            <CustomTooltip {...props}
+              label="Time listened"
+              formatter={(value) => getMsPlayedInHours(value, true)}
+              header={(payload) => `${payload.platform.charAt(0).toUpperCase()}${payload.platform.slice(1)}`}
+              suffix="h"
             />
-          }
+          )}
+          cursor={true}
         />
         <Pie
           data={colorData(chartData)}
@@ -127,5 +106,44 @@ export const TopPlatformChart = ({
         </Pie>
       </PieChart>
     </ChartContainer>
+  );
+};
+
+
+type CustomTooltipProps = {
+  payload?: any[];
+  label: string;
+  formatter?: (value: number | string) => string;
+  suffix?: string;
+  header: (payload: any) => string;
+};
+
+const CustomTooltip = ({ payload, label, formatter, suffix, header }: CustomTooltipProps) => {
+  if (!payload || payload.length === 0) return null;
+  const currentData = payload[0].payload;
+
+  return (
+    <div className="text-xs flex flex-col bg-background shadow-lg rounded-md border overflow-hidden">
+      <div className="border-b p-2 flex justify-between items-center gap-4">
+        <p>{header(currentData)}</p>
+      </div>
+      <div className="flex flex-col gap-1.5 px-3 py-2">
+        {payload.map((item, index) => (
+          <div key={index} className="flex items-center justify-between space-x-4">
+            <div className="flex items-center space-x-1 truncate">
+              <span
+                className="size-2.5 shrink-0 rounded-xs"
+                style={{ "backgroundColor": item.payload.fill } as React.CSSProperties}
+                aria-hidden="true"
+              />
+              <p className="truncate text-muted-foreground">{label}</p>
+            </div>
+            <div className="font-medium">
+              <NumberFlow value={formatter ? formatter(item.value) : item.value} suffix={suffix} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };

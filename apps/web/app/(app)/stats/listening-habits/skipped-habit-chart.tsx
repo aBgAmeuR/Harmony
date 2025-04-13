@@ -13,11 +13,11 @@ import { getSkippedHabit } from "./get-charts-data";
 const chartConfig = {
   skipped: {
     label: "Skipped",
-    color: "hsl(var(--chart-1))",
+    color: "var(--chart-1)",
   },
   notSkipped: {
     label: "Not Skipped",
-    color: "hsl(var(--chart-2))",
+    color: "var(--chart-4)",
   },
 } satisfies ChartConfig;
 

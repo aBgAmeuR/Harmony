@@ -1,6 +1,6 @@
 import React, { Suspense } from "react";
 import { Button } from "@repo/ui/button";
-import { NumberFlow } from "@repo/ui/number";
+import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
 import { ExternalLink } from "lucide-react";
 import { notFound } from "next/navigation";

@@ -5,12 +5,11 @@ import { format, localeFormat } from "light-date";
 import { getMonthRange } from "~/lib/utils-server";
 
 const formatMonth = (date: Date) =>
-  `${localeFormat(date, "{MMM}")} ${format(date, "{yyyy}")}`;
+  `${localeFormat(date, "{MMMM}")} ${format(date, "{yyyy}")}`;
 
 const aggregateData = (
   items: Array<{ timestamp: Date }>,
-  // eslint-disable-next-line no-unused-vars
-  keyExtractor: (item: any) => string
+  keyExtractor: (item: { timestamp: Date }) => string
 ) => {
   const aggregated = items.reduce<Record<string, number>>((acc, item) => {
     const key = keyExtractor(item);
@@ -30,10 +29,13 @@ const aggregateData = (
   return result;
 };
 
-export const getMonthlyData = async (userId: string | undefined) => {
+export const getMonthlyData = async (
+  userId: string | undefined,
+  isDemo: boolean
+) => {
   if (!userId) return null;
 
-  const monthRange = await getMonthRange(userId, false);
+  const monthRange = await getMonthRange(userId, isDemo);
   if (!monthRange) return null;
 
   const tracks = await prisma.$queryRaw<
@@ -60,8 +62,6 @@ export const getMonthlyData = async (userId: string | undefined) => {
 
   const average = totalMsPlayed / tracks.length;
 
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
   return {
     data: Object.entries(data).map(([key, value]) => ({
       month: key,
@@ -71,10 +71,13 @@ export const getMonthlyData = async (userId: string | undefined) => {
   };
 };
 
-export const getMonthlyPlatformData = async (userId: string | undefined) => {
+export const getMonthlyPlatformData = async (
+  userId: string | undefined,
+  isDemo: boolean
+) => {
   if (!userId) return null;
 
-  const monthRange = await getMonthRange(userId, false);
+  const monthRange = await getMonthRange(userId, isDemo);
   if (!monthRange) return null;
 
   const platforms = await prisma.$queryRaw<
@@ -154,10 +157,13 @@ export const getMonthlyPlatformData = async (userId: string | undefined) => {
   };
 };
 
-export const getFirstTimeListenedData = async (userId: string | undefined) => {
+export const getFirstTimeListenedData = async (
+  userId: string | undefined,
+  isDemo: boolean
+) => {
   if (!userId) return null;
 
-  const monthRange = await getMonthRange(userId, false);
+  const monthRange = await getMonthRange(userId, isDemo);
   if (!monthRange) return null;
 
   const firstPlays = await prisma.track.findMany({
@@ -175,7 +181,7 @@ export const getFirstTimeListenedData = async (userId: string | undefined) => {
   if (firstPlays.length === 0) return null;
 
   const tracksData = aggregateData(firstPlays, (track) =>
-    new Date(track.timestamp).toISOString().slice(0, 7)
+    formatMonth(new Date(track.timestamp))
   );
 
   const albumsData = aggregateData(
@@ -188,7 +194,7 @@ export const getFirstTimeListenedData = async (userId: string | undefined) => {
         {}
       )
     ),
-    (play) => new Date(play.timestamp).toISOString().slice(0, 7)
+    (play) => formatMonth(new Date(play.timestamp))
   );
 
   const artistsData = aggregateData(
@@ -201,7 +207,7 @@ export const getFirstTimeListenedData = async (userId: string | undefined) => {
         return acc;
       }, {})
     ),
-    (play) => new Date(play.timestamp).toISOString().slice(0, 7)
+    (play) => formatMonth(new Date(play.timestamp))
   );
 
   const filterData = (

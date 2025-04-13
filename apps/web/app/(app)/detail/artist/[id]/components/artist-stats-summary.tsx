@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
-import { NumberFlow } from "@repo/ui/number";
+import { NumberFlow } from "@repo/ui/components/number";
 import {
   ArrowDownRight,
   ArrowUpRight,

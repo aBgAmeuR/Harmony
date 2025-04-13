@@ -10,8 +10,10 @@
     "test": "jest"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^15.3.0",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.62.7",
+    "babel-plugin-react-compiler": "19.0.0-beta-e993439-20250405",
     "date-fns": "^4.1.0",
     "fflate": "^0.8.2",
     "light-date": "^1.2.0",
