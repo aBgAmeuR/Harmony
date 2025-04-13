@@ -16,6 +16,7 @@ import {
 } from "./listening-pattern-chart";
 import { RankingList } from "./ranking-list";
 import { TopStatsCards, TopStatsCardsSkeleton } from "./top-stats-cards";
+import { extractUserInfo } from "~/lib/utils";
 
 export default function OverviewPage() {
   return (
@@ -46,7 +47,8 @@ export default function OverviewPage() {
 
 const TimeListenedChartWrapper = async () => {
   const session = await auth();
-  return <TimeListenedChart data={getMonthlyData(session?.user?.id)} className="flex-1" />;
+  const { userId, isDemo } = extractUserInfo(session);
+  return <TimeListenedChart data={getMonthlyData(userId, isDemo)} className="flex-1" />;
 };
 
 const ListeningPatternChartWrapper = async () => {
