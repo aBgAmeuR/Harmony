@@ -5,7 +5,7 @@ export const getMsPlayedInMinutes = (msPlayed: number | string) =>
   (Number(msPlayed) / (1000 * 60)).toFixed(2);
 
 export const getMsPlayedInHours = (
-  msPlayed: number | string,
+  msPlayed: number | string | (string | number)[],
   showDecimals = true
 ) => {
   const hours = Number(msPlayed) / (1000 * 60 * 60);

@@ -150,7 +150,7 @@ export const getHoursHabit = async (
   return listeningHabits.map((habit) => {
     const dataItem = data.find((d) => Number(d.hour) === habit.hour);
     return {
-      hour: habit.hour,
+      hour: String(habit.hour),
       msPlayed: dataItem ? Number(dataItem.time) : 0,
     };
   });

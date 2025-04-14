@@ -1,21 +1,22 @@
 "use client";
 
-import * as React from "react";
 import {
   ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent,
+  ChartTooltipContent
 } from "@repo/ui/chart";
 import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
+import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { ChartCard, ChartCardSkeleton } from "~/components/charts"; // Import the new components
 import { getMsPlayedInHours } from "~/lib/utils";
 
+import { ChartTooltipFormatter, createGradientDefs, msToHours } from "~/components/charts/utils";
 import { getMonthlyPlatformData } from "./get-data";
 
 type DataPromise = ReturnType<typeof getMonthlyPlatformData>;
@@ -38,8 +39,6 @@ const chartConfig = {
     color: "var(--chart-3)",
   },
 } satisfies ChartConfig;
-
-const msToHours = (ms: number) => ms / 1000 / 60 / 60;
 
 export function PlatformUsageChart({
   data: dataPromise,
@@ -69,44 +68,7 @@ export function PlatformUsageChart({
   const chart = (
     <ChartContainer config={chartConfig} className="aspect-[10/3] size-full">
       <AreaChart data={chartData.data}>
-        <defs>
-          <linearGradient id="fillWeb" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-web)"
-              stopOpacity={0.9}
-            />
-            <stop
-              offset="95%"
-              stopColor="var(--color-web)"
-              stopOpacity={0.3}
-            />
-          </linearGradient>
-          <linearGradient id="fillMobile" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-mobile)"
-              stopOpacity={0.9}
-            />
-            <stop
-              offset="95%"
-              stopColor="var(--color-mobile)"
-              stopOpacity={0.3}
-            />
-          </linearGradient>
-          <linearGradient id="fillDesktop" x1="0" y1="0" x2="0" y2="1">
-            <stop
-              offset="5%"
-              stopColor="var(--color-desktop)"
-              stopOpacity={0.9}
-            />
-            <stop
-              offset="95%"
-              stopColor="var(--color-desktop)"
-              stopOpacity={0.3}
-            />
-          </linearGradient>
-        </defs>
+        {createGradientDefs(Object.values(chartConfig))}
         <CartesianGrid vertical={false} strokeDasharray="3 3" />
         <XAxis
           dataKey="month"
@@ -114,25 +76,16 @@ export function PlatformUsageChart({
           axisLine={false}
           tickMargin={8}
           minTickGap={32}
-          tickFormatter={(value) => {
-            const date = new Date(value);
-            return date.toLocaleDateString("en-US", {
-              month: "short",
-              year: "2-digit",
-            });
-          }}
         />
         <YAxis
           tickLine={false}
           axisLine={false}
           tickMargin={8}
-          tickFormatter={(value) => {
-            return getMsPlayedInHours(value.toString(), false) + "h";
-          }}
+          tickFormatter={(value) => getMsPlayedInHours(value.toString(), false) + "h"}
         />
         <ChartTooltip
-          content={(props) => <CustomTooltip {...props} />}
-          cursor={true}
+          content={<ChartTooltipContent formatter={ChartTooltipFormatter} />}
+          cursor={false}
         />
         <Area
           type="monotone"
@@ -189,39 +142,5 @@ export const PlatformUsageChartSkeleton = () => {
       headerContentSkeleton={headerContentSkeleton}
       chartHeightClassName="aspect-[10/3]"
     />
-  );
-};
-
-type CustomTooltipProps = {
-  payload?: any[];
-};
-
-const CustomTooltip = ({ payload }: CustomTooltipProps) => {
-  if (!payload || payload.length === 0) return null;
-  const currentData = payload[0].payload;
-
-  return (
-    <div className="text-xs flex flex-col bg-background shadow-lg rounded-md border overflow-hidden">
-      <div className="border-b p-2 flex justify-between items-center gap-4">
-        <p>{currentData.month}</p>
-      </div>
-      <div className="flex flex-col gap-1.5 px-3 py-2">
-        {payload.map((item, index) => (
-          <div key={index} className="flex items-center justify-between space-x-4">
-            <div className="flex items-center space-x-1 truncate">
-              <span
-                className="size-2.5 shrink-0 rounded-xs"
-                style={{ "backgroundColor": item.color } as React.CSSProperties}
-                aria-hidden="true"
-              />
-              <p className="truncate text-muted-foreground">{item.name}</p>
-            </div>
-            <div className="font-medium">
-              <NumberFlow value={getMsPlayedInHours(item.value)} suffix="h" />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 };

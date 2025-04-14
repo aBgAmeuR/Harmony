@@ -26,21 +26,13 @@ const renderLineChart = (
   tooltipLabel: string,
 ) => (
   <ChartContainer
-    config={{
-      value: {
-        label: "value",
-        color,
-      },
-    }}
+    config={{ value: { label: "value", color } }}
     className="aspect-video size-full"
   >
     <LineChart accessibilityLayer data={data} syncId={syncId}>
       <CartesianGrid vertical={false} strokeDasharray="3 3" />
       <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
-      <ChartTooltip
-        content={(props) => <CustomTooltip {...props} label={tooltipLabel} />}
-        cursor={true}
-      />
+      <ChartTooltip content={(props) => <CustomTooltip {...props} label={tooltipLabel} />} cursor={true} />
       <Line
         dataKey="value"
         type="linear"
@@ -137,18 +129,13 @@ export const FirstTimeEvolutionChartsSkeleton = () => {
   );
 };
 
-type CustomTooltipProps = {
-  payload?: any[];
-  label: string;
-};
-
-const CustomTooltip = ({ payload, label }: CustomTooltipProps) => {
+const CustomTooltip = ({ payload, label }: { payload?: any[]; label: string }) => {
   if (!payload || payload.length === 0) return null;
   const currentData = payload[0].payload;
 
   return (
     <div className="text-xs flex flex-col bg-background shadow-lg rounded-md border overflow-hidden">
-      <div className="border-b p-2 flex justify-between items-center gap-4">
+      <div className="p-2 pb-0 flex justify-between items-center">
         <p>{currentData.month}</p>
       </div>
       <div className="flex flex-col gap-1.5 px-3 py-2">

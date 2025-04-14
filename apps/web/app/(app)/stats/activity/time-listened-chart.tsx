@@ -1,6 +1,6 @@
 "use client";
 
-import { ChartConfig, ChartContainer, ChartTooltip } from "@repo/ui/chart";
+import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@repo/ui/chart";
 import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
 import * as React from "react";
@@ -14,12 +14,11 @@ import {
 } from "recharts";
 
 import { ChartCard, ChartCardSkeleton } from "~/components/charts";
-import { getMsPlayedInHours } from "~/lib/utils";
 
+import { ChartTooltipFormatter, msToHours } from "~/components/charts/utils";
 import { getMonthlyData } from "./get-data";
 
 type DataPromise = ReturnType<typeof getMonthlyData>;
-type Data = NonNullable<Awaited<DataPromise>>;
 
 type TimeListenedChartProps = {
   data: DataPromise;
@@ -27,18 +26,11 @@ type TimeListenedChartProps = {
 };
 
 const chartConfig = {
-  month: {
-    label: "month",
+  value: {
+    label: "Listening Time",
     color: "var(--chart-1) ",
   },
 } satisfies ChartConfig;
-
-const msToHours = (ms: number) => ms / 1000 / 60 / 60;
-
-const calculatePercentageChange = (current: number, previous: number) => {
-  if (previous === 0) return 0;
-  return ((current - previous) / previous) * 100;
-};
 
 export function TimeListenedChart({
   data: dataPromise,
@@ -72,16 +64,12 @@ export function TimeListenedChart({
           tickMargin={8}
         />
         <ChartTooltip
-          content={(props) => <CustomTooltip {...props} chartData={chartData} />}
-          cursor={true}
+          content={<ChartTooltipContent labelFormatter={(value, payload) => labelFormatter(value, payload, chartData.average)} formatter={ChartTooltipFormatter} />}
+          cursor={false}
         />
-        <Bar dataKey="value" fill="var(--color-month)" radius={4} />
-        <ReferenceLine
-          y={chartData.average}
-          stroke="red"
-          strokeDasharray="3 3"
-        >
-          <Label value="Average" position="insideTopLeft" fill="red" />
+        <Bar dataKey="value" fill="var(--color-value)" radius={4} />
+        <ReferenceLine y={chartData.average} stroke="red" strokeDasharray="3 3">
+          <Label value="Average" position="insideBottomLeft" fill="red" />
         </ReferenceLine>
       </BarChart>
     </ChartContainer>
@@ -126,60 +114,27 @@ export const TimeListenedChartSkeleton = ({
   );
 };
 
-type CustomTooltipProps = {
-  payload?: any[];
-  chartData: Data;
-};
-
-const CustomTooltip = ({ payload, chartData }: CustomTooltipProps) => {
-  if (!payload || payload.length === 0) return null;
-  const currentData = payload[0].payload;
-  const currentIndex = chartData.data.findIndex(
-    (item) => item.month === currentData.month,
-  );
-  const previousData =
-    currentIndex > 0 ? chartData.data[currentIndex - 1] : null;
-  const percentageChange = previousData
-    ? calculatePercentageChange(currentData.value, previousData.value)
-    : 0;
+const labelFormatter = (value: string, payload: any, average: number) => {
+  const percentage = ((payload[0].value - average) / average) * 100;
 
   return (
-    <div className="text-xs flex flex-col bg-background shadow-lg rounded-md border overflow-hidden">
-      <div className="border-b p-2 flex justify-between items-center gap-4">
-        <p>{currentData.month}</p>
-        {previousData && (
-          <div className="flex items-center h-4">
-            {percentageChange >= 0 ? (
-              <NumberFlow
-                value={Math.abs(percentageChange).toFixed(2)}
-                prefix={percentageChange > 0 ? "+" : "-"}
-                suffix="%"
-                className="font-medium text-emerald-700 dark:text-emerald-500"
-              />
-            ) : (
-              <NumberFlow
-                value={Math.abs(percentageChange).toFixed(2)}
-                prefix={percentageChange > 0 ? "+" : "-"}
-                suffix="%"
-                className="font-medium text-red-700 dark:text-red-500"
-              />
-            )}
-          </div>
-        )}
-      </div>
-      <div className="flex items-center justify-between space-x-4 px-3 py-2">
-        <div className="flex items-center space-x-1 truncate">
-          <span
-            className="size-2.5 shrink-0 rounded-xs"
-            style={{ "backgroundColor": "var(--color-month)" } as React.CSSProperties}
-            aria-hidden="true"
-          />
-          <p className="truncate text-muted-foreground">Time listened</p>
-        </div>
-        <div className="font-medium">
-          <NumberFlow value={getMsPlayedInHours(currentData.value)} suffix="h" />
-        </div>
-      </div>
+    <div className="w-full flex justify-between items-center gap-2">
+      <p>{value}</p>
+      {percentage >= 0 ? (
+        <NumberFlow
+          value={Math.abs(percentage).toFixed(2)}
+          prefix={percentage > 0 ? "+" : "-"}
+          suffix="%"
+          className="font-medium text-emerald-700 dark:text-emerald-500"
+        />
+      ) : (
+        <NumberFlow
+          value={Math.abs(percentage).toFixed(2)}
+          prefix={percentage > 0 ? "+" : "-"}
+          suffix="%"
+          className="font-medium text-red-700 dark:text-red-500"
+        />
+      )}
     </div>
   );
 };
