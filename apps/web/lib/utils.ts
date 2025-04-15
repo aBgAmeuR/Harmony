@@ -1,4 +1,4 @@
-import { Session } from "@repo/auth";
+import { auth, Session } from "@repo/auth";
 import { cache } from "react";
 
 export const getMsPlayedInMinutes = (msPlayed: number | string) =>
@@ -17,7 +17,8 @@ export const getMsPlayedInHours = (
   return Math.floor(hours).toString();
 };
 
-export const extractUserInfo = cache((session: Session | null) => {
+export const getUserInfos = cache(async () => {
+  const session = await auth();
   const userId = session?.user?.id;
   const isDemo = session?.user?.name === "Demo";
 

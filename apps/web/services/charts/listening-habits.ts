@@ -6,7 +6,7 @@ import { getMonthRange } from "~/lib/utils-server";
 
 export const getShuffleHabit = async (
   userId: string | undefined,
-  isDemo: boolean,
+  isDemo: boolean
 ) => {
   if (!userId) return null;
 
@@ -25,20 +25,17 @@ export const getShuffleHabit = async (
     },
   });
 
-  return [
-    {
-      shuffled:
-        shuffles.find((shuffle) => shuffle.shuffle === true)?._count?._all || 0,
-      notShuffled:
-        shuffles.find((shuffle) => shuffle.shuffle === false)?._count?._all ||
-        1,
-    },
-  ];
+  return {
+    shuffled:
+      shuffles.find((shuffle) => shuffle.shuffle === true)?._count?._all || 0,
+    notShuffled:
+      shuffles.find((shuffle) => shuffle.shuffle === false)?._count?._all || 1,
+  };
 };
 
 export const getSkippedHabit = async (
   userId: string | undefined,
-  isDemo: boolean,
+  isDemo: boolean
 ) => {
   if (!userId) return null;
 
@@ -57,20 +54,17 @@ export const getSkippedHabit = async (
     },
   });
 
-  return [
-    {
-      skipped:
-        skippeds.find((shuffle) => shuffle.skipped === true)?._count?._all || 0,
-      notSkipped:
-        skippeds.find((shuffle) => shuffle.skipped === false)?._count?._all ||
-        1,
-    },
-  ];
+  return {
+    skipped:
+      skippeds.find((shuffle) => shuffle.skipped === true)?._count?._all || 0,
+    notSkipped:
+      skippeds.find((shuffle) => shuffle.skipped === false)?._count?._all || 1,
+  };
 };
 
 export const getTopPlatforms = async (
   userId: string | undefined,
-  isDemo: boolean,
+  isDemo: boolean
 ) => {
   const TOP_PLATFORMS_LIMIT = 4 as const;
 
@@ -122,7 +116,7 @@ export const getTopPlatforms = async (
 
 export const getHoursHabit = async (
   userId: string | undefined,
-  isDemo: boolean,
+  isDemo: boolean
 ) => {
   if (!userId) return null;
 
@@ -158,7 +152,7 @@ export const getHoursHabit = async (
 
 export const getDaysHabit = async (
   userId: string | undefined,
-  isDemo: boolean,
+  isDemo: boolean
 ) => {
   if (!userId) return null;
 

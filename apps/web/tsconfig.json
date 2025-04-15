@@ -14,6 +14,6 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts"
-  ],
+, "../../packages/ui/src/components/charts/chart-color-utils.tsx", "../../packages/ui/src/components/charts/chart-tooltip-formatter.tsx"  ],
   "exclude": ["node_modules"]
 }

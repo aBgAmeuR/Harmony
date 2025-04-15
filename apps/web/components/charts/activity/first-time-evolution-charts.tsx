@@ -1,17 +1,16 @@
 "use client";
 
-import * as React from "react";
 import {
   ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
+  ChartTooltip
 } from "@repo/ui/chart";
 import { NumberFlow } from "@repo/ui/components/number";
 import { CartesianGrid, Line, LineChart, XAxis } from "recharts";
 
-import { ChartCard, ChartCardSkeleton } from "~/components/charts"; // Import the new components
-
-import { getFirstTimeListenedData } from "./get-data";
+import { getFirstTimeListenedData } from "~/services/charts/activity";
+import { ChartCard, ChartCardContent, ChartCardHeader } from "~/components/charts/utils/chart-card";
+import { Skeleton } from "@repo/ui/skeleton";
+import React from "react";
 
 type DataPromise = ReturnType<typeof getFirstTimeListenedData>;
 
@@ -52,48 +51,48 @@ export function FirstTimeEvolutionCharts({
 
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <ChartCard
-        title="Tracks Evolution"
-        description="Evolution of tracks listened to for the first time."
-        chart={renderLineChart(
-          chartData.tracks.data,
-          "var(--chart-1)",
-          "first-time-evolution",
-          "Tracks",
-        )}
-        cardContentClassName="p-0"
-        className="justify-between"
-        showSeparator={false}
-        paddingHeaderContent={true}
-      />
-      <ChartCard
-        title="Albums Evolution"
-        description="Evolution of albums listened to for the first time."
-        chart={renderLineChart(
-          chartData.albums.data,
-          "var(--chart-2)",
-          "first-time-evolution",
-          "Albums",
-        )}
-        cardContentClassName="p-0"
-        className="justify-between"
-        showSeparator={false}
-        paddingHeaderContent={true}
-      />
-      <ChartCard
-        title="Artists Evolution"
-        description="Evolution of artists listened to for the first time."
-        chart={renderLineChart(
-          chartData.artists.data,
-          "var(--chart-3)",
-          "first-time-evolution",
-          "Artists",
-        )}
-        cardContentClassName="p-0"
-        className="justify-between"
-        showSeparator={false}
-        paddingHeaderContent={true}
-      />
+      <ChartCard className="justify-between">
+        <ChartCardHeader
+          title="Tracks Evolution"
+          description="Evolution of tracks listened to for the first time."
+        />
+        <ChartCardContent>
+          {renderLineChart(
+            chartData.tracks.data,
+            "var(--chart-1)",
+            "first-time-evolution",
+            "Tracks",
+          )}
+        </ChartCardContent>
+      </ChartCard>
+      <ChartCard className="justify-between">
+        <ChartCardHeader
+          title="Albums Evolution"
+          description="Evolution of albums listened to for the first time."
+        />
+        <ChartCardContent>
+          {renderLineChart(
+            chartData.albums.data,
+            "var(--chart-2)",
+            "first-time-evolution",
+            "Albums",
+          )}
+        </ChartCardContent>
+      </ChartCard>
+      <ChartCard className="justify-between">
+        <ChartCardHeader
+          title="Artists Evolution"
+          description="Evolution of artists listened to for the first time."
+        />
+        <ChartCardContent>
+          {renderLineChart(
+            chartData.artists.data,
+            "var(--chart-3)",
+            "first-time-evolution",
+            "Artists",
+          )}
+        </ChartCardContent>
+      </ChartCard>
     </div>
   );
 }
@@ -101,30 +100,33 @@ export function FirstTimeEvolutionCharts({
 export const FirstTimeEvolutionChartsSkeleton = () => {
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-      <ChartCardSkeleton
-        title="Tracks Evolution"
-        description="Evolution of tracks listened to for the first time."
-        chartHeightClassName="aspect-video"
-        showSeparator={false}
-        className="justify-between"
-        paddingHeaderContent={true}
-      />
-      <ChartCardSkeleton
-        title="Albums Evolution"
-        description="Evolution of albums listened to for the first time."
-        chartHeightClassName="aspect-video"
-        showSeparator={false}
-        className="justify-between"
-        paddingHeaderContent={true}
-      />
-      <ChartCardSkeleton
-        title="Artists Evolution"
-        description="Evolution of artists listened to for the first time"
-        chartHeightClassName="aspect-video"
-        showSeparator={false}
-        className="justify-between"
-        paddingHeaderContent={true}
-      />
+      <ChartCard className="justify-between">
+        <ChartCardHeader
+          title="Tracks Evolution"
+          description="Evolution of tracks listened to for the first time."
+        />
+        <ChartCardContent>
+          <Skeleton className="aspect-video" />
+        </ChartCardContent>
+      </ChartCard>
+      <ChartCard className="justify-between">
+        <ChartCardHeader
+          title="Albums Evolution"
+          description="Evolution of albums listened to for the first time."
+        />
+        <ChartCardContent>
+          <Skeleton className="aspect-video" />
+        </ChartCardContent>
+      </ChartCard>
+      <ChartCard className="justify-between">
+        <ChartCardHeader
+          title="Artists Evolution"
+          description="Evolution of artists listened to for the first time."
+        />
+        <ChartCardContent>
+          <Skeleton className="aspect-video" />
+        </ChartCardContent>
+      </ChartCard>
     </div>
   );
 };

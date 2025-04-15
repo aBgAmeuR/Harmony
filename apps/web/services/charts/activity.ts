@@ -62,6 +62,8 @@ export const getMonthlyData = async (
 
   const average = totalMsPlayed / tracks.length;
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   return {
     data: Object.entries(data).map(([key, value]) => ({
       month: key,
@@ -123,14 +125,6 @@ export const getMonthlyPlatformData = async (
     );
   });
 
-  const platformsLength = Array.from(platformsMap.values()).length;
-  const totalMsPlayed = Array.from(platformsMap.values()).reduce(
-    (acc, msPlayed) => acc + msPlayed,
-    0
-  );
-
-  const average = totalMsPlayed / platformsLength;
-
   const mostUsedPlatform = Array.from(platformsMap.entries()).reduce(
     (acc, [key, value]) => {
       if (value > acc.value) {
@@ -142,6 +136,8 @@ export const getMonthlyPlatformData = async (
     { key: "", value: 0 }
   );
 
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   return {
     data: Object.entries(data).map(([month, platforms]) => ({
       month,
@@ -149,7 +145,6 @@ export const getMonthlyPlatformData = async (
       desktop: platforms.desktop ?? 0,
       web: platforms.web ?? 0,
     })),
-    average: Math.round(average),
     mostUsedPlatform: {
       platform: mostUsedPlatform.key,
       value: mostUsedPlatform.value,

@@ -1,12 +1,14 @@
 'use client'
 
-import { ChartTooltipContent, useChart } from "@repo/ui/chart";
 import { NumberFlow } from "@repo/ui/components/number";
-import React from "react";
-import { getMsPlayedInHours } from "~/lib/utils";
+import { ChartTooltipContent, useChart } from "@repo/ui/chart";
 
-export type Formatter = React.ComponentProps<typeof ChartTooltipContent>['formatter']
+type Formatter = React.ComponentProps<typeof ChartTooltipContent>['formatter']
 
+/**
+ * Format chart tooltip values
+ * This formatter can handle various data types including time in milliseconds
+ */
 export const ChartTooltipFormatter: Formatter = (value, name, item) => {
   const { config } = useChart();
   const indicatorColor = item?.payload?.fill || item?.color;
@@ -28,15 +30,15 @@ export const ChartTooltipFormatter: Formatter = (value, name, item) => {
   );
 }
 
-export const createGradientDefs = (items: Array<{ label: string, color: string }>) => (
-  <defs>
-    {items.map(({ label, color }) => (
-      <linearGradient key={label} id={`fill${label}`} x1="0" y1="0" x2="0" y2="1">
-        <stop offset="5%" stopColor={color} stopOpacity={0.9} />
-        <stop offset="95%" stopColor={color} stopOpacity={0.3} />
-      </linearGradient>
-    ))}
-  </defs >
-)
+const getMsPlayedInHours = (ms: number | string | (string | number)[], showDecimals = true): string => {
+  if (Array.isArray(ms)) {
+    return ms.map((item) => getMsPlayedInHours(item, showDecimals)).join(", ");
+  }
+  const msNum = typeof ms === 'string' ? parseInt(ms, 10) : ms;
+  return msToHours(msNum, showDecimals).toFixed(showDecimals ? 2 : 0);
+};
 
-export const msToHours = (ms: number) => ms / 1000 / 60 / 60;
+const msToHours = (ms: number, showDecimals = true): number => {
+  const hours = ms / 1000 / 60 / 60;
+  return showDecimals ? hours : Math.floor(hours);
+};

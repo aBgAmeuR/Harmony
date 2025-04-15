@@ -1,14 +1,11 @@
-import React, { Suspense } from "react";
-import { auth } from "@repo/auth";
+import { Suspense } from "react";
 
 import { AppHeader } from "~/components/app-header";
 import { SelectMonthRange } from "~/components/select-month-range";
 
-import { getMonthlyData } from "../stats/activity/get-data";
-import {
-  TimeListenedChart,
-  TimeListenedChartSkeleton,
-} from "../stats/activity/time-listened-chart";
+import { getMonthlyData } from "../../../services/charts/activity";
+
+import { getUserInfos } from "~/lib/utils";
 import { getListeningPatternData } from "./get-listening-pattern-data";
 import {
   ListeningPatternChart,
@@ -16,9 +13,11 @@ import {
 } from "./listening-pattern-chart";
 import { RankingList } from "./ranking-list";
 import { TopStatsCards, TopStatsCardsSkeleton } from "./top-stats-cards";
-import { extractUserInfo } from "~/lib/utils";
+import { TimeListenedChartComponent, TimeListenedChartSkeleton } from "~/components/charts/activity/time-listened-chart";
 
-export default function OverviewPage() {
+export default async function OverviewPage() {
+  const { userId, isDemo } = await getUserInfos();
+
   return (
     <>
       <AppHeader items={["Package", "Overview"]}>
@@ -30,10 +29,10 @@ export default function OverviewPage() {
         </Suspense>
         <div className="flex flex-col md:flex-row gap-4">
           <Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
-            <TimeListenedChartWrapper />
+            <TimeListenedChartComponent data={getMonthlyData(userId, isDemo)} className="flex-1" />
           </Suspense>
           <Suspense fallback={<ListeningPatternChartSkeleton />}>
-            <ListeningPatternChartWrapper />
+            <ListeningPatternChart data={getListeningPatternData(userId)} />
           </Suspense>
         </div>
         <div className="grid gap-4 lg:grid-cols-2">
@@ -44,17 +43,3 @@ export default function OverviewPage() {
     </>
   );
 }
-
-const TimeListenedChartWrapper = async () => {
-  const session = await auth();
-  const { userId, isDemo } = extractUserInfo(session);
-  return <TimeListenedChart data={getMonthlyData(userId, isDemo)} className="flex-1" />;
-};
-
-const ListeningPatternChartWrapper = async () => {
-  const session = await auth();
-  const data = await getListeningPatternData(session?.user?.id);
-  if (!data) return null;
-
-  return <ListeningPatternChart data={data} />;
-};

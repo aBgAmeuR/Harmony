@@ -13,9 +13,9 @@ import { CalendarIcon } from "lucide-react";
 import { ListeningPatternChart } from "~/app/(app)/overview/listening-pattern-chart";
 import { RankingList } from "~/app/(app)/overview/ranking-list";
 import { TopStatsCards } from "~/app/(app)/overview/top-stats-cards";
-import { TimeListenedChart } from "~/app/(app)/stats/activity/time-listened-chart";
 import { AppHeader } from "~/components/app-header";
 import { AppSidebar } from "~/components/navbar/app-sidebar";
+import { TimeListenedChartComponent } from "../charts/activity/time-listened-chart";
 
 const data = {
   topStats: {
@@ -188,11 +188,11 @@ export const Demo = () => {
                 <div className="flex flex-1 flex-col gap-4 p-4 pt-2 max-w-screen-2xl w-full mx-auto">
                   <TopStatsCards demoData={data.topStats} />
                   <div className="flex flex-col md:flex-row gap-4">
-                    <TimeListenedChart
+                    <TimeListenedChartComponent
                       data={new Promise((resolve) => resolve(data.timeListened))}
                       className="flex-1"
-                    />
-                    <ListeningPatternChart data={data.listeningPattern} />
+                    />  
+                    <ListeningPatternChart data={new Promise((resolve) => resolve(data.listeningPattern))} />
                   </div>
                   <div className="grid gap-4 lg:grid-cols-2">
                     <RankingList
