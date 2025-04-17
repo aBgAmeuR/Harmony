@@ -5,6 +5,7 @@ type MusicItemCardContentProps = {
     href: string;
     name: string;
     artists?: string;
+    description?: React.ReactNode;
   };
 };
 
@@ -30,9 +31,12 @@ export const MusicItemCardContent = ({ item }: MusicItemCardContentProps) => {
           {nameContent}
         </a>
         {item.artists && (
-          <p className="line-clamp-2 break-all text-sm text-muted-foreground">
-            {item.artists}
-          </p>
+          <div className="flex items-center gap-1">
+            <p className="line-clamp-2 break-all text-sm text-muted-foreground">
+              {item.artists}
+            </p>
+            {item.description}
+          </div>
         )}
       </div>
     </div>

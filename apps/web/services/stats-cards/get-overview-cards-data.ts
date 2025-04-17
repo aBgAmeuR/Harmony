@@ -75,9 +75,6 @@ export const getOverviewCardsData = async (userId: string | undefined) => {
     ((monthRange.dateEnd.getTime() - monthRange.dateStart.getTime()) /
       (1000 * 60 * 60 * 24));
   
-  console.log("mostActiveDay", mostActiveDay);
-  
-
   return {
     listeningTime: Number(listeningTime?._sum?.msPlayed) || 0,
     totalPlays: totalPlays || 0,

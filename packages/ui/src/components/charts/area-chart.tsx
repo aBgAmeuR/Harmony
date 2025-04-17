@@ -47,8 +47,6 @@ export function ReusableAreaChart({
     color: config[key]?.color || `var(--chart-${key})`,
   }));
 
-  console.log("chartItems", chartItems);
-
   return (
     <ChartContainer config={config} className={className}>
       <AreaChart data={data}>

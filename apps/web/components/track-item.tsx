@@ -4,7 +4,7 @@ import { Button } from "@repo/ui/button";
 import { NumberFlow } from "@repo/ui/components/number";
 import { Clock, ExternalLink, Music } from "lucide-react";
 
-import { getTrendColorClass, TrendBadge, TrendType } from "./trend-badge";
+import { TrendBadge, TrendType } from "./trend-badge";
 
 interface TrackItemProps {
   track: {
@@ -91,7 +91,6 @@ export function TrackItem({
               {track.previousRank && track.trend !== "same" && (
                 <div className="flex items-center gap-1 text-xs">
                   <span
-                    className={`font-medium ${getTrendColorClass(track.trend)}`}
                   >
                     {track.trend === "up"
                       ? `↑ from #${track.previousRank}`

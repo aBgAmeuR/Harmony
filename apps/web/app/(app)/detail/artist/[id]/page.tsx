@@ -77,10 +77,9 @@ export default async function DetailArtistPage({ params }: PageProps) {
             </div>
 
             <TabsContent value="overview">
-              <Container className="space-y-8">
+              {/* <Container className="space-y-8">
                 <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
                   <div className="space-y-6">
-                    {/* Main Stats Summary */}
                     <Suspense fallback={<ArtistStatsSummarySkeleton />}>
                       <ArtistStatsSummaryWrapper
                         userId={userId}
@@ -88,7 +87,6 @@ export default async function DetailArtistPage({ params }: PageProps) {
                       />
                     </Suspense>
 
-                    {/* Top Tracks Preview */}
                     <ScrollArea className="rounded-lg border bg-card">
                       <div className="p-6">
                         <Suspense fallback={<TracksAlbumsListsSkeleton />}>
@@ -103,14 +101,13 @@ export default async function DetailArtistPage({ params }: PageProps) {
                     </ScrollArea>
                   </div>
 
-                  {/* Quick Insights */}
                   <div className="space-y-6">
                     <Suspense fallback={<QuickInsightsSkeleton />}>
                       <QuickInsightsWrapper artistId={id} />
                     </Suspense>
                   </div>
                 </div>
-              </Container>
+              </Container> */}
             </TabsContent>
 
             <TabsContent value="stats">

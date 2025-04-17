@@ -3,17 +3,20 @@
 import { cache } from "react";
 import { prisma } from "@repo/database";
 import { spotify } from "@repo/spotify";
+import { format, localeFormat } from "light-date";
 
 type MonthlyStats = {
   month: string;
-  minutes: number;
-  streams: number;
+  msPlayed: number;
 };
 
 type HourlyStats = {
   hour: string;
-  minutes: number;
+  msPlayed: number;
 };
+
+const formatMonth = (date: Date) =>
+  `${localeFormat(date, "{MMMM}")} ${format(date, "{yyyy}")}`;
 
 export const getArtistStatsAction = cache(
   async (userId: string | undefined, artistId: string) => {
@@ -28,7 +31,7 @@ export const getArtistStatsAction = cache(
               month: string;
               year: number;
               month_num: number;
-              minutes: number;
+              msplayed: number;
               streams: number;
             }[]
           >`
@@ -36,7 +39,7 @@ export const getArtistStatsAction = cache(
           TO_CHAR(timestamp, 'Mon') AS month,
           EXTRACT(YEAR FROM timestamp) AS year,
           EXTRACT(MONTH FROM timestamp) AS month_num,
-          ROUND(SUM("msPlayed")::numeric / 1000 / 60) AS minutes,
+          ROUND(SUM("msPlayed")::numeric) AS msplayed,
           COUNT(*) AS streams
         FROM "Track"
         WHERE "userId" = ${userId}
@@ -47,12 +50,12 @@ export const getArtistStatsAction = cache(
           prisma.$queryRaw<
             {
               hour: number;
-              minutes: number;
+              msplayed: number;
             }[]
           >`
         SELECT
           EXTRACT(HOUR FROM timestamp) AS hour,
-          ROUND(SUM("msPlayed")::numeric / 1000 / 60) AS minutes
+          ROUND(SUM("msPlayed")::numeric) AS msplayed
         FROM "Track"
         WHERE "userId" = ${userId}
           AND ${artistId} = ANY("artistIds")
@@ -78,11 +81,10 @@ export const getArtistStatsAction = cache(
 
       // Format monthly trends
       const monthlyTrends: MonthlyStats[] = monthlyStats.map(
-        ({ month, year, minutes, streams }) => ({
+        ({ month, year, msplayed }) => ({
           month: `${month} ${year}`,
-          minutes: Number(minutes),
-          streams: Number(streams),
-        }),
+          msPlayed: Number(msplayed),
+        })
       );
 
       // Format hourly stats (ensure all 24 hours are represented)
@@ -93,24 +95,24 @@ export const getArtistStatsAction = cache(
           const foundHour = hourlyStats.find((stat) => Number(stat.hour) === i);
           return {
             hour,
-            minutes: foundHour ? Number(foundHour.minutes) : 0,
+            msPlayed: foundHour ? Number(foundHour.msplayed) : 0,
           };
-        },
+        }
       );
 
       // Find top month
       const topMonth = monthlyTrends.reduce(
         (max, current) =>
-          current.streams > (max?.streams || 0) ? current : max,
-        monthlyTrends[0],
+          current.msPlayed > (max?.msPlayed || 0) ? current : max,
+        monthlyTrends[0]
       );
 
       // Calculate averages
       const monthlyAverageStreams = Math.round(
-        Number(totalStreams) / monthlyTrends.length,
+        Number(totalStreams) / monthlyTrends.length
       );
       const monthlyAverageMinutes = Math.round(
-        Number(totalMinutes) / monthlyTrends.length,
+        Number(totalMinutes) / monthlyTrends.length
       );
 
       // Calculate progress to next milestone (next 100 streams)
@@ -130,8 +132,68 @@ export const getArtistStatsAction = cache(
       console.error("Failed to fetch artist stats:", error);
       return null;
     }
-  },
+  }
 );
+
+export const getArtistListeningTrends = async (
+  userId: string | undefined,
+  artistId: string
+) => {
+  if (!userId) return null;
+
+  const listeningHabits = Array.from({ length: 24 }, (_, i) => {
+    return {
+      hour: i,
+      msPlayed: 0,
+    };
+  });
+
+  const [hourData, monthData] = await prisma.$transaction([
+    prisma.$queryRaw<{ hour: bigint; msplayed: bigint }[]>`
+      SELECT
+        EXTRACT(HOUR FROM timestamp) AS hour,
+        SUM("msPlayed") AS msplayed
+      FROM "Track"
+      WHERE "userId" = ${userId} AND ${artistId} = ANY("artistIds")
+      GROUP BY hour
+      ORDER BY hour ASC
+    `,
+    prisma.$queryRaw<{ month: string; totalmsplayed: number }[]>`
+      SELECT TO_CHAR(timestamp, 'YYYY-MM') as month, SUM("msPlayed") as totalmsplayed
+      FROM "Track"
+      WHERE "userId" = ${userId} AND ${artistId} = ANY("artistIds")
+      GROUP BY month
+      ORDER BY month ASC
+    `,
+  ]);
+
+  const monthDataClean: Record<string, number> = {};
+
+  monthData.forEach((track) => {
+    const date = new Date(track.month);
+    const key = formatMonth(date);
+    monthDataClean[key] = Number(track.totalmsplayed);
+  });
+
+  const monthlyTrends = Object.entries(monthDataClean).map(([key, value]) => ({
+    month: key,
+    msPlayed: Number(value),
+  }));
+
+  const timeDistribution = listeningHabits.map((habit) => {
+    const dataItem = hourData.find((d) => Number(d.hour) === habit.hour);
+    
+    return {
+      hour: String(habit.hour),
+      msPlayed: dataItem ? Number(dataItem.msplayed) : 0,
+    };
+  });
+
+  return {
+    monthlyTrends,
+    timeDistribution,
+  };
+};
 
 export const getArtistDetails = cache(async (artistId: string) => {
   return await spotify.artists.get(artistId);

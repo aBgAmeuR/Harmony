@@ -34,8 +34,6 @@ export async function POST(req: Request) {
 
     if (data.length <= 0) return NextResponse.json({ message: "ok" });
 
-    console.log("data:", data.length);
-
     await prisma.track.createMany({
       data: data.map((track) => ({
         ...track,

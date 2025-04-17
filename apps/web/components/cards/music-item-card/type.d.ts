@@ -7,6 +7,7 @@ export type MusicItemCardProps = {
     artists?: string;
     stat1?: string;
     stat2?: string;
+    description?: React.ReactNode;
   };
   rank?: number;
   showAction?: boolean;

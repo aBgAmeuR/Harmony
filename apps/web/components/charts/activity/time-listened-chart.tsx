@@ -21,8 +21,6 @@ export function TimeListenedChartComponent({
   className,
 }: TimeListenedChartComponentProps) {
   const chartData = React.use(dataPromise);
-  console.log("chartData", chartData);
-  
   if (!chartData) return null;
 
   // Custom tooltip label formatter that shows percentage difference from average

@@ -1,8 +1,6 @@
-import { spotify } from "@repo/spotify";
-
-import { getMonthlyTopTracksAction } from "~/actions/get-monthly-top-tracks-action";
-
+import { getMonthlyTopTracks } from "~/services/details/get-monthly-top-tracks";
 import { MonthlyTopTracks } from "./monthly-top-tracks";
+import { getArtistDetails } from "~/actions/get-artist-stats-action";
 
 interface MonthlyTopTracksWrapperProps {
   artistId: string;
@@ -15,19 +13,14 @@ export async function MonthlyTopTracksWrapper({
   limit = 5,
   userId,
 }: MonthlyTopTracksWrapperProps) {
-  const artist = await spotify.artists.get(artistId);
-
-  // Fetch monthly top tracks data
-  const monthlyTopTracksData = await getMonthlyTopTracksAction(
-    userId,
-    artistId,
-    limit,
-  );
-
   return (
     <MonthlyTopTracks
-      data={monthlyTopTracksData}
-      artistName={artist?.name || "this artist"}
+      dataPromise={getMonthlyTopTracks(
+        userId,
+        artistId,
+        limit,
+      )}
+      artistNamePromise={getArtistDetails(artistId).then((artist) => artist?.name)}
     />
   );
 }

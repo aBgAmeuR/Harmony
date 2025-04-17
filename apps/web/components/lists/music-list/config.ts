@@ -24,7 +24,7 @@ export const musicListConfig = {
   rankingTracks: {
     action: getRankingTracks,
     label: "tracks",
-    showAction: true,
+    showAction: false,
     showRank: true,
   },
   rankingArtists: {
@@ -36,7 +36,7 @@ export const musicListConfig = {
   rankingAlbums: {
     action: getRankingAlbums,
     label: "albums",
-    showAction: true,
+    showAction: false,
     showRank: true,
   },
   topTracks: {

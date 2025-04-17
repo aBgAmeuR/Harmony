@@ -29,7 +29,7 @@
   "prisma": {
     "schema": "packages/database/prisma/schema.prisma"
   },
-  "packageManager": "pnpm@10.8.0",
+  "packageManager": "pnpm@10.8.1",
   "engines": {
     "node": ">=20"
   }

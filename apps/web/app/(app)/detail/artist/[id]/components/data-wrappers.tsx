@@ -1,10 +1,11 @@
 import { Badge } from "@repo/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 
-import { getArtistStatsAction } from "~/actions/get-artist-stats-action";
+import { getArtistListeningTrends, getArtistStatsAction } from "~/actions/get-artist-stats-action";
 
 import { ArtistListeningTrends } from "./artist-listening-trends";
 import { ArtistStatsSummary } from "./artist-stats-summary";
+import { Suspense } from "react";
 
 interface WrapperProps {
   artistId: string;
@@ -25,10 +26,11 @@ export async function ArtistListeningTrendsWrapper({
   artistId,
   userId,
 }: WrapperProps) {
-  const artistStats = await getArtistStatsAction(userId, artistId);
-  if (!artistStats) return null;
-
-  return <ArtistListeningTrends stats={artistStats} />;
+  return (
+    <Suspense fallback={<h3 className="text-muted-foreground">Loading...</h3>}>
+      <ArtistListeningTrends stats={getArtistListeningTrends(userId, artistId)} />
+    </Suspense>
+  );
 }
 
 export async function QuickInsightsWrapper({ artistId, userId }: WrapperProps) {

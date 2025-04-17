@@ -7,6 +7,14 @@ export const msToHours = (ms: number, showDecimals = true): number => {
 };
 
 /**
+ * Convert milliseconds to minutes with optional decimal places
+ */
+export const msToMinutes = (ms: number, showDecimals = true): number => {
+  const minutes = ms / 1000 / 60;
+  return showDecimals ? minutes : Math.floor(minutes);
+};
+
+/**
  * Format milliseconds into hours display string
  */
 export const getMsPlayedInHours = (ms: number | string, showDecimals = true): string => {
