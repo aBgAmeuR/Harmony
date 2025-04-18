@@ -42,15 +42,15 @@ export function ListeningPatternChart({
 	return (
 		<Card className={cn("pb-0", className)}>
 			<CardHeader className="flex flex-row items-center justify-between pb-2">
-				<CardTitle className="text-sm font-medium">
+				<CardTitle className="font-medium text-sm">
 					Listening Patterns
 				</CardTitle>
 				<Brain className="size-4 text-muted-foreground" />
 			</CardHeader>
-			<CardContent className="pb-0 max-h-56 md:max-h-52 lg:max-h-64 xl:max-h-80 2xl:max-h-[350px] size-full">
+			<CardContent className="size-full max-h-56 pb-0 md:max-h-52 lg:max-h-64 xl:max-h-80 2xl:max-h-[350px]">
 				<ChartContainer
 					config={chartConfig}
-					className="mx-auto size-full aspect-square w-56 md:w-52 lg:w-64 xl:w-80 2xl:w-[350px]"
+					className="mx-auto aspect-square size-full w-56 md:w-52 lg:w-64 xl:w-80 2xl:w-[350px]"
 				>
 					<RadarChart
 						data={chartData}
@@ -81,13 +81,13 @@ export const ListeningPatternChartSkeleton = () => {
 	return (
 		<Card>
 			<CardHeader className="flex flex-row items-center justify-between pb-2">
-				<CardTitle className="text-sm font-medium">
+				<CardTitle className="font-medium text-sm">
 					Listening Patterns
 				</CardTitle>
 				<Brain className="size-4 text-muted-foreground" />
 			</CardHeader>
-			<CardContent className="max-h-56 md:max-h-52 lg:max-h-64 xl:max-h-80 2xl:max-h-[350px] size-full ">
-				<div className="mx-auto w-56 md:w-52 lg:w-64 xl:w-80 2xl:w-[350px] aspect-square ">
+			<CardContent className="size-full max-h-56 md:max-h-52 lg:max-h-64 xl:max-h-80 2xl:max-h-[350px] ">
+				<div className="mx-auto aspect-square w-56 md:w-52 lg:w-64 xl:w-80 2xl:w-[350px] ">
 					<div className="size-full pb-6">
 						<Skeleton className="size-full" />
 					</div>

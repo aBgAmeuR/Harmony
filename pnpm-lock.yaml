@@ -18,6 +18,9 @@ importers:
       '@biomejs/biome':
         specifier: 1.9.4
         version: 1.9.4
+      '@nedcloarbr/biome-config':
+        specifier: 1.9.1
+        version: 1.9.1
       prettier:
         specifier: ^3.4.2
         version: 3.5.3
@@ -1810,6 +1813,10 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
+    dev: true
+
+  /@nedcloarbr/biome-config@1.9.1:
+    resolution: {integrity: sha512-hU+ed/VpwW/yDTRma0DPGuoge7usn2fPBPOS8pKOZ2WH7sdIYjRzrziWeaCBtJPRWIqowf/C9cguVl0DxGIgog==}
     dev: true
 
   /@next/bundle-analyzer@15.3.1:

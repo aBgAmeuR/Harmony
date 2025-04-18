@@ -14,14 +14,14 @@ export const MusicItemCardStats = ({
 	<div
 		className={cn(
 			layout === "list"
-				? "hidden space-y-1 flex-col items-start @lg:flex"
-				: "flex flex-row items-end justify-between w-full",
+				? "@lg:flex hidden flex-col items-start space-y-1"
+				: "flex w-full flex-row items-end justify-between",
 		)}
 	>
-		<p className="text-sm text-muted-foreground">
+		<p className="text-muted-foreground text-sm">
 			{layout === "grid" ? stat1?.replace(" minutes", "min") : stat1}
 		</p>
-		<p className="text-sm text-muted-foreground">
+		<p className="text-muted-foreground text-sm">
 			{layout === "grid" ? stat2?.replace(" streams", "x") : stat2}
 		</p>
 	</div>

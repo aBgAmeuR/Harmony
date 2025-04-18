@@ -46,12 +46,12 @@ export const SelectMonthRange = () => {
 		return (
 			<TooltipProvider delayDuration={0}>
 				<Tooltip>
-					<TooltipTrigger className="cursor-not-allowed" asChild>
+					<TooltipTrigger className="cursor-not-allowed" asChild={true}>
 						<span tabIndex={0}>
 							<Button
 								variant={"outline"}
 								className="w-[220px] justify-start text-left font-normal"
-								disabled
+								disabled={true}
 							>
 								<CalendarIcon className="mr-2 size-4" />
 								{buttonLabel}
@@ -77,5 +77,5 @@ export const SelectMonthRange = () => {
 };
 
 export const SelectMonthRangeSkeleton = () => (
-	<Skeleton className="w-[220px] h-9 rounded-md" />
+	<Skeleton className="h-9 w-[220px] rounded-md" />
 );

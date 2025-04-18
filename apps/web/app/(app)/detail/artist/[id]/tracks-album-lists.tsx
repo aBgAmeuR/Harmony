@@ -56,16 +56,16 @@ export const TracksAlbumsListsSkeleton = () => (
 				slidesToScroll: 3,
 			}}
 		>
-			<div className="flex items-center justify-between mb-4">
+			<div className="mb-4 flex items-center justify-between">
 				<div className="flex flex-col">
-					<h2 className="text-xl font-bold">Your Top Tracks</h2>
-					<p className="text-sm text-muted-foreground">
+					<h2 className="font-bold text-xl">Your Top Tracks</h2>
+					<p className="text-muted-foreground text-sm">
 						Here are your top tracks
 					</p>
 				</div>
 				<div className="flex items-center gap-2">
-					<CarouselPrevious className="relative left-0 top-0 translate-y-0" />
-					<CarouselNext className="relative right-0 top-0 translate-y-0" />
+					<CarouselPrevious className="relative top-0 left-0 translate-y-0" />
+					<CarouselNext className="relative top-0 right-0 translate-y-0" />
 				</div>
 			</div>
 			<CarouselContent>
@@ -80,12 +80,12 @@ export const TracksAlbumsListsSkeleton = () => (
 			</CarouselContent>
 		</Carousel>
 		<div>
-			<h2 className="text-xl font-bold">Top Albums</h2>
-			<p className="text-sm text-muted-foreground mb-4">
+			<h2 className="font-bold text-xl">Top Albums</h2>
+			<p className="mb-4 text-muted-foreground text-sm">
 				Here are your top albums
 			</p>
 			<div className="flex flex-col">
-				<ListSkeleton length={10} showRank />
+				<ListSkeleton length={10} showRank={true} />
 			</div>
 		</div>
 	</div>

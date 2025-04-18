@@ -9,8 +9,8 @@ export const Providers = ({ children }: PropsWithChildren) => {
 		<ThemeProvider
 			attribute="class"
 			defaultTheme="system"
-			enableSystem
-			disableTransitionOnChange
+			enableSystem={true}
+			disableTransitionOnChange={true}
 		>
 			<SessionProvider>
 				<QueryClientProvider>{children}</QueryClientProvider>

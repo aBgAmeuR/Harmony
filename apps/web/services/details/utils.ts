@@ -15,8 +15,8 @@ export const generateMonthRange = (
 	months: string[],
 ): string[] => {
 	const result: string[] = [];
-	let y = first.year,
-		m = first.monthIndex;
+	let y = first.year;
+	let m = first.monthIndex;
 	while (y < last.year || (y === last.year && m <= last.monthIndex)) {
 		result.push(`${months[m]} ${y}`);
 		m++;

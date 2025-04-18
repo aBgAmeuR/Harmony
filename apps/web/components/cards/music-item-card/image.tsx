@@ -21,20 +21,20 @@ export const MusicItemCardImage = ({
 			layout === "grid" ? "size-full" : "size-16",
 		)}
 	>
-		<AvatarImage src={src!} asChild>
+		<AvatarImage src={src!} asChild={true}>
 			{href ? (
 				<a
 					href={href}
 					target="_blank"
 					rel="noreferrer"
-					className="aspect-square rounded-md object-cover cursor-pointer"
+					className="aspect-square cursor-pointer rounded-md object-cover"
 				>
 					<img
 						src={src!}
 						alt={alt!}
 						width={layout === "grid" ? 200 : 64}
 						height={layout === "grid" ? 200 : 64}
-						className={"aspect-square rounded-md object-cover size-full"}
+						className={"aspect-square size-full rounded-md object-cover"}
 					/>
 				</a>
 			) : (

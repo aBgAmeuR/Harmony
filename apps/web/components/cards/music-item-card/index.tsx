@@ -18,9 +18,9 @@ export const MusicItemCard = ({
 	return (
 		<article
 			className={cn(
-				"flex @container",
+				"@container flex",
 				layout === "grid"
-					? "flex-col items-start space-y-2 h-full"
+					? "h-full flex-col items-start space-y-2"
 					: "items-center space-x-2 py-4 sm:space-x-4",
 			)}
 		>

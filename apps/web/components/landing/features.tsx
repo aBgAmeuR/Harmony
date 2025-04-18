@@ -60,17 +60,17 @@ const features = [
 
 export function Features() {
 	return (
-		<section className="py-12 sm:py-16 md:py-20 px-4">
-			<div className="max-w-screen-xl w-full mx-auto">
-				<h2 className="text-2xl md:text-3xl font-bold text-center mb-12 animate-appear opacity-0 delay-200">
+		<section className="px-4 py-12 sm:py-16 md:py-20">
+			<div className="mx-auto w-full max-w-screen-xl">
+				<h2 className="mb-12 animate-appear text-center font-bold text-2xl opacity-0 delay-200 md:text-3xl">
 					Discover Harmony's Features
 				</h2>
-				<div className="grid grid-cols-1 md:grid-cols-3 gap-6 justify-items-center">
+				<div className="grid grid-cols-1 justify-items-center gap-6 md:grid-cols-3">
 					{features.map((feature, index) => (
 						<Card
 							key={index}
 							className={cn(
-								"flex flex-col overflow-hidden w-full",
+								"flex w-full flex-col overflow-hidden",
 								feature.delay,
 								"animate-appear opacity-0",
 							)}
@@ -78,14 +78,14 @@ export function Features() {
 							<CardHeader className="pb-1">
 								<feature.icon className="size-4" strokeWidth={1} />
 							</CardHeader>
-							<CardContent className="text-left grow">
-								<h3 className="mb-1 text-lg font-semibold">{feature.title}</h3>
-								<p className="leading-snug text-muted-foreground">
+							<CardContent className="grow text-left">
+								<h3 className="mb-1 font-semibold text-lg">{feature.title}</h3>
+								<p className="text-muted-foreground leading-snug">
 									{feature.description}
 								</p>
 							</CardContent>
-							<CardFooter className="justify-end pb-0 pr-0">
-								<div className="h-40 w-full rounded-tl-md bg-background overflow-hidden p-px">
+							<CardFooter className="justify-end pr-0 pb-0">
+								<div className="h-40 w-full overflow-hidden rounded-tl-md bg-background p-px">
 									{feature.component}
 								</div>
 							</CardFooter>

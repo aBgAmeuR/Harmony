@@ -18,9 +18,9 @@ type AlbumListProps = {
 
 export const AlbumList = ({ albums }: AlbumListProps) => (
 	<div>
-		<div className="flex flex-col mb-4">
-			<h2 className="text-xl font-bold">Top Albums</h2>
-			<p className="text-sm text-muted-foreground">
+		<div className="mb-4 flex flex-col">
+			<h2 className="font-bold text-xl">Top Albums</h2>
+			<p className="text-muted-foreground text-sm">
 				Here are your top albums from this artist
 			</p>
 		</div>

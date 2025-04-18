@@ -10,15 +10,15 @@ export function MonthlyTopTracksSkeleton() {
 		<div className="space-y-10">
 			{/* Introduction skeleton */}
 			<div className="mb-2">
-				<div className="flex items-center gap-2 mb-2">
+				<div className="mb-2 flex items-center gap-2">
 					<Skeleton className="size-5 rounded-full" />
 					<Skeleton className="h-8 w-56" />
 				</div>
-				<Skeleton className="h-4 w-full mb-1" />
-				<Skeleton className="h-4 w-5/6 mb-4" />
+				<Skeleton className="mb-1 h-4 w-full" />
+				<Skeleton className="mb-4 h-4 w-5/6" />
 
 				{/* Legend skeleton */}
-				<div className="flex flex-wrap gap-5 mt-4">
+				<div className="mt-4 flex flex-wrap gap-5">
 					{Array.from({ length: 4 }).map((_, i) => (
 						<div key={i} className="flex items-center gap-2">
 							<Skeleton className="h-6 w-8 rounded-md" />
@@ -33,7 +33,7 @@ export function MonthlyTopTracksSkeleton() {
 				<Button
 					variant="outline"
 					size="sm"
-					disabled
+					disabled={true}
 					className="flex items-center gap-1"
 				>
 					<ChevronLeft className="size-4" />
@@ -41,7 +41,7 @@ export function MonthlyTopTracksSkeleton() {
 				</Button>
 
 				<div className="text-center">
-					<Badge variant="secondary" className="font-medium px-3 py-1">
+					<Badge variant="secondary" className="px-3 py-1 font-medium">
 						<Skeleton className="h-4 w-16 bg-primary/20" />
 					</Badge>
 				</div>
@@ -49,7 +49,7 @@ export function MonthlyTopTracksSkeleton() {
 				<Button
 					variant="outline"
 					size="sm"
-					disabled
+					disabled={true}
 					className="flex items-center gap-1"
 				>
 					<span>Next month</span>
@@ -73,7 +73,7 @@ export function MonthlyTopTracksSkeleton() {
 						<div key={i}>
 							<div className="flex items-center gap-3 p-4">
 								{/* Rank number */}
-								<div className="flex items-center justify-center w-8 text-xl font-semibold text-muted-foreground">
+								<div className="flex w-8 items-center justify-center font-semibold text-muted-foreground text-xl">
 									{i + 1}
 								</div>
 
@@ -84,9 +84,9 @@ export function MonthlyTopTracksSkeleton() {
 								<Skeleton className="size-12 rounded-md" />
 
 								{/* Track info skeleton */}
-								<div className="flex-1 min-w-0">
-									<Skeleton className="h-5 w-40 mb-1" />
-									<Skeleton className="h-4 w-32 mb-1" />
+								<div className="min-w-0 flex-1">
+									<Skeleton className="mb-1 h-5 w-40" />
+									<Skeleton className="mb-1 h-4 w-32" />
 									<div className="flex gap-4">
 										<Skeleton className="h-4 w-20" />
 										<Skeleton className="h-4 w-20" />
@@ -95,7 +95,7 @@ export function MonthlyTopTracksSkeleton() {
 								</div>
 
 								{/* Action button skeleton */}
-								<Skeleton className="size-8 rounded-md ml-auto" />
+								<Skeleton className="ml-auto size-8 rounded-md" />
 							</div>
 							{i < 4 && <Separator />}
 						</div>

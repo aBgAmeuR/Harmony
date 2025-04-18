@@ -5,7 +5,7 @@ import { CircleAlert } from "lucide-react";
 
 export const MusicListError = () => {
 	return (
-		<div className="rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
+		<div className="rounded-lg border border-border bg-background p-4 shadow-black/5 shadow-lg">
 			<div className="flex gap-2">
 				<div className="flex grow gap-3">
 					<CircleAlert
@@ -16,10 +16,10 @@ export const MusicListError = () => {
 					/>
 					<div className="flex grow flex-col gap-3">
 						<div className="space-y-1">
-							<p className="text-sm font-medium">
+							<p className="font-medium text-sm">
 								We couldn&lsquo;t complete your request!
 							</p>
-							<p className="text-sm text-muted-foreground">
+							<p className="text-muted-foreground text-sm">
 								It indicates that an issue has prevented the processing of the
 								request.
 							</p>

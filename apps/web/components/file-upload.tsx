@@ -73,17 +73,17 @@ export const FileUpload = () => {
 				/>
 				<label
 					htmlFor="file-upload"
-					className="flex cursor-pointer justify-center rounded-md border-2 border-dashed border-gray-300 px-6 pb-6 pt-5"
+					className="flex cursor-pointer justify-center rounded-md border-2 border-gray-300 border-dashed px-6 pt-5 pb-6"
 				>
 					<div className="space-y-1 text-center">
 						<Upload className="mx-auto size-12 text-gray-400" />
-						<div className="flex text-sm text-gray-600 dark:text-gray-400">
-							<span className="hover:text-primary-dark relative font-medium text-primary">
+						<div className="flex text-gray-600 text-sm dark:text-gray-400">
+							<span className="relative font-medium text-primary hover:text-primary-dark">
 								Upload a file
 							</span>
 							<p className="pl-1">or drag and drop</p>
 						</div>
-						<p className="text-xs text-gray-500 dark:text-gray-400">
+						<p className="text-gray-500 text-xs dark:text-gray-400">
 							ZIP file up to 100MB
 						</p>
 					</div>
@@ -95,7 +95,7 @@ export const FileUpload = () => {
 						<FileArchive className="mr-2 size-5 text-primary" />
 						<p>
 							<span>{file.name}</span>
-							<span className="ml-2 text-xs text-gray-500">
+							<span className="ml-2 text-gray-500 text-xs">
 								{(file.size / 1024 / 1024).toFixed(2)}MB
 							</span>
 						</p>

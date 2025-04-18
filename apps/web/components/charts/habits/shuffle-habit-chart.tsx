@@ -47,7 +47,7 @@ export function ShuffleHabitChartComponent({
 				description="How often you use shuffle"
 			/>
 			<ChartCardContent>
-				<div className="flex overflow-hidden w-full min-w-60 h-40 justify-center items-start">
+				<div className="flex h-40 w-full min-w-60 items-start justify-center overflow-hidden">
 					<ReusableRadialBarChart
 						data={[chartData]}
 						barDataKeys={["shuffled", "notShuffled"]}

@@ -32,7 +32,7 @@ export const PackageDocumentation = ({
 								href="https://www.spotify.com/account/privacy/"
 								target="_blank"
 								rel="noopener noreferrer"
-								className="hover:underline text-chart-1"
+								className="text-chart-1 hover:underline"
 							>
 								Spotify Account Privacy Settings
 							</a>
@@ -47,7 +47,7 @@ export const PackageDocumentation = ({
 						</li>
 						<li>
 							Wait for an email from Spotify containing the download link.
-							<small className="block text-sm text-muted-foreground">
+							<small className="block text-muted-foreground text-sm">
 								(It may take up to 30 days, but usually arrives within a few
 								days.)
 							</small>

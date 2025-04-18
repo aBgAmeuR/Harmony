@@ -142,7 +142,7 @@ function MonthSelector({
 				<ArrowLeft className="size-4" />
 			</Button>
 			<Popover>
-				<PopoverTrigger asChild>
+				<PopoverTrigger asChild={true}>
 					<Button
 						size="sm"
 						variant="outline"

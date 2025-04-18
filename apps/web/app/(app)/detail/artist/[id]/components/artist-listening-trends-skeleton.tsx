@@ -29,7 +29,7 @@ export function ArtistListeningTrendsSkeleton() {
 					<div className="aspect-[21/9] w-full">
 						<Skeleton className="size-full" />
 					</div>
-					<div className="flex items-center justify-center gap-4 mt-4">
+					<div className="mt-4 flex items-center justify-center gap-4">
 						<div className="flex items-center gap-2">
 							<div className="size-2 rounded-full bg-muted-foreground/30" />
 							<Skeleton className="h-4 w-32" />

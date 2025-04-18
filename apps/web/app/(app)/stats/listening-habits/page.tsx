@@ -39,8 +39,8 @@ export default async function StatsListeningHabitsPage() {
 			<AppHeader items={["Package", "Stats", "Listening Habits"]}>
 				<SelectMonthRange />
 			</AppHeader>
-			<main className="flex flex-col lg:flex-row p-4 gap-4 max-w-6xl w-full mx-auto">
-				<div className="flex flex-col flex-1 gap-4">
+			<main className="mx-auto flex w-full max-w-6xl flex-col gap-4 p-4 lg:flex-row">
+				<div className="flex flex-1 flex-col gap-4">
 					<Suspense fallback={<HoursHabitChartSkeleton />}>
 						<HoursHabitChartComponent data={getHoursHabit(userId, isDemo)} />
 					</Suspense>
@@ -49,7 +49,7 @@ export default async function StatsListeningHabitsPage() {
 						<DaysHabitChartComponent data={getDaysHabit(userId, isDemo)} />
 					</Suspense>
 				</div>
-				<div className="flex justify-center flex-wrap md:justify-start lg:flex-nowrap lg:flex-col gap-4">
+				<div className="flex flex-wrap justify-center gap-4 md:justify-start lg:flex-col lg:flex-nowrap">
 					<Suspense fallback={<TopPlatformChartSkeleton />}>
 						<TopPlatformChartComponent data={getTopPlatforms(userId, isDemo)} />
 					</Suspense>

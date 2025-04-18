@@ -49,7 +49,7 @@ export const RankingList = ({
 					<CardTitle>{label}</CardTitle>
 					<CardDescription>{description}</CardDescription>
 				</div>
-				<Button className="group" variant="secondary" asChild>
+				<Button className="group" variant="secondary" asChild={true}>
 					<a href={href}>
 						View All
 						<ArrowRight

@@ -16,15 +16,15 @@ export function SidebarOptInForm() {
 	return (
 		<Card
 			className={cn(
-				"p-2 overflow-hidden dark:bg-background",
+				"overflow-hidden p-2 dark:bg-background",
 				!open && "hidden",
 			)}
 		>
 			<CardHeader className="p-2">
-				<CardTitle className="text-sm break-all line-clamp-2">
+				<CardTitle className="line-clamp-2 break-all text-sm">
 					You are in a demo
 				</CardTitle>
-				<CardDescription className="text-xs break-all line-clamp-2">
+				<CardDescription className="line-clamp-2 break-all text-xs">
 					You need to log in to see your own data
 				</CardDescription>
 			</CardHeader>

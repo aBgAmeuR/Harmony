@@ -29,13 +29,13 @@ export const Hero = () => {
         strokeDasharray={"4 2"}
         squaresClassName="hover:fill-chart-1"
       /> */}
-			<Announcement className="animate-appear z-10" />
+			<Announcement className="z-10 animate-appear" />
 			<div
 				aria-hidden="true"
-				className="flex absolute -top-96 start-1/2 -translate-x-1/2 overflow-hidden max-w-full"
+				className="-top-96 -translate-x-1/2 absolute start-1/2 flex max-w-full overflow-hidden"
 			>
-				<div className="bg-gradient-to-r from-background/50 to-background blur-3xl w-[25rem] h-[44rem] rotate-[-60deg] -translate-x-40 max-w-full" />
-				<div className="bg-gradient-to-tl blur-3xl w-[90rem] h-[50rem] rounded-full origin-top-left -rotate-12 -translate-x-60 from-primary-foreground via-primary-foreground to-background max-w-full" />
+				<div className="-translate-x-40 h-[44rem] w-[25rem] max-w-full rotate-[-60deg] bg-gradient-to-r from-background/50 to-background blur-3xl" />
+				<div className="-rotate-12 -translate-x-60 h-[50rem] w-[90rem] max-w-full origin-top-left rounded-full bg-gradient-to-tl from-primary-foreground via-primary-foreground to-background blur-3xl" />
 			</div>
 			<PageHeaderHeading className="animate-appear opacity-0 delay-100">
 				Discover Your Listening Story
@@ -45,7 +45,7 @@ export const Hero = () => {
 				insights on your listening habits and more detailed information about
 				your account.
 			</PageHeaderDescription>
-			<PageActions className="flex-col animate-appear opacity-0 delay-300">
+			<PageActions className="animate-appear flex-col opacity-0 delay-300">
 				<div className="flex items-center justify-center space-x-4">
 					<GetStartedBtn>Get Started</GetStartedBtn>
 					<Link

@@ -18,13 +18,13 @@ export const NumbersStatsCards = async () => {
 	if (!data) return null;
 
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+		<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
 			{/* Listening Time */}
-			<Card className="p-6 bg-gradient-to-br from-purple-500 to-indigo-600 text-white">
-				<div className="flex justify-between items-start">
+			<Card className="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white">
+				<div className="flex items-start justify-between">
 					<div>
 						<p className="text-sm opacity-75">Total Listening Time</p>
-						<h2 className="text-4xl font-bold mt-2">
+						<h2 className="mt-2 font-bold text-4xl">
 							<NumberFlow
 								value={msToHours(data.listeningTime).toFixed(2)}
 								suffix=" hours"
@@ -44,10 +44,10 @@ export const NumbersStatsCards = async () => {
 
 			{/* Total Plays and Unique Tracks */}
 			<Card className="p-6">
-				<div className="flex justify-between mb-4">
+				<div className="mb-4 flex justify-between">
 					<div>
-						<p className="text-sm text-muted-foreground">Total Plays</p>
-						<h3 className="text-2xl font-semibold">
+						<p className="text-muted-foreground text-sm">Total Plays</p>
+						<h3 className="font-semibold text-2xl">
 							<NumberFlow
 								value={data.totalPlays}
 								format={{ notation: "standard" }}
@@ -56,8 +56,8 @@ export const NumbersStatsCards = async () => {
 						</h3>
 					</div>
 					<div>
-						<p className="text-sm text-muted-foreground">Unique Tracks</p>
-						<h3 className="text-2xl font-semibold">
+						<p className="text-muted-foreground text-sm">Unique Tracks</p>
+						<h3 className="font-semibold text-2xl">
 							<NumberFlow
 								value={data.uniqueTracks}
 								format={{ notation: "standard" }}
@@ -70,7 +70,7 @@ export const NumbersStatsCards = async () => {
 					value={(data.uniqueTracks / data.totalPlays) * 100}
 					className="h-2 [&>div]:duration-500 [&>div]:ease-in-out"
 				/>
-				<p className="text-sm text-muted-foreground mt-2">
+				<p className="mt-2 text-muted-foreground text-sm">
 					<NumberFlow
 						value={
 							data.uniqueTracks && data.totalPlays
@@ -85,18 +85,18 @@ export const NumbersStatsCards = async () => {
 			</Card>
 
 			{/* Different Artists */}
-			<Card className="p-6 flex flex-row items-center space-x-4">
+			<Card className="flex flex-row items-center space-x-4 p-6">
 				<Users className="size-12 text-indigo-500" />
 				<div>
-					<p className="text-sm text-muted-foreground">Different Artists</p>
-					<h3 className="text-3xl font-bold">
+					<p className="text-muted-foreground text-sm">Different Artists</p>
+					<h3 className="font-bold text-3xl">
 						<NumberFlow
 							value={data.differentArtists}
 							format={{ notation: "standard" }}
 							locales="en-US"
 						/>
 					</h3>
-					<p className="text-sm text-muted-foreground mt-1">
+					<p className="mt-1 text-muted-foreground text-sm">
 						Explored in your musical journey
 					</p>
 				</div>
@@ -104,7 +104,7 @@ export const NumbersStatsCards = async () => {
 
 			{/* First Track */}
 			<Card className="p-6">
-				<h3 className="font-semibold mb-2">First Track you played</h3>
+				<h3 className="mb-2 font-semibold">First Track you played</h3>
 				<div>
 					<div className="flex items-center space-x-2 sm:space-x-4">
 						<MusicItemCardImage
@@ -119,10 +119,13 @@ export const NumbersStatsCards = async () => {
 							}}
 						/>
 					</div>
-					<p className="mt-2 text-sm text-muted-foreground">
+					<p className="mt-2 text-muted-foreground text-sm">
 						Played on{" "}
 						{data.firstTrack.timestamp ? (
-							<NumbersFlowDate value={data.firstTrack.timestamp} showTime />
+							<NumbersFlowDate
+								value={data.firstTrack.timestamp}
+								showTime={true}
+							/>
 						) : (
 							"an unknown date"
 						)}
@@ -131,17 +134,17 @@ export const NumbersStatsCards = async () => {
 			</Card>
 
 			{/* Most Played Day */}
-			<Card className="p-6 bg-green-100 dark:bg-green-900">
-				<Calendar className="size-8 mb-2 text-green-600 dark:text-green-400" />
+			<Card className="bg-green-100 p-6 dark:bg-green-900">
+				<Calendar className="mb-2 size-8 text-green-600 dark:text-green-400" />
 				<h3 className="font-semibold">Most Active Day</h3>
-				<p className="text-2xl font-bold mt-1">
+				<p className="mt-1 font-bold text-2xl">
 					{data.mostActiveDay.day ? (
 						<NumbersFlowDate value={new Date(data.mostActiveDay.day)} />
 					) : (
 						"No data available"
 					)}
 				</p>
-				<p className="text-sm text-muted-foreground mt-1">
+				<p className="mt-1 text-muted-foreground text-sm">
 					<NumberFlow
 						value={data.mostActiveDay.totalPlayed}
 						format={{ notation: "standard" }}
@@ -157,11 +160,11 @@ export const NumbersStatsCards = async () => {
 			</Card>
 
 			{/* Online Track Percent */}
-			<Card className="p-6 flex flex-col justify-between h-full">
-				<div className="flex justify-between mb-4">
+			<Card className="flex h-full flex-col justify-between p-6">
+				<div className="mb-4 flex justify-between">
 					<div>
-						<p className="text-sm text-muted-foreground">Online Listening</p>
-						<h3 className="text-4xl font-semibold">
+						<p className="text-muted-foreground text-sm">Online Listening</p>
+						<h3 className="font-semibold text-4xl">
 							<NumberFlow
 								value={data.onlineTrackPercent / 100}
 								format={{ style: "percent" }}
@@ -174,7 +177,7 @@ export const NumbersStatsCards = async () => {
 					value={data.onlineTrackPercent}
 					className="h-2 [&>div]:duration-500 [&>div]:ease-in-out"
 				/>
-				<p className="text-sm text-muted-foreground mt-2">
+				<p className="mt-2 text-muted-foreground text-sm">
 					{data.onlineTrackPercent > 50
 						? "You mostly listen to music while connected to the internet"
 						: "You mostly listen to music while offline"}
@@ -182,8 +185,8 @@ export const NumbersStatsCards = async () => {
 			</Card>
 
 			{/* Most Skipped Track */}
-			<Card className="p-6 bg-red-100 dark:bg-red-900">
-				<div className="flex justify-between items-start mb-4">
+			<Card className="bg-red-100 p-6 dark:bg-red-900">
+				<div className="mb-4 flex items-start justify-between">
 					<h3 className="font-semibold">Most Forwarded Track</h3>
 					<FastForward className="size-5 text-red-500 dark:text-red-400" />
 				</div>
@@ -216,87 +219,87 @@ export const NumbersStatsCards = async () => {
 
 export const NumbersStatsSkeleton = () => {
 	return (
-		<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-			<Card className="p-6 bg-gradient-to-br from-purple-500 to-indigo-600 text-white">
-				<div className="flex justify-between items-start">
+		<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+			<Card className="bg-gradient-to-br from-purple-500 to-indigo-600 p-6 text-white">
+				<div className="flex items-start justify-between">
 					<div>
 						<p className="text-sm opacity-75">Total Listening Time</p>
-						<Skeleton className="w-40 h-10 mt-4" />
+						<Skeleton className="mt-4 h-10 w-40" />
 					</div>
 					<Clock className="size-8 opacity-75" />
 				</div>
-				<Skeleton className="w-56 h-5 mt-6" />
+				<Skeleton className="mt-6 h-5 w-56" />
 			</Card>
 
 			<Card className="p-6">
-				<div className="flex justify-between mb-4">
+				<div className="mb-4 flex justify-between">
 					<div>
-						<p className="text-sm text-muted-foreground">Total Plays</p>
-						<Skeleton className="w-20 h-8 mt-1" />
+						<p className="text-muted-foreground text-sm">Total Plays</p>
+						<Skeleton className="mt-1 h-8 w-20" />
 					</div>
 					<div>
-						<p className="text-sm text-muted-foreground">Unique Tracks</p>
-						<Skeleton className="w-20 h-8 mt-1" />
+						<p className="text-muted-foreground text-sm">Unique Tracks</p>
+						<Skeleton className="mt-1 h-8 w-20" />
 					</div>
 				</div>
 				<Progress className="h-2" />
-				<Skeleton className="w-44 h-5 mt-2" />
+				<Skeleton className="mt-2 h-5 w-44" />
 			</Card>
 
-			<Card className="p-6 flex items-center space-x-4">
+			<Card className="flex items-center space-x-4 p-6">
 				<Users className="size-12 text-indigo-500" />
 				<div>
-					<p className="text-sm text-muted-foreground">Different Artists</p>
-					<Skeleton className="w-20 h-7 mt-2" />
-					<Skeleton className="w-36 h-5 mt-4" />
+					<p className="text-muted-foreground text-sm">Different Artists</p>
+					<Skeleton className="mt-2 h-7 w-20" />
+					<Skeleton className="mt-4 h-5 w-36" />
 				</div>
 			</Card>
 
 			<Card className="p-6">
-				<h3 className="font-semibold mb-2">First Track of the Year</h3>
+				<h3 className="mb-2 font-semibold">First Track of the Year</h3>
 				<div>
 					<div className="flex items-center space-x-3">
 						<MusicItemCardImage />
 						<div className="space-y-1">
-							<Skeleton className="w-32 h-5 mt-1" />
-							<Skeleton className="w-20 h-4 mt-1" />
+							<Skeleton className="mt-1 h-5 w-32" />
+							<Skeleton className="mt-1 h-4 w-20" />
 						</div>
 					</div>
-					<Skeleton className="w-36 h-4 mt-2" />
+					<Skeleton className="mt-2 h-4 w-36" />
 				</div>
 			</Card>
 
-			<Card className="p-6 bg-green-100 dark:bg-green-900">
-				<Calendar className="size-8 mb-2 text-green-600 dark:text-green-400" />
+			<Card className="bg-green-100 p-6 dark:bg-green-900">
+				<Calendar className="mb-2 size-8 text-green-600 dark:text-green-400" />
 				<h3 className="font-semibold">Most Active Day</h3>
-				<Skeleton className="w-44 h-8 mt-2" />
-				<Skeleton className="w-52 h-5 mt-3" />
+				<Skeleton className="mt-2 h-8 w-44" />
+				<Skeleton className="mt-3 h-5 w-52" />
 			</Card>
 
-			<Card className="p-6 flex flex-col justify-between h-full">
-				<div className="flex justify-between mb-4">
+			<Card className="flex h-full flex-col justify-between p-6">
+				<div className="mb-4 flex justify-between">
 					<div>
-						<p className="text-sm text-muted-foreground">Online Listening</p>
-						<Skeleton className="w-24 h-10 mt-3" />
+						<p className="text-muted-foreground text-sm">Online Listening</p>
+						<Skeleton className="mt-3 h-10 w-24" />
 					</div>
 				</div>
 				<Progress className="h-2" />
-				<Skeleton className="w-64 h-5 mt-1" />
+				<Skeleton className="mt-1 h-5 w-64" />
 			</Card>
 
-			<Card className="p-6 bg-red-100 dark:bg-red-900">
-				<div className="flex justify-between items-start mb-4">
+			<Card className="bg-red-100 p-6 dark:bg-red-900">
+				<div className="mb-4 flex items-start justify-between">
 					<h3 className="font-semibold">Most Forwarded Track</h3>
 					<FastForward className="size-5 text-red-500 dark:text-red-400" />
 				</div>
 				<div className="flex items-center space-x-3">
 					<MusicItemCardImage />
 					<div className="space-y-1">
-						<Skeleton className="w-32 h-5 mt-1" />
-						<Skeleton className="w-20 h-4 mt-1" />
+						<Skeleton className="mt-1 h-5 w-32" />
+						<Skeleton className="mt-1 h-4 w-20" />
 					</div>
 				</div>
-				<Skeleton className="w-32 h-6 mt-3" />
+				<Skeleton className="mt-3 h-6 w-32" />
 			</Card>
 		</div>
 	);

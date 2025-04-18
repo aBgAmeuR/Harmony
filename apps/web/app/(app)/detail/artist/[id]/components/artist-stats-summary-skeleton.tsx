@@ -17,7 +17,7 @@ export function ArtistStatsSummarySkeleton() {
 					<div className="space-y-3">
 						<div>
 							<Skeleton className="h-8 w-32" />
-							<Skeleton className="h-4 w-44 mt-1" />
+							<Skeleton className="mt-1 h-4 w-44" />
 						</div>
 						<div className="flex items-center gap-2">
 							<Skeleton className="size-3" />
@@ -45,7 +45,7 @@ export function ArtistStatsSummarySkeleton() {
 								<Skeleton className="h-8 w-24" />
 								<Skeleton className="h-5 w-20" />
 							</div>
-							<div className="flex items-center gap-2 mt-1">
+							<div className="mt-1 flex items-center gap-2">
 								<Skeleton className="size-4" />
 								<Skeleton className="h-4 w-16" />
 							</div>
@@ -73,20 +73,20 @@ export function ArtistStatsSummarySkeleton() {
 					<div className="space-y-3">
 						<div>
 							<Skeleton className="h-8 w-28" />
-							<div className="flex items-center gap-2 mt-1">
+							<div className="mt-1 flex items-center gap-2">
 								<Skeleton className="size-4" />
 								<Skeleton className="h-4 w-32" />
 							</div>
 						</div>
 						<div className="flex flex-col gap-2">
-							<div className="flex justify-between items-center">
+							<div className="flex items-center justify-between">
 								<Skeleton className="h-4 w-20" />
 								<div className="flex items-center gap-1">
 									<Skeleton className="h-4 w-16" />
 									<Brain className="size-3 text-muted-foreground/30" />
 								</div>
 							</div>
-							<div className="flex justify-between items-center">
+							<div className="flex items-center justify-between">
 								<Skeleton className="h-4 w-28" />
 								<div className="flex items-center gap-1">
 									<Skeleton className="h-4 w-16" />

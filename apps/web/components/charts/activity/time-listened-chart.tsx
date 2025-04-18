@@ -33,7 +33,7 @@ export function TimeListenedChartComponent({
 		const percentage = ((payload[0].value - average) / average) * 100;
 
 		return (
-			<div className="w-full flex justify-between items-center gap-2">
+			<div className="flex w-full items-center justify-between gap-2">
 				<p>{value}</p>
 				{percentage >= 0 ? (
 					<NumberFlow
@@ -64,7 +64,7 @@ export function TimeListenedChartComponent({
 	return (
 		<ChartCard className={className}>
 			<ChartCardHeader
-				showSeparator
+				showSeparator={true}
 				title="Time Listened Over Months"
 				description="Showing total time listened in hours over the months"
 			>
@@ -101,7 +101,7 @@ export function TimeListenedChartSkeleton({
 	return (
 		<ChartCard className={className}>
 			<ChartCardHeader
-				showSeparator
+				showSeparator={true}
 				title="Time Listened Over Months"
 				description="Showing total time listened in hours over the months"
 			>

@@ -41,9 +41,9 @@ const items = [
 
 export function FAQ() {
 	return (
-		<section className="py-12 sm:py-16 md:py-20 px-4">
-			<div className="max-w-3xl w-full mx-auto">
-				<h2 className="text-2xl md:text-3xl font-bold text-center mb-8 sm:mb-10 md:mb-12 animate-appear opacity-0 delay-500">
+		<section className="px-4 py-12 sm:py-16 md:py-20">
+			<div className="mx-auto w-full max-w-3xl">
+				<h2 className="mb-8 animate-appear text-center font-bold text-2xl opacity-0 delay-500 sm:mb-10 md:mb-12 md:text-3xl">
 					Frequently Asked Questions
 				</h2>
 				<AccordionIcons

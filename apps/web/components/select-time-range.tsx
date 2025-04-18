@@ -81,9 +81,9 @@ export const SelectTimeRange = () => {
 	return (
 		<TooltipProvider delayDuration={0}>
 			<Tooltip>
-				<TooltipTrigger asChild>
+				<TooltipTrigger asChild={true}>
 					<span tabIndex={0}>
-						<Select value={timeRange} disabled>
+						<Select value={timeRange} disabled={true}>
 							<SelectTrigger className="w-[180px]">
 								<SelectValue placeholder="Select time range" />
 							</SelectTrigger>
@@ -106,5 +106,5 @@ export const SelectTimeRange = () => {
 };
 
 export const SelectTimeRangeSkeleton = () => (
-	<Skeleton className="w-[180px] h-9 rounded-md" />
+	<Skeleton className="h-9 w-[180px] rounded-md" />
 );

@@ -17,7 +17,7 @@ export function ThemeToggle(props: React.ComponentProps<typeof Button>) {
 			{...props}
 		>
 			<SunMedium
-				className="rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+				className="dark:-rotate-90 rotate-0 scale-100 transition-all dark:scale-0"
 				size={18}
 			/>
 			<Moon

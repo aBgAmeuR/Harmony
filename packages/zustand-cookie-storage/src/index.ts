@@ -57,7 +57,8 @@ function setNestedKeys(keys: string[], value: any) {
 	if (keys.length === 0) {
 		if (isArrayString(decodedValue)) {
 			return JSON.parse(decodedValue);
-		} else if (["true", "false"].includes(decodedValue)) {
+		}
+		if (["true", "false"].includes(decodedValue)) {
 			return decodedValue !== "false";
 		}
 		return decodedValue;

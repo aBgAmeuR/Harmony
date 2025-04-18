@@ -26,11 +26,11 @@ export default async function OverviewPage() {
 			<AppHeader items={["Package", "Overview"]}>
 				<SelectMonthRange />
 			</AppHeader>
-			<div className="flex flex-1 flex-col gap-4 p-4 pt-2 max-w-screen-2xl w-full mx-auto">
+			<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
 				<Suspense fallback={<TopStatsCardsSkeleton />}>
 					<TopStatsCards />
 				</Suspense>
-				<div className="flex flex-col md:flex-row gap-4">
+				<div className="flex flex-col gap-4 md:flex-row">
 					<Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
 						<TimeListenedChartComponent
 							data={getMonthlyData(userId, isDemo)}

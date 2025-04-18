@@ -27,7 +27,7 @@ export const AppHeader = ({ items, demo = true, children }: AppHeaderProps) => {
 						{items.slice(0, -1).map((item, index) => (
 							<React.Fragment key={`${item}-${index}`}>
 								<BreadcrumbItem className="hidden md:block">
-									<BreadcrumbPage className="line-clamp-1 break-all text-sm text-muted-foreground">
+									<BreadcrumbPage className="line-clamp-1 break-all text-muted-foreground text-sm">
 										{item}
 									</BreadcrumbPage>
 								</BreadcrumbItem>

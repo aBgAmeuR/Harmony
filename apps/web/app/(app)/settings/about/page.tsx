@@ -14,7 +14,7 @@ export default async function SettingsAboutPage() {
 		<>
 			<AppHeader items={["Settings", "About"]} />
 			<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-				<Card className="max-w-screen-xl w-full mx-auto">
+				<Card className="mx-auto w-full max-w-screen-xl">
 					<CardHeader>
 						<CardTitle>App Information</CardTitle>
 						<CardDescription>Key details about Harmony</CardDescription>
@@ -54,7 +54,7 @@ export default async function SettingsAboutPage() {
 								contribute, or report issues on our{" "}
 								<a
 									href="https://github.com/aBgAmeuR/Harmony"
-									className="hover:underline text-chart-1"
+									className="text-chart-1 hover:underline"
 								>
 									GitHub repository
 								</a>

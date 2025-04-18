@@ -71,7 +71,7 @@ export function NavUser({ user }: NavUserProps) {
 			<SidebarMenuItem>
 				<Dialog>
 					<DropdownMenu>
-						<DropdownMenuTrigger asChild>
+						<DropdownMenuTrigger asChild={true}>
 							<SidebarMenuButton
 								size="lg"
 								className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
@@ -85,7 +85,7 @@ export function NavUser({ user }: NavUserProps) {
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-semibold">{user.name}</span>
 									{isMounted && showEmail && user.email ? (
-										<span className="truncate text-xs text-muted-foreground">
+										<span className="truncate text-muted-foreground text-xs">
 											{user.email}
 										</span>
 									) : null}
@@ -113,7 +113,7 @@ export function NavUser({ user }: NavUserProps) {
 									<div className="grid flex-1 text-left text-sm leading-tight">
 										<span className="truncate font-semibold">{user.name}</span>
 										{isMounted && user.email && showEmail ? (
-											<span className="truncate text-xs text-muted-foreground">
+											<span className="truncate text-muted-foreground text-xs">
 												{user.email}
 											</span>
 										) : null}
@@ -121,7 +121,7 @@ export function NavUser({ user }: NavUserProps) {
 								</div>
 							</DropdownMenuLabel>
 							<DropdownMenuSeparator />
-							<DropdownMenuItem asChild>
+							<DropdownMenuItem asChild={true}>
 								<Button
 									className="flex w-full cursor-pointer items-center justify-start"
 									variant="ghost"
@@ -137,11 +137,11 @@ export function NavUser({ user }: NavUserProps) {
 								</Button>
 							</DropdownMenuItem>
 							<DropdownMenuSeparator />
-							<DropdownMenuLabel className="text-xs text-muted-foreground">
+							<DropdownMenuLabel className="text-muted-foreground text-xs">
 								Preferences
 							</DropdownMenuLabel>
 							{!isDemo ? (
-								<DropdownMenuItem asChild>
+								<DropdownMenuItem asChild={true}>
 									<Button
 										onClick={(e) => {
 											e.preventDefault();
@@ -156,7 +156,7 @@ export function NavUser({ user }: NavUserProps) {
 									</Button>
 								</DropdownMenuItem>
 							) : null}
-							<DropdownMenuItem asChild>
+							<DropdownMenuItem asChild={true}>
 								<Button
 									onClick={(e) => {
 										e.preventDefault();
@@ -177,8 +177,8 @@ export function NavUser({ user }: NavUserProps) {
 							{!isDemo ? (
 								<>
 									<DropdownMenuSeparator />
-									<DialogTrigger asChild>
-										<DropdownMenuItem asChild>
+									<DialogTrigger asChild={true}>
+										<DropdownMenuItem asChild={true}>
 											<Button
 												className="w-full cursor-pointer focus:bg-destructive/90 focus-visible:ring-transparent"
 												variant="destructive"
@@ -202,7 +202,7 @@ export function NavUser({ user }: NavUserProps) {
 							</DialogDescription>
 						</DialogHeader>
 						<div className="space-y-4 py-4">
-							<p className="text-sm text-muted-foreground">
+							<p className="text-muted-foreground text-sm">
 								To confirm, please type your nickname:{" "}
 								<span className="font-semibold">{user.name}</span>
 							</p>
@@ -214,7 +214,7 @@ export function NavUser({ user }: NavUserProps) {
 							/>
 						</div>
 						<DialogFooter>
-							<DialogClose asChild>
+							<DialogClose asChild={true}>
 								<Button variant="outline">Cancel</Button>
 							</DialogClose>
 							<Button

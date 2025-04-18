@@ -27,10 +27,10 @@ export function ArtistListeningTrends({ stats }: ArtistListeningTrendsProps) {
 	if (!chartData) return null;
 
 	return (
-		<div className="grid xl:grid-cols-2 gap-4 w-full">
+		<div className="grid w-full gap-4 xl:grid-cols-2">
 			<ChartCard>
 				<ChartCardHeader
-					showSeparator
+					showSeparator={true}
 					title="Monthly Listening Activity"
 					description="Total time listened in hours over the months"
 				/>
@@ -53,7 +53,7 @@ export function ArtistListeningTrends({ stats }: ArtistListeningTrendsProps) {
 
 			<ChartCard>
 				<ChartCardHeader
-					showSeparator
+					showSeparator={true}
 					title="Listening Patterns"
 					description="When you listen most during the day"
 				/>

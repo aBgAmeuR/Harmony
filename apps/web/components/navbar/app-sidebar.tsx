@@ -69,7 +69,7 @@ export function AppSidebar({
 								size="lg"
 								className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
 							>
-								<Skeleton className="size-8 min-w-8 min-h-8 rounded-lg" />
+								<Skeleton className="size-8 min-h-8 min-w-8 rounded-lg" />
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<Skeleton className="h-[17.5] w-1/2" />
 								</div>

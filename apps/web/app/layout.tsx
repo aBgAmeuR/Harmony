@@ -28,7 +28,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<html lang="en" suppressHydrationWarning>
+		<html lang="en" suppressHydrationWarning={true}>
 			<head>
 				<link
 					rel="icon"
@@ -53,7 +53,7 @@ export default function RootLayout({
 				<ErrorBoundary errorComponent={Error}>
 					<Providers>{children}</Providers>
 				</ErrorBoundary>
-				<Toaster richColors closeButton />
+				<Toaster richColors={true} closeButton={true} />
 			</body>
 		</html>
 	);

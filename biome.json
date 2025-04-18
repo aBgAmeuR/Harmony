@@ -1,13 +1,17 @@
 {
 	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"extends": [
+		"@nedcloarbr/biome-config/react",
+		"@nedcloarbr/biome-config/ignore"
+	],
 	"vcs": {
 		"enabled": false,
 		"clientKind": "git",
-		"useIgnoreFile": false
+		"useIgnoreFile": true
 	},
 	"files": {
 		"ignoreUnknown": false,
-		"ignore": []
+		"ignore": ["ui", "/.next/", ".turbo"]
 	},
 	"formatter": {
 		"enabled": true,
@@ -19,7 +23,26 @@
 	"linter": {
 		"enabled": true,
 		"rules": {
-			"recommended": true
+			"recommended": true,
+			"nursery": {
+				"useSortedClasses": "error"
+			},
+			"complexity": {
+				"noForEach": "off"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
+			},
+			"suspicious": {
+				"noArrayIndexKey": "off",
+				"noExplicitAny": "warn",
+				"noShadowRestrictedNames": "warn"
+			},
+			"a11y": {
+				"noSvgWithoutTitle": "off",
+				"useButtonType": "off",
+				"noNoninteractiveTabindex": "off"
+			}
 		}
 	},
 	"javascript": {

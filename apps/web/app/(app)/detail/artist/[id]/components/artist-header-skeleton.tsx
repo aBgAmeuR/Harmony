@@ -6,33 +6,33 @@ import { ExternalLink } from "lucide-react";
 
 export function ArtistHeaderSkeleton() {
 	return (
-		<div className="flex flex-col md:flex-row items-start md:items-end gap-6">
-			<Skeleton className="rounded-full shadow-lg size-24 md:size-32" />
+		<div className="flex flex-col items-start gap-6 md:flex-row md:items-end">
+			<Skeleton className="size-24 rounded-full shadow-lg md:size-32" />
 			<div className="flex-1">
-				<div className="flex items-center gap-4 mb-2">
+				<div className="mb-2 flex items-center gap-4">
 					<Skeleton className="h-10 w-60" />
 					<Button
 						variant="outline"
 						size="sm"
 						className="h-8 opacity-50"
-						disabled
+						disabled={true}
 					>
 						<span>Open in Spotify</span>
-						<ExternalLink className="size-3 ml-2" />
+						<ExternalLink className="ml-2 size-3" />
 					</Button>
 				</div>
-				<div className="flex flex-wrap gap-6 mt-3">
+				<div className="mt-3 flex flex-wrap gap-6">
 					<div>
-						<p className="text-sm text-muted-foreground">Followers</p>
-						<Skeleton className="h-6 w-24 mt-1" />
+						<p className="text-muted-foreground text-sm">Followers</p>
+						<Skeleton className="mt-1 h-6 w-24" />
 					</div>
 					<div>
-						<p className="text-sm text-muted-foreground">Total Time</p>
-						<Skeleton className="h-6 w-28 mt-1" />
+						<p className="text-muted-foreground text-sm">Total Time</p>
+						<Skeleton className="mt-1 h-6 w-28" />
 					</div>
 					<div>
-						<p className="text-sm text-muted-foreground">Total Plays</p>
-						<Skeleton className="h-6 w-20 mt-1" />
+						<p className="text-muted-foreground text-sm">Total Plays</p>
+						<Skeleton className="mt-1 h-6 w-20" />
 					</div>
 				</div>
 			</div>

@@ -14,12 +14,12 @@ export function Announcement({ className }: AnnouncementProps) {
 		return (
 			<div
 				className={cn(
-					"inline-flex gap-2 rounded-lg bg-muted px-3 py-1 text-sm font-medium",
+					"inline-flex gap-2 rounded-lg bg-muted px-3 py-1 font-medium text-sm",
 					className,
 				)}
 			>
 				<TriangleAlert
-					className="mt-0.5 shrink-0 opacity-60 text-red-400 dark:text-red-600"
+					className="mt-0.5 shrink-0 text-red-400 opacity-60 dark:text-red-600"
 					size={16}
 					strokeWidth={2}
 					aria-hidden="true"
@@ -33,7 +33,7 @@ export function Announcement({ className }: AnnouncementProps) {
 		<Link
 			href="/overview"
 			className={cn(
-				"inline-flex items-center rounded-lg bg-muted px-3 py-1 text-sm font-medium",
+				"inline-flex items-center rounded-lg bg-muted px-3 py-1 font-medium text-sm",
 				className,
 			)}
 		>

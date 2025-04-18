@@ -15,7 +15,7 @@ export default function StatsNumbersPage() {
 			<AppHeader items={["Package", "Stats", "Numbers"]}>
 				<SelectMonthRange />
 			</AppHeader>
-			<div className="flex flex-1 flex-col gap-4 p-4 max-w-7xl w-full mx-auto">
+			<div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4 p-4">
 				<Suspense fallback={<NumbersStatsSessionSkeleton />}>
 					<NumbersStatsSessionCard />
 				</Suspense>

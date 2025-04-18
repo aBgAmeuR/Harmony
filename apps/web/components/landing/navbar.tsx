@@ -11,24 +11,24 @@ export const Navbar = () => {
 	const isMaintenance = process.env.APP_MAINTENANCE === "true";
 
 	return (
-		<header className="top-0 z-50 -mb-4 px-4 pb-4">
-			<div className="fade-bottom absolute left-0 h-24 w-full"></div>
+		<header className="-mb-4 top-0 z-50 px-4 pb-4">
+			<div className="fade-bottom absolute left-0 h-24 w-full" />
 			<div className="relative mx-auto max-w-screen-xl">
 				<nav className="flex items-center justify-between py-4">
-					<nav className="flex items-center gap-4 justify-start">
+					<nav className="flex items-center justify-start gap-4">
 						<Link
 							href="/"
-							className="flex items-center gap-2 text-xl font-bold"
+							className="flex items-center gap-2 font-bold text-xl"
 						>
 							<Icons.logo className="size-8" />
 							Harmony
 						</Link>
-						<div className="hidden sm:flex gap-2">
+						<div className="hidden gap-2 sm:flex">
 							<Button
 								variant="ghost"
 								size="icon"
 								aria-label="View on Github"
-								asChild
+								asChild={true}
 							>
 								<Link
 									href="https://github.com/aBgAmeuR/Harmony"
@@ -40,7 +40,7 @@ export const Navbar = () => {
 							<ThemeToggle />
 						</div>
 					</nav>
-					<nav className="flex items-center gap-4 justify-end">
+					<nav className="flex items-center justify-end gap-4">
 						{!isMaintenance ? (
 							<GetDemoBtn label="Get Demo" variant="link" />
 						) : null}

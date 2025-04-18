@@ -46,19 +46,19 @@ function ErrorContent({ error }: ErrorProps) {
 
 	return (
 		<div className="flex min-h-screen flex-col justify-between p-4">
-			<div className="grow flex items-center justify-center">
+			<div className="flex grow items-center justify-center">
 				<div className="w-full max-w-md space-y-4 text-center">
 					<AlertCircle className="mx-auto size-12" />
-					<h1 className="text-2xl font-bold">
+					<h1 className="font-bold text-2xl">
 						{errorParams
 							? "Authentication Error"
 							: "An unexpected error occurred"}
 					</h1>
 					<p className="text-lg">{errorMessage}</p>
-					<p className="text-sm text-muted-foreground font-mono">
+					<p className="font-mono text-muted-foreground text-sm">
 						Error Code: <span>{errorParams || error.digest || "Unknown"}</span>
 					</p>
-					<div className="flex gap-2 justify-center">
+					<div className="flex justify-center gap-2">
 						<Button onClick={() => router.refresh()}>Try again</Button>
 						<Button
 							className="group"
@@ -84,7 +84,7 @@ function ErrorContent({ error }: ErrorProps) {
 			</div>
 			<footer className="mt-8 flex items-center justify-center gap-2">
 				<Icons.logo className="size-8" />
-				<h1 className="text-xl font-bold">Harmony</h1>
+				<h1 className="font-bold text-xl">Harmony</h1>
 				<ThemeToggle />
 			</footer>
 		</div>

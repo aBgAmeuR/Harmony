@@ -74,7 +74,7 @@ export class MeManager extends Manager {
 		};
 
 		const res = await this.http.get<CursorPagingObject<RecentlyPlayed>>(
-			`/v1/me/player/recently-played`,
+			"/v1/me/player/recently-played",
 			query,
 		);
 

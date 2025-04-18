@@ -12,7 +12,7 @@ export const SelectTimeRangeInfo = () => {
 	return (
 		<TooltipProvider delayDuration={0}>
 			<Tooltip>
-				<TooltipTrigger asChild>
+				<TooltipTrigger asChild={true}>
 					<Button variant="ghost" size="icon">
 						<Info />
 					</Button>

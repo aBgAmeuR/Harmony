@@ -20,16 +20,16 @@ export async function ArtistHeader({ artistId, userId }: ArtistHeaderProps) {
 	if (!artist) return notFound();
 
 	return (
-		<div className="flex flex-col md:flex-row items-start md:items-end gap-6">
+		<div className="flex flex-col items-start gap-6 md:flex-row md:items-end">
 			<img
 				src={artist.images[0]?.url || "/placeholder.svg"}
 				alt={artist.name}
-				className="rounded-full shadow-lg size-24 md:size-32"
+				className="size-24 rounded-full shadow-lg md:size-32"
 			/>
 			<div className="flex-1">
-				<div className="flex items-center gap-4 mb-2">
-					<h1 className="text-3xl md:text-4xl font-bold">{artist.name}</h1>
-					<Button variant="outline" size="sm" className="h-8" asChild>
+				<div className="mb-2 flex items-center gap-4">
+					<h1 className="font-bold text-3xl md:text-4xl">{artist.name}</h1>
+					<Button variant="outline" size="sm" className="h-8" asChild={true}>
 						<a
 							href={artist.href}
 							target="_blank"
@@ -43,8 +43,8 @@ export async function ArtistHeader({ artistId, userId }: ArtistHeaderProps) {
 				</div>
 				<div className="flex flex-wrap gap-6">
 					<div>
-						<p className="text-sm text-muted-foreground">Followers</p>
-						<p className="text-xl font-semibold">
+						<p className="text-muted-foreground text-sm">Followers</p>
+						<p className="font-semibold text-xl">
 							<NumberFlow
 								value={artist.followers.total}
 								format={{ notation: "standard" }}
@@ -55,12 +55,12 @@ export async function ArtistHeader({ artistId, userId }: ArtistHeaderProps) {
 						fallback={
 							<>
 								<div>
-									<p className="text-sm text-muted-foreground">Total Time</p>
-									<Skeleton className="h-6 w-28 mt-1" />
+									<p className="text-muted-foreground text-sm">Total Time</p>
+									<Skeleton className="mt-1 h-6 w-28" />
 								</div>
 								<div>
-									<p className="text-sm text-muted-foreground">Total Plays</p>
-									<Skeleton className="h-6 w-20 mt-1" />
+									<p className="text-muted-foreground text-sm">Total Plays</p>
+									<Skeleton className="mt-1 h-6 w-20" />
 								</div>
 							</>
 						}
@@ -80,8 +80,8 @@ const ArtistStats = async ({ artistId, userId }: ArtistHeaderProps) => {
 	return (
 		<>
 			<div>
-				<p className="text-sm text-muted-foreground">Total Time</p>
-				<p className="text-xl font-semibold">
+				<p className="text-muted-foreground text-sm">Total Time</p>
+				<p className="font-semibold text-xl">
 					<NumberFlow
 						value={artistStats.totalMinutes}
 						suffix=" minutes"
@@ -90,8 +90,8 @@ const ArtistStats = async ({ artistId, userId }: ArtistHeaderProps) => {
 				</p>
 			</div>
 			<div>
-				<p className="text-sm text-muted-foreground">Total Plays</p>
-				<p className="text-xl font-semibold">
+				<p className="text-muted-foreground text-sm">Total Plays</p>
+				<p className="font-semibold text-xl">
 					<NumberFlow
 						value={artistStats.totalStreams}
 						format={{ notation: "standard" }}

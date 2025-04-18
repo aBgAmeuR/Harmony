@@ -70,7 +70,7 @@ export function PlatformUsageChartComponent({
 	return (
 		<ChartCard>
 			<ChartCardHeader
-				showSeparator
+				showSeparator={true}
 				title="Platform Usage Over Time"
 				description="Showing platform usage statistics"
 			>
@@ -100,17 +100,17 @@ export function PlatformUsageChartSkeleton() {
 	return (
 		<ChartCard>
 			<ChartCardHeader
-				showSeparator
+				showSeparator={true}
 				title="Platform Usage Over Time"
 				description="Showing platform usage statistics"
 			>
 				<ChartCardHeaderContent
 					title={
 						<span className="flex gap-1">
-							Most used platform is <Skeleton className="w-11 h-4" /> with
+							Most used platform is <Skeleton className="h-4 w-11" /> with
 						</span>
 					}
-					description={<Skeleton className="mt-2 w-28 h-[22px]" />}
+					description={<Skeleton className="mt-2 h-[22px] w-28" />}
 				/>
 			</ChartCardHeader>
 			<ChartCardContent>

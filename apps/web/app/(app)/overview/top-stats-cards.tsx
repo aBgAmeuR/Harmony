@@ -23,18 +23,18 @@ export const TopStatsCards = async ({ demoData: data }: TopStatsCardsProps) => {
 		<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="text-sm font-medium">Total Playtime</CardTitle>
+					<CardTitle className="font-medium text-sm">Total Playtime</CardTitle>
 					<Clock className="size-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
-					<div className="text-2xl font-bold">
+					<div className="font-bold text-2xl">
 						<NumberFlow
 							value={msToHours(data.listeningTime).toFixed(2)}
 							suffix=" "
 						/>
 						hours
 					</div>
-					<p className="text-xs text-muted-foreground">
+					<p className="text-muted-foreground text-xs">
 						<NumberFlow
 							className="break-all"
 							value={Math.round(msToHours(data.listeningTime) / 24)}
@@ -47,18 +47,18 @@ export const TopStatsCards = async ({ demoData: data }: TopStatsCardsProps) => {
 			</Card>
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="text-sm font-medium">Tracks Played</CardTitle>
+					<CardTitle className="font-medium text-sm">Tracks Played</CardTitle>
 					<Music className="size-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
-					<div className="text-2xl font-bold">
+					<div className="font-bold text-2xl">
 						<NumberFlow
 							value={data.totalPlays}
 							format={{ notation: "standard" }}
 							locales="en-US"
 						/>
 					</div>
-					<p className="text-xs text-muted-foreground">
+					<p className="text-muted-foreground text-xs">
 						<NumberFlow
 							value={data.totalPlaysPerDay}
 							prefix="Averaging "
@@ -70,20 +70,20 @@ export const TopStatsCards = async ({ demoData: data }: TopStatsCardsProps) => {
 			</Card>
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="text-sm font-medium">
+					<CardTitle className="font-medium text-sm">
 						Artists Explored
 					</CardTitle>
 					<Users className="size-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
-					<div className="text-2xl font-bold">
+					<div className="font-bold text-2xl">
 						<NumberFlow
 							value={data.uniqueArtists}
 							format={{ notation: "standard" }}
 							locales="en-US"
 						/>
 					</div>
-					<p className="text-xs text-muted-foreground">
+					<p className="text-muted-foreground text-xs">
 						It's like having a concert with
 						<NumberFlow
 							value={data.uniqueArtists}
@@ -98,20 +98,20 @@ export const TopStatsCards = async ({ demoData: data }: TopStatsCardsProps) => {
 			</Card>
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="text-sm font-medium">
+					<CardTitle className="font-medium text-sm">
 						Active Listeners
 					</CardTitle>
 					<Headphones className="size-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent>
-					<div className="text-2xl font-bold">
+					<div className="font-bold text-2xl">
 						{data.mostActiveDay.day ? (
 							<NumbersFlowDate value={data.mostActiveDay.day} />
 						) : (
 							"No data available"
 						)}
 					</div>
-					<p className="text-xs text-muted-foreground">
+					<p className="text-muted-foreground text-xs">
 						<NumberFlow
 							value={data.mostActiveDay.totalPlayed}
 							format={{ notation: "standard" }}
@@ -135,60 +135,60 @@ export const TopStatsCardsSkeleton = () => {
 		<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="text-sm font-medium">Total Playtime</CardTitle>
+					<CardTitle className="font-medium text-sm">Total Playtime</CardTitle>
 					<Clock className="size-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent className="space-y-1.5">
-					<div className="text-2xl font-bold">
+					<div className="font-bold text-2xl">
 						<Skeleton>1014,63 hours</Skeleton>
 					</div>
-					<div className="text-xs text-muted-foreground">
+					<div className="text-muted-foreground text-xs">
 						<Skeleton>That's about 42 days of non-stop music!</Skeleton>
 					</div>
 				</CardContent>
 			</Card>
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="text-sm font-medium">Tracks Played</CardTitle>
+					<CardTitle className="font-medium text-sm">Tracks Played</CardTitle>
 					<Music className="size-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent className="space-y-1.5">
-					<div className="text-2xl font-bold">
+					<div className="font-bold text-2xl">
 						<Skeleton>24,302</Skeleton>
 					</div>
-					<div className="text-xs text-muted-foreground">
+					<div className="text-muted-foreground text-xs">
 						<Skeleton>Averaging 66 tracks per day</Skeleton>
 					</div>
 				</CardContent>
 			</Card>
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="text-sm font-medium">
+					<CardTitle className="font-medium text-sm">
 						Artists Explored
 					</CardTitle>
 					<Users className="size-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent className="space-y-1.5">
-					<div className="text-2xl font-bold">
+					<div className="font-bold text-2xl">
 						<Skeleton>1,829</Skeleton>
 					</div>
-					<div className="text-xs text-muted-foreground">
+					<div className="text-muted-foreground text-xs">
 						<Skeleton>It's like having a concert with 1,829 artists!</Skeleton>
 					</div>
 				</CardContent>
 			</Card>
 			<Card>
 				<CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-					<CardTitle className="text-sm font-medium">
+					<CardTitle className="font-medium text-sm">
 						Active Listeners
 					</CardTitle>
 					<Headphones className="size-4 text-muted-foreground" />
 				</CardHeader>
 				<CardContent className="space-y-1.5">
-					<div className="text-2xl font-bold">
+					<div className="font-bold text-2xl">
 						<Skeleton>August 16, 2024</Skeleton>
 					</div>
-					<div className="text-xs text-muted-foreground">
+					<div className="text-muted-foreground text-xs">
 						<Skeleton>You played 1 tracks for 0,2 hours</Skeleton>
 					</div>
 				</CardContent>

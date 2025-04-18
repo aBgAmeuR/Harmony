@@ -71,12 +71,12 @@ function ChartCardHeaderContent({
 	return (
 		<div
 			className={cn(
-				"flex flex-col justify-center border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-l sm:border-t-0 sm:px-6 sm:py-0",
+				"flex flex-col justify-center border-t px-6 py-4 text-left even:border-l data-[active=true]:bg-muted/50 sm:border-t-0 sm:border-l sm:px-6 sm:py-0",
 				className,
 			)}
 		>
-			<span className="text-xs text-muted-foreground">{title}</span>
-			<span className="text-lg font-bold leading-none sm:text-xl">
+			<span className="text-muted-foreground text-xs">{title}</span>
+			<span className="font-bold text-lg leading-none sm:text-xl">
 				{description}
 			</span>
 			{children}

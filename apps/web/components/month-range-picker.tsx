@@ -210,7 +210,7 @@ function MonthRangePicker({
 	if (isMobile) {
 		return (
 			<Drawer>
-				<DrawerTrigger asChild>
+				<DrawerTrigger asChild={true}>
 					<Button
 						variant={"outline"}
 						className={cn(
@@ -229,7 +229,7 @@ function MonthRangePicker({
 							Select a range of months to filter the data.
 						</DrawerDescription>
 					</DrawerHeader>
-					<div className={cn("min-w-[300px]  p-3", className)} {...props}>
+					<div className={cn("min-w-[300px] p-3", className)} {...props}>
 						<div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
 							<div className="w-full">
 								<MonthRangeCal
@@ -244,12 +244,12 @@ function MonthRangePicker({
 									maxDate={maxDate}
 									quickSelectors={selector}
 									showQuickSelectors={showQuickSelectors}
-								></MonthRangeCal>
+								/>
 							</div>
 						</div>
 					</div>
 					<DrawerFooter>
-						<DrawerClose asChild>
+						<DrawerClose asChild={true}>
 							<Button>Close</Button>
 						</DrawerClose>
 					</DrawerFooter>
@@ -261,7 +261,7 @@ function MonthRangePicker({
 
 	return (
 		<Popover>
-			<PopoverTrigger asChild>
+			<PopoverTrigger asChild={true}>
 				<Button
 					variant={"outline"}
 					className={cn(
@@ -274,7 +274,7 @@ function MonthRangePicker({
 				</Button>
 			</PopoverTrigger>
 			<PopoverContent className="w-auto p-0">
-				<div className={cn("min-w-[400px]  p-3", className)} {...props}>
+				<div className={cn("min-w-[400px] p-3", className)} {...props}>
 					<div className="flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
 						<div className="w-full">
 							<MonthRangeCal
@@ -289,7 +289,7 @@ function MonthRangePicker({
 								maxDate={maxDate}
 								quickSelectors={selector}
 								showQuickSelectors={showQuickSelectors}
-							></MonthRangeCal>
+							/>
 						</div>
 					</div>
 				</div>
@@ -333,7 +333,7 @@ function MonthRangeCal({
 		<div className="flex flex-col gap-4 md:flex-row">
 			<div className="min-w-[300px] space-y-4">
 				<div className="relative flex items-center justify-evenly pt-1">
-					<div className="text-sm font-medium">
+					<div className="font-medium text-sm">
 						{callbacks?.yearLabel ? callbacks?.yearLabel(menuYear) : menuYear}
 					</div>
 					<div className="flex items-center space-x-1">
@@ -362,7 +362,7 @@ function MonthRangeCal({
 							<ChevronRight className="size-4 opacity-50" />
 						</button>
 					</div>
-					<div className="text-sm font-medium">
+					<div className="font-medium text-sm">
 						{callbacks?.yearLabel
 							? callbacks?.yearLabel(menuYear + 1)
 							: menuYear + 1}
@@ -372,41 +372,41 @@ function MonthRangeCal({
 					<tbody>
 						{MONTHS.map((monthRow, a) => {
 							return (
-								<tr key={"row-" + a} className="mt-2 flex w-full">
+								<tr key={`row-${a}`} className="mt-2 flex w-full">
 									{monthRow.map((m, i) => {
 										return (
 											<td
-												key={m.number + "-" + m.yearOffset}
+												key={`${m.number}-${m.yearOffset}`}
 												className={cn(
 													cn(
 														cn(
 															cn(
 																"relative h-10 w-1/4 p-0 text-center text-sm focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected].day-range-end)]:rounded-r-md",
 																(menuYear + m.yearOffset > startYear ||
-																	(menuYear + m.yearOffset == startYear &&
+																	(menuYear + m.yearOffset === startYear &&
 																		m.number > startMonth)) &&
 																	(menuYear + m.yearOffset < endYear ||
-																		(menuYear + m.yearOffset == endYear &&
+																		(menuYear + m.yearOffset === endYear &&
 																			m.number < endMonth)) &&
 																	(rangePending || endLocked)
 																	? "bg-accent text-accent-foreground"
 																	: "",
 															),
-															menuYear + m.yearOffset == startYear &&
-																m.number == startMonth &&
+															menuYear + m.yearOffset === startYear &&
+																m.number === startMonth &&
 																(rangePending || endLocked)
 																? "rounded-l-md bg-accent text-accent-foreground"
 																: "",
 														),
-														menuYear + m.yearOffset == endYear &&
-															m.number == endMonth &&
+														menuYear + m.yearOffset === endYear &&
+															m.number === endMonth &&
 															(rangePending || endLocked) &&
 															menuYear + m.yearOffset >= startYear &&
 															m.number >= startMonth
 															? "rounded-r-md bg-accent text-accent-foreground"
 															: "",
 													),
-													i == 3 ? "mr-2" : i == 4 ? "ml-2" : "",
+													i === 3 ? "mr-2" : i === 4 ? "ml-2" : "",
 												)}
 												onMouseEnter={() => {
 													if (rangePending && !endLocked) {
@@ -420,7 +420,7 @@ function MonthRangeCal({
 														if (rangePending) {
 															if (
 																menuYear + m.yearOffset < startYear ||
-																(menuYear + m.yearOffset == startYear &&
+																(menuYear + m.yearOffset === startYear &&
 																	m.number < startMonth)
 															) {
 																setRangePending(true);
@@ -464,14 +464,14 @@ function MonthRangeCal({
 														(maxDate
 															? menuYear + m.yearOffset >
 																	maxDate?.getFullYear() ||
-																(menuYear + m.yearOffset ==
+																(menuYear + m.yearOffset ===
 																	maxDate?.getFullYear() &&
 																	m.number > maxDate.getMonth())
 															: false) ||
 														(minDate
 															? menuYear + m.yearOffset <
 																	minDate?.getFullYear() ||
-																(menuYear + m.yearOffset ==
+																(menuYear + m.yearOffset ===
 																	minDate?.getFullYear() &&
 																	m.number < minDate.getMonth())
 															: false)
@@ -479,10 +479,10 @@ function MonthRangeCal({
 													className={cn(
 														buttonVariants({
 															variant:
-																(startMonth == m.number &&
-																	menuYear + m.yearOffset == startYear) ||
-																(endMonth == m.number &&
-																	menuYear + m.yearOffset == endYear &&
+																(startMonth === m.number &&
+																	menuYear + m.yearOffset === startYear) ||
+																(endMonth === m.number &&
+																	menuYear + m.yearOffset === endYear &&
 																	!rangePending)
 																	? (variant?.calendar?.selected ?? "default")
 																	: (variant?.calendar?.main ?? "ghost"),

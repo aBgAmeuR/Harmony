@@ -45,7 +45,7 @@ export default async function DetailArtistPage({ params }: PageProps) {
 				<div>
 					{/* Main Content */}
 					<Tabs defaultValue="overview" className="w-full">
-						<div className="mb-4 py-1 border-y border-border">
+						<div className="mb-4 border-border border-y py-1">
 							<Container>
 								<TabsList className="bg-transparent ">
 									<TabsTrigger
@@ -130,7 +130,11 @@ export default async function DetailArtistPage({ params }: PageProps) {
 						<TabsContent value="catalog">
 							<Container className="space-y-6">
 								<Suspense>
-									<TracksAlbumLists artistId={id} sessionId={userId} showAll />
+									<TracksAlbumLists
+										artistId={id}
+										sessionId={userId}
+										showAll={true}
+									/>
 								</Suspense>
 							</Container>
 						</TabsContent>
@@ -148,7 +152,7 @@ const Container = ({
 	className?: string;
 }>) => {
 	return (
-		<div className={cn("max-w-7xl w-full mx-auto px-4", className)}>
+		<div className={cn("mx-auto w-full max-w-7xl px-4", className)}>
 			{children}
 		</div>
 	);

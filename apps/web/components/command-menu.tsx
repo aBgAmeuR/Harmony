@@ -82,20 +82,20 @@ export function CommandMenu({
 		<>
 			<div className="@container">
 				<button
-					className="border-input bg-background text-foreground placeholder:text-muted-foreground/70 focus-visible:border-ring focus-visible:ring-ring/50 inline-flex h-8 @[150px]:h-9 w-full rounded-md border @[150px]:px-3 @[150px]:py-2 text-sm shadow-xs transition-[color,box-shadow] outline-none focus-visible:ring hover:bg-background/80"
+					className="inline-flex @[150px]:h-9 h-8 w-full rounded-md border border-input bg-background @[150px]:px-3 @[150px]:py-2 text-foreground text-sm shadow-xs outline-none transition-[color,box-shadow] placeholder:text-muted-foreground/70 hover:bg-background/80 focus-visible:border-ring focus-visible:ring focus-visible:ring-ring/50"
 					onClick={() => setOpen(true)}
 				>
-					<span className="flex grow items-center justify-center @[150px]:justify-start">
+					<span className="flex grow items-center @[150px]:justify-start justify-center">
 						<Search
-							className="text-muted-foreground/80 @[150px]:me-2"
+							className="@[150px]:me-2 text-muted-foreground/80"
 							size={16}
 							aria-hidden="true"
 						/>
-						<span className="text-muted-foreground/70 font-normal @[150px]:block hidden">
+						<span className="@[150px]:block hidden font-normal text-muted-foreground/70">
 							Search
 						</span>
 					</span>
-					<kbd className="@[150px]:inline-flex hidden bg-background text-muted-foreground/70 ms-12 -me-1 h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
+					<kbd className="-me-1 ms-12 @[150px]:inline-flex hidden h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] font-medium text-[0.625rem] text-muted-foreground/70">
 						⌘K
 					</kbd>
 				</button>
@@ -190,19 +190,19 @@ export function CommandMenu({
 						</CommandItem>
 					</CommandGroup>
 				</CommandList>
-				<div className="flex h-10 items-center justify-between bg-popover w-full absolute bottom-[-0.1px] p-2 border-t border-border rounded-b-lg">
+				<div className="absolute bottom-[-0.1px] flex h-10 w-full items-center justify-between rounded-b-lg border-border border-t bg-popover p-2">
 					<div className="flex items-center justify-center gap-1">
 						<Icons.logo className="size-5" />
-						<p className="text-sm text-muted-foreground">Harmony</p>
+						<p className="text-muted-foreground text-sm">Harmony</p>
 					</div>
 					<div className="flex items-center">
 						<Button
 							variant="ghost"
 							size="sm"
-							className="w-fit text-muted-foreground cursor-default hover:bg-background hover:text-muted-foreground"
+							className="w-fit cursor-default text-muted-foreground hover:bg-background hover:text-muted-foreground"
 						>
 							Enter
-							<kbd className="inline-flex bg-background text-muted-foreground/70 -me-1 h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
+							<kbd className="-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] font-medium text-[0.625rem] text-muted-foreground/70">
 								↵
 							</kbd>
 						</Button>
@@ -213,7 +213,7 @@ export function CommandMenu({
 							onClick={() => setOpen(false)}
 						>
 							Close
-							<kbd className="inline-flex bg-background text-muted-foreground/70 -me-1 h-5 max-h-full items-center rounded border px-1 font-[inherit] text-[0.625rem] font-medium">
+							<kbd className="-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] font-medium text-[0.625rem] text-muted-foreground/70">
 								ESC
 							</kbd>
 						</Button>
@@ -253,7 +253,7 @@ const CommandGroupSidebar = ({
 						>
 							<subItem.icon className="!size-4" />
 							{subItem.title}
-							<p className="text-muted-foreground text-xs font-medium">
+							<p className="font-medium text-muted-foreground text-xs">
 								in {navItem.title}
 							</p>
 						</CommandItem>

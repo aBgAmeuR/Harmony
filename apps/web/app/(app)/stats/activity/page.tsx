@@ -30,7 +30,7 @@ export default async function StatsActivityPage() {
 			<AppHeader items={["Package", "Stats", "Activity"]}>
 				<SelectMonthRange />
 			</AppHeader>
-			<div className="flex flex-1 flex-col gap-4 p-4 max-w-6xl w-full mx-auto">
+			<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 p-4">
 				<Suspense fallback={<TimeListenedChartSkeleton />}>
 					<TimeListenedChartComponent data={getMonthlyData(userId, isDemo)} />
 				</Suspense>

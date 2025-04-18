@@ -29,7 +29,7 @@ const renderLineChart = (
 		config={{ value: { label: "value", color } }}
 		className="aspect-video size-full"
 	>
-		<LineChart accessibilityLayer data={data} syncId={syncId}>
+		<LineChart accessibilityLayer={true} data={data} syncId={syncId}>
 			<CartesianGrid vertical={false} strokeDasharray="3 3" />
 			<XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
 			<ChartTooltip
@@ -54,7 +54,7 @@ export function FirstTimeEvolutionCharts({
 	if (!chartData) return null;
 
 	return (
-		<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+		<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			<ChartCard className="justify-between">
 				<ChartCardHeader
 					title="Tracks Evolution"
@@ -103,7 +103,7 @@ export function FirstTimeEvolutionCharts({
 
 export const FirstTimeEvolutionChartsSkeleton = () => {
 	return (
-		<div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+		<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
 			<ChartCard className="justify-between">
 				<ChartCardHeader
 					title="Tracks Evolution"
@@ -143,8 +143,8 @@ const CustomTooltip = ({
 	const currentData = payload[0].payload;
 
 	return (
-		<div className="text-xs flex flex-col bg-background shadow-lg rounded-md border overflow-hidden">
-			<div className="p-2 pb-0 flex justify-between items-center">
+		<div className="flex flex-col overflow-hidden rounded-md border bg-background text-xs shadow-lg">
+			<div className="flex items-center justify-between p-2 pb-0">
 				<p>{currentData.month}</p>
 			</div>
 			<div className="flex flex-col gap-1.5 px-3 py-2">

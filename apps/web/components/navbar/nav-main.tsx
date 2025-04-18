@@ -53,7 +53,7 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 				{items.map((item) => (
 					<Collapsible
 						key={item.title}
-						asChild
+						asChild={true}
 						defaultOpen={
 							item.isActive || item.items?.some((i) => i.url === pathname)
 						}
@@ -61,7 +61,7 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 					>
 						<SidebarMenuItem>
 							{item.items ? (
-								<CollapsibleTrigger asChild>
+								<CollapsibleTrigger asChild={true}>
 									<SidebarMenuButton
 										isActive={
 											!open &&
@@ -80,7 +80,7 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 														<SidebarMenuButton
 															key={subItem.title}
 															isActive={subItem.url === pathname}
-															asChild
+															asChild={true}
 															size="sm"
 															className="group-data-[collapsible=icon]:!size-auto"
 														>
@@ -119,7 +119,7 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 							) : (
 								<SidebarMenuButton
 									tooltip={item.title}
-									asChild
+									asChild={true}
 									isActive={
 										item.url === pathname || item.anotherUrl === pathname
 									}
@@ -134,7 +134,7 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 											onClick={() => {
 												router.push(item.url);
 											}}
-											className="cursor-pointer w-full"
+											className="w-full cursor-pointer"
 										>
 											{item.icon && <item.icon />}
 											<span>{item.title}</span>
@@ -152,7 +152,7 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 									{item.items?.map((subItem) => (
 										<SidebarMenuSubItem key={subItem.title}>
 											<SidebarMenuSubButton
-												asChild
+												asChild={true}
 												isActive={pathname === subItem.url}
 											>
 												{!disable ? (
@@ -165,7 +165,7 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 														onClick={() => {
 															router.push(subItem.url);
 														}}
-														className="cursor-pointer w-full"
+														className="w-full cursor-pointer"
 													>
 														{subItem.icon && <subItem.icon />}
 														<span>{subItem.title}</span>

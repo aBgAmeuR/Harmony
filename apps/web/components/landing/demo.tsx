@@ -151,25 +151,32 @@ const user = {
 
 export const Demo = () => {
 	return (
-		<section className="w-full px-4 hidden md:block pb-12 sm:pb-16 md:pb-20 animate-appear-zoom opacity-0 delay-400">
-			<div className="relative mx-auto max-w-screen-xl aspect-video border rounded-lg overflow-hidden">
+		<section className="hidden w-full animate-appear-zoom px-4 pb-12 opacity-0 delay-400 sm:pb-16 md:block md:pb-20">
+			<div className="relative mx-auto aspect-video max-w-screen-xl overflow-hidden rounded-lg border">
 				<Suspense fallback={<Skeleton className="size-full" />}>
 					<SidebarProvider
 						defaultOpen={false}
-						className="relative aspect-video max-w-screen-xl min-h-0"
+						className="relative aspect-video min-h-0 max-w-screen-xl"
 					>
-						<AppSidebar className="absolute h-full" disable user={user} />
+						<AppSidebar
+							className="absolute h-full"
+							disable={true}
+							user={user}
+						/>
 						<SidebarInset className="min-h-full overflow-y-scroll">
 							<main>
 								<AppHeader items={["Package", "Overview"]} demo={false}>
 									<TooltipProvider delayDuration={0}>
 										<Tooltip>
-											<TooltipTrigger className="cursor-not-allowed" asChild>
+											<TooltipTrigger
+												className="cursor-not-allowed"
+												asChild={true}
+											>
 												<span tabIndex={0}>
 													<Button
 														variant={"outline"}
 														className="w-[220px] justify-start text-left font-normal"
-														disabled
+														disabled={true}
 													>
 														<CalendarIcon className="mr-2 size-4" />
 														Jan 2024 - Oct 2024
@@ -185,9 +192,9 @@ export const Demo = () => {
 										</Tooltip>
 									</TooltipProvider>
 								</AppHeader>
-								<div className="flex flex-1 flex-col gap-4 p-4 pt-2 max-w-screen-2xl w-full mx-auto">
+								<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
 									<TopStatsCards demoData={data.topStats} />
-									<div className="flex flex-col md:flex-row gap-4">
+									<div className="flex flex-col gap-4 md:flex-row">
 										<TimeListenedChartComponent
 											data={
 												new Promise((resolve) => resolve(data.timeListened))

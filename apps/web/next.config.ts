@@ -13,6 +13,9 @@ const nextConfig: NextConfig = {
 			{ hostname: "i.scdn.co" },
 		],
 	},
+	eslint: {
+		ignoreDuringBuilds: true,
+	},
 	transpilePackages: ["@repo/ui"],
 	env: { DATABASE_URL: process.env.DATABASE_URL },
 	experimental: {

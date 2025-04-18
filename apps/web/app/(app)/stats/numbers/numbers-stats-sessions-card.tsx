@@ -18,13 +18,13 @@ export const NumbersStatsSessionCard = async () => {
 	if (!data) return null;
 
 	return (
-		<Card className="p-6 col-span-full">
-			<h3 className="font-semibold mb-4">Listening Sessions</h3>
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+		<Card className="col-span-full p-6">
+			<h3 className="mb-4 font-semibold">Listening Sessions</h3>
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 				<div>
-					<p className="text-sm text-muted-foreground">Total Sessions</p>
+					<p className="text-muted-foreground text-sm">Total Sessions</p>
 					{/* <p className="text-2xl font-bold">1,447</p> */}
-					<p className="text-2xl font-bold">
+					<p className="font-bold text-2xl">
 						<NumberFlow
 							value={data.totalSessions}
 							format={{ notation: "standard" }}
@@ -33,8 +33,8 @@ export const NumbersStatsSessionCard = async () => {
 					</p>
 				</div>
 				<div>
-					<p className="text-sm text-muted-foreground">Average Session</p>
-					<p className="text-2xl font-bold">
+					<p className="text-muted-foreground text-sm">Average Session</p>
+					<p className="font-bold text-2xl">
 						<NumberFlow
 							value={Math.floor(data.averageSessionTime / 1000 / 60)}
 							format={{ notation: "standard" }}
@@ -44,9 +44,9 @@ export const NumbersStatsSessionCard = async () => {
 					</p>
 				</div>
 				<div>
-					<p className="text-sm text-muted-foreground">Longest Session</p>
+					<p className="text-muted-foreground text-sm">Longest Session</p>
 					{/* <p className="text-2xl font-bold">6 hours 54 minutes</p> */}
-					<p className="text-2xl font-bold">
+					<p className="font-bold text-2xl">
 						<NumberFlow
 							value={getMsToHoursAndMinutes(data.longestSession).hours}
 							format={{ notation: "standard" }}
@@ -68,20 +68,20 @@ export const NumbersStatsSessionCard = async () => {
 
 export const NumbersStatsSessionSkeleton = () => {
 	return (
-		<Card className="p-6 col-span-full">
-			<h3 className="font-semibold mb-4">Listening Sessions</h3>
-			<div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+		<Card className="col-span-full p-6">
+			<h3 className="mb-4 font-semibold">Listening Sessions</h3>
+			<div className="grid grid-cols-1 gap-4 md:grid-cols-3">
 				<div>
-					<p className="text-sm text-muted-foreground">Total Sessions</p>
-					<Skeleton className="w-20 h-7 mt-1" />
+					<p className="text-muted-foreground text-sm">Total Sessions</p>
+					<Skeleton className="mt-1 h-7 w-20" />
 				</div>
 				<div>
-					<p className="text-sm text-muted-foreground">Average Session</p>
-					<Skeleton className="w-36 h-7 mt-1" />
+					<p className="text-muted-foreground text-sm">Average Session</p>
+					<Skeleton className="mt-1 h-7 w-36" />
 				</div>
 				<div>
-					<p className="text-sm text-muted-foreground">Longest Session</p>
-					<Skeleton className="w-48 h-7 mt-1" />
+					<p className="text-muted-foreground text-sm">Longest Session</p>
+					<Skeleton className="mt-1 h-7 w-48" />
 				</div>
 			</div>
 		</Card>

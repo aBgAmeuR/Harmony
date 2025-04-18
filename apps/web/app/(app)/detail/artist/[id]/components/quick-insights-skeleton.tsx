@@ -13,7 +13,7 @@ export function QuickInsightsSkeleton() {
 				</CardHeader>
 				<CardContent className="space-y-4">
 					<div>
-						<div className="flex items-center gap-2 mb-2">
+						<div className="mb-2 flex items-center gap-2">
 							<Skeleton className="h-5 w-28" />
 							<Skeleton className="h-5 w-36 rounded-full" />
 						</div>
@@ -30,7 +30,7 @@ export function QuickInsightsSkeleton() {
 					</div>
 
 					<div>
-						<Skeleton className="h-5 w-28 mb-2" />
+						<Skeleton className="mb-2 h-5 w-28" />
 						<div className="space-y-2">
 							<Skeleton className="h-4 w-48" />
 							<div className="flex items-center gap-2">
@@ -40,7 +40,7 @@ export function QuickInsightsSkeleton() {
 						</div>
 					</div>
 
-					<Alert className="bg-muted/50 border-muted">
+					<Alert className="border-muted bg-muted/50">
 						<Info className="size-4 text-muted-foreground/50" />
 						<div className="ml-2 space-y-1">
 							<Skeleton className="h-4 w-full" />

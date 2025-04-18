@@ -6,10 +6,10 @@ export default function ArtistNotFound() {
 	return (
 		<>
 			<AppHeader items={["Detail", "Artist", "Not Found"]} />
-			<div className="flex flex-col items-center justify-center px-4 py-16 max-w-6xl w-full mx-auto">
-				<AlertTriangle className="size-12 text-yellow-500 mb-4" />
-				<h2 className="text-2xl font-semibold mb-2">Artist not found</h2>
-				<p className="text-muted-foreground text-center max-w-md">
+			<div className="mx-auto flex w-full max-w-6xl flex-col items-center justify-center px-4 py-16">
+				<AlertTriangle className="mb-4 size-12 text-yellow-500" />
+				<h2 className="mb-2 font-semibold text-2xl">Artist not found</h2>
+				<p className="max-w-md text-center text-muted-foreground">
 					We couldn't find this artist. They might not be in your listening
 					history, or there might be an issue with the Spotify API.
 				</p>

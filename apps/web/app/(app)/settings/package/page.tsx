@@ -19,7 +19,7 @@ export default async function SettingsPackagePage() {
 				<AppHeader items={["Settings", "Package"]} />
 				<div className="flex flex-1 flex-col items-center gap-4 p-4 pt-0">
 					<div className="flex flex-col gap-4">
-						<div className="rounded-lg border border-border bg-background p-4 shadow-lg shadow-black/5">
+						<div className="rounded-lg border border-border bg-background p-4 shadow-black/5 shadow-lg">
 							<div className="flex items-center gap-4">
 								<Info
 									className="text-blue-500"
@@ -27,12 +27,12 @@ export default async function SettingsPackagePage() {
 									strokeWidth={2}
 									aria-hidden="true"
 								/>
-								<div className="flex grow items-center justify-between w-full">
+								<div className="flex w-full grow items-center justify-between">
 									<div className="space-y-1">
-										<p className="text-sm font-medium">
+										<p className="font-medium text-sm">
 											Sign in to view your package
 										</p>
-										<p className="text-xs text-muted-foreground">
+										<p className="text-muted-foreground text-xs">
 											You must sign in to view your package and explore your
 											listening history with Harmony.
 										</p>
