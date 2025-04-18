@@ -5,41 +5,47 @@ import { SelectMonthRange } from "~/components/select-month-range";
 
 import { getMonthlyData } from "../../../services/charts/activity";
 
+import {
+	TimeListenedChartComponent,
+	TimeListenedChartSkeleton,
+} from "~/components/charts/activity/time-listened-chart";
 import { getUserInfos } from "~/lib/utils";
 import { getListeningPatternData } from "./get-listening-pattern-data";
 import {
-  ListeningPatternChart,
-  ListeningPatternChartSkeleton,
+	ListeningPatternChart,
+	ListeningPatternChartSkeleton,
 } from "./listening-pattern-chart";
 import { RankingList } from "./ranking-list";
 import { TopStatsCards, TopStatsCardsSkeleton } from "./top-stats-cards";
-import { TimeListenedChartComponent, TimeListenedChartSkeleton } from "~/components/charts/activity/time-listened-chart";
 
 export default async function OverviewPage() {
-  const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUserInfos();
 
-  return (
-    <>
-      <AppHeader items={["Package", "Overview"]}>
-        <SelectMonthRange />
-      </AppHeader>
-      <div className="flex flex-1 flex-col gap-4 p-4 pt-2 max-w-screen-2xl w-full mx-auto">
-        <Suspense fallback={<TopStatsCardsSkeleton />}>
-          <TopStatsCards />
-        </Suspense>
-        <div className="flex flex-col md:flex-row gap-4">
-          <Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
-            <TimeListenedChartComponent data={getMonthlyData(userId, isDemo)} className="flex-1" />
-          </Suspense>
-          <Suspense fallback={<ListeningPatternChartSkeleton />}>
-            <ListeningPatternChart data={getListeningPatternData(userId)} />
-          </Suspense>
-        </div>
-        <div className="grid gap-4 lg:grid-cols-2">
-          <RankingList type="dashboardArtists" className="col-span-1" />
-          <RankingList type="dashboardTracks" className="col-span-1" />
-        </div>
-      </div>
-    </>
-  );
+	return (
+		<>
+			<AppHeader items={["Package", "Overview"]}>
+				<SelectMonthRange />
+			</AppHeader>
+			<div className="flex flex-1 flex-col gap-4 p-4 pt-2 max-w-screen-2xl w-full mx-auto">
+				<Suspense fallback={<TopStatsCardsSkeleton />}>
+					<TopStatsCards />
+				</Suspense>
+				<div className="flex flex-col md:flex-row gap-4">
+					<Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
+						<TimeListenedChartComponent
+							data={getMonthlyData(userId, isDemo)}
+							className="flex-1"
+						/>
+					</Suspense>
+					<Suspense fallback={<ListeningPatternChartSkeleton />}>
+						<ListeningPatternChart data={getListeningPatternData(userId)} />
+					</Suspense>
+				</div>
+				<div className="grid gap-4 lg:grid-cols-2">
+					<RankingList type="dashboardArtists" className="col-span-1" />
+					<RankingList type="dashboardTracks" className="col-span-1" />
+				</div>
+			</div>
+		</>
+	);
 }

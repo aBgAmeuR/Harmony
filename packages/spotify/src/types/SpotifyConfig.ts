@@ -1,5 +1,5 @@
 export interface SpotifyConfig {
-  clientId: string;
-  clientSecret: string;
-  debug?: boolean;
+	clientId: string;
+	clientSecret: string;
+	debug?: boolean;
 }

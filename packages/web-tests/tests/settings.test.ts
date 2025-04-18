@@ -20,7 +20,7 @@
 //   await demoBtn.click();
 
 //   await page.goto("http://localhost:3000/settings/about");
-  
+
 //   await page.waitForLoadState('networkidle');
 //   const appInfo = await page.waitForSelector('h2:has-text("App Information")', { timeout: 60000 });
 

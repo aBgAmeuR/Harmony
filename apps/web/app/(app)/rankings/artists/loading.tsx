@@ -4,14 +4,14 @@ import { ListSkeleton } from "~/components/list-skeleton";
 import { SelectMonthRangeSkeleton } from "~/components/select-month-range";
 
 export default function Loading() {
-  return (
-    <>
-      <AppHeader items={["Package", "Rankings", "Artists"]} demo={false}>
-        <SelectMonthRangeSkeleton />
-      </AppHeader>
-      <Main>
-        <ListSkeleton />
-      </Main>
-    </>
-  )
+	return (
+		<>
+			<AppHeader items={["Package", "Rankings", "Artists"]} demo={false}>
+				<SelectMonthRangeSkeleton />
+			</AppHeader>
+			<Main>
+				<ListSkeleton />
+			</Main>
+		</>
+	);
 }

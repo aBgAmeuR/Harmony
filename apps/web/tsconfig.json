@@ -1,19 +1,19 @@
 {
-  "extends": "@repo/typescript-config/nextjs.json",
-  "compilerOptions": { 
-    "plugins": [{ "name": "next" }],
-    "moduleResolution": "bundler",
-    "paths": {
-      "@repo/*": ["../../packages/*/src"],
-      "~/*": ["./*"]
-    }
-  },
-  "include": [
-    "next-env.d.ts",
-    "next.config.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts"
-, "../../packages/ui/src/components/charts/chart-color-utils.tsx", "../../packages/ui/src/components/charts/chart-tooltip-formatter.tsx"  ],
-  "exclude": ["node_modules"]
+	"extends": "@repo/typescript-config/nextjs.json",
+	"compilerOptions": {
+		"plugins": [{ "name": "next" }],
+		"moduleResolution": "bundler",
+		"paths": {
+			"@repo/*": ["../../packages/*/src"],
+			"~/*": ["./*"]
+		}
+	},
+	"include": [
+		"next-env.d.ts",
+		"next.config.ts",
+		"**/*.ts",
+		"**/*.tsx",
+		".next/types/**/*.ts"
+	],
+	"exclude": ["node_modules"]
 }

@@ -7,15 +7,15 @@ import { Hero } from "~/components/landing/hero";
 import { Navbar } from "~/components/landing/navbar";
 
 export default async function HomePage() {
-  return (
-    <div className="flex min-h-screen h-full flex-col">
-      <Navbar />
-      <Hero />
-      <Demo />
-      <Features />
-      <FAQ />
-      <CTASection />
-      <Footer />
-    </div>
-  );
+	return (
+		<div className="flex min-h-screen h-full flex-col">
+			<Navbar />
+			<Hero />
+			<Demo />
+			<Features />
+			<FAQ />
+			<CTASection />
+			<Footer />
+		</div>
+	);
 }

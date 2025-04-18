@@ -5,17 +5,17 @@ import { SelectTimeRange } from "~/components/select-time-range";
 import { SelectTimeRangeInfo } from "~/components/select-time-range-info";
 
 export default async function TopTracksPage() {
-  return (
-    <>
-      <AppHeader items={["Stats", "Top", "Tracks"]}>
-        <SelectTimeRangeInfo />
-        <SelectTimeRange />
-        {/* // TODO: Enable this component when it's ready */}
-        {/* <SelectTopLayout /> */}
-      </AppHeader>
-      <Main>
-        <MusicList type="topTracks" />
-      </Main>
-    </>
-  );
+	return (
+		<>
+			<AppHeader items={["Stats", "Top", "Tracks"]}>
+				<SelectTimeRangeInfo />
+				<SelectTimeRange />
+				{/* // TODO: Enable this component when it's ready */}
+				{/* <SelectTopLayout /> */}
+			</AppHeader>
+			<Main>
+				<MusicList type="topTracks" />
+			</Main>
+		</>
+	);
 }

@@ -1,41 +1,41 @@
-import * as React from "react";
 import {
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
+	SidebarGroup,
+	SidebarGroupContent,
+	SidebarMenu,
+	SidebarMenuButton,
+	SidebarMenuItem,
 } from "@repo/ui/sidebar";
-import { type LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import type * as React from "react";
 
 type NavSecondaryProps = {
-  items: {
-    title: string;
-    url: string;
-    icon: LucideIcon;
-  }[];
+	items: {
+		title: string;
+		url: string;
+		icon: LucideIcon;
+	}[];
 };
 
 export function NavSecondary({
-  items,
-  ...props
+	items,
+	...props
 }: NavSecondaryProps & React.ComponentPropsWithoutRef<typeof SidebarGroup>) {
-  return (
-    <SidebarGroup {...props}>
-      <SidebarGroupContent>
-        <SidebarMenu>
-          {items.map((item) => (
-            <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild size="sm">
-                <a href={item.url} target="_blank" rel="noopener noreferrer">
-                  <item.icon />
-                  <span>{item.title}</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          ))}
-        </SidebarMenu>
-      </SidebarGroupContent>
-    </SidebarGroup>
-  );
+	return (
+		<SidebarGroup {...props}>
+			<SidebarGroupContent>
+				<SidebarMenu>
+					{items.map((item) => (
+						<SidebarMenuItem key={item.title}>
+							<SidebarMenuButton asChild size="sm">
+								<a href={item.url} target="_blank" rel="noopener noreferrer">
+									<item.icon />
+									<span>{item.title}</span>
+								</a>
+							</SidebarMenuButton>
+						</SidebarMenuItem>
+					))}
+				</SidebarMenu>
+			</SidebarGroupContent>
+		</SidebarGroup>
+	);
 }

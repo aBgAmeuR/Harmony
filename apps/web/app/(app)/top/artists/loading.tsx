@@ -4,14 +4,14 @@ import { ListSkeleton } from "~/components/list-skeleton";
 import { SelectTimeRangeSkeleton } from "~/components/select-time-range";
 
 export default function Loading() {
-  return (
-    <>
-      <AppHeader items={["Stats", "Top", "Artists"]} demo={false}>
-        <SelectTimeRangeSkeleton />
-      </AppHeader>
-      <Main>
-        <ListSkeleton />
-      </Main>
-    </>
-  )
+	return (
+		<>
+			<AppHeader items={["Stats", "Top", "Artists"]} demo={false}>
+				<SelectTimeRangeSkeleton />
+			</AppHeader>
+			<Main>
+				<ListSkeleton />
+			</Main>
+		</>
+	);
 }

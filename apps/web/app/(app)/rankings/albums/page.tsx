@@ -4,14 +4,14 @@ import { MusicList } from "~/components/lists/music-list";
 import { SelectMonthRange } from "~/components/select-month-range";
 
 export default function RankingsAlbumsPage() {
-  return (
-    <>
-      <AppHeader items={["Package", "Rankings", "Albums"]}>
-        <SelectMonthRange />
-      </AppHeader>
-      <Main>
-        <MusicList type="rankingAlbums" />
-      </Main>
-    </>
-  );
+	return (
+		<>
+			<AppHeader items={["Package", "Rankings", "Albums"]}>
+				<SelectMonthRange />
+			</AppHeader>
+			<Main>
+				<MusicList type="rankingAlbums" />
+			</Main>
+		</>
+	);
 }

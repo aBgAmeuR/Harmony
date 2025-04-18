@@ -1,38 +1,33 @@
 {
-  "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": ["**/.env"],
-  "ui": "tui",
-  "envMode": "loose",
-  "tasks": {
-    "build": {
-      "dependsOn": ["^generate", "^build"],
-      "outputs": ["dist/**", ".next/**", "!.next/cache/**"]
-    },
-    "db:migrate:deploy": {},
-    "db:push": {
-      "cache": false
-    },
-    "db:seed": {},
-    "dev": {
-      "dependsOn": ["^generate"],
-      "cache": false,
-      "persistent": true
-    },
-    "generate": {
-      "cache": false
-    },
-    "lint": {},
-    "studio": {},
-    "test": {},
-    "dev:test": {
-      "cache": false
-    },
-    "e2e:test": {
-      "dependsOn": ["^build"]
-    },
-    "start": {},
-    "ci": {
-      "dependsOn": ["^build", "^e2e:test", "^lint"]
-    }
-  }
+	"$schema": "https://turbo.build/schema.json",
+	"globalDependencies": ["**/.env"],
+	"ui": "tui",
+	"envMode": "loose",
+	"tasks": {
+		"build": {
+			"dependsOn": ["^generate", "^build"],
+			"outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+		},
+		"dev": {
+			"dependsOn": ["^generate"],
+			"cache": false,
+			"persistent": true
+		},
+		"start": {
+			"dependsOn": ["^build"],
+			"cache": false,
+			"persistent": true
+		},
+		"generate": {
+			"cache": false
+		},
+		"studio": {},
+		"format-and-lint": {},
+		"format-and-lint:fix": {
+			"cache": false
+		},
+		"ci": {
+			"dependsOn": ["^build"]
+		}
+	}
 }
