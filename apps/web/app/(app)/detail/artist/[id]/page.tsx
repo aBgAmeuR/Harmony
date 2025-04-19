@@ -1,25 +1,19 @@
 import { auth } from "@repo/auth";
 import { cn } from "@repo/ui/lib/utils";
-import { ScrollArea } from "@repo/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
-import React, { type PropsWithChildren, Suspense } from "react";
+import { type PropsWithChildren, Suspense } from "react";
 
 import { AppHeader } from "~/components/app-header";
 
-import { ArtistHeader } from "./components/artist-header";
-import { ArtistHeaderSkeleton } from "./components/artist-header-skeleton";
-import { ArtistStatsSummarySkeleton } from "./components/artist-stats-summary-skeleton";
 import {
-	ArtistListeningTrendsWrapper,
-	ArtistStatsSummaryWrapper,
-	QuickInsightsWrapper,
-} from "./components/data-wrappers";
-import { MonthlyTopTracksWrapper } from "./components/monthly-top-tracks-wrapper";
-import { QuickInsightsSkeleton } from "./components/quick-insights-skeleton";
-import {
-	TracksAlbumLists,
-	TracksAlbumsListsSkeleton,
-} from "./tracks-album-lists";
+	getArtistDetails,
+	getArtistListeningTrends,
+} from "~/actions/get-artist-stats-action";
+import { getMonthlyTopTracks } from "~/services/details/get-monthly-top-tracks";
+import { ArtistHeader, ArtistHeaderSkeleton } from "./components/artist-header";
+import { ArtistListeningTrends } from "./components/artist-listening-trends";
+import { MonthlyTopTracks } from "./components/monthly-top-tracks";
+import { TracksAlbumLists } from "./tracks-album-lists";
 
 interface PageProps {
 	params: Promise<{
@@ -37,13 +31,11 @@ export default async function DetailArtistPage({ params }: PageProps) {
 			<AppHeader items={["Detail", "Artist"]} />
 			<div className="flex flex-col gap-8 py-4">
 				<Container>
-					{/* Artist Header with Stats */}
 					<Suspense fallback={<ArtistHeaderSkeleton />}>
 						<ArtistHeader artistId={id} userId={userId} />
 					</Suspense>
 				</Container>
 				<div>
-					{/* Main Content */}
 					<Tabs defaultValue="overview" className="w-full">
 						<div className="mb-4 border-border border-y py-1">
 							<Container>
@@ -77,52 +69,34 @@ export default async function DetailArtistPage({ params }: PageProps) {
 						</div>
 
 						<TabsContent value="overview">
-							{/* <Container className="space-y-8">
-                <div className="grid gap-6 lg:grid-cols-[2fr,1fr]">
-                  <div className="space-y-6">
-                    <Suspense fallback={<ArtistStatsSummarySkeleton />}>
-                      <ArtistStatsSummaryWrapper
-                        userId={userId}
-                        artistId={id}
-                      />
-                    </Suspense>
-
-                    <ScrollArea className="rounded-lg border bg-card">
-                      <div className="p-6">
-                        <Suspense fallback={<TracksAlbumsListsSkeleton />}>
-                          <TracksAlbumLists
-                            artistId={id}
-                            limitTracks={5}
-                            limitAlbums={5}
-                            sessionId={userId}
-                          />
-                        </Suspense>
-                      </div>
-                    </ScrollArea>
-                  </div>
-
-                  <div className="space-y-6">
-                    <Suspense fallback={<QuickInsightsSkeleton />}>
-                      <QuickInsightsWrapper artistId={id} />
-                    </Suspense>
-                  </div>
-                </div>
-              </Container> */}
+							<Container className="space-y-6">
+								<h1 className="font-bold text-2xl">Overview</h1>
+								<p className="text-muted-foreground">
+									Here you can find an overview of the artist's statistics and
+									information.
+								</p>
+							</Container>
 						</TabsContent>
 
 						<TabsContent value="stats">
 							<Container className="space-y-6">
 								<Suspense>
-									<ArtistListeningTrendsWrapper userId={userId} artistId={id} />
+									<ArtistListeningTrends
+										stats={getArtistListeningTrends(userId, id)}
+									/>
 								</Suspense>
 							</Container>
 						</TabsContent>
 
-						{/* New Monthly Tracks Tab */}
 						<TabsContent value="monthly-tracks">
 							<Container className="space-y-6">
 								<Suspense>
-									<MonthlyTopTracksWrapper artistId={id} userId={userId} />
+									<MonthlyTopTracks
+										dataPromise={getMonthlyTopTracks(userId, id, 5)}
+										artistNamePromise={getArtistDetails(id).then(
+											(artist) => artist?.name,
+										)}
+									/>
 								</Suspense>
 							</Container>
 						</TabsContent>

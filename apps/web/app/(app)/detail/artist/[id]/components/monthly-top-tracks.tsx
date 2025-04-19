@@ -14,7 +14,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Separator } from "@repo/ui/separator";
 import { format } from "date-fns";
-import { ArrowLeft, ArrowRight, Music4 } from "lucide-react"; // Import Music4 icon
+import { ArrowLeft, ArrowRight, Music4 } from "lucide-react";
 import React from "react";
 import { MusicItemCard } from "~/components/cards/music-item-card";
 import { msToMinutes } from "~/components/charts/utils/time-formatters";

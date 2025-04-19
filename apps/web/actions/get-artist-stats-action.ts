@@ -5,16 +5,6 @@ import { spotify } from "@repo/spotify";
 import { format, localeFormat } from "light-date";
 import { cache } from "react";
 
-type MonthlyStats = {
-	month: string;
-	msPlayed: number;
-};
-
-type HourlyStats = {
-	hour: string;
-	msPlayed: number;
-};
-
 const formatMonth = (date: Date) =>
 	`${localeFormat(date, "{MMMM}")} ${format(date, "{yyyy}")}`;
 
@@ -23,45 +13,8 @@ export const getArtistStatsAction = cache(
 		if (!userId) return null;
 
 		try {
-			// Execute all queries in a single transaction
-			const [monthlyStats, hourlyStats, [{ totalMinutes, totalStreams }]] =
+			const [[{ totalMinutes = 0, totalStreams = 0 }]] =
 				await prisma.$transaction([
-					prisma.$queryRaw<
-						{
-							month: string;
-							year: number;
-							month_num: number;
-							msplayed: number;
-							streams: number;
-						}[]
-					>`
-        SELECT
-          TO_CHAR(timestamp, 'Mon') AS month,
-          EXTRACT(YEAR FROM timestamp) AS year,
-          EXTRACT(MONTH FROM timestamp) AS month_num,
-          ROUND(SUM("msPlayed")::numeric) AS msplayed,
-          COUNT(*) AS streams
-        FROM "Track"
-        WHERE "userId" = ${userId}
-          AND ${artistId} = ANY("artistIds")
-        GROUP BY month, year, month_num
-        ORDER BY year, month_num
-      `,
-					prisma.$queryRaw<
-						{
-							hour: number;
-							msplayed: number;
-						}[]
-					>`
-        SELECT
-          EXTRACT(HOUR FROM timestamp) AS hour,
-          ROUND(SUM("msPlayed")::numeric) AS msplayed
-        FROM "Track"
-        WHERE "userId" = ${userId}
-          AND ${artistId} = ANY("artistIds")
-        GROUP BY hour
-        ORDER BY hour
-      `,
 					prisma.$queryRaw<
 						{
 							totalMinutes: number;
@@ -77,56 +30,9 @@ export const getArtistStatsAction = cache(
       `,
 				]);
 
-			if (monthlyStats.length === 0) return null;
-
-			// Format monthly trends
-			const monthlyTrends: MonthlyStats[] = monthlyStats.map(
-				({ month, year, msplayed }) => ({
-					month: `${month} ${year}`,
-					msPlayed: Number(msplayed),
-				}),
-			);
-
-			// Format hourly stats (ensure all 24 hours are represented)
-			const timeDistribution: HourlyStats[] = Array.from(
-				{ length: 24 },
-				(_, i) => {
-					const hour = i.toString().padStart(2, "0");
-					const foundHour = hourlyStats.find((stat) => Number(stat.hour) === i);
-					return {
-						hour,
-						msPlayed: foundHour ? Number(foundHour.msplayed) : 0,
-					};
-				},
-			);
-
-			// Find top month
-			const topMonth = monthlyTrends.reduce(
-				(max, current) =>
-					current.msPlayed > (max?.msPlayed || 0) ? current : max,
-				monthlyTrends[0],
-			);
-
-			// Calculate averages
-			const monthlyAverageStreams = Math.round(
-				Number(totalStreams) / monthlyTrends.length,
-			);
-			const monthlyAverageMinutes = Math.round(
-				Number(totalMinutes) / monthlyTrends.length,
-			);
-
-			// Calculate progress to next milestone (next 100 streams)
-			const streamProgress = (Number(totalStreams) % 100) / 100;
-
 			return {
 				totalMinutes: Number(totalMinutes),
 				totalStreams: Number(totalStreams),
-				monthlyTrends,
-				timeDistribution,
-				topMonth,
-				monthlyAverageStreams,
-				monthlyAverageMinutes,
-				streamProgress,
 			};
 		} catch (error) {
 			console.error("Failed to fetch artist stats:", error);

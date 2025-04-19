@@ -7,7 +7,6 @@ import {
 	CarouselPrevious,
 } from "@repo/ui/carousel";
 import { Info } from "lucide-react";
-import { FC } from "react";
 
 import { MusicItemCard } from "~/components/cards/music-item-card";
 
