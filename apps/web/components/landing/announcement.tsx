@@ -31,7 +31,7 @@ export function Announcement({ className }: AnnouncementProps) {
 
 	return (
 		<Link
-			href="/overview"
+			href="/detail/artist/699OTQXzgjhIYAHMy9RyPD"
 			className={cn(
 				"inline-flex items-center rounded-lg bg-muted px-3 py-1 font-medium text-sm",
 				className,
@@ -42,7 +42,7 @@ export function Announcement({ className }: AnnouncementProps) {
 				className="mx-2 h-3 bg-muted-foreground"
 				orientation="vertical"
 			/>{" "}
-			<span>Introducing Overview page</span>
+			<span>Introducing Artist Details Page</span>
 			<ArrowRightIcon className="ml-1 size-4" />
 		</Link>
 	);

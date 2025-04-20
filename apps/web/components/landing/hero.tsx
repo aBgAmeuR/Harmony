@@ -1,6 +1,6 @@
 import { buttonVariants } from "@repo/ui/button";
 import { cn } from "@repo/ui/lib/utils";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, GithubIcon } from "lucide-react";
 import Link from "next/link";
 
 import { GetDemoBtn } from "../get-demo-btn";
@@ -54,6 +54,7 @@ export const Hero = () => {
 						href="https://github.com/aBgAmeuR/Harmony"
 						className={cn("group", buttonVariants({ variant: "outline" }))}
 					>
+						<GithubIcon className="size-4" />
 						Github
 						<ArrowRight
 							className="opacity-60 transition-transform group-hover:translate-x-0.5"
