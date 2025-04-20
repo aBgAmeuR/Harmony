@@ -1,62 +1,72 @@
+import { Suspense } from "react";
 import { AppHeader } from "~/components/app-header";
 import { SelectMonthRange } from "~/components/select-month-range";
+import { getUserInfos } from "~/lib/utils";
 
 import {
-  DaysHabitChartWrapper,
-  HoursHabitChartWrapper,
-  ShuffleHabitChartWrapper,
-  SkippedHabitChartWrapper,
-  TopPlatformChartWrapper,
-} from "./components/chart-wrappers";
-import { StatCard } from "./components/stat-card";
+	DaysHabitChartComponent,
+	DaysHabitChartSkeleton,
+} from "~/components/charts/habits/days-habit-chart";
+import {
+	HoursHabitChartComponent,
+	HoursHabitChartSkeleton,
+} from "~/components/charts/habits/hours-habit-chart";
+import {
+	ShuffleHabitChartComponent,
+	ShuffleHabitChartSkeleton,
+} from "~/components/charts/habits/shuffle-habit-chart";
+import {
+	SkippedHabitChartComponent,
+	SkippedHabitChartSkeleton,
+} from "~/components/charts/habits/skipped-habit-chart";
+import {
+	TopPlatformChartComponent,
+	TopPlatformChartSkeleton,
+} from "~/components/charts/habits/top-platform-chart";
+import {
+	getDaysHabit,
+	getHoursHabit,
+	getShuffleHabit,
+	getSkippedHabit,
+	getTopPlatforms,
+} from "~/services/charts/listening-habits";
 
 export default async function StatsListeningHabitsPage() {
-  return (
-    <>
-      <AppHeader items={["Package", "Stats", "Listening Habits"]}>
-        <SelectMonthRange />
-      </AppHeader>
-      <main className="flex flex-col lg:flex-row p-4 gap-4 max-w-6xl w-full mx-auto">
-        <div className="flex flex-col flex-1 gap-4">
-          <StatCard
-            title="Listening Hours"
-            description="Time spent listening to music"
-            skeletonClassName="aspect-video w-full"
-          >
-            <HoursHabitChartWrapper />
-          </StatCard>
-          <StatCard
-            title="Listening Days"
-            description="Days you listened to music"
-            skeletonClassName="aspect-video w-full"
-          >
-            <DaysHabitChartWrapper />
-          </StatCard>
-        </div>
-        <div className="flex justify-center flex-wrap md:justify-start lg:flex-nowrap lg:flex-col gap-4">
-          <StatCard
-            title="Top Platforms"
-            description="Most used platforms"
-            skeletonClassName="h-[240px] w-[240px]"
-          >
-            <TopPlatformChartWrapper />
-          </StatCard>
-          <StatCard
-            title="Shuffle Habits"
-            description="Shuffle habits"
-            skeletonClassName="h-[160px] w-[240px]"
-          >
-            <ShuffleHabitChartWrapper />
-          </StatCard>
-          <StatCard
-            title="Skipped Tracks"
-            description="Tracks you skipped"
-            skeletonClassName="h-[160px] w-[240px]"
-          >
-            <SkippedHabitChartWrapper />
-          </StatCard>
-        </div>
-      </main>
-    </>
-  );
+	const { userId, isDemo } = await getUserInfos();
+
+	return (
+		<>
+			<AppHeader items={["Package", "Stats", "Listening Habits"]}>
+				<SelectMonthRange />
+			</AppHeader>
+			<main className="mx-auto flex w-full max-w-6xl flex-col gap-4 p-4 lg:flex-row">
+				<div className="flex flex-1 flex-col gap-4">
+					<Suspense fallback={<HoursHabitChartSkeleton />}>
+						<HoursHabitChartComponent data={getHoursHabit(userId, isDemo)} />
+					</Suspense>
+
+					<Suspense fallback={<DaysHabitChartSkeleton />}>
+						<DaysHabitChartComponent data={getDaysHabit(userId, isDemo)} />
+					</Suspense>
+				</div>
+				<div className="flex flex-wrap justify-center gap-4 md:justify-start lg:flex-col lg:flex-nowrap">
+					<Suspense fallback={<TopPlatformChartSkeleton />}>
+						<TopPlatformChartComponent data={getTopPlatforms(userId, isDemo)} />
+					</Suspense>
+
+					<Suspense fallback={<ShuffleHabitChartSkeleton />}>
+						<ShuffleHabitChartComponent
+							data={getShuffleHabit(userId, isDemo)}
+						/>
+					</Suspense>
+
+					<Suspense fallback={<SkippedHabitChartSkeleton />}>
+						<SkippedHabitChartComponent
+							data={getSkippedHabit(userId, isDemo)}
+						/>
+					</Suspense>
+				</div>
+			</main>
+		</>
+	);
 }

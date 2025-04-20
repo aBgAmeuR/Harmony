@@ -1,3 +1,8 @@
 import { handlers } from "@repo/auth";
 
-export const { GET, POST } = handlers;
+import type { NextRequest } from "next/server";
+
+// @ts-ignore
+export const GET: (req: NextRequest) => Promise<Response> = handlers.GET;
+// @ts-ignore
+export const POST: (req: NextRequest) => Promise<Response> = handlers.POST;

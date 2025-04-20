@@ -1,4 +1,4 @@
-import { strFromU8, unzip, Unzipped } from "fflate";
+import { type Unzipped, strFromU8, unzip } from "fflate";
 
 /**
  * Extracts relevant JSON files from a provided ZIP buffer.
@@ -7,29 +7,29 @@ import { strFromU8, unzip, Unzipped } from "fflate";
  * @returns A promise that resolves to an array of objects containing filenames and file content.
  */
 export async function extractZipAndGetFiles(
-  arrayBuffer: ArrayBuffer,
-  filesRegexPattern: RegExp,
+	arrayBuffer: ArrayBuffer,
+	filesRegexPattern: RegExp,
 ): Promise<{ filename: string; content: Uint8Array }[]> {
-  return new Promise((resolve, reject) => {
-    unzip(new Uint8Array(arrayBuffer), (err, unzipped: Unzipped) => {
-      if (err) {
-        return reject(new Error("Failed to unzip the file"));
-      }
+	return new Promise((resolve, reject) => {
+		unzip(new Uint8Array(arrayBuffer), (err, unzipped: Unzipped) => {
+			if (err) {
+				return reject(new Error("Failed to unzip the file"));
+			}
 
-      const files: { filename: string; content: Uint8Array }[] = [];
-      for (const filename in unzipped) {
-        if (filesRegexPattern.test(filename)) {
-          files.push({ filename, content: unzipped[filename] });
-        }
-      }
+			const files: { filename: string; content: Uint8Array }[] = [];
+			for (const filename in unzipped) {
+				if (filesRegexPattern.test(filename)) {
+					files.push({ filename, content: unzipped[filename] });
+				}
+			}
 
-      if (files.length === 0) {
-        reject(new Error("No valid files found in the zip"));
-      } else {
-        resolve(files);
-      }
-    });
-  });
+			if (files.length === 0) {
+				reject(new Error("No valid files found in the zip"));
+			} else {
+				resolve(files);
+			}
+		});
+	});
 }
 
 /**
@@ -38,19 +38,19 @@ export async function extractZipAndGetFiles(
  * @returns An array of parsed JSON objects.
  */
 export function parseZipFiles<T>(
-  files: { filename: string; content: Uint8Array }[],
+	files: { filename: string; content: Uint8Array }[],
 ): T[][] {
-  const data: T[][] = [];
+	const data: T[][] = [];
 
-  for (const file of files) {
-    const contentStr = strFromU8(file.content);
-    try {
-      const jsonData = JSON.parse(contentStr) as T[];
-      data.push(jsonData);
-    } catch (error) {
-      console.error(`Failed to parse JSON from file: ${file.filename}`, error);
-    }
-  }
+	for (const file of files) {
+		const contentStr = strFromU8(file.content);
+		try {
+			const jsonData = JSON.parse(contentStr) as T[];
+			data.push(jsonData);
+		} catch (error) {
+			console.error(`Failed to parse JSON from file: ${file.filename}`, error);
+		}
+	}
 
-  return data;
+	return data;
 }

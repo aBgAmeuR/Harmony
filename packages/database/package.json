@@ -1,33 +1,31 @@
 {
-  "name": "@repo/database",
-  "version": "1.0.0",
-  "exports": {
-    ".": "./src/client.ts"
-  },
-  "scripts": {
-    "db:migrate:deploy": "dotenv -e ../../.env -- prisma migrate deploy",
-    "db:migrate:dev": "dotenv -e ../../.env -- prisma migrate dev",
-    "db:push": "dotenv -e ../../.env -- prisma db push",
-    "db:seed": "tsx src/seed.ts",
-    "dev": "tsup src/* --watch",
-    "format": "prisma format",
-    "generate": "prisma generate",
-    "lint": "eslint . --max-warnings 0",
-    "prebuild": "npm run generate",
-    "predev": "npm run generate",
-    "studio": "dotenv -e ../../.env -- prisma studio"
-  },
-  "dependencies": {
-    "@prisma/client": "^6.0.1"
-  },
-  "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "eslint": "^8",
-    "prisma": "^6.0.1",
-    "rimraf": "^6.0.1",
-    "tsup": "^8.3.5",
-    "tsx": "4.19.2",
-    "typescript": "^5"
-  }
+	"name": "@repo/database",
+	"version": "1.0.0",
+	"exports": {
+		".": "./src/client.ts"
+	},
+	"scripts": {
+		"db:migrate:deploy": "dotenv -e ../../.env -- prisma migrate deploy",
+		"db:migrate:dev": "dotenv -e ../../.env -- prisma migrate dev",
+		"db:push": "dotenv -e ../../.env -- prisma db push",
+		"db:seed": "tsx src/seed.ts",
+		"dev": "tsup src/* --watch",
+		"format": "prisma format",
+		"generate": "prisma generate",
+		"prebuild": "npm run generate",
+		"predev": "npm run generate",
+		"studio": "dotenv -e ../../.env -- prisma studio"
+	},
+	"dependencies": {
+		"@prisma/client": "^6.4.1"
+	},
+	"devDependencies": {
+		"@repo/typescript-config": "workspace:*",
+		"@types/node": "^22.14.0",
+		"prisma": "^6.4.1",
+		"rimraf": "^6.0.1",
+		"tsup": "^8.3.5",
+		"tsx": "4.19.2",
+		"typescript": "^5"
+	}
 }

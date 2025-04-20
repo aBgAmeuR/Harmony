@@ -1,25 +1,25 @@
 {
-  "name": "@repo/auth",
-  "version": "0.0.0",
-  "private": true,
-  "dependencies": {
-    "@auth/prisma-adapter": "^2.7.4",
-    "next-auth": "^5.0.0-beta.24"
-  },
-  "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/database": "*",
-    "@repo/typescript-config": "*",
-    "@types/node": "^22",
-    "@types/react": "19.0.1",
-    "typescript": "^5"
-  },
-  "exports": {
-    ".": {
-      "default": "./src/index.ts"
-    },
-    "./actions": {
-      "default": "./src/actions.ts"
-    }
-  }
+	"name": "@repo/auth",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"dependencies": {
+		"@auth/prisma-adapter": "2.7.2",
+		"next-auth": "^5.0.0-beta.25"
+	},
+	"devDependencies": {
+		"@repo/database": "workspace:*",
+		"@repo/typescript-config": "workspace:*",
+		"@types/node": "^22",
+		"@types/react": "19.0.2",
+		"typescript": "^5"
+	},
+	"exports": {
+		".": {
+			"default": "./src/index.ts"
+		},
+		"./actions": {
+			"default": "./src/actions.ts"
+		}
+	}
 }

@@ -1,7 +1,7 @@
-import { Track } from "./Track";
+import type { Track } from "./Track";
 
 export interface RecentlyPlayed {
-  played_at: Date;
-  context: string;
-  track: Track;
+	played_at: Date;
+	context: string;
+	track: Track;
 }
