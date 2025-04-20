@@ -22,7 +22,11 @@ export const Footer = () => {
 							- <span className="text-muted-foreground">v2.3</span>
 						</p>
 						<div className="flex items-center gap-1">
-							<GetStartedBtn variant="ghost" size="sm">
+							<GetStartedBtn
+								variant="ghost"
+								size="sm"
+								className="hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50"
+							>
 								Get Started
 							</GetStartedBtn>
 							{!isMaintenance ? (
