@@ -16,7 +16,6 @@ export class MeManager extends Manager {
 	 * @param {"long_term" | "medium_term" | "short_term"} time_range
 	 * @returns {Promise<Artist[]>} Returns a promise with the paginated {@link Artist}.
 	 */
-	// eslint-disable-next-line no-unused-vars
 	async top(
 		type: "artists",
 		time_range: "long_term" | "medium_term" | "short_term",
@@ -28,7 +27,6 @@ export class MeManager extends Manager {
 	 * @param {"long_term" | "medium_term" | "short_term"} time_range
 	 * @returns {Promise<Track[]>} Returns a promise with the paginated {@link Track}.
 	 */
-	// eslint-disable-next-line no-unused-vars
 	async top(
 		type: "tracks",
 		time_range: "long_term" | "medium_term" | "short_term",

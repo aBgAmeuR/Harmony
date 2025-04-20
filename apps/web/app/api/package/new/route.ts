@@ -377,7 +377,6 @@ function extractValidTrackUris(data: DataType[][]) {
 	}
 
 	// Filter out tracks with less than 1 play count
-	// eslint-disable-next-line no-unused-vars
 	return new Map([...trackUriMap].filter(([_, count]) => count >= 1));
 }
 

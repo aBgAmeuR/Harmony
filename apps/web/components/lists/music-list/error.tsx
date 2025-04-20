@@ -29,7 +29,6 @@ export const MusicListError = () => {
 								size="sm"
 								onClick={() => {
 									if (typeof window !== "undefined") {
-										// eslint-disable-next-line no-undef
 										window.location.reload();
 									}
 								}}

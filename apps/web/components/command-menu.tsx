@@ -227,7 +227,6 @@ export function CommandMenu({
 type CommandGroupSidebarProps = {
 	heading?: React.ReactNode;
 	items: SidebarItem[];
-	// eslint-disable-next-line no-unused-vars
 	runCommand: (command: () => unknown) => void;
 };
 

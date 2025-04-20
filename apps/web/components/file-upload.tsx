@@ -17,7 +17,6 @@ export const FileUpload = () => {
 	const queryClient = useQueryClient();
 
 	useEffect(() => {
-		// eslint-disable-next-line no-undef
 		let interval: NodeJS.Timeout | null = null;
 		if (inTransition) {
 			interval = setInterval(() => {
@@ -45,20 +44,20 @@ export const FileUpload = () => {
 		}
 	};
 
-  const handleUpload = async () => {
-    if (file) {
-      startTransition(async () => {
-        // const res = await filesProcessing(file);
-        // if (res.message === "error") {
-        //   toast.error(res.error);
-        //   return;
-        // }
-        queryClient.clear();
-        // TODO: Update user session but next-auth has not yet implemented the solution
-        await signOut({ redirect: true, redirectTo: "/settings/package" });
-      });
-    }
-  };
+	const handleUpload = async () => {
+		if (file) {
+			startTransition(async () => {
+				// const res = await filesProcessing(file);
+				// if (res.message === "error") {
+				//   toast.error(res.error);
+				//   return;
+				// }
+				queryClient.clear();
+				// TODO: Update user session but next-auth has not yet implemented the solution
+				await signOut({ redirect: true, redirectTo: "/settings/package" });
+			});
+		}
+	};
 
 	return (
 		<>

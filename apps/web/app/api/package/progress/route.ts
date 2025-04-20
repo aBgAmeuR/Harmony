@@ -32,7 +32,6 @@ type ProgressStore = Map<string, PackageProgressData>;
 
 // Make the store global so it's accessible throughout the application
 declare global {
-	// eslint-disable-next-line no-unused-vars
 	var progressStore: ProgressStore | undefined;
 }
 

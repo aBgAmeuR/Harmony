@@ -11,7 +11,6 @@ import {
 type Config = {
 	[key: string]: {
 		action: (
-			// eslint-disable-next-line no-unused-vars
 			userId: string | undefined,
 		) => Promise<MusicItemCardProps["item"][] | null>;
 		label: string;

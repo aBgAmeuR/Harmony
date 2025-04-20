@@ -9,7 +9,6 @@ import { isDemo } from "~/lib/utils-server";
 export class ApiError extends Error {
 	constructor(
 		message: string,
-		// eslint-disable-next-line no-unused-vars
 		public statusCode: number,
 	) {
 		super(message);
