@@ -1,42 +1,33 @@
 {
-  "private": true,
-  "prisma": {
-    "schema": "packages/database/prisma/schema.prisma"
-  },
-  "scripts": {
-    "build": "turbo run build",
-    "db:migrate:deploy": "turbo run db:migrate:deploy",
-    "db:push": "turbo run db:push",
-    "db:seed": "turbo run db:seed",
-    "dev": "turbo run dev",
-    "start": "turbo run start",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "generate": "turbo run generate",
-    "lint": "turbo run lint",
-    "ui": "npm run -w @repo/ui ui --",
-    "studio": "turbo run studio",
-    "dev:test": "turbo run dev:test",
-    "e2e:test": "turbo run e2e:test",
-    "ci": "turbo run build e2e:test lint"
-  },
-  "devDependencies": {
-    "dotenv-cli": "^7.4.4",
-    "prettier": "^3.4.2",
-    "prisma": "^6.0.1",
-    "tsx": "4.19.2",
-    "turbo": "^2.4.0"
-  },
-  "engines": {
-    "node": ">=18"
-  },
-  "name": "harmony",
-  "dependencies": {
-    "@prisma/client": "^6.0.1",
-    "dotenv": "^16.4.7"
-  },
-  "packageManager": "npm@10.9.0",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ]
+	"name": "harmony",
+	"private": true,
+	"scripts": {
+		"build": "turbo run build",
+		"dev": "turbo run dev",
+		"start": "turbo run start",
+		"generate": "turbo run generate",
+		"ui": "pnpm --filter @repo/ui ui",
+		"studio": "turbo run studio",
+		"format-and-lint": "biome check .",
+		"format-and-lint:fix": "biome check . --write",
+		"ci": "turbo run build"
+	},
+	"devDependencies": {
+		"@biomejs/biome": "1.9.4",
+		"@nedcloarbr/biome-config": "1.9.1",
+		"prettier": "^3.4.2",
+		"tsx": "4.19.2",
+		"turbo": "^2.4.4"
+	},
+	"dependencies": {
+		"dotenv": "^16.4.7",
+		"dotenv-cli": "^8.0.0"
+	},
+	"prisma": {
+		"schema": "packages/database/prisma/schema.prisma"
+	},
+	"packageManager": "pnpm@10.8.1",
+	"engines": {
+		"node": ">=20"
+	}
 }

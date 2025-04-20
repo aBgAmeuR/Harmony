@@ -1,5 +1,5 @@
-import { HttpClient } from './http/HttpClient';
+import type { HttpClient } from "./http/HttpClient";
 
 export abstract class Manager {
-  constructor(protected readonly http: HttpClient) {}
+	constructor(protected readonly http: HttpClient) {}
 }
