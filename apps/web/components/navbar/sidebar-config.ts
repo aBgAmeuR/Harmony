@@ -96,6 +96,7 @@ export const data: SidebarConfig = {
 				{
 					title: "Artists",
 					url: "/rankings/artists",
+					anotherUrl: "/detail/artist/*",
 					icon: UserRoundPen,
 				},
 			],

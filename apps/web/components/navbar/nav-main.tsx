@@ -21,23 +21,11 @@ import { ChevronRight, type LucideIcon } from "lucide-react";
 import { PrefetchKind } from "next/dist/client/components/router-reducer/router-reducer-types";
 import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
-
-type Item = {
-	title: string;
-	url: string;
-	anotherUrl?: string;
-	icon?: LucideIcon;
-	isActive?: boolean;
-	items?: {
-		title: string;
-		url: string;
-		icon?: LucideIcon;
-	}[];
-};
+import type { SidebarItem } from "./sidebar-config";
 
 type NavMainProps = {
 	label: string;
-	items: Item[];
+	items: SidebarItem[];
 	disable?: boolean;
 };
 
@@ -55,7 +43,10 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 						key={item.title}
 						asChild={true}
 						defaultOpen={
-							item.isActive || item.items?.some((i) => i.url === pathname)
+							item.items?.some((i) => i.url === pathname) ||
+							item.items?.some(
+								(i) => pathname.replace(/[^/]+$/, "*") === i.anotherUrl,
+							)
 						}
 						className="group/collapsible"
 					>
@@ -66,8 +57,11 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 										isActive={
 											!open &&
 											!isMobile &&
-											(item.isActive ||
-												item.items.some((i) => i.url === pathname))
+											(item.items.some((i) => i.url === pathname) ||
+												item.items?.some(
+													(i) =>
+														pathname.replace(/[^/]+$/, "*") === i.anotherUrl,
+												))
 										}
 										tooltip={{
 											children: (
@@ -121,7 +115,9 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 									tooltip={item.title}
 									asChild={true}
 									isActive={
-										item.url === pathname || item.anotherUrl === pathname
+										item.url === pathname ||
+										item.anotherUrl === pathname ||
+										pathname.replace(/[^/]+$/, "*") === item.anotherUrl
 									}
 								>
 									{!disable ? (
@@ -153,7 +149,10 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 										<SidebarMenuSubItem key={subItem.title}>
 											<SidebarMenuSubButton
 												asChild={true}
-												isActive={pathname === subItem.url}
+												isActive={
+													pathname === subItem.url ||
+													pathname.replace(/[^/]+$/, "*") === subItem.anotherUrl
+												}
 											>
 												{!disable ? (
 													<button

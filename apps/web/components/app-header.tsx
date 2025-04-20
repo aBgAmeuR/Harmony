@@ -9,6 +9,7 @@ import { Separator } from "@repo/ui/separator";
 import { SidebarTrigger } from "@repo/ui/sidebar";
 import React, { type PropsWithChildren, Suspense } from "react";
 
+import { BackBtn } from "./back-btn";
 import { DemoBadge } from "./demo-badge";
 
 type AppHeaderProps = PropsWithChildren<{
@@ -46,6 +47,7 @@ export const AppHeader = ({ items, demo = true, children }: AppHeaderProps) => {
 						<DemoBadge />
 					</Suspense>
 				)}
+				<BackBtn />
 			</div>
 			<div className="flex items-center gap-2">{children}</div>
 		</header>
