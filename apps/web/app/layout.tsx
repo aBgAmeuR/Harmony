@@ -3,13 +3,13 @@ import "@repo/ui/globals.css";
 import { cn } from "@repo/ui/lib/utils";
 import { Toaster } from "@repo/ui/sonner";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
-import type { Metadata } from "next";"
+import type { Metadata } from "next";
+import { ErrorBoundary } from "next/dist/client/components/error-boundary";
+import { Inter } from "next/font/google";
 import { extractRouterConfig } from "uploadthing/server";
 
-import { ourFileRouteruteruter } app/apiiuploadthingicore
-import { Providers"~/compcompcomponentsnproviderspprovidersrsrs";
+import { ourFileRouter } from "~/app/api/uploadthing/core";
+import { Providers } from "~/components/providers/providers";
 
 import Error from "./error";
 
@@ -22,8 +22,6 @@ export const metadata: Metadata = {
 	description:
 		"Harmony is a web app that helps you visualize your Spotify data.",
 };
-
-export const experimental_ppr = true;
 
 export default function RootLayout({
 	children,
@@ -54,7 +52,7 @@ export default function RootLayout({
 				className={cn(inter.className, "antialiased")}
 			>
 				<ErrorBoundary errorComponent={Error}>
-          <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+					<NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
 					<Providers>{children}</Providers>
 				</ErrorBoundary>
 				<Toaster richColors={true} closeButton={true} />
