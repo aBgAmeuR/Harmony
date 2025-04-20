@@ -36,13 +36,14 @@ export default async function DetailArtistPage({ params }: PageProps) {
 					</Suspense>
 				</Container>
 				<div>
-					<Tabs defaultValue="overview" className="w-full">
+					<Tabs defaultValue="stats" className="w-full">
 						<div className="mb-4 border-border border-y py-1">
 							<Container>
-								<TabsList className="bg-transparent ">
+								<TabsList className="bg-transparent">
 									<TabsTrigger
 										value="overview"
 										className="data-[state=active]:bg-muted data-[state=active]:shadow-none"
+										disabled={true}
 									>
 										Overview
 									</TabsTrigger>

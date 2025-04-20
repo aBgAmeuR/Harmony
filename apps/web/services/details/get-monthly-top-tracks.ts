@@ -25,8 +25,16 @@ export type MonthlyTrackData = {
 		msPlayed: number;
 		trend?: "up" | "down" | "same" | "new";
 		previousRank?: number;
+		rank: number;
 	}>;
 };
+
+// Add chart race type for line race chart
+export type ChartRace = Array<{
+	name: string;
+	color: string;
+	data: Array<{ month: string; rank: number | null; image?: string | null }>;
+}>;
 
 const MONTHS = [
 	"January",
@@ -54,8 +62,8 @@ export const getMonthlyTopTracks = async (
 	userId: string | undefined,
 	artistId: string,
 	limit = 5,
-): Promise<MonthlyTrackData[]> => {
-	if (!userId || !artistId) return [];
+): Promise<{ results: MonthlyTrackData[]; chartRace: ChartRace }> => {
+	if (!userId || !artistId) return { results: [], chartRace: [] };
 
 	try {
 		const monthlyTracksData = await fetchMonthlyTracksData(
@@ -63,7 +71,7 @@ export const getMonthlyTopTracks = async (
 			artistId,
 			limit,
 		);
-		if (!monthlyTracksData.length) return [];
+		if (!monthlyTracksData.length) return { results: [], chartRace: [] };
 
 		// Group data by month and collect unique track IDs
 		const groupedByMonth = _.groupBy(
@@ -74,7 +82,7 @@ export const getMonthlyTopTracks = async (
 			monthlyTracksData.map((d: MonthlyTrack) => d.spotifyId),
 		);
 		const monthsArr = Object.keys(groupedByMonth);
-		if (!monthsArr.length) return [];
+		if (!monthsArr.length) return { results: [], chartRace: [] };
 
 		// Sort months chronologically
 		const sortedMonths = _.sortBy(monthsArr, (m: string) => {
@@ -164,16 +172,52 @@ export const getMonthlyTopTracks = async (
 							trend,
 							previousRank:
 								previousRank !== undefined ? Number(previousRank) : undefined,
+							rank: stats.rank,
 						};
 					}),
 				};
 			})
 			.value();
+		// Build chart race data
+		const trackNames = Array.from(
+			new Set(results.flatMap((r) => r.tracks.map((t) => t.name))),
+		);
+		const colorMap: Record<string, string> = {};
+		trackNames.forEach((name) => {
+			colorMap[name] = stringToColor(name);
+		});
+		const chartRaceMap: Record<
+			string,
+			{
+				name: string;
+				color: string;
+				data: Array<{
+					month: string;
+					rank: number | null;
+					image?: string | null;
+				}>;
+			}
+		> = {};
+		trackNames.forEach((name) => {
+			chartRaceMap[name] = { name, color: colorMap[name], data: [] };
+		});
+		results.forEach(({ month, tracks }) => {
+			const nameToData = Object.fromEntries(tracks.map((t) => [t.name, t]));
+			trackNames.forEach((name) => {
+				const entry = nameToData[name];
+				chartRaceMap[name].data.push({
+					month,
+					rank: entry ? Number(entry.rank) : null,
+					image: entry ? entry.image : null,
+				});
+			});
+		});
+		const chartRace: ChartRace = Object.values(chartRaceMap).reverse();
 
-		return results;
+		return { results, chartRace };
 	} catch (error) {
 		console.error("Failed to fetch monthly top tracks:", error);
-		return [];
+		return { results: [], chartRace: [] };
 	}
 };
 
@@ -220,4 +264,14 @@ export const fetchMonthlyTracksData = async (
       TO_DATE(month, 'Month YYYY') DESC,
       rank ASC
   `;
+};
+
+// helper pour générer une couleur unique et déterministe à partir d'une chaîne
+const stringToColor = (str: string): string => {
+	let hash = 0;
+	for (let i = 0; i < str.length; i++) {
+		hash = str.charCodeAt(i) + ((hash << 5) - hash);
+	}
+	const color = (hash & 0x00ffffff).toString(16).toUpperCase();
+	return `#${"00000".substring(0, 6 - color.length)}${color}`;
 };

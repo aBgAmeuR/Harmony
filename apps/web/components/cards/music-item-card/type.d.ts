@@ -13,4 +13,5 @@ export type MusicItemCardProps = {
 	showAction?: boolean;
 	actionHref?: string;
 	layout?: "grid" | "list";
+	className?: string;
 };

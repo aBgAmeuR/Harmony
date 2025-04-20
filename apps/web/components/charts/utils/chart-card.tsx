@@ -65,8 +65,8 @@ function ChartCardHeaderContent({
 	title,
 	description,
 }: PropsWithChildrenAndClassName & {
-	title: ReactNode;
-	description: ReactNode;
+	title?: ReactNode;
+	description?: ReactNode;
 }) {
 	return (
 		<div

@@ -20,11 +20,21 @@ import { MusicItemCard } from "~/components/cards/music-item-card";
 import { msToMinutes } from "~/components/charts/utils/time-formatters";
 
 import _ from "lodash";
+import { TrackRaceChartComponent } from "~/components/charts/artist/track-race-chart";
+import {
+	ChartCard,
+	ChartCardContent,
+	ChartCardHeader,
+	ChartCardHeaderContent,
+} from "~/components/charts/utils/chart-card";
 import { TrendBadge } from "~/components/trend-badge";
-import type { MonthlyTrackData } from "~/services/details/get-monthly-top-tracks";
+import type {
+	ChartRace,
+	MonthlyTrackData,
+} from "~/services/details/get-monthly-top-tracks";
 
 interface MonthlyTopTracksProps {
-	dataPromise: Promise<MonthlyTrackData[]>;
+	dataPromise: Promise<{ results: MonthlyTrackData[]; chartRace: ChartRace }>;
 	artistNamePromise: Promise<string | undefined>;
 }
 
@@ -32,7 +42,7 @@ export function MonthlyTopTracks({
 	dataPromise,
 	artistNamePromise,
 }: MonthlyTopTracksProps) {
-	const data = React.use(dataPromise);
+	const { results: data, chartRace } = React.use(dataPromise);
 	const artistName = React.use(artistNamePromise);
 	const [date, setDate] = React.useState<Date | undefined>(
 		data.length > 0 ? new Date(`${data[0].month}-01`) : undefined,
@@ -56,29 +66,27 @@ export function MonthlyTopTracks({
 		);
 	}
 
-	const currentMonth =
+	const { month, tracks } =
 		data.find((month) => month.month === format(date, "MMMM yyyy")) || data[0];
-	const { month, tracks } = currentMonth;
 
 	return (
-		<div>
-			<Card>
-				<CardHeader className="flex flex-row items-center justify-between">
-					<div className="space-y-1">
-						<CardTitle>Top Tracks for {month}</CardTitle>
-						<CardDescription>
-							Your most played tracks by {artistName || "this artist"} during{" "}
-							{month}.
-						</CardDescription>
-					</div>
-					<MonthSelector
-						date={date}
-						setDate={setDate}
-						minDate={new Date(`${data[data.length - 1].month}-01`)}
-						maxDate={new Date(`${data[0].month}-01`)}
-					/>
-				</CardHeader>
-				<CardContent className="flex flex-col p-4 pb-0">
+		<div className="space-y-6">
+			<ChartCard className="pb-0">
+				<ChartCardHeader
+					title={`Top Tracks for ${month}`}
+					description={`Your most played tracks by ${artistName || "this artist"} during ${month}.`}
+					showSeparator={true}
+				>
+					<ChartCardHeaderContent className="border-l-transparent">
+						<MonthSelector
+							date={date}
+							setDate={setDate}
+							minDate={new Date(`${data[data.length - 1].month}-01`)}
+							maxDate={new Date(`${data[0].month}-01`)}
+						/>
+					</ChartCardHeaderContent>
+				</ChartCardHeader>
+				<ChartCardContent className="!p-0">
 					{tracks.length > 0 ? (
 						tracks.map((track, index) => (
 							<div key={track.id} className="flex flex-col">
@@ -99,6 +107,7 @@ export function MonthlyTopTracks({
 										),
 									}}
 									rank={index + 1}
+									className="pr-4"
 								/>
 								{index < tracks.length - 1 && <Separator />}
 							</div>
@@ -112,8 +121,19 @@ export function MonthlyTopTracks({
 							</p>
 						</div>
 					)}
-				</CardContent>
-			</Card>
+				</ChartCardContent>
+			</ChartCard>
+			<TrackRaceChartComponent
+				data={{
+					series: chartRace,
+					artistName,
+				}}
+				availableYears={Array.from(
+					new Set(data.map((d) => new Date(`${d.month}-01`).getFullYear())),
+				).sort((a, b) => b - a)}
+				initialYear={new Date(`${data[0].month}-01`).getFullYear()}
+				className="mt-6"
+			/>
 		</div>
 	);
 }

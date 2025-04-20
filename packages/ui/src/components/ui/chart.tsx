@@ -115,6 +115,7 @@ function ChartTooltipContent({
 	labelFormatter,
 	labelClassName,
 	formatter,
+	itemSorter,
 	color,
 	nameKey,
 	labelKey,
@@ -170,6 +171,10 @@ function ChartTooltipContent({
 
 	const nestLabel = payload.length === 1 && indicator !== "dot";
 
+	if (itemSorter) {
+		payload.sort((a, b) => (Number(itemSorter(a)) || 0) - (Number(itemSorter(b)) || 0));
+	}
+
 	return (
 		<div
 			className={cn(
@@ -186,7 +191,7 @@ function ChartTooltipContent({
 
 					return (
 						<div
-							key={item.dataKey}
+							key={`${item.dataKey}-${item.name}-${index}`}
 							className={cn(
 								"[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5",
 								indicator === "dot" && "items-center",

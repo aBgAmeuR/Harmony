@@ -9,6 +9,7 @@ import {
 	getArtistDetails,
 	getArtistStatsAction,
 } from "~/actions/get-artist-stats-action";
+import { Icons } from "~/components/icons";
 
 type ArtistHeaderProps = {
 	artistId: string;
@@ -29,14 +30,20 @@ export async function ArtistHeader({ artistId, userId }: ArtistHeaderProps) {
 			<div className="flex-1">
 				<div className="mb-2 flex items-center gap-4">
 					<h1 className="font-bold text-3xl md:text-4xl">{artist.name}</h1>
-					<Button variant="outline" size="sm" className="h-8" asChild={true}>
+					<Button
+						asChild={true}
+						size="sm"
+						className="bg-[#1DB954] text-white hover:bg-[#169c43]"
+						aria-label="Ouvrir l'artiste dans Spotify"
+					>
 						<a
 							href={artist.href}
 							target="_blank"
 							rel="noopener noreferrer"
-							className="inline-flex items-center gap-2"
+							className="inline-flex items-center gap-2 font-semibold"
 						>
-							<span>Open in Spotify</span>
+							<Icons.spotify className="size-4" />
+							<span className="hidden sm:inline">Ouvrir</span>
 							<ExternalLink className="size-3" />
 						</a>
 					</Button>

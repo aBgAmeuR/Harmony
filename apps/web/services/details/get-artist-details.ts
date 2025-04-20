@@ -45,7 +45,7 @@ export async function getArtistDetails(userId: string | undefined, id: string) {
 			OR: [{ artistIds: { has: id } }, { albumArtistIds: { has: id } }],
 		},
 		orderBy: { _sum: { msPlayed: "desc" } },
-		take: 22,
+		take: 30,
 	});
 
 	const topAlbumsQuery = prisma.$queryRaw<TopItemWithAlbumId[]>`
@@ -55,7 +55,7 @@ export async function getArtistDetails(userId: string | undefined, id: string) {
     GROUP BY "albumId"
     HAVING COUNT(DISTINCT "spotifyId") >= 2
     ORDER BY _sum DESC
-    LIMIT 10
+    LIMIT 20
   `;
 
 	const [topTracks, topAlbums] = await prisma.$transaction([

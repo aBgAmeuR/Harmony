@@ -14,6 +14,7 @@ export const MusicItemCard = ({
 	showAction,
 	actionHref,
 	layout = "list",
+	className,
 }: Props) => {
 	return (
 		<article
@@ -22,6 +23,7 @@ export const MusicItemCard = ({
 				layout === "grid"
 					? "h-full flex-col items-start space-y-2"
 					: "items-center space-x-2 py-4 sm:space-x-4",
+				className,
 			)}
 		>
 			{layout === "grid" ? (
