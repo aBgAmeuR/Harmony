@@ -37,7 +37,7 @@ export async function ArtistHeader({ artistId, userId }: ArtistHeaderProps) {
 						aria-label="Ouvrir l'artiste dans Spotify"
 					>
 						<a
-							href={artist.href}
+							href={artist.external_urls.spotify}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="inline-flex items-center gap-2 font-semibold"
