@@ -7,6 +7,8 @@
 @plugin "tailwindcss-motion";
 
 @import "uploadthing/tw/v4";
+
+@custom-variant dark (&:is(.dark *));
 @source "../node_modules/@uploadthing/react/dist"
 
 @custom-variant dark (&:is(.dark *));

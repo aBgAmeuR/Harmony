@@ -35,7 +35,7 @@ export function AppSidebar({
 }: AppSidebarProps) {
 	const hasPackage = user?.hasPackage || false;
 	return (
-		<Sidebar collapsible="icon" {...props}>
+		<Sidebar collapsible="icon" variant="inset" {...props}>
 			<SidebarHeader>
 				<NavHeader {...data.header} />
 			</SidebarHeader>

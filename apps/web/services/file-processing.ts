@@ -3,9 +3,9 @@ import {
 	createPackageAction,
 	deleteLastPackageAction,
 } from "~/actions/user-package-action";
-import type { TrackInfo } from "~/app/api/package/tracks/route";
 import { extractZipAndGetFiles, parseZipFiles } from "~/lib/zip";
 import type { DataType } from "~/types/data";
+import type {TrackInfo} from "~/app/api/package/new/types";
 
 export async function getFiles(file: File) {
   try {

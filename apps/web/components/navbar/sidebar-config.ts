@@ -1,3 +1,10 @@
+import { AudioLinesIcon } from "@repo/ui/icons/audio-lines";
+import { ChartLineIcon } from "@repo/ui/icons/chart-line";
+import { HistoryIcon } from "@repo/ui/icons/history";
+import { LayoutPanelTopIcon } from "@repo/ui/icons/layout-panel-top";
+import { TrendingUpIcon } from "@repo/ui/icons/trending-up";
+import { TrendingUpDownIcon } from "@repo/ui/icons/trending-up-down";
+import { UserIcon } from "@repo/ui/icons/user";
 import {
 	ArrowRightLeft,
 	AudioLines,
@@ -7,9 +14,7 @@ import {
 	ChartNoAxesCombined,
 	Disc3,
 	Github,
-	History,
 	Info,
-	LayoutDashboard,
 	ListOrdered,
 	type LucideIcon,
 	Milestone,
@@ -19,7 +24,6 @@ import {
 	UserRoundPen,
 	UsersRound,
 } from "lucide-react";
-
 import { Icons } from "../icons";
 
 export type SidebarItem = {
@@ -56,19 +60,19 @@ export const data: SidebarConfig = {
 				{
 					title: "Tracks",
 					url: "/top/tracks",
-					icon: AudioLines,
+					icon: AudioLinesIcon as LucideIcon,
 				},
 				{
 					title: "Artists",
 					url: "/top/artists",
-					icon: UserRoundPen,
+					icon: UserIcon as LucideIcon,
 				},
 			],
 		},
 		{
 			title: "Recently Played",
 			url: "/recently-played",
-			icon: History,
+			icon: HistoryIcon as LucideIcon,
 		},
 	],
 	package: [
@@ -76,17 +80,17 @@ export const data: SidebarConfig = {
 			title: "Overview",
 			url: "/overview",
 			anotherUrl: "/",
-			icon: LayoutDashboard,
+			icon: LayoutPanelTopIcon as LucideIcon,
 		},
 		{
 			title: "Rankings",
 			url: "/rankings",
-			icon: TrendingUp,
+			icon: TrendingUpIcon as LucideIcon,
 			items: [
 				{
 					title: "Tracks",
 					url: "/rankings/tracks",
-					icon: AudioLines,
+					icon: AudioLinesIcon as LucideIcon,
 				},
 				{
 					title: "Albums",
@@ -97,7 +101,7 @@ export const data: SidebarConfig = {
 					title: "Artists",
 					url: "/rankings/artists",
 					anotherUrl: "/detail/artist/*",
-					icon: UserRoundPen,
+					icon: UserIcon as LucideIcon,
 				},
 			],
 		},
@@ -114,12 +118,12 @@ export const data: SidebarConfig = {
 				{
 					title: "Listening Habits",
 					url: "/stats/listening-habits",
-					icon: ChartLine,
+					icon: ChartLineIcon as LucideIcon,
 				},
 				{
 					title: "Activity",
 					url: "/stats/activity",
-					icon: TrendingUpDown,
+					icon: TrendingUpDownIcon as LucideIcon,
 				},
 			],
 		},
