@@ -1,27 +1,22 @@
 import { AudioLinesIcon } from "@repo/ui/icons/audio-lines";
 import { ChartLineIcon } from "@repo/ui/icons/chart-line";
+import { Disc3Icon } from "@repo/ui/icons/disc-3";
 import { HistoryIcon } from "@repo/ui/icons/history";
+import { InfoIcon } from "@repo/ui/icons/info";
 import { LayoutPanelTopIcon } from "@repo/ui/icons/layout-panel-top";
+import { ListOrderedIcon } from "@repo/ui/icons/list-ordered";
+import { PackageIcon } from "@repo/ui/icons/package";
 import { TrendingUpIcon } from "@repo/ui/icons/trending-up";
 import { TrendingUpDownIcon } from "@repo/ui/icons/trending-up-down";
 import { UserIcon } from "@repo/ui/icons/user";
 import {
 	ArrowRightLeft,
-	AudioLines,
 	Binary,
 	CalendarRange,
-	ChartLine,
 	ChartNoAxesCombined,
-	Disc3,
 	Github,
-	Info,
-	ListOrdered,
 	type LucideIcon,
 	Milestone,
-	Package,
-	TrendingUp,
-	TrendingUpDown,
-	UserRoundPen,
 	UsersRound,
 } from "lucide-react";
 import { Icons } from "../icons";
@@ -55,7 +50,7 @@ export const data: SidebarConfig = {
 		{
 			title: "Top",
 			url: "/top",
-			icon: ListOrdered,
+			icon: ListOrderedIcon as LucideIcon,
 			items: [
 				{
 					title: "Tracks",
@@ -95,7 +90,7 @@ export const data: SidebarConfig = {
 				{
 					title: "Albums",
 					url: "/rankings/albums",
-					icon: Disc3,
+					icon: Disc3Icon as LucideIcon,
 				},
 				{
 					title: "Artists",
@@ -156,12 +151,12 @@ export const data: SidebarConfig = {
 		{
 			title: "Package",
 			url: "/settings/package",
-			icon: Package,
+			icon: PackageIcon as LucideIcon,
 		},
 		{
 			title: "About",
 			url: "/settings/about",
-			icon: Info,
+			icon: InfoIcon as LucideIcon,
 		},
 	],
 	navSecondary: [
