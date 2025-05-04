@@ -1,6 +1,7 @@
 "use client";
 
-import { type User, signOut } from "@repo/auth";
+import type { User } from "@repo/auth";
+import { signOut } from "@repo/auth/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {

@@ -113,8 +113,6 @@ const NavigationButton = ({
 
 	const handleMouseEnter = () => {
 		router.prefetch(item.url, { kind: PrefetchKind.FULL });
-		console.log("azery");
-
 		if (iconRef.current?.startAnimation) {
 			iconRef.current.startAnimation();
 		}
@@ -286,7 +284,7 @@ const SidebarTooltip = ({
 					isActive={isActive}
 					asChild={true}
 					size="sm"
-					className="group-data-[collapsible=icon]:!size-auto"
+					className="group-data-[collapsible=icon]:!size-auto z-10"
 				>
 					<NavigationButton item={subItem} disable={disable} router={router} />
 				</SidebarMenuButton>

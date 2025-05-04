@@ -3,23 +3,21 @@ import {
 	createPackageAction,
 	deleteLastPackageAction,
 } from "~/actions/user-package-action";
+import type { TrackInfo } from "~/app/api/package/new/types";
 import { extractZipAndGetFiles, parseZipFiles } from "~/lib/zip";
 import type { DataType } from "~/types/data";
-import type {TrackInfo} from "~/app/api/package/new/types";
 
 export async function getFiles(file: File) {
-  try {
-    const buffer = await file.arrayBuffer();
-    const filesRegexPattern =
-      /Spotify Extended Streaming History\/Streaming_History_Audio_(\d{4}(-\d{4})?)_(\d+)\.json/;
+	try {
+		const buffer = await file.arrayBuffer();
+		const filesRegexPattern =
+			/Spotify Extended Streaming History\/Streaming_History_Audio_(\d{4}(-\d{4})?)_(\d+)\.json/;
 
-    console.time("Processing time");
-    console.log("Processing files...");
-    return await extractZipAndGetFiles(buffer, filesRegexPattern);
-  } catch (error) {
-    console.error("Error processing files:", error as Error);
-    return { message: "error", error: (error as Error).toString() };
-  }
+		return await extractZipAndGetFiles(buffer, filesRegexPattern);
+	} catch (error) {
+		console.error("Error processing files:", error as Error);
+		return { message: "error", error: (error as Error).toString() };
+	}
 }
 
 /**
@@ -28,15 +26,15 @@ export async function getFiles(file: File) {
  * @returns A status message object indicating the result of the operation.
  */
 export async function filesProcessing(
-  file: File,
-  files: {
-    filename: string;
-    content: Uint8Array;
-  }[],
-  setProgress: (progress: number) => void,
+	file: File,
+	files: {
+		filename: string;
+		content: Uint8Array;
+	}[],
+	setProgress: (progress: number) => void,
 ) {
-  try {
-    const data = parseZipFiles<DataType>(files);
+	try {
+		const data = parseZipFiles<DataType>(files);
 
 		const res = await saveData(data, file);
 		if (res?.message === "error") return res;

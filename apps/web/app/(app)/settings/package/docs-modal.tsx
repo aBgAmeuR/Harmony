@@ -9,12 +9,17 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@repo/ui/dialog";
-import type { PropsWithChildren } from "react";
+import { HelpCircle } from "lucide-react";
 
-export const DocsModal = ({ children }: PropsWithChildren) => {
+export const DocsModal = () => {
 	return (
 		<Dialog>
-			<DialogTrigger asChild={true}>{children}</DialogTrigger>
+			<DialogTrigger asChild={true}>
+				<Button variant="ghost" size="sm">
+					<HelpCircle className="size-4" />
+					How to get my package
+				</Button>
+			</DialogTrigger>
 			<DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-lg [&>button:last-child]:hidden">
 				<div className="overflow-y-auto">
 					<DialogHeader className="contents space-y-0 text-left">
@@ -83,7 +88,9 @@ export const DocsModal = ({ children }: PropsWithChildren) => {
 				</div>
 				<DialogFooter className="border-t px-4 py-2">
 					<DialogClose asChild={true}>
-						<Button type="button">Close</Button>
+						<Button type="button" size="sm">
+							Close
+						</Button>
 					</DialogClose>
 				</DialogFooter>
 			</DialogContent>

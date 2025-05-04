@@ -2,7 +2,7 @@
 
 import { Slot } from "@radix-ui/react-slot";
 import { cn } from "@repo/ui/lib/utils";
-import { CheckIcon, LoaderCircleIcon } from "lucide-react";
+import { CheckIcon, LoaderCircleIcon, X } from "lucide-react";
 import * as React from "react";
 import { createContext, useContext } from "react";
 
@@ -17,9 +17,10 @@ type StepItemContextValue = {
 	state: StepState;
 	isDisabled: boolean;
 	isLoading: boolean;
+	isError: boolean;
 };
 
-type StepState = "active" | "completed" | "inactive" | "loading";
+type StepState = "active" | "completed" | "inactive" | "loading" | "error";
 
 const StepperContext = createContext<StepperContextValue | undefined>(
 	undefined,
@@ -99,6 +100,7 @@ interface StepperItemProps extends React.HTMLAttributes<HTMLDivElement> {
 	completed?: boolean;
 	disabled?: boolean;
 	loading?: boolean;
+	error?: boolean;
 }
 
 function StepperItem({
@@ -106,6 +108,7 @@ function StepperItem({
 	completed = false,
 	disabled = false,
 	loading = false,
+	error = false,
 	className,
 	children,
 	...props
@@ -115,6 +118,7 @@ function StepperItem({
 	const state: StepState =
 		completed || step < activeStep
 			? "completed"
+			: error ? "error"
 			: activeStep === step
 				? "active"
 				: "inactive";
@@ -123,7 +127,7 @@ function StepperItem({
 
 	return (
 		<StepItemContext.Provider
-			value={{ step, state, isDisabled: disabled, isLoading }}
+			value={{ step, state, isDisabled: disabled, isLoading, isError: error }}
 		>
 			<div
 				data-slot="stepper-item"
@@ -190,7 +194,7 @@ function StepperIndicator({
 	children,
 	...props
 }: StepperIndicatorProps) {
-	const { state, step, isLoading } = useStepItem();
+	const { state, step, isLoading, isError } = useStepItem();
 
 	return (
 		<span
@@ -214,6 +218,11 @@ function StepperIndicator({
 						size={16}
 						aria-hidden="true"
 					/>
+					{isError && (
+						<span className="absolute text-red-500 transition-all">
+							<X size={14} aria-hidden="true" />
+						</span>
+					)}
 					{isLoading && (
 						<span className="absolute transition-all">
 							<LoaderCircleIcon

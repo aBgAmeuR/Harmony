@@ -1,4 +1,4 @@
-const PROCESSING_STEPS_NAME = [
+export const PROCESSING_STEPS_NAME = [
 	"Extracting files from archive",
 	"Processing track information",
 	"Retrieving additional track details",
@@ -7,20 +7,22 @@ const PROCESSING_STEPS_NAME = [
 
 type Status = "pending" | "processing" | "completed" | "error";
 type ProcessingStepName = (typeof PROCESSING_STEPS_NAME)[number];
-type ProcessingStep = {
+export type ProcessingStepType = {
 	name: ProcessingStepName;
 	status: Status;
+	startTime?: number;
+	endTime?: number;
 };
 
 type PackageProgressData = {
 	percentage: number;
 	error?: string;
-	processingSteps: ProcessingStep[];
+	processingSteps: ProcessingStepType[];
 };
 
 export class PackageStreamer {
 	private encoder = new TextEncoder();
-	private steps: ProcessingStep[] = PROCESSING_STEPS_NAME.map((step) => ({
+	private steps: ProcessingStepType[] = PROCESSING_STEPS_NAME.map((step) => ({
 		name: step,
 		status: "pending",
 	}));
@@ -47,10 +49,26 @@ export class PackageStreamer {
 		name?: ProcessingStepName,
 		status: Exclude<Status, "error"> = "pending",
 	) {
-		this.steps = this.steps.map((step) => ({
-			...step,
-			status: step.name === name ? status : step.status,
-		}));
+		const now = Date.now();
+		this.steps = this.steps.map((step) => {
+			if (step.name === name) {
+				const updatedStep: ProcessingStepType = {
+					...step,
+					status,
+				};
+
+				if (status === "processing" && step.status !== "processing") {
+					updatedStep.startTime = now;
+				}
+				if (status === "completed" && step.status !== "completed") {
+					updatedStep.endTime = now;
+				}
+
+				return updatedStep;
+			}
+			return step;
+		});
+
 		return this.send({ percentage });
 	}
 
