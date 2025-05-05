@@ -9,11 +9,15 @@ import {
 } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
 import { Clock, Layers, LineChart, Sparkles } from "lucide-react";
+import { getUserInfos } from "~/lib/utils";
 import { Client } from "./client";
 import { DocsModal } from "./docs-modal";
 import { HistoryModal } from "./history-modal";
+import { DemoStep } from "./steps-components/demo-step";
 
 export default async function SettingsPackagePage() {
+	const { isDemo } = await getUserInfos();
+
 	return (
 		<>
 			<AppHeader items={["Settings", "Package"]} />
@@ -41,7 +45,7 @@ export default async function SettingsPackagePage() {
 							</CardDescription>
 						</CardHeader>
 
-						<Client />
+						{isDemo ? <DemoStep /> : <Client />}
 
 						<CardFooter className="mt-2 justify-between">
 							<DocsModal />
