@@ -5,6 +5,7 @@ import { Toaster } from "@repo/ui/sonner";
 import type { Metadata } from "next";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react"
 
 import { Providers } from "~/components/providers/providers";
 
@@ -53,6 +54,7 @@ export default function RootLayout({
 				<ErrorBoundary errorComponent={Error}>
 					<Providers>{children}</Providers>
 				</ErrorBoundary>
+				<Analytics />
 				<Toaster richColors={true} closeButton={true} />
 			</body>
 		</html>
