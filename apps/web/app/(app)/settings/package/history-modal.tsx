@@ -18,6 +18,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/table";
+import { History } from "lucide-react";
 import { Suspense } from "react";
 import { getUserInfos } from "~/lib/utils";
 
@@ -25,28 +26,23 @@ export const HistoryModal = async () => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild={true}>
-				<Button variant="link" size="sm" className="mt-2">
+				<Button variant="link" size="sm">
+					<History className="size-4" />
 					View History
 				</Button>
 			</DialogTrigger>
-			<DialogContent className="flex flex-col gap-0 p-0 sm:max-h-[min(640px,80vh)] sm:max-w-lg [&>button:last-child]:hidden">
-				<div className="overflow-y-auto">
-					<DialogHeader className="contents space-y-0 text-left">
-						<DialogTitle className="px-6 pt-6 text-base">
-							History of your uploaded Spotify data packages
-						</DialogTitle>
-						<DialogDescription asChild={true}>
-							<div className="p-6">
-								<div className="space-y-4 [&_strong]:font-semibold [&_strong]:text-foreground">
-									<Suspense fallback={null}>
-										<HistoryTable />
-									</Suspense>
-								</div>
-							</div>
-						</DialogDescription>
-					</DialogHeader>
+			<DialogContent className="flex flex-col gap-0 overflow-hidden p-0 sm:max-h-[min(640px,80vh)] sm:max-w-lg">
+				<DialogHeader className="sticky top-0 z-10 border-b bg-background">
+					<DialogTitle className="p-4">
+						History of your uploaded Spotify data packages
+					</DialogTitle>
+				</DialogHeader>
+				<div className="overflow-y-auto px-4 py-2">
+					<Suspense fallback={null}>
+						<HistoryTable />
+					</Suspense>
 				</div>
-				<DialogFooter className="border-t px-4 py-2">
+				<DialogFooter className="sticky bottom-0 border-t bg-background p-2">
 					<DialogClose asChild={true}>
 						<Button type="button" size="sm">
 							Close
@@ -72,34 +68,43 @@ const HistoryTable = async () => {
 	const packages = await getPackageHistory();
 
 	if (!packages)
-		return <p className="text-center">No packages uploaded yet.</p>;
+		return (
+			<p className="text-center text-muted-foreground">
+				No packages uploaded yet.
+			</p>
+		);
 
 	return (
 		<Table>
 			<TableHeader>
 				<TableRow>
-					<TableHead>Name</TableHead>
+					<TableHead className="w-full">Name</TableHead>
 					<TableHead>Date</TableHead>
-					<TableHead>Size</TableHead>
+					<TableHead className="text-right">Size</TableHead>
 				</TableRow>
 			</TableHeader>
 			<TableBody>
 				{packages.map((item) => (
 					<TableRow key={item.id}>
-						<TableCell className="">
-							<p className="line-clamp-1 break-all">{item.fileName}</p>
-						</TableCell>
-						<TableCell>{item.createdAt.toLocaleDateString()}</TableCell>
 						<TableCell>
-							<p className="text-nowrap">
-								{(Number(item.fileSize) / 1024).toFixed(2)} MB
+							<p className="line-clamp-1 break-all font-medium">
+								{item.fileName}
 							</p>
+						</TableCell>
+						<TableCell className="text-muted-foreground">
+							{item.createdAt.toLocaleDateString()}
+						</TableCell>
+						<TableCell className="text-right text-muted-foreground">
+							{(Number(item.fileSize) / 1024).toFixed(2)} MB
 						</TableCell>
 					</TableRow>
 				))}
 				{packages.length === 0 && (
 					<TableRow>
-						<TableCell colSpan={3} className="text-center">
+						<TableCell
+							colSpan={3}
+							className="text-center text-muted-foreground"
+						>
 							No packages uploaded yet.
 						</TableCell>
 					</TableRow>

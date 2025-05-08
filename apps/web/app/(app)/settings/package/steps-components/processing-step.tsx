@@ -9,7 +9,7 @@ import {
 	StepperSeparator,
 	StepperTitle,
 } from "@repo/ui/stepper";
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import type { ProcessingStepType } from "~/app/api/package/new/PackageStreamer";
 
 type ProcessingStepProps = {
@@ -17,11 +17,14 @@ type ProcessingStepProps = {
 	processingSteps: ProcessingStepType[];
 };
 
-const calculateStepTime = (step: ProcessingStepType): string => {
+const calculateStepTime = (
+	step: ProcessingStepType,
+	currentTime: number,
+): string => {
 	if (step.startTime) {
-		return `${Math.floor(
-			((step.endTime ? step.endTime : Date.now()) - step.startTime) / 1000,
-		)}s`;
+		const endTime = step.endTime ?? currentTime;
+		const duration = Math.max(0, Math.floor((endTime - step.startTime) / 1000));
+		return `${duration}s`;
 	}
 	return "0s";
 };
@@ -30,29 +33,26 @@ export const ProcessingStep = ({
 	processingProgress,
 	processingSteps,
 }: ProcessingStepProps) => {
+	const [currentTime, setCurrentTime] = useState(Date.now());
 	const currentStepIndex = processingSteps.findIndex(
 		(step) => step.status === "processing",
 	);
-	const [elapsedTime, setElapsedTime] = useState<number>(0);
+
 	useEffect(() => {
-		const firstStepStartTime = processingSteps[0]?.startTime || 0;
-		if (!firstStepStartTime) return;
-
-		const lastStep = processingSteps[processingSteps.length - 1];
-
-		if (lastStep.endTime) {
-			setElapsedTime(
-				Math.floor((lastStep.endTime - firstStepStartTime) / 1000),
-			);
-			return;
-		}
-
 		const timer = setInterval(() => {
-			setElapsedTime(Math.floor((Date.now() - firstStepStartTime) / 1000));
+			setCurrentTime(Date.now());
 		}, 1000);
 
 		return () => clearInterval(timer);
-	}, [processingSteps]);
+	}, []);
+
+	const totalTime = processingSteps.reduce((acc, step) => {
+		if (step.startTime) {
+			const endTime = step.endTime ?? currentTime;
+			return acc + Math.max(0, endTime - step.startTime);
+		}
+		return acc;
+	}, 0);
 
 	return (
 		<CardContent className="space-y-4 px-6">
@@ -60,7 +60,7 @@ export const ProcessingStep = ({
 				<div className="flex items-center justify-between">
 					<span>
 						<span className="font-medium">Overall Progress</span>
-						<span className="text-muted-foreground text-sm">{` - ${elapsedTime}s`}</span>
+						<span className="text-muted-foreground text-sm">{` - ${Math.max(0, Math.floor(totalTime / 1000))}s`}</span>
 					</span>
 					<span className="font-bold text-primary text-sm">
 						<NumberFlow value={processingProgress} suffix="%" />
@@ -93,7 +93,7 @@ export const ProcessingStep = ({
 										<span>{step.name}</span>
 										{step.startTime && (
 											<span className="text-muted-foreground text-xs">
-												{` - ${calculateStepTime(step)}`}
+												{` - ${calculateStepTime(step, currentTime)}`}
 											</span>
 										)}
 									</StepperTitle>

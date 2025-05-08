@@ -7,6 +7,7 @@ import {
 	type ProcessingStepType,
 } from "~/app/api/package/new/PackageStreamer";
 import { readStreamResponse } from "~/lib/utils";
+import { CompleteStep } from "./steps-components/complete-step";
 import { ProcessingStep } from "./steps-components/processing-step";
 import { UploadStep } from "./steps-components/upload-step";
 
@@ -20,6 +21,12 @@ export const Client = () => {
 	const [processingProgress, setProcessingProgress] = useState(0);
 	const [processingSteps, setProcessingSteps] =
 		useState<ProcessingStepType[]>();
+	const [errorMessage, setErrorMessage] = useState<string>();
+
+	const isProcessingComplete =
+		processingSteps?.length &&
+		(processingSteps[processingSteps.length - 1].endTime !== undefined ||
+			processingSteps.some((step) => step.status === "error"));
 
 	const onClientUploadComplete = async (packageId: string) => {
 		setProcessingSteps(
@@ -28,6 +35,7 @@ export const Client = () => {
 				status: "pending",
 			})),
 		);
+		setErrorMessage(undefined);
 
 		try {
 			const response = await fetch("/api/package/new", {
@@ -42,6 +50,7 @@ export const Client = () => {
 					setProcessingProgress(progressData.percentage);
 					setProcessingSteps(progressData.processingSteps);
 					if (progressData.error) {
+						setErrorMessage(progressData.error);
 						toast.error(progressData.error);
 						cancelStream().catch(console.error);
 					}
@@ -50,27 +59,36 @@ export const Client = () => {
 					}
 				},
 				onError: (error) => {
-					toast.error(`Streaming error: ${error.message}`);
+					setErrorMessage(error.message);
 				},
-				onComplete: () => {},
+				onComplete: () => {
+					// update user session hasPackage: true
+				},
 			});
 		} catch (error) {
 			setProcessingSteps(undefined);
+			const message = error instanceof Error ? error.message : String(error);
+			setErrorMessage(message);
 			toast.error(
-				`Streaming error: ${error instanceof Error ? error.message : String(error)}`,
+				"An error occurred while processing your package. Please try again.",
 			);
 		}
 	};
 
 	return (
 		<>
-			{processingSteps ? (
+			{!processingSteps ? (
+				<UploadStep onClientUploadComplete={onClientUploadComplete} />
+			) : isProcessingComplete ? (
+				<CompleteStep
+					processingSteps={processingSteps}
+					errorMessage={errorMessage}
+				/>
+			) : (
 				<ProcessingStep
 					processingProgress={processingProgress}
 					processingSteps={processingSteps}
 				/>
-			) : (
-				<UploadStep onClientUploadComplete={onClientUploadComplete} />
 			)}
 		</>
 	);

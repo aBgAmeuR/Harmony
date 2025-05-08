@@ -77,7 +77,6 @@ async function processUserPackage(
 		);
 	}
 
-	// Clear existing user tracks
 	await prisma.track.deleteMany({ where: { userId } });
 	packageSteamer.emit(5, "Extracting files from archive", "processing");
 
@@ -94,11 +93,8 @@ async function processUserPackage(
 		);
 	}
 
-	await delay(1000);
 	packageSteamer.emit(90, "Retrieving additional track details", "completed");
-	await delay(1000);
 	packageSteamer.emit(90, "Saving your listening history", "processing");
-	await delay(1000);
 
 	await setPackageStatus(packageId, "processed");
 
@@ -113,7 +109,6 @@ async function processUserPackage(
 		data: { hasPackage: true },
 	});
 
-	await delay(1000);
 	packageSteamer.emit(100, "Saving your listening history", "completed");
 }
 
@@ -126,7 +121,6 @@ async function processPackageFile(
 	const buffer = await response.arrayBuffer();
 
 	packageSteamer.emit(10);
-	await delay(1000);
 
 	const filesRegexPattern =
 		/Spotify Extended Streaming History\/Streaming_History_Audio_(\d{4}(-\d{4})?)_(\d+)\.json/;
@@ -135,17 +129,14 @@ async function processPackageFile(
 
 	packageSteamer.emit(15, "Extracting files from archive", "completed");
 	packageSteamer.emit(15, "Processing track information", "processing");
-	await delay(1000);
 
 	const data = parseZipFiles<DataType>(files);
 
 	packageSteamer.emit(20);
-	await delay(1000);
 
 	const trackUris = extractValidTrackUris(data);
 
 	packageSteamer.emit(25, "Processing track information", "completed");
-	await delay(1000);
 
 	if (!trackUris.size) return null;
 
@@ -154,13 +145,11 @@ async function processPackageFile(
 	await spotify.me.get();
 
 	packageSteamer.emit(35);
-	await delay(1000);
 
 	const trackUriArray = Array.from(trackUris.keys());
 	const trackUriBatches = batchArray(trackUriArray, 200);
 
 	packageSteamer.emit(40);
-	await delay(1000);
 
 	const totalBatches = trackUriBatches.length;
 	let completedBatches = 0;
@@ -179,7 +168,6 @@ async function processPackageFile(
 
 			const progress = 40 + Math.floor((completedBatches / totalBatches) * 50);
 			packageSteamer.emit(progress);
-			await delay(1000);
 		}),
 	);
 
