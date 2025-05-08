@@ -12,6 +12,7 @@
 		"@next/bundle-analyzer": "^15.3.0",
 		"@repo/ui": "workspace:*",
 		"@tanstack/react-query": "^5.62.7",
+		"@vercel/analytics": "^1.5.0",
 		"babel-plugin-react-compiler": "19.0.0-beta-e993439-20250405",
 		"@uploadthing/react": "^7.3.0",
 		"date-fns": "^4.1.0",

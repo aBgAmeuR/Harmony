@@ -6,8 +6,8 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import type { Metadata } from "next";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Inter } from "next/font/google";
+import { Analytics } from "@vercel/analytics/react"
 import { extractRouterConfig } from "uploadthing/server";
-
 import { ourFileRouter } from "~/app/api/uploadthing/core";
 import { Providers } from "~/components/providers/providers";
 
@@ -55,6 +55,7 @@ export default function RootLayout({
 					<NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
 					<Providers>{children}</Providers>
 				</ErrorBoundary>
+				<Analytics />
 				<Toaster richColors={true} closeButton={true} />
 			</body>
 		</html>
