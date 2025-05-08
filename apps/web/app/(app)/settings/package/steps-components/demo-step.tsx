@@ -1,4 +1,4 @@
-import { signOut } from "@repo/auth";
+import { signOut } from "@repo/auth/actions";
 import { Button } from "@repo/ui/button";
 import { CardContent } from "@repo/ui/card";
 import { Info } from "lucide-react";
@@ -24,6 +24,7 @@ export const DemoStep = () => {
 					</div>
 					<form
 						action={async () => {
+							"use server";
 							await signOut({
 								redirect: true,
 								redirectTo: "/",
