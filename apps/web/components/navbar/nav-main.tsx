@@ -5,6 +5,7 @@ import {
 	CollapsibleContent,
 	CollapsibleTrigger,
 } from "@repo/ui/collapsible";
+import type { AnimIconHandle } from "@repo/ui/components/icons/type";
 import { Separator } from "@repo/ui/separator";
 import {
 	SidebarGroup,
@@ -17,173 +18,271 @@ import {
 	SidebarMenuSubItem,
 	useSidebar,
 } from "@repo/ui/sidebar";
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import { PrefetchKind } from "next/dist/client/components/router-reducer/router-reducer-types";
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { usePathname } from "next/navigation";
 import { useRouter } from "nextjs-toploader/app";
+import { useRef } from "react";
 import type { SidebarItem } from "./sidebar-config";
 
-type NavMainProps = {
+// Utility: isActive
+function isSidebarItemActive(item: SidebarItem, pathname: string): boolean {
+	return (
+		item.url === pathname ||
+		item.anotherUrl === pathname ||
+		pathname.replace(/[^/]+$/, "*") === item.anotherUrl ||
+		(item.items?.some((sub) => isSidebarItemActive(sub, pathname)) ?? false)
+	);
+}
+
+type SidebarNavButtonProps = {
+	item: SidebarItem;
+	disable?: boolean;
+	isActive?: boolean;
+	onClick?: (e: React.MouseEvent) => void;
+	onMouseEnter?: (e: React.MouseEvent) => void;
+	onMouseLeave?: (e: React.MouseEvent) => void;
+	children?: React.ReactNode;
+	as?: React.ElementType;
+	className?: string;
+	tooltip?: any;
+	[key: string]: any;
+};
+
+function SidebarNavButton({
+	item,
+	disable,
+	isActive,
+	onClick,
+	onMouseEnter,
+	onMouseLeave,
+	children,
+	as: Wrapper = "button",
+	className = "w-full cursor-pointer",
+	isCollapsed = false,
+	hasSubItems = false,
+	...props
+}: SidebarNavButtonProps & { isCollapsed?: boolean; hasSubItems?: boolean }) {
+	const iconRef = useRef<AnimIconHandle>(null);
+
+	const handleMouseEnter = (e: React.MouseEvent) => {
+		props.router?.prefetch?.(item.url, { kind: PrefetchKind.FULL });
+		if (iconRef.current?.startAnimation) {
+			iconRef.current.startAnimation();
+		}
+		onMouseEnter?.(e);
+	};
+
+	const handleMouseLeave = (e: React.MouseEvent) => {
+		if (iconRef.current?.stopAnimation) {
+			iconRef.current.stopAnimation();
+		}
+		onMouseLeave?.(e);
+	};
+
+	const handleClick = (e: React.MouseEvent) => {
+		props.router?.push?.(item.url);
+		onClick?.(e);
+	};
+
+	if (disable) {
+		return (
+			<Wrapper
+				tabIndex={-1}
+				aria-disabled={true}
+				className={className}
+				data-active={isActive}
+				{...props}
+			>
+				{item.icon && (
+					<item.icon
+						className="p-0"
+						ref={iconRef as React.Ref<SVGSVGElement>}
+					/>
+				)}
+				<span>{item.title}</span>
+				{children}
+			</Wrapper>
+		);
+	}
+
+	return (
+		<Wrapper
+			onMouseEnter={handleMouseEnter}
+			onMouseLeave={handleMouseLeave}
+			onClick={handleClick}
+			className={className}
+			data-active={isActive}
+			{...props}
+		>
+			{item.icon && (
+				<item.icon className="p-0" ref={iconRef as React.Ref<SVGSVGElement>} />
+			)}
+			<span>{item.title}</span>
+			{children}
+		</Wrapper>
+	);
+}
+
+function SidebarItemRenderer({
+	item,
+	pathname,
+	disable,
+	isCollapsed,
+	isOpen,
+	router,
+}: {
+	item: SidebarItem;
+	pathname: string;
+	disable?: boolean;
+	isCollapsed: boolean;
+	isOpen?: boolean;
+	router: AppRouterInstance;
+}) {
+	const isActive = isSidebarItemActive(item, pathname);
+
+	if (item.items) {
+		return (
+			<Collapsible
+				key={item.title}
+				asChild={true}
+				defaultOpen={isActive}
+				className="group/collapsible"
+			>
+				<SidebarMenuItem>
+					<CollapsibleTrigger asChild={true}>
+						<SidebarNavButton
+							item={item}
+							disable={disable}
+							isActive={!isOpen && isActive}
+							as={SidebarMenuButton}
+							isCollapsed={isCollapsed}
+							hasSubItems={!!item.items}
+							tooltip={{
+								children: (
+									<SidebarTooltip
+										item={item}
+										disable={disable}
+										router={router}
+									/>
+								),
+								className: "p-1 min-w-32",
+							}}
+						>
+							<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+						</SidebarNavButton>
+					</CollapsibleTrigger>
+					{isOpen && (
+						<CollapsibleContent>
+							<SidebarMenuSub>
+								{item.items.map((sub) => (
+									<SidebarMenuSubItem key={sub.title}>
+										<SidebarNavButton
+											item={sub}
+											disable={disable}
+											isActive={isSidebarItemActive(sub, pathname)}
+											as={SidebarMenuSubButton}
+											router={router}
+										/>
+									</SidebarMenuSubItem>
+								))}
+							</SidebarMenuSub>
+						</CollapsibleContent>
+					)}
+				</SidebarMenuItem>
+			</Collapsible>
+		);
+	}
+	return (
+		<SidebarMenuItem key={item.title}>
+			<SidebarNavButton
+				item={item}
+				disable={disable}
+				isActive={isActive}
+				as={SidebarMenuButton}
+				router={router}
+			/>
+		</SidebarMenuItem>
+	);
+}
+
+export function NavMain({
+	label,
+	items,
+	disable,
+	hasPackage = true,
+}: {
 	label: string;
 	items: SidebarItem[];
 	disable?: boolean;
-};
-
-export function NavMain({ label, items, disable }: NavMainProps) {
+	hasPackage?: boolean;
+}) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const { open, isMobile } = useSidebar();
+
+	const filteredItems = items.filter(
+		(item) => item.alwaysVisible || hasPackage,
+	);
 
 	return (
 		<SidebarGroup>
 			<SidebarGroupLabel>{label}</SidebarGroupLabel>
 			<SidebarMenu>
-				{items.map((item) => (
-					<Collapsible
+				{filteredItems.map((item) => (
+					<SidebarItemRenderer
 						key={item.title}
-						asChild={true}
-						defaultOpen={
-							item.items?.some((i) => i.url === pathname) ||
-							item.items?.some(
-								(i) => pathname.replace(/[^/]+$/, "*") === i.anotherUrl,
-							)
-						}
-						className="group/collapsible"
-					>
-						<SidebarMenuItem>
-							{item.items ? (
-								<CollapsibleTrigger asChild={true}>
-									<SidebarMenuButton
-										isActive={
-											!open &&
-											!isMobile &&
-											(item.items.some((i) => i.url === pathname) ||
-												item.items?.some(
-													(i) =>
-														pathname.replace(/[^/]+$/, "*") === i.anotherUrl,
-												))
-										}
-										tooltip={{
-											children: (
-												<>
-													<div className="px-2 py-1">
-														<p className="text-sm">{item.title}</p>
-													</div>
-													<Separator className="mb-1" />
-													{item.items.map((subItem) => (
-														<SidebarMenuButton
-															key={subItem.title}
-															isActive={subItem.url === pathname}
-															asChild={true}
-															size="sm"
-															className="group-data-[collapsible=icon]:!size-auto"
-														>
-															{!disable ? (
-																<button
-																	onMouseEnter={() => {
-																		router.prefetch(subItem.url, {
-																			kind: PrefetchKind.FULL,
-																		});
-																	}}
-																	onClick={() => {
-																		router.push(subItem.url);
-																	}}
-																>
-																	{subItem.icon && <subItem.icon />}
-																	<span>{subItem.title}</span>
-																</button>
-															) : (
-																<div>
-																	{subItem.icon && <subItem.icon />}
-																	<span>{subItem.title}</span>
-																</div>
-															)}
-														</SidebarMenuButton>
-													))}
-												</>
-											),
-											className: "p-1 min-w-32",
-										}}
-									>
-										{item.icon && <item.icon />}
-										<span>{item.title}</span>
-										<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-									</SidebarMenuButton>
-								</CollapsibleTrigger>
-							) : (
-								<SidebarMenuButton
-									tooltip={item.title}
-									asChild={true}
-									isActive={
-										item.url === pathname ||
-										item.anotherUrl === pathname ||
-										pathname.replace(/[^/]+$/, "*") === item.anotherUrl
-									}
-								>
-									{!disable ? (
-										<button
-											onMouseEnter={() => {
-												router.prefetch(item.url, {
-													kind: PrefetchKind.FULL,
-												});
-											}}
-											onClick={() => {
-												router.push(item.url);
-											}}
-											className="w-full cursor-pointer"
-										>
-											{item.icon && <item.icon />}
-											<span>{item.title}</span>
-										</button>
-									) : (
-										<div>
-											{item.icon && <item.icon />}
-											<span>{item.title}</span>
-										</div>
-									)}
-								</SidebarMenuButton>
-							)}
-							<CollapsibleContent>
-								<SidebarMenuSub>
-									{item.items?.map((subItem) => (
-										<SidebarMenuSubItem key={subItem.title}>
-											<SidebarMenuSubButton
-												asChild={true}
-												isActive={
-													pathname === subItem.url ||
-													pathname.replace(/[^/]+$/, "*") === subItem.anotherUrl
-												}
-											>
-												{!disable ? (
-													<button
-														onMouseEnter={() => {
-															router.prefetch(subItem.url, {
-																kind: PrefetchKind.FULL,
-															});
-														}}
-														onClick={() => {
-															router.push(subItem.url);
-														}}
-														className="w-full cursor-pointer"
-													>
-														{subItem.icon && <subItem.icon />}
-														<span>{subItem.title}</span>
-													</button>
-												) : (
-													<div>
-														{subItem.icon && <subItem.icon />}
-														<span>{subItem.title}</span>
-													</div>
-												)}
-											</SidebarMenuSubButton>
-										</SidebarMenuSubItem>
-									))}
-								</SidebarMenuSub>
-							</CollapsibleContent>
-						</SidebarMenuItem>
-					</Collapsible>
+						item={item}
+						pathname={pathname}
+						disable={disable}
+						isCollapsed={isMobile}
+						isOpen={open}
+						router={router}
+					/>
 				))}
 			</SidebarMenu>
 		</SidebarGroup>
 	);
 }
+
+const SidebarTooltip = ({
+	item,
+	disable = false,
+	router,
+}: {
+	item: SidebarItem;
+	disable?: boolean;
+	router: AppRouterInstance;
+}) => {
+	const pathname = usePathname();
+
+	return (
+		<>
+			<div className="px-2 py-1">
+				<p className="text-sm">{item.title}</p>
+			</div>
+			<Separator className="mb-1" />
+			{item.items?.map((subItem) => {
+				const subActive = isSidebarItemActive(subItem, pathname);
+				return (
+					<SidebarMenuButton
+						key={subItem.title}
+						isActive={subActive}
+						asChild={true}
+						size="sm"
+						className="group-data-[collapsible=icon]:!size-auto z-10"
+					>
+						<SidebarNavButton
+							item={subItem}
+							disable={disable}
+							isActive={subActive}
+							as={"button"}
+							router={router}
+						/>
+					</SidebarMenuButton>
+				);
+			})}
+		</>
+	);
+};

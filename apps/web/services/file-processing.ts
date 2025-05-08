@@ -3,24 +3,37 @@ import {
 	createPackageAction,
 	deleteLastPackageAction,
 } from "~/actions/user-package-action";
-import type { TrackInfo } from "~/app/api/package/tracks/route";
+import type { TrackInfo } from "~/app/api/package/new/types";
 import { extractZipAndGetFiles, parseZipFiles } from "~/lib/zip";
 import type { DataType } from "~/types/data";
+
+export async function getFiles(file: File) {
+	try {
+		const buffer = await file.arrayBuffer();
+		const filesRegexPattern =
+			/Spotify Extended Streaming History\/Streaming_History_Audio_(\d{4}(-\d{4})?)_(\d+)\.json/;
+
+		return await extractZipAndGetFiles(buffer, filesRegexPattern);
+	} catch (error) {
+		console.error("Error processing files:", error as Error);
+		return { message: "error", error: (error as Error).toString() };
+	}
+}
 
 /**
  * Processes files and organizes data fetching and storage.
  * @param file The file to be processed.
  * @returns A status message object indicating the result of the operation.
  */
-export async function filesProcessing(file: File) {
+export async function filesProcessing(
+	file: File,
+	files: {
+		filename: string;
+		content: Uint8Array;
+	}[],
+	setProgress: (progress: number) => void,
+) {
 	try {
-		const buffer = await file.arrayBuffer();
-		const filesRegexPattern =
-			/Spotify Extended Streaming History\/Streaming_History_Audio_(\d{4}(-\d{4})?)_(\d+)\.json/;
-
-		console.time("Processing time");
-		console.log("Processing files...");
-		const files = await extractZipAndGetFiles(buffer, filesRegexPattern);
 		const data = parseZipFiles<DataType>(files);
 
 		const res = await saveData(data, file);

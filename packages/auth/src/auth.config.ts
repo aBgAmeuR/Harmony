@@ -1,3 +1,4 @@
+import { prisma } from "@repo/database";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Spotify from "next-auth/providers/spotify";
@@ -34,10 +35,13 @@ export default {
 			// Logged in users are authenticated, otherwise redirect to login page
 			return !!auth;
 		},
-		jwt: async ({ token, user }) => {
+		jwt: async ({ token, user, trigger, session }) => {
 			if (user) {
 				token.id = user.id;
 				token.hasPackage = user.hasPackage;
+			}
+			if (trigger === "update" && session) {
+				token.hasPackage = true;
 			}
 			return token;
 		},
@@ -53,5 +57,8 @@ export default {
 		signOut: "/",
 		newUser: "/",
 		verifyRequest: "/",
+	},
+	session: {
+		strategy: "jwt",
 	},
 } as NextAuthConfig;

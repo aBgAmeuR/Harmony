@@ -8,6 +8,8 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@custom-variant dark (&:is(.dark *));
+
 :root {
 	--radius: 0.75rem;
 	--background: oklch(1 0 0);
@@ -118,6 +120,8 @@
 
 	--animate-accordion-down: accordion-down 0.2s ease-out;
 	--animate-accordion-up: accordion-up 0.2s ease-out;
+	--animate-collapsible-down: collapsible-down 0.2s ease-out;
+	--animate-collapsible-up: collapsible-up 0.2s ease-out;
 	--animate-appear: appear 0.6s forwards ease-out;
 	--animate-appear-left: appear-left 0.6s forwards ease-out;
 	--animate-appear-right: appear-right 0.6s forwards ease-out;
@@ -141,6 +145,24 @@
 	@keyframes accordion-up {
 		from {
 			height: var(--radix-accordion-content-height);
+		}
+		to {
+			height: 0;
+		}
+	}
+
+	@keyframes collapsible-down {
+		from {
+			height: 0;
+		}
+		to {
+			height: var(--radix-collapsible-content-height);
+		}
+	}
+
+	@keyframes collapsible-up {
+		from {
+			height: var(--radix-collapsible-content-height);
 		}
 		to {
 			height: 0;
@@ -281,5 +303,37 @@
 	}
 	button:not(:disabled), [role="button"]:not(:disabled) {
 		cursor: pointer;
+	}
+}
+@layer components {
+	.custom-button {
+		@apply
+			!w-26
+			!h-8
+			!bg-primary
+			!text-primary-foreground
+			!shadow-xs
+			hover:!bg-primary/90
+			!inline-flex
+			!items-center
+			!justify-center
+			!gap-1.5
+			!whitespace-nowrap
+			!rounded-md
+			!text-sm
+			!font-medium
+			!transition-all
+			!shrink-0
+			!outline-none
+			focus-visible:!border-ring
+			focus-visible:!ring-ring/50
+			focus-visible:!ring-[3px]
+			aria-invalid:!ring-destructive/20
+			dark:aria-invalid:!ring-destructive/40
+			aria-invalid:!border-destructive;
+	}
+
+	.custom-button::after {
+		@apply !hidden;
 	}
 }

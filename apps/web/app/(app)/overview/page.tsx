@@ -9,6 +9,7 @@ import {
 	TimeListenedChartComponent,
 	TimeListenedChartSkeleton,
 } from "~/components/charts/activity/time-listened-chart";
+import { UserHasNotPackage } from "~/components/user-has-not-package";
 import { getUserInfos } from "~/lib/utils";
 import { getListeningPatternData } from "./get-listening-pattern-data";
 import {
@@ -19,7 +20,17 @@ import { RankingList } from "./ranking-list";
 import { TopStatsCards, TopStatsCardsSkeleton } from "./top-stats-cards";
 
 export default async function OverviewPage() {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo, hasPackage } = await getUserInfos();
+
+	if (!hasPackage)
+		return (
+			<>
+				<AppHeader items={["Package", "Overview"]} />
+				<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
+					<UserHasNotPackage />
+				</div>
+			</>
+		);
 
 	return (
 		<>

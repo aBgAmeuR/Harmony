@@ -1,25 +1,24 @@
+import { AudioLinesIcon } from "@repo/ui/icons/audio-lines";
+import { ChartLineIcon } from "@repo/ui/icons/chart-line";
+import { Disc3Icon } from "@repo/ui/icons/disc-3";
+import { HistoryIcon } from "@repo/ui/icons/history";
+import { InfoIcon } from "@repo/ui/icons/info";
+import { LayoutPanelTopIcon } from "@repo/ui/icons/layout-panel-top";
+import { ListOrderedIcon } from "@repo/ui/icons/list-ordered";
+import { PackageIcon } from "@repo/ui/icons/package";
+import { TrendingUpIcon } from "@repo/ui/icons/trending-up";
+import { TrendingUpDownIcon } from "@repo/ui/icons/trending-up-down";
+import { UserIcon } from "@repo/ui/icons/user";
 import {
 	ArrowRightLeft,
-	AudioLines,
 	Binary,
 	CalendarRange,
-	ChartLine,
 	ChartNoAxesCombined,
-	Disc3,
 	Github,
-	History,
-	Info,
-	LayoutDashboard,
-	ListOrdered,
 	type LucideIcon,
 	Milestone,
-	Package,
-	TrendingUp,
-	TrendingUpDown,
-	UserRoundPen,
 	UsersRound,
 } from "lucide-react";
-
 import { Icons } from "../icons";
 
 export type SidebarItem = {
@@ -28,6 +27,7 @@ export type SidebarItem = {
 	icon: LucideIcon;
 	items?: SidebarItem[];
 	anotherUrl?: string;
+	alwaysVisible?: boolean;
 };
 
 type SidebarConfig = {
@@ -51,24 +51,28 @@ export const data: SidebarConfig = {
 		{
 			title: "Top",
 			url: "/top",
-			icon: ListOrdered,
+			icon: ListOrderedIcon as LucideIcon,
+			alwaysVisible: true,
 			items: [
 				{
 					title: "Tracks",
 					url: "/top/tracks",
-					icon: AudioLines,
+					icon: AudioLinesIcon as LucideIcon,
+					alwaysVisible: true,
 				},
 				{
 					title: "Artists",
 					url: "/top/artists",
-					icon: UserRoundPen,
+					icon: UserIcon as LucideIcon,
+					alwaysVisible: true,
 				},
 			],
 		},
 		{
 			title: "Recently Played",
 			url: "/recently-played",
-			icon: History,
+			icon: HistoryIcon as LucideIcon,
+			alwaysVisible: true,
 		},
 	],
 	package: [
@@ -76,28 +80,29 @@ export const data: SidebarConfig = {
 			title: "Overview",
 			url: "/overview",
 			anotherUrl: "/",
-			icon: LayoutDashboard,
+			icon: LayoutPanelTopIcon as LucideIcon,
+			alwaysVisible: true,
 		},
 		{
 			title: "Rankings",
 			url: "/rankings",
-			icon: TrendingUp,
+			icon: TrendingUpIcon as LucideIcon,
 			items: [
 				{
 					title: "Tracks",
 					url: "/rankings/tracks",
-					icon: AudioLines,
+					icon: AudioLinesIcon as LucideIcon,
 				},
 				{
 					title: "Albums",
 					url: "/rankings/albums",
-					icon: Disc3,
+					icon: Disc3Icon as LucideIcon,
 				},
 				{
 					title: "Artists",
 					url: "/rankings/artists",
 					anotherUrl: "/detail/artist/*",
-					icon: UserRoundPen,
+					icon: UserIcon as LucideIcon,
 				},
 			],
 		},
@@ -114,12 +119,12 @@ export const data: SidebarConfig = {
 				{
 					title: "Listening Habits",
 					url: "/stats/listening-habits",
-					icon: ChartLine,
+					icon: ChartLineIcon as LucideIcon,
 				},
 				{
 					title: "Activity",
 					url: "/stats/activity",
-					icon: TrendingUpDown,
+					icon: TrendingUpDownIcon as LucideIcon,
 				},
 			],
 		},
@@ -152,12 +157,13 @@ export const data: SidebarConfig = {
 		{
 			title: "Package",
 			url: "/settings/package",
-			icon: Package,
+			icon: PackageIcon as LucideIcon,
+			alwaysVisible: true,
 		},
 		{
 			title: "About",
 			url: "/settings/about",
-			icon: Info,
+			icon: InfoIcon as LucideIcon,
 		},
 	],
 	navSecondary: [

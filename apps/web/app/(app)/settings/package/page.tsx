@@ -1,80 +1,111 @@
-import { auth } from "@repo/auth";
-import { signOut } from "@repo/auth/actions";
-import { Button } from "@repo/ui/button";
-import { Info } from "lucide-react";
-import React, { Suspense } from "react";
-
 import { AppHeader } from "~/components/app-header";
 
-import { PackageDocumentation } from "./package-documentation";
-import { PackageHistoryUpload } from "./package-history-upload";
-import { PackageUpload } from "./package-upload";
+import {
+	Card,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from "@repo/ui/card";
+import { cn } from "@repo/ui/lib/utils";
+import { Clock, Layers, LineChart, Sparkles } from "lucide-react";
+import { getUserInfos } from "~/lib/utils";
+import { Client } from "./client";
+import { DocsModal } from "./docs-modal";
+import { HistoryModal } from "./history-modal";
+import { DemoStep } from "./steps-components/demo-step";
 
 export default async function SettingsPackagePage() {
-	const session = await auth();
-
-	if (session?.user?.name === "Demo") {
-		return (
-			<>
-				<AppHeader items={["Settings", "Package"]} />
-				<div className="flex flex-1 flex-col items-center gap-4 p-4 pt-0">
-					<div className="flex flex-col gap-4">
-						<div className="rounded-lg border border-border bg-background p-4 shadow-black/5 shadow-lg">
-							<div className="flex items-center gap-4">
-								<Info
-									className="text-blue-500"
-									size={24}
-									strokeWidth={2}
-									aria-hidden="true"
-								/>
-								<div className="flex w-full grow items-center justify-between">
-									<div className="space-y-1">
-										<p className="font-medium text-sm">
-											Sign in to view your package
-										</p>
-										<p className="text-muted-foreground text-xs">
-											You must sign in to view your package and explore your
-											listening history with Harmony.
-										</p>
-									</div>
-									<form
-										action={async () => {
-											"use server";
-											await signOut({
-												redirect: true,
-												redirectTo: "/",
-											});
-										}}
-									>
-										<Button className="w-full" size="sm" type="submit">
-											Exit demo
-										</Button>
-									</form>
-								</div>
-							</div>
-						</div>
-
-						<PackageDocumentation />
-					</div>
-				</div>
-			</>
-		);
-	}
+	const { isDemo } = await getUserInfos();
 
 	return (
 		<>
 			<AppHeader items={["Settings", "Package"]} />
-			<div className="flex flex-1 flex-col items-center gap-4 p-4 pt-0">
-				<div className="grid gap-4 md:grid-cols-2">
-					<div className="space-y-4">
-						<PackageUpload />
-						<PackageDocumentation />
+			<div className="flex flex-1 flex-col items-center justify-center gap-4 p-4 pt-0">
+				<div>
+					<div className="mb-8 text-center">
+						<h1 className="mb-3 bg-gradient-to-r from-primary to-primary/70 bg-clip-text font-bold text-3xl text-transparent">
+							Upload Your Spotify Data
+						</h1>
+						<p className="mx-auto max-w-2xl text-lg text-muted-foreground">
+							Transform your listening history into beautiful insights and
+							discover your unique music journey through interactive
+							visualizations.
+						</p>
 					</div>
-					<Suspense fallback={null}>
-						<PackageHistoryUpload />
-					</Suspense>
+
+					<FeatureShowcase className="mb-6" />
+
+					<Card>
+						<CardHeader className="mb-4">
+							<CardTitle>Upload Your Spotify Data Package</CardTitle>
+							<CardDescription>
+								Please upload your Spotify data package to generate your
+								listening stats.
+							</CardDescription>
+						</CardHeader>
+
+						{isDemo ? <DemoStep /> : <Client />}
+
+						<CardFooter className="mt-2 justify-between">
+							<DocsModal />
+							<HistoryModal />
+						</CardFooter>
+					</Card>
 				</div>
 			</div>
 		</>
 	);
 }
+
+const FeatureShowcase = ({ className }: { className?: string }) => {
+	return (
+		<div className={cn("grid gap-3 sm:grid-cols-2", className)}>
+			<Card className="flex-row gap-2 p-4">
+				<div className="flex size-8 min-w-8 items-center justify-center rounded-lg bg-primary/20 text-primary">
+					<LineChart className="size-4" />
+				</div>
+				<div>
+					<CardTitle>Track your listening patterns</CardTitle>
+					<CardDescription>
+						See how your music taste evolves over time with beautiful
+						visualizations.
+					</CardDescription>
+				</div>
+			</Card>
+			<Card className="flex-row gap-2 p-4">
+				<div className="flex size-8 min-w-8 items-center justify-center rounded-lg bg-primary/20 text-primary">
+					<Sparkles className="size-4" />
+				</div>
+				<div>
+					<CardTitle>Discover hidden gems</CardTitle>
+					<CardDescription>
+						Uncover forgotten favorites and tracks you've loved but rarely play.
+					</CardDescription>
+				</div>
+			</Card>
+			<Card className="flex-row gap-2 p-4">
+				<div className="flex size-8 min-w-8 items-center justify-center rounded-lg bg-primary/20 text-primary">
+					<Layers className="size-4" />
+				</div>
+				<div>
+					<CardTitle>Compare artists and genres</CardTitle>
+					<CardDescription>
+						See which artists and genres dominate your listening habits.
+					</CardDescription>
+				</div>
+			</Card>
+			<Card className="flex-row gap-2 p-4">
+				<div className="flex size-8 min-w-8 items-center justify-center rounded-lg bg-primary/20 text-primary">
+					<Clock className="size-4" />
+				</div>
+				<div>
+					<CardTitle>View your all-time top tracks</CardTitle>
+					<CardDescription>
+						Get insights into your most played songs and artists.
+					</CardDescription>
+				</div>
+			</Card>
+		</div>
+	);
+};
