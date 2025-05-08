@@ -49,9 +49,12 @@ export function AppSidebar({
 					</div>
 				)}
 				<NavMain items={data.stats} label="Stats" disable={disable} />
-				{hasPackage || disable ? (
-					<NavMain items={data.package} label="Package" disable={disable} />
-				) : null}
+				<NavMain
+					items={data.package}
+					label="Package"
+					disable={disable}
+					hasPackage={hasPackage}
+				/>
 				{/* {hasPackage ? (
 					<NavMain items={data.advanced} label="Advanced" disable={disable} />
 				) : null} */}

@@ -21,10 +21,12 @@ export const getUserInfos = cache(async () => {
 	const session = await auth();
 	const userId = session?.user?.id;
 	const isDemo = session?.user?.name === "Demo";
+	const hasPackage = session?.user?.hasPackage;
 
 	return {
 		userId,
 		isDemo,
+		hasPackage,
 	};
 });
 
@@ -41,12 +43,10 @@ export async function readStreamResponse<T>({
 	response,
 	onProgress,
 	onError,
-	onComplete,
 }: {
 	response: Response;
 	onProgress: (data: T) => void;
 	onError?: (error: Error) => void;
-	onComplete?: () => void;
 }): Promise<() => Promise<void>> {
 	if (!response.body) {
 		const error = new Error("No response body");
@@ -62,12 +62,7 @@ export async function readStreamResponse<T>({
 	const processStream = async (): Promise<void> => {
 		try {
 			while (!cancelled) {
-				const { value, done } = await reader.read();
-
-				if (done) {
-					if (onComplete) onComplete();
-					break;
-				}
+				const { value } = await reader.read();
 
 				buffer += decoder.decode(value, { stream: true });
 				const lines = buffer.split("\n");

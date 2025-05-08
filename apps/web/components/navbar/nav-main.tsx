@@ -30,14 +30,19 @@ type NavMainProps = {
 	label: string;
 	items: SidebarItem[];
 	disable?: boolean;
+	hasPackage?: boolean;
 };
 
-export function NavMain({ label, items, disable }: NavMainProps) {
+export function NavMain({
+	label,
+	items,
+	disable,
+	hasPackage = true,
+}: NavMainProps) {
 	const pathname = usePathname();
 	const router = useRouter();
 	const { open, isMobile } = useSidebar();
 
-	// Détermine si un élément ou ses sous-éléments sont actifs
 	const isItemActive = (item: SidebarItem): boolean => {
 		const isDirectMatch =
 			item.url === pathname ||
@@ -47,11 +52,17 @@ export function NavMain({ label, items, disable }: NavMainProps) {
 		return isDirectMatch || Boolean(item.items?.some(isItemActive));
 	};
 
+	const filteredItems = items.filter((item) => {
+		if (item.alwaysVisible) return true;
+		if (hasPackage) return true;
+		return false;
+	});
+
 	return (
 		<SidebarGroup>
 			<SidebarGroupLabel>{label}</SidebarGroupLabel>
 			<SidebarMenu>
-				{items.map((item) => (
+				{filteredItems.map((item) => (
 					<Collapsible
 						key={item.title}
 						asChild={true}

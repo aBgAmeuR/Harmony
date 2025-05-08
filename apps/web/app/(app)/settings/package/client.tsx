@@ -1,6 +1,8 @@
 "use client";
 
+import { useSession } from "@repo/auth";
 import { toast } from "@repo/ui/sonner";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import {
 	PROCESSING_STEPS_NAME,
@@ -22,6 +24,8 @@ export const Client = () => {
 	const [processingSteps, setProcessingSteps] =
 		useState<ProcessingStepType[]>();
 	const [errorMessage, setErrorMessage] = useState<string>();
+	const { data: session, update } = useSession();
+	const router = useRouter();
 
 	const isProcessingComplete =
 		processingSteps?.length &&
@@ -46,23 +50,24 @@ export const Client = () => {
 
 			const cancelStream = await readStreamResponse<PackageProgressData>({
 				response,
-				onProgress: (progressData) => {
+				onProgress: async (progressData) => {
 					setProcessingProgress(progressData.percentage);
 					setProcessingSteps(progressData.processingSteps);
 					if (progressData.error) {
 						setErrorMessage(progressData.error);
 						toast.error(progressData.error);
 						cancelStream().catch(console.error);
-					}
-					if (progressData.percentage >= 100) {
+					} else if (progressData.percentage >= 100) {
 						cancelStream().catch(console.error);
+						await update({
+							...session,
+							user: { ...session?.user, hasPackage: true },
+						});
+						router.refresh();
 					}
 				},
 				onError: (error) => {
 					setErrorMessage(error.message);
-				},
-				onComplete: () => {
-					// update user session hasPackage: true
 				},
 			});
 		} catch (error) {

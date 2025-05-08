@@ -27,6 +27,7 @@ export type SidebarItem = {
 	icon: LucideIcon;
 	items?: SidebarItem[];
 	anotherUrl?: string;
+	alwaysVisible?: boolean;
 };
 
 type SidebarConfig = {
@@ -51,16 +52,19 @@ export const data: SidebarConfig = {
 			title: "Top",
 			url: "/top",
 			icon: ListOrderedIcon as LucideIcon,
+			alwaysVisible: true,
 			items: [
 				{
 					title: "Tracks",
 					url: "/top/tracks",
 					icon: AudioLinesIcon as LucideIcon,
+					alwaysVisible: true,
 				},
 				{
 					title: "Artists",
 					url: "/top/artists",
 					icon: UserIcon as LucideIcon,
+					alwaysVisible: true,
 				},
 			],
 		},
@@ -68,6 +72,7 @@ export const data: SidebarConfig = {
 			title: "Recently Played",
 			url: "/recently-played",
 			icon: HistoryIcon as LucideIcon,
+			alwaysVisible: true,
 		},
 	],
 	package: [
@@ -76,6 +81,7 @@ export const data: SidebarConfig = {
 			url: "/overview",
 			anotherUrl: "/",
 			icon: LayoutPanelTopIcon as LucideIcon,
+			alwaysVisible: true,
 		},
 		{
 			title: "Rankings",
@@ -152,6 +158,7 @@ export const data: SidebarConfig = {
 			title: "Package",
 			url: "/settings/package",
 			icon: PackageIcon as LucideIcon,
+			alwaysVisible: true,
 		},
 		{
 			title: "About",

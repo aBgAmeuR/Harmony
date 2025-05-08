@@ -46,6 +46,7 @@ export async function POST(req: Request) {
 						console.error("An unexpected error occurred:", error);
 					}
 				} finally {
+					controller.enqueue(new TextEncoder().encode("{}\n"));
 					controller.close();
 				}
 			},
@@ -108,6 +109,8 @@ async function processUserPackage(
 		where: { id: userId },
 		data: { hasPackage: true },
 	});
+
+	await setDefaulMonthStats(userId);
 
 	packageSteamer.emit(100, "Saving your listening history", "completed");
 }
@@ -305,6 +308,28 @@ function mapTrackDataForDb(
 	}, []);
 }
 
-function delay(ms: number) {
-	return new Promise((resolve) => setTimeout(resolve, ms));
+async function setDefaulMonthStats(userId: string) {
+	await prisma.$transaction(async (tx) => {
+		const [minDate, maxDate] = await Promise.all([
+			tx.track.findFirst({
+				where: { userId },
+				select: { timestamp: true },
+				orderBy: { timestamp: "asc" },
+			}),
+			tx.track.findFirst({
+				where: { userId },
+				select: { timestamp: true },
+				orderBy: { timestamp: "desc" },
+			}),
+		]);
+
+		await tx.user.update({
+			where: { id: userId },
+			data: {
+				timeRangeDateStart: minDate?.timestamp,
+				timeRangeDateEnd: maxDate?.timestamp,
+			},
+		});
+	});
 }
+

@@ -95,7 +95,7 @@ const HistoryTable = async () => {
 							{item.createdAt.toLocaleDateString()}
 						</TableCell>
 						<TableCell className="text-right text-muted-foreground">
-							{(Number(item.fileSize) / 1024).toFixed(2)} MB
+							{item.fileSize}
 						</TableCell>
 					</TableRow>
 				))}
