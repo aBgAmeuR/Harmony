@@ -95,7 +95,11 @@ export function NavMain({
 									</CollapsibleContent>
 								</>
 							) : (
-								<MenuButton item={item} disable={disable} />
+								<MenuButton
+									item={item}
+									disable={disable}
+									isActive={isItemActive(item)}
+								/>
 							)}
 						</SidebarMenuItem>
 					</Collapsible>
@@ -111,12 +115,14 @@ type NavigationButtonProps = {
 	router: ReturnType<typeof useRouter>;
 	children?: React.ReactNode;
 	className?: string;
+	isActive?: boolean;
 };
 
 const NavigationButton = ({
 	item,
 	disable = false,
 	router,
+	isActive,
 	children,
 	className = "w-full cursor-pointer",
 }: NavigationButtonProps) => {
@@ -155,6 +161,7 @@ const NavigationButton = ({
 			onMouseLeave={handleMouseLeave}
 			onClick={handleClick}
 			className={className}
+			data-active={isActive}
 		>
 			{item.icon && (
 				<item.icon className="p-0" ref={iconRef as React.Ref<SVGSVGElement>} />
@@ -169,18 +176,14 @@ const MenuButton = ({
 	item,
 	disable = false,
 	children,
+	isActive,
 	...props
 }: {
 	disable?: boolean;
 	item: SidebarItem;
+	isActive: boolean;
 } & React.ComponentProps<typeof SidebarMenuButton>) => {
 	const router = useRouter();
-	const pathname = usePathname();
-
-	const isActive =
-		item.url === pathname ||
-		item.anotherUrl === pathname ||
-		pathname.replace(/[^/]+$/, "*") === item.anotherUrl;
 
 	return (
 		<SidebarMenuButton
@@ -189,7 +192,12 @@ const MenuButton = ({
 			isActive={isActive}
 			{...props}
 		>
-			<NavigationButton item={item} disable={disable} router={router}>
+			<NavigationButton
+				item={item}
+				disable={disable}
+				router={router}
+				isActive={isActive}
+			>
 				{children}
 			</NavigationButton>
 		</SidebarMenuButton>
@@ -265,7 +273,12 @@ const MenuSubButton = ({
 
 	return (
 		<SidebarMenuSubButton asChild={true} isActive={isActive} {...props}>
-			<NavigationButton item={item} disable={disable} router={router}>
+			<NavigationButton
+				item={item}
+				disable={disable}
+				router={router}
+				isActive={isActive}
+			>
 				{children}
 			</NavigationButton>
 		</SidebarMenuSubButton>
@@ -297,7 +310,12 @@ const SidebarTooltip = ({
 					size="sm"
 					className="group-data-[collapsible=icon]:!size-auto z-10"
 				>
-					<NavigationButton item={subItem} disable={disable} router={router} />
+					<NavigationButton
+						item={subItem}
+						disable={disable}
+						router={router}
+						isActive={isActive}
+					/>
 				</SidebarMenuButton>
 			))}
 		</>

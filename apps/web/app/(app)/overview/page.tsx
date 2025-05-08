@@ -25,9 +25,7 @@ export default async function OverviewPage() {
 	if (!hasPackage)
 		return (
 			<>
-				<AppHeader items={["Package", "Overview"]}>
-					<SelectMonthRange />
-				</AppHeader>
+				<AppHeader items={["Package", "Overview"]} />
 				<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
 					<UserHasNotPackage />
 				</div>
