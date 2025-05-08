@@ -26,298 +26,263 @@ import { useRouter } from "nextjs-toploader/app";
 import { useRef } from "react";
 import type { SidebarItem } from "./sidebar-config";
 
-type NavMainProps = {
-	label: string;
-	items: SidebarItem[];
-	disable?: boolean;
-	hasPackage?: boolean;
-};
-
-export function NavMain({
-	label,
-	items,
-	disable,
-	hasPackage = true,
-}: NavMainProps) {
-	const pathname = usePathname();
-	const router = useRouter();
-	const { open, isMobile } = useSidebar();
-
-	const isItemActive = (item: SidebarItem): boolean => {
-		const isDirectMatch =
-			item.url === pathname ||
-			item.anotherUrl === pathname ||
-			pathname.replace(/[^/]+$/, "*") === item.anotherUrl;
-
-		return isDirectMatch || Boolean(item.items?.some(isItemActive));
-	};
-
-	const filteredItems = items.filter((item) => {
-		if (item.alwaysVisible) return true;
-		if (hasPackage) return true;
-		return false;
-	});
-
+// Utility: isActive
+function isSidebarItemActive(item: SidebarItem, pathname: string): boolean {
 	return (
-		<SidebarGroup>
-			<SidebarGroupLabel>{label}</SidebarGroupLabel>
-			<SidebarMenu>
-				{filteredItems.map((item) => (
-					<Collapsible
-						key={item.title}
-						asChild={true}
-						defaultOpen={isItemActive(item)}
-						className="group/collapsible"
-					>
-						<SidebarMenuItem>
-							{item.items ? (
-								<>
-									<CollapseMenuButton
-										item={item}
-										disable={disable}
-										isItemActive={isItemActive(item)}
-										isMobile={isMobile}
-										router={router}
-										isOpen={open}
-									/>
-									<CollapsibleContent>
-										<SidebarMenuSub>
-											{item.items?.map((subItem) => (
-												<SidebarMenuSubItem key={subItem.title}>
-													<MenuSubButton
-														item={subItem}
-														disable={disable}
-														className="w-full"
-													/>
-												</SidebarMenuSubItem>
-											))}
-										</SidebarMenuSub>
-									</CollapsibleContent>
-								</>
-							) : (
-								<MenuButton
-									item={item}
-									disable={disable}
-									isActive={isItemActive(item)}
-								/>
-							)}
-						</SidebarMenuItem>
-					</Collapsible>
-				))}
-			</SidebarMenu>
-		</SidebarGroup>
+		item.url === pathname ||
+		item.anotherUrl === pathname ||
+		pathname.replace(/[^/]+$/, "*") === item.anotherUrl ||
+		(item.items?.some((sub) => isSidebarItemActive(sub, pathname)) ?? false)
 	);
 }
 
-type NavigationButtonProps = {
+type SidebarNavButtonProps = {
 	item: SidebarItem;
 	disable?: boolean;
-	router: ReturnType<typeof useRouter>;
-	children?: React.ReactNode;
-	className?: string;
 	isActive?: boolean;
+	onClick?: (e: React.MouseEvent) => void;
+	onMouseEnter?: (e: React.MouseEvent) => void;
+	onMouseLeave?: (e: React.MouseEvent) => void;
+	children?: React.ReactNode;
+	as?: React.ElementType;
+	className?: string;
+	tooltip?: any;
+	[key: string]: any;
 };
 
-const NavigationButton = ({
+function SidebarNavButton({
 	item,
-	disable = false,
-	router,
+	disable,
 	isActive,
+	onClick,
+	onMouseEnter,
+	onMouseLeave,
 	children,
+	as: Wrapper = "button",
 	className = "w-full cursor-pointer",
-}: NavigationButtonProps) => {
+	isCollapsed = false,
+	hasSubItems = false,
+	...props
+}: SidebarNavButtonProps & { isCollapsed?: boolean; hasSubItems?: boolean }) {
 	const iconRef = useRef<AnimIconHandle>(null);
 
-	const handleMouseEnter = () => {
-		router.prefetch(item.url, { kind: PrefetchKind.FULL });
+	const handleMouseEnter = (e: React.MouseEvent) => {
+		props.router?.prefetch?.(item.url, { kind: PrefetchKind.FULL });
 		if (iconRef.current?.startAnimation) {
 			iconRef.current.startAnimation();
 		}
+		onMouseEnter?.(e);
 	};
 
-	const handleMouseLeave = () => {
+	const handleMouseLeave = (e: React.MouseEvent) => {
 		if (iconRef.current?.stopAnimation) {
 			iconRef.current.stopAnimation();
 		}
+		onMouseLeave?.(e);
 	};
 
-	const handleClick = () => {
-		router.push(item.url);
+	const handleClick = (e: React.MouseEvent) => {
+		props.router?.push?.(item.url);
+		onClick?.(e);
 	};
 
 	if (disable) {
 		return (
-			<div>
-				{item.icon && <item.icon />}
+			<Wrapper
+				tabIndex={-1}
+				aria-disabled={true}
+				className={className}
+				data-active={isActive}
+				{...props}
+			>
+				{item.icon && (
+					<item.icon
+						className="p-0"
+						ref={iconRef as React.Ref<SVGSVGElement>}
+					/>
+				)}
 				<span>{item.title}</span>
 				{children}
-			</div>
+			</Wrapper>
 		);
 	}
 
 	return (
-		<button
+		<Wrapper
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}
 			onClick={handleClick}
 			className={className}
 			data-active={isActive}
+			{...props}
 		>
 			{item.icon && (
 				<item.icon className="p-0" ref={iconRef as React.Ref<SVGSVGElement>} />
 			)}
 			<span>{item.title}</span>
 			{children}
-		</button>
+		</Wrapper>
 	);
-};
+}
 
-const MenuButton = ({
+function SidebarItemRenderer({
 	item,
-	disable = false,
-	children,
-	isActive,
-	...props
-}: {
-	disable?: boolean;
-	item: SidebarItem;
-	isActive: boolean;
-} & React.ComponentProps<typeof SidebarMenuButton>) => {
-	const router = useRouter();
-
-	return (
-		<SidebarMenuButton
-			tooltip={item.title}
-			asChild={true}
-			isActive={isActive}
-			{...props}
-		>
-			<NavigationButton
-				item={item}
-				disable={disable}
-				router={router}
-				isActive={isActive}
-			>
-				{children}
-			</NavigationButton>
-		</SidebarMenuButton>
-	);
-};
-
-const CollapseMenuButton = ({
-	item,
-	disable = false,
-	isItemActive,
-	isMobile,
-	router,
+	pathname,
+	disable,
+	isCollapsed,
 	isOpen,
+	router,
 }: {
-	disable?: boolean;
 	item: SidebarItem;
-	isMobile: boolean;
-	isItemActive: boolean;
-	router: AppRouterInstance;
+	pathname: string;
+	disable?: boolean;
+	isCollapsed: boolean;
 	isOpen?: boolean;
-}) => {
-	const iconRef = useRef<AnimIconHandle>(null);
+	router: AppRouterInstance;
+}) {
+	const isActive = isSidebarItemActive(item, pathname);
 
-	return (
-		<CollapsibleTrigger asChild={true}>
-			<SidebarMenuButton
-				isActive={!isOpen && !isMobile && isItemActive}
-				tooltip={{
-					children: (
-						<SidebarTooltip
-							item={item}
-							isActive={isItemActive}
-							disable={disable}
-							router={router}
-						/>
-					),
-					className: "p-1 min-w-32",
-				}}
-				onMouseEnter={() => {
-					if (iconRef.current?.startAnimation) {
-						iconRef.current.startAnimation();
-					}
-				}}
-				onMouseLeave={() => {
-					if (iconRef.current?.stopAnimation) {
-						iconRef.current.stopAnimation();
-					}
-				}}
+	if (item.items) {
+		return (
+			<Collapsible
+				key={item.title}
+				asChild={true}
+				defaultOpen={isActive}
+				className="group/collapsible"
 			>
-				{item.icon && <item.icon ref={iconRef as React.Ref<SVGSVGElement>} />}
-				<span>{item.title}</span>
-				<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-			</SidebarMenuButton>
-		</CollapsibleTrigger>
-	);
-};
-
-const MenuSubButton = ({
-	item,
-	disable = false,
-	children,
-	...props
-}: {
-	disable?: boolean;
-	item: SidebarItem;
-} & React.ComponentProps<typeof SidebarMenuSubButton>) => {
-	const router = useRouter();
-	const pathname = usePathname();
-
-	const isActive =
-		pathname === item.url ||
-		pathname.replace(/[^/]+$/, "*") === item.anotherUrl;
-
+				<SidebarMenuItem>
+					<CollapsibleTrigger asChild={true}>
+						<SidebarNavButton
+							item={item}
+							disable={disable}
+							isActive={!isOpen && isActive}
+							as={SidebarMenuButton}
+							isCollapsed={isCollapsed}
+							hasSubItems={!!item.items}
+							tooltip={{
+								children: (
+									<SidebarTooltip
+										item={item}
+										disable={disable}
+										router={router}
+									/>
+								),
+								className: "p-1 min-w-32",
+							}}
+						>
+							<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+						</SidebarNavButton>
+					</CollapsibleTrigger>
+					{isOpen && (
+						<CollapsibleContent>
+							<SidebarMenuSub>
+								{item.items.map((sub) => (
+									<SidebarMenuSubItem key={sub.title}>
+										<SidebarNavButton
+											item={sub}
+											disable={disable}
+											isActive={isSidebarItemActive(sub, pathname)}
+											as={SidebarMenuSubButton}
+											router={router}
+										/>
+									</SidebarMenuSubItem>
+								))}
+							</SidebarMenuSub>
+						</CollapsibleContent>
+					)}
+				</SidebarMenuItem>
+			</Collapsible>
+		);
+	}
 	return (
-		<SidebarMenuSubButton asChild={true} isActive={isActive} {...props}>
-			<NavigationButton
+		<SidebarMenuItem key={item.title}>
+			<SidebarNavButton
 				item={item}
 				disable={disable}
-				router={router}
 				isActive={isActive}
-			>
-				{children}
-			</NavigationButton>
-		</SidebarMenuSubButton>
+				as={SidebarMenuButton}
+				router={router}
+			/>
+		</SidebarMenuItem>
 	);
-};
+}
+
+export function NavMain({
+	label,
+	items,
+	disable,
+	hasPackage = true,
+}: {
+	label: string;
+	items: SidebarItem[];
+	disable?: boolean;
+	hasPackage?: boolean;
+}) {
+	const pathname = usePathname();
+	const router = useRouter();
+	const { open, isMobile } = useSidebar();
+
+	const filteredItems = items.filter(
+		(item) => item.alwaysVisible || hasPackage,
+	);
+
+	return (
+		<SidebarGroup>
+			<SidebarGroupLabel>{label}</SidebarGroupLabel>
+			<SidebarMenu>
+				{filteredItems.map((item) => (
+					<SidebarItemRenderer
+						key={item.title}
+						item={item}
+						pathname={pathname}
+						disable={disable}
+						isCollapsed={isMobile}
+						isOpen={open}
+						router={router}
+					/>
+				))}
+			</SidebarMenu>
+		</SidebarGroup>
+	);
+}
 
 const SidebarTooltip = ({
 	item,
-	isActive,
 	disable = false,
 	router,
 }: {
 	item: SidebarItem;
-	isActive: boolean;
 	disable?: boolean;
 	router: AppRouterInstance;
 }) => {
+	const pathname = usePathname();
+
 	return (
 		<>
 			<div className="px-2 py-1">
 				<p className="text-sm">{item.title}</p>
 			</div>
 			<Separator className="mb-1" />
-			{item.items?.map((subItem) => (
-				<SidebarMenuButton
-					key={subItem.title}
-					isActive={isActive}
-					asChild={true}
-					size="sm"
-					className="group-data-[collapsible=icon]:!size-auto z-10"
-				>
-					<NavigationButton
-						item={subItem}
-						disable={disable}
-						router={router}
-						isActive={isActive}
-					/>
-				</SidebarMenuButton>
-			))}
+			{item.items?.map((subItem) => {
+				const subActive = isSidebarItemActive(subItem, pathname);
+				return (
+					<SidebarMenuButton
+						key={subItem.title}
+						isActive={subActive}
+						asChild={true}
+						size="sm"
+						className="group-data-[collapsible=icon]:!size-auto z-10"
+					>
+						<SidebarNavButton
+							item={subItem}
+							disable={disable}
+							isActive={subActive}
+							as={"button"}
+							router={router}
+						/>
+					</SidebarMenuButton>
+				);
+			})}
 		</>
 	);
 };
