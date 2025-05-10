@@ -39,6 +39,7 @@ export const MusicList = async ({
 						item={item}
 						rank={listConfig.showRank ? index + 1 : undefined}
 						showAction={listConfig.showAction}
+						showHistoricalRankings={listConfig.showHistoricalRankings}
 						actionHref={`/detail/artist/${item.id}?back=/rankings/artists`}
 					/>
 					{index < items.slice(0, listLength).length - 1 && <Separator />}

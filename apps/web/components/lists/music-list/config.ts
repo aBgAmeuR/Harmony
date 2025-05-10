@@ -16,14 +16,14 @@ type Config = {
 		label: string;
 		showAction?: boolean;
 		showRank?: boolean;
+		showHistoricalRankings?: boolean;
 	};
 };
 
-export const musicListConfig = {
+export const musicListConfig: Config = {
 	rankingTracks: {
 		action: getRankingTracks,
 		label: "tracks",
-		showAction: false,
 		showRank: true,
 	},
 	rankingArtists: {
@@ -35,37 +35,32 @@ export const musicListConfig = {
 	rankingAlbums: {
 		action: getRankingAlbums,
 		label: "albums",
-		showAction: false,
 		showRank: true,
 	},
 	topTracks: {
 		action: getTopTracks,
 		label: "tracks",
-		showAction: false,
 		showRank: true,
+		showHistoricalRankings: true,
 	},
 	topArtists: {
 		action: getTopArtists,
 		label: "artists",
-		showAction: false,
 		showRank: true,
+		showHistoricalRankings: true,
 	},
 	recentlyPlayed: {
 		action: getRecentlyPlayedTracks,
 		label: "tracks",
-		showAction: false,
-		showRank: false,
 	},
 	dashboardTracks: {
 		action: getRankingTracks,
 		label: "tracks",
-		showAction: false,
 		showRank: true,
 	},
 	dashboardArtists: {
 		action: getRankingArtists,
 		label: "artists",
-		showAction: false,
 		showRank: true,
 	},
-} satisfies Config;
+} as const;

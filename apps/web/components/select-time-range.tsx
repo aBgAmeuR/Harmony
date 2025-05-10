@@ -54,6 +54,7 @@ export const SelectTimeRange = () => {
 		},
 		onSettled: () => {
 			queryClient.invalidateQueries({ queryKey: ["timeRangeStats"] });
+			queryClient.invalidateQueries({ queryKey: ["historical-rankings"] });
 		},
 	});
 

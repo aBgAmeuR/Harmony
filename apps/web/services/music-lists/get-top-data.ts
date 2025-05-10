@@ -5,7 +5,7 @@ import { spotify } from "@repo/spotify";
 
 import { getMsPlayedInMinutes } from "~/lib/utils";
 
-const getTimeRangeStats = async (userId: string) => {
+export const getTimeRangeStats = async (userId: string) => {
 	return await prisma.user.findFirst({
 		where: { id: userId },
 		select: { timeRangeStats: true },

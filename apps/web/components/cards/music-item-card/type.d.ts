@@ -11,6 +11,7 @@ export type MusicItemCardProps = {
 	};
 	rank?: number;
 	showAction?: boolean;
+	showHistoricalRankings?: boolean;
 	actionHref?: string;
 	layout?: "grid" | "list";
 	className?: string;

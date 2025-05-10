@@ -3,6 +3,7 @@ import { cn } from "@repo/ui/lib/utils";
 
 import { MusicItemCardAction as Action } from "./action";
 import { MusicItemCardContent as Content } from "./content";
+import { HistoricalRankings } from "./historical-rankings";
 import { MusicItemCardImage as Image } from "./image";
 import { MusicItemCardRank as Rank } from "./rank";
 import { MusicItemCardStats as Stats } from "./stats";
@@ -12,6 +13,7 @@ export const MusicItemCard = ({
 	item,
 	rank,
 	showAction,
+	showHistoricalRankings,
 	actionHref,
 	layout = "list",
 	className,
@@ -49,6 +51,7 @@ export const MusicItemCard = ({
 						layout={layout}
 					/>
 					<Content item={item} />
+					{showHistoricalRankings && <HistoricalRankings item={item} />}
 					<Stats stat1={item.stat1} stat2={item.stat2} layout={layout} />
 					{showAction && <Action href={actionHref} />}
 				</>

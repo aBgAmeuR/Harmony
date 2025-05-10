@@ -20,6 +20,8 @@ model User {
   accounts           Account[]
   package            Package[]
   tracks             Track[]
+  historicalTrackRankings  HistoricalTrackRanking[]
+  historicalArtistRankings HistoricalArtistRanking[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 }
@@ -73,6 +75,32 @@ model Package {
   userId       String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+model HistoricalTrackRanking {
+  id        String   @id @default(cuid())
+  userId    String
+  trackId   String
+  rank      Int
+  timeRange TimeRangeStats
+  timestamp DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, trackId, timestamp, timeRange])
+  @@index([userId, timestamp])
+}
+
+model HistoricalArtistRanking {
+  id        String   @id @default(cuid())
+  userId    String
+  artistId  String
+  rank      Int
+  timeRange TimeRangeStats
+  timestamp DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, artistId, timestamp, timeRange])
+  @@index([userId, timestamp])
 }
 
 enum TimeRangeStats {
