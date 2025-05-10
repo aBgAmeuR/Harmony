@@ -1,9 +1,7 @@
 {
-	"buildCommand": "pnpm turbo build",
-	"ignoreCommand": "pnpm dlx turbo-ignore",
 	"crons": [
 		{
-			"path": "apps/web/app/api/cron/update-rankings",
+			"path": "./apps/web/app/api/cron/update-rankings",
 			"schedule": "0 0 * * 0"
 		}
 	]
