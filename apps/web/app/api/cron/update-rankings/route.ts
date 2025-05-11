@@ -1,4 +1,3 @@
-import { auth } from "@repo/auth";
 import { prisma } from "@repo/database";
 import { type NextRequest, NextResponse } from "next/server";
 import { updateHistoricalRankings } from "~/services/historical-rankings";

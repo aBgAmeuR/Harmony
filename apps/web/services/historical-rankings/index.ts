@@ -31,19 +31,27 @@ export async function getHistoricalArtistRankings(artistId: string) {
 	const timeRangeStats = await getTimeRangeStats(userId);
 	if (!timeRangeStats) return [];
 
-	const data = await prisma.historicalArtistRanking.findMany({
-		where: {
-			userId,
-			artistId,
-			timeRange: timeRangeStats.timeRangeStats,
-		},
-		orderBy: { timestamp: "asc" },
-	});
+	const results = await prisma.$queryRaw`
+		SELECT d.timestamp, r.rank
+		FROM (
+			SELECT DISTINCT timestamp
+			FROM "HistoricalArtistRanking"
+			WHERE "userId" = ${userId} AND "timeRange" = ${timeRangeStats.timeRangeStats}::"TimeRangeStats"
+		) d
+		LEFT JOIN "HistoricalArtistRanking" r
+		ON r."timestamp" = d.timestamp
+		AND r."userId" = ${userId}
+		AND r."artistId" = ${artistId}
+		AND r."timeRange" = ${timeRangeStats.timeRangeStats}::"TimeRangeStats"
+		ORDER BY d.timestamp ASC;
+	`;
 
-	return data.map((item) => ({
-		rank: item.rank,
-		timestamp: item.timestamp,
-	}));
+	return (results as Array<{ timestamp: string; rank: number | null }>).map(
+		(row) => ({
+			rank: row.rank,
+			timestamp: new Date(row.timestamp),
+		}),
+	);
 }
 
 export async function updateHistoricalRankings(userId: string) {

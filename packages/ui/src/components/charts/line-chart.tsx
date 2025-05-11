@@ -43,7 +43,7 @@ export function ReusableLineChart({
 }: LineChartProps) {
 	return (
 		<ChartContainer config={config} className={className}>
-			<LineChart data={data} margin={{ left: -38, top: 6 }}>
+			<LineChart data={data} margin={{ left: -38, top: 6, right: 6 }}>
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
 				<XAxis
 					dataKey={xAxisDataKey}
@@ -51,11 +51,13 @@ export function ReusableLineChart({
 					axisLine={false}
 					tickMargin={2}
 					tickFormatter={xAxisTickFormatter}
+					dy={10}
 				/>
 				{showYAxis && (
 					<YAxis
 						tickLine={false}
 						axisLine={false}
+						ticks={[0, 1, 10, 20, 30, 40, 50]} 
 						tickFormatter={yAxisTickFormatter}
 						reversed={yAxisReversed}
 						domain={yAxisDomain}
@@ -71,11 +73,11 @@ export function ReusableLineChart({
 					cursor={false}
 				/>
 				<Line
-					type="monotone"
+					type="natural"
 					dataKey={lineDataKey}
 					stroke={`var(--color-${lineDataKey})`}
 					strokeWidth={2}
-					dot={{ r: 4 }}
+					dot={{ fill: `var(--color-${lineDataKey})` }}
 					activeDot={{ r: 6 }}
 				/>
 			</LineChart>

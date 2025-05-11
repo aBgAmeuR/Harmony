@@ -7,7 +7,7 @@ import { fr } from "date-fns/locale";
 interface HistoricalRankingsChartProps {
 	data: Array<{
 		timestamp: Date;
-		rank: number;
+		rank: number | null;
 	}>;
 	className?: string;
 }
