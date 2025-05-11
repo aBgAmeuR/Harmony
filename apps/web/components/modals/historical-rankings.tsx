@@ -12,7 +12,7 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 import { Spinner } from "@repo/ui/spinner";
 import { useQuery } from "@tanstack/react-query";
-import { AlertCircle } from "lucide-react";
+import { AlertCircle, InfoIcon } from "lucide-react";
 import type { PropsWithChildren, ReactNode } from "react";
 import type { MusicItemCardProps } from "~/components/cards/music-item-card/type";
 import { HistoricalRankingsChart } from "~/components/charts/historical-rankings-chart";
@@ -21,7 +21,12 @@ import { useModals } from "~/lib/store";
 
 interface HistoricalRankingsModalProps extends PropsWithChildren {
 	type: "artist" | "track";
-	getHistoricalRankings: (id: string) => Promise<any[]>;
+	getHistoricalRankings: (id: string) => Promise<
+		{
+			rank: number | null;
+			timestamp: Date;
+		}[]
+	>;
 }
 
 export const HistoricalRankingsModal = ({
@@ -62,6 +67,16 @@ export const HistoricalRankingsModal = ({
 							See how {historicalRankingsIsOpen?.name} has ranked over time.
 						</CredenzaDescription>
 					</CredenzaHeader>
+					<div className="rounded-md border bg-muted px-4 py-3">
+						<p className="text-sm">
+							<InfoIcon
+								className="-mt-0.5 me-3 inline-flex text-blue-500"
+								size={16}
+								aria-hidden="true"
+							/>
+							This information is updated at the beginning of each week.
+						</p>
+					</div>
 					<div className="w-full px-4 md:px-0">
 						{isLoading && (
 							<div className="flex aspect-video w-full flex-col items-center justify-center gap-1">

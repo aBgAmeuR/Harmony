@@ -43,7 +43,7 @@ export const MusicItemCard = ({
 				</>
 			) : (
 				<>
-					{rank && <Rank rank={rank} />}
+					{rank && <Rank rank={rank} rankChange={item.rankChange} />}
 					<Image
 						src={item.image}
 						alt={item.name}
