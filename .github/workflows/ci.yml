@@ -33,3 +33,48 @@ jobs:
           AUTH_SPOTIFY_SECRET: ${{ secrets.AUTH_SPOTIFY_SECRET }}
           APP_MAINTENANCE: ${{ secrets.APP_MAINTENANCE }}
           DEMO_ID: ${{ secrets.DEMO_ID }}
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-build
+          path: apps/web/.next
+
+  e2e:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        name: Install pnpm
+        with:
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: web-build
+          path: apps/web/.next
+
+      - name: Install Playwright Browsers
+        run: pnpm exec playwright install --with-deps
+
+      - name: Run e2e tests
+        run: pnpm run e2e:test
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
+          AUTH_SPOTIFY_ID: ${{ secrets.AUTH_SPOTIFY_ID }}
+          AUTH_SPOTIFY_SECRET: ${{ secrets.AUTH_SPOTIFY_SECRET }}
+          APP_MAINTENANCE: ${{ secrets.APP_MAINTENANCE }}
+          DEMO_ID: ${{ secrets.DEMO_ID }}
