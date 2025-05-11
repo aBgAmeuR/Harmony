@@ -3,10 +3,10 @@ import "@repo/ui/globals.css";
 import { cn } from "@repo/ui/lib/utils";
 import { Toaster } from "@repo/ui/sonner";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Inter } from "next/font/google";
-import { Analytics } from "@vercel/analytics/react"
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "~/app/api/uploadthing/core";
 import { Providers } from "~/components/providers/providers";
@@ -48,7 +48,7 @@ export default function RootLayout({
 				<link rel="manifest" href="/site.webmanifest" />
 			</head>
 			<body
-				// vaul-drawer-wrapper=""
+				data-vaul-drawer-wrapper=""
 				className={cn(inter.className, "antialiased")}
 			>
 				<ErrorBoundary errorComponent={Error}>

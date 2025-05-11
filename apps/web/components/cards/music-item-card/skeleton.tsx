@@ -47,7 +47,7 @@ export const CardSkeleton = ({
 	return (
 		<article className="flex items-center space-x-2 py-4 sm:space-x-4">
 			{showRank && (
-				<span className="w-6 text-right font-medium text-muted-foreground text-sm">
+				<span className="flex w-6 flex-col items-center justify-center text-right font-medium text-muted-foreground text-sm">
 					{index + 1}
 				</span>
 			)}

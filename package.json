@@ -10,11 +10,12 @@
 		"studio": "turbo run studio",
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",
-		"ci": "turbo run build"
+		"e2e:test": "turbo run e2e:test"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@nedcloarbr/biome-config": "1.9.1",
+		"playwright": "^1.52.0",
 		"prettier": "^3.4.2",
 		"tsx": "4.19.2",
 		"turbo": "^2.4.4"
