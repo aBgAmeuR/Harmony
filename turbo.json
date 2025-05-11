@@ -25,6 +25,9 @@
 		"format-and-lint": {},
 		"format-and-lint:fix": {
 			"cache": false
+		},
+		"e2e:test": {
+			"cache": false
 		}
 	}
 }
