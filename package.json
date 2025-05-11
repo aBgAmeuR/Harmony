@@ -10,7 +10,6 @@
 		"studio": "turbo run studio",
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",
-		"ci": "turbo run build",
 		"e2e:test": "turbo run e2e:test"
 	},
 	"devDependencies": {
