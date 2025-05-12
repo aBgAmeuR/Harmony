@@ -13,8 +13,6 @@ export async function GET(request: NextRequest) {
 		});
 	}
 
-	console.log("Updating rankings");
-
 	try {
 		const users = await prisma.user.findMany();
 

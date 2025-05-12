@@ -1,7 +1,7 @@
 "use server";
 
 import { prisma } from "@repo/database";
-import { spotify } from "@repo/spotify";
+import { SpotifyAPI } from "@repo/spotify";
 import { getUserInfos } from "~/lib/utils";
 import { getTimeRangeStats } from "~/services/music-lists/get-top-data";
 
@@ -58,6 +58,13 @@ export async function updateHistoricalRankings(userId: string) {
 	const timeRanges = ["short_term", "medium_term", "long_term"] as const;
 	const allTrackRankings = [];
 	const allArtistRankings = [];
+
+	const spotify = new SpotifyAPI({
+		clientId: process.env.AUTH_SPOTIFY_ID || "missing",
+		clientSecret: process.env.AUTH_SPOTIFY_SECRET || "missing",
+		debug: true,
+		userId,
+	});
 
 	for (const timeRange of timeRanges) {
 		const topTracks = await spotify.me.top("tracks", timeRange);

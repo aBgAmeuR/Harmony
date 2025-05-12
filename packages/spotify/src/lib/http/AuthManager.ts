@@ -95,7 +95,9 @@ export class AuthManager {
 			return this.refreshPromise;
 		}
 
-		const session = await auth();
+		const session = this.config.userId
+			? { user: { id: this.config.userId } }
+			: await auth();
 
 		if (!session?.user?.id) {
 			throw new AuthError("No user session found");
