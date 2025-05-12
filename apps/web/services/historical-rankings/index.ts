@@ -55,45 +55,49 @@ export async function getHistoricalArtistRankings(artistId: string) {
 }
 
 export async function updateHistoricalRankings(userId: string) {
-	const timeRanges = ["short_term", "medium_term", "long_term"] as const;
-	const allTrackRankings = [];
-	const allArtistRankings = [];
+	try {
+		const timeRanges = ["short_term", "medium_term", "long_term"] as const;
+		const allTrackRankings = [];
+		const allArtistRankings = [];
 
-	const spotify = new SpotifyAPI({
-		clientId: process.env.AUTH_SPOTIFY_ID || "missing",
-		clientSecret: process.env.AUTH_SPOTIFY_SECRET || "missing",
-		debug: true,
-		userId,
-	});
-
-	for (const timeRange of timeRanges) {
-		const topTracks = await spotify.me.top("tracks", timeRange);
-		const topArtists = await spotify.me.top("artists", timeRange);
-
-		const trackRankings = topTracks.map((track, index) => ({
+		const spotify = new SpotifyAPI({
+			clientId: process.env.AUTH_SPOTIFY_ID || "missing",
+			clientSecret: process.env.AUTH_SPOTIFY_SECRET || "missing",
+			debug: true,
 			userId,
-			trackId: track.id,
-			rank: index + 1,
-			timeRange,
-		}));
+		});
 
-		const artistRankings = topArtists.map((artist, index) => ({
-			userId,
-			artistId: artist.id,
-			rank: index + 1,
-			timeRange,
-		}));
+		for (const timeRange of timeRanges) {
+			const topTracks = await spotify.me.top("tracks", timeRange);
+			const topArtists = await spotify.me.top("artists", timeRange);
 
-		allTrackRankings.push(...trackRankings);
-		allArtistRankings.push(...artistRankings);
+			const trackRankings = topTracks.map((track, index) => ({
+				userId,
+				trackId: track.id,
+				rank: index + 1,
+				timeRange,
+			}));
+
+			const artistRankings = topArtists.map((artist, index) => ({
+				userId,
+				artistId: artist.id,
+				rank: index + 1,
+				timeRange,
+			}));
+
+			allTrackRankings.push(...trackRankings);
+			allArtistRankings.push(...artistRankings);
+		}
+
+		await prisma.$transaction([
+			prisma.historicalTrackRanking.createMany({
+				data: allTrackRankings,
+			}),
+			prisma.historicalArtistRanking.createMany({
+				data: allArtistRankings,
+			}),
+		]);
+	} catch (error) {
+		console.error(error);
 	}
-
-	await prisma.$transaction([
-		prisma.historicalTrackRanking.createMany({
-			data: allTrackRankings,
-		}),
-		prisma.historicalArtistRanking.createMany({
-			data: allArtistRankings,
-		}),
-	]);
 }
