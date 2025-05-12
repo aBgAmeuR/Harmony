@@ -18,7 +18,7 @@
 		"playwright": "^1.52.0",
 		"prettier": "^3.4.2",
 		"tsx": "4.19.2",
-		"turbo": "^2.4.4"
+		"turbo": "^2.5.3"
 	},
 	"dependencies": {
 		"dotenv": "^16.4.7",
