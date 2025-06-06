@@ -1,50 +1,19 @@
-"use client";
-
-import type { Album } from "@repo/spotify/types";
+import { spotify } from "@repo/spotify";
 import { Button } from "@repo/ui/button";
 import { Skeleton } from "@repo/ui/skeleton";
-import { ExternalLink, PauseIcon, PlayIcon } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { notFound } from "next/navigation";
 
 interface AlbumHeaderProps {
 	albumId: string;
 	userId?: string;
 }
 
-async function getAlbumDetails(albumId: string) {
-	// TODO: Implement proper API call
-	// For now, return mock data
-	return {
-		id: albumId,
-		name: "Album Name",
-		artists: [{ id: "1", name: "Artist Name" }],
-		images: [
-			{ url: "https://via.placeholder.com/300", height: 300, width: 300 },
-		],
-		release_date: "2024-01-01",
-		release_date_precision: "day",
-		total_tracks: 12,
-		album_type: "album",
-		external_urls: { spotify: `https://open.spotify.com/album/${albumId}` },
-		label: "Record Label",
-		genres: ["Pop", "Rock"],
-		popularity: 85,
-	} as Album;
-}
-
-export function AlbumHeader({ albumId, userId }: AlbumHeaderProps) {
-	const [album, setAlbum] = useState<Album | null>(null);
-	const [isPlaying, setIsPlaying] = useState(false);
-
-	useEffect(() => {
-		getAlbumDetails(albumId).then(setAlbum);
-	}, [albumId]);
-
-	if (!album) {
-		return <AlbumHeaderSkeleton />;
-	}
+export async function AlbumHeader({ albumId, userId }: AlbumHeaderProps) {
+	const album = await spotify.albums.get(albumId);
+	if (!album) return notFound();
 
 	const formatReleaseDate = (date: string, precision: string) => {
 		const dateObj = new Date(date);
@@ -127,18 +96,6 @@ export function AlbumHeader({ albumId, userId }: AlbumHeaderProps) {
 				</div>
 
 				<div className="mt-2 flex items-center gap-4">
-					<Button
-						size="lg"
-						className="rounded-full"
-						onClick={() => setIsPlaying(!isPlaying)}
-					>
-						{isPlaying ? (
-							<PauseIcon className="mr-2 h-5 w-5" />
-						) : (
-							<PlayIcon className="mr-2 h-5 w-5" />
-						)}
-						{isPlaying ? "Pause" : "Play"}
-					</Button>
 
 					<Button
 						variant="outline"
@@ -191,3 +148,4 @@ export function AlbumHeaderSkeleton() {
 		</div>
 	);
 }
+

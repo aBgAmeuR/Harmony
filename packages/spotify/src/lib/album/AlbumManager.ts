@@ -4,6 +4,19 @@ import { Manager } from "../Manager";
 
 export class AlbumManager extends Manager {
 	/**
+	 * @description Get a album by ID.
+	 * @param {string} id
+	 * @returns {Promise<Album[]>} Returns a promise with a single {@link Album}.
+	 */
+	async get(id: string): Promise<Album | null> {
+		try {
+			return await this.http.get<Album>(`/v1/albums/${id}`);
+		} catch (error) {
+			return null;
+		}
+	}
+	
+	/**
 	 * @description Get multiple albums by ID.
 	 * @param {string[]} ids Array of IDs.
 	 * @returns {Promise<Album[]>} Returns a promise with an array of {@link Album}s.
