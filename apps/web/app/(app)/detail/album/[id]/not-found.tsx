@@ -6,7 +6,7 @@ export default function AlbumNotFound() {
 	return (
 		<div className="flex min-h-[60vh] flex-col items-center justify-center">
 			<AlertTriangle className="mb-4 h-16 w-16 text-yellow-500" />
-			<h1 className="mb-2 text-3xl font-bold">Album Not Found</h1>
+			<h1 className="mb-2 font-bold text-3xl">Album Not Found</h1>
 			<p className="mb-6 text-center text-muted-foreground">
 				The album you're looking for doesn't exist or has been removed.
 			</p>

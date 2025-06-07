@@ -24,78 +24,77 @@ export async function getAlbumListeningStats(
 	}
 
 	try {
-		// Get tracks listened from this album
-		const tracks = await prisma.track.findMany({
-			where: {
-				userId: userId,
-				albumId: albumId,
-			},
-			orderBy: {
-				timestamp: "desc",
-			},
-		});
+		// 1. Statistiques globales
+		const [global] = await prisma.$queryRaw<
+			[
+				{
+					totalplays: number;
+					totalminutes: number;
+					firstlisten: Date | null;
+					lastlisten: Date | null;
+				},
+			]
+		>`
+			SELECT
+				COUNT(*) AS totalplays,
+				ROUND(SUM("msPlayed")::numeric / 1000 / 60) AS totalminutes,
+				MIN("timestamp") AS firstlisten,
+				MAX("timestamp") AS lastlisten
+			FROM "Track"
+			WHERE "userId" = ${userId} AND "albumId" = ${albumId}
+		`;
 
-		// Calculate stats
-		const totalPlays = tracks.length;
-		const totalMs = tracks.reduce(
-			(sum, track) => sum + Number(track.msPlayed),
-			0,
-		);
-		const totalMinutes = Math.round(totalMs / 60000);
+		// 2. Piste favorite
+		const [fav] = await prisma.$queryRaw<
+			[
+				{
+					spotifyid: string;
+					plays: number;
+				},
+			]
+		>`
+			SELECT "spotifyId" as spotifyid, COUNT(*) as plays
+			FROM "Track"
+			WHERE "userId" = ${userId} AND "albumId" = ${albumId}
+			GROUP BY "spotifyId"
+			ORDER BY plays DESC
+			LIMIT 1
+		`;
 
-		// Get first and last listen
-		const firstListen =
-			tracks.length > 0 ? tracks[tracks.length - 1].timestamp : null;
-		const lastListen = tracks.length > 0 ? tracks[0].timestamp : null;
-
-		// Get most played track (simplified)
-		const trackCounts = tracks.reduce(
-			(acc, track) => {
-				const id = track.spotifyId;
-				acc[id] = (acc[id] || 0) + 1;
-				return acc;
-			},
-			{} as Record<string, number>,
-		);
-
-		const favoriteTrackId = Object.entries(trackCounts).sort(
-			([, a], [, b]) => b - a,
-		)[0]?.[0];
-
-		// Create monthly trend (simplified)
-		const monthlyTrend = tracks.reduce(
-			(acc, track) => {
-				const month = track.timestamp.toISOString().slice(0, 7); // YYYY-MM format
-				acc[month] = (acc[month] || 0) + 1;
-				return acc;
-			},
-			{} as Record<string, number>,
-		);
-
-		const monthlyTrendArray = Object.entries(monthlyTrend)
-			.sort(([a], [b]) => a.localeCompare(b))
-			.slice(-6) // Last 6 months
-			.map(([month, plays]) => ({
-				month: new Date(`${month}-01`).toLocaleDateString("en-US", {
-					month: "short",
-				}),
-				plays,
-			}));
+		// 3. Tendance mensuelle
+		const monthly = await prisma.$queryRaw<
+			{
+				month: string;
+				plays: number;
+			}[]
+		>`
+			SELECT TO_CHAR("timestamp", 'YYYY-MM') as month, COUNT(*) as plays
+			FROM "Track"
+			WHERE "userId" = ${userId} AND "albumId" = ${albumId}
+			AND "timestamp" > NOW() - INTERVAL '6 months'
+			GROUP BY month
+			ORDER BY month ASC
+		`;
 
 		return {
-			totalPlays,
-			totalMinutes,
-			firstListen,
-			lastListen,
-			avgCompletion: 85, // Mock value for now
-			favoriteTrack: favoriteTrackId
+			totalPlays: Number(global?.totalplays ?? 0),
+			totalMinutes: Number(global?.totalminutes ?? 0),
+			firstListen: global?.firstlisten ?? null,
+			lastListen: global?.lastlisten ?? null,
+			avgCompletion: 85, // TODO: calculer si pertinent
+			favoriteTrack: fav
 				? {
-						id: favoriteTrackId,
-						name: "Track", // Would need to get from Spotify API
-						plays: trackCounts[favoriteTrackId],
+						id: fav.spotifyid,
+						name: "Track", // Pour un vrai nom, requête Spotify API
+						plays: Number(fav.plays),
 					}
 				: null,
-			monthlyTrend: monthlyTrendArray,
+			monthlyTrend: monthly.map((m) => ({
+				month: new Date(`${m.month}-01`).toLocaleDateString("en-US", {
+					month: "short",
+				}),
+				plays: Number(m.plays),
+			})),
 		};
 	} catch (error) {
 		console.error("Error fetching album stats:", error);

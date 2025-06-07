@@ -53,7 +53,7 @@ export async function AlbumHeader({ albumId, userId }: AlbumHeaderProps) {
 						{album.album_type.charAt(0).toUpperCase() +
 							album.album_type.slice(1)}
 					</p>
-					<h1 className="mb-1 text-3xl font-bold md:text-4xl lg:text-5xl">
+					<h1 className="mb-1 font-bold text-3xl md:text-4xl lg:text-5xl">
 						{album.name}
 					</h1>
 					<div className="flex items-center gap-2 text-lg">
@@ -96,7 +96,6 @@ export async function AlbumHeader({ albumId, userId }: AlbumHeaderProps) {
 				</div>
 
 				<div className="mt-2 flex items-center gap-4">
-
 					<Button
 						variant="outline"
 						size="lg"
@@ -116,7 +115,7 @@ export async function AlbumHeader({ albumId, userId }: AlbumHeaderProps) {
 					{album.popularity && (
 						<div className="ml-auto flex items-center gap-2">
 							<span className="text-muted-foreground text-sm">Popularity</span>
-							<span className="text-lg font-semibold">{album.popularity}%</span>
+							<span className="font-semibold text-lg">{album.popularity}%</span>
 						</div>
 					)}
 				</div>
@@ -148,4 +147,3 @@ export function AlbumHeaderSkeleton() {
 		</div>
 	);
 }
-

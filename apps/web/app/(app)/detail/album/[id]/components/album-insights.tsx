@@ -1,25 +1,11 @@
-"use client";
-
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
 import { Badge } from "@repo/ui/badge";
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardHeader,
-	CardTitle,
-} from "@repo/ui/card";
-import { Brain, Lightbulb, Music2, Star, Target, Zap } from "lucide-react";
-import { useEffect, useState } from "react";
-
-interface AlbumInsightsProps {
-	albumId: string;
-	userId?: string;
-}
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Brain } from "lucide-react";
 
 interface AlbumInsight {
 	type: "achievement" | "recommendation" | "pattern" | "milestone";
-	icon: typeof Brain;
+	icon: any;
 	title: string;
 	description: string;
 	metadata?: {
@@ -29,86 +15,12 @@ interface AlbumInsight {
 	};
 }
 
-// Mock function to get album insights
-async function getAlbumInsights(
-	albumId: string,
-	userId?: string,
-): Promise<AlbumInsight[]> {
-	// TODO: Implement proper API call
-	return [
-		{
-			type: "achievement",
-			icon: Star,
-			title: "Super Fan Status",
-			description: "You're in the top 5% of listeners for this album!",
-			metadata: {
-				percentage: 95,
-			},
-		},
-		{
-			type: "pattern",
-			icon: Brain,
-			title: "Weekend Warrior",
-			description: "You tend to listen to this album most on Saturday evenings",
-			metadata: {
-				value: "Saturday, 8-10 PM",
-			},
-		},
-		{
-			type: "milestone",
-			icon: Target,
-			title: "100 Plays Milestone",
-			description: "You've reached 100 total plays of this album!",
-			metadata: {
-				date: "January 15, 2024",
-			},
-		},
-		{
-			type: "recommendation",
-			icon: Lightbulb,
-			title: "Hidden Gem",
-			description:
-				"Track 7 has the lowest play count - give it another listen!",
-			metadata: {
-				value: "Only 3 plays",
-			},
-		},
-		{
-			type: "pattern",
-			icon: Music2,
-			title: "Seasonal Favorite",
-			description: "Your listening peaks during winter months",
-			metadata: {
-				value: "December - February",
-			},
-		},
-		{
-			type: "achievement",
-			icon: Zap,
-			title: "Marathon Listener",
-			description:
-				"You've listened to the entire album 12 times from start to finish",
-			metadata: {
-				value: "12 complete plays",
-			},
-		},
-	];
+interface AlbumInsightsProps {
+	insights: AlbumInsight[];
 }
 
-export function AlbumInsights({ albumId, userId }: AlbumInsightsProps) {
-	const [insights, setInsights] = useState<AlbumInsight[]>([]);
-	const [loading, setLoading] = useState(true);
-
-	useEffect(() => {
-		getAlbumInsights(albumId, userId).then((data) => {
-			setInsights(data);
-			setLoading(false);
-		});
-	}, [albumId, userId]);
-
-	if (loading) {
-		return <InsightsSkeleton />;
-	}
+export function AlbumInsights({ insights }: AlbumInsightsProps) {
+	if (!insights?.length) return <InsightsSkeleton />;
 
 	const getTypeColor = (type: AlbumInsight["type"]) => {
 		switch (type) {
@@ -164,21 +76,14 @@ export function AlbumInsights({ albumId, userId }: AlbumInsightsProps) {
 								<p className="mb-3 text-muted-foreground text-sm">
 									{insight.description}
 								</p>
-								{insight.metadata && (
-									<div className="flex items-center gap-2 text-sm">
-										{insight.metadata.value && (
-											<Badge variant="outline" className="font-mono">
-												{insight.metadata.value}
-											</Badge>
-										)}
-										{insight.metadata.percentage && (
-											<Badge variant="outline" className="font-mono">
-												Top {insight.metadata.percentage}%
-											</Badge>
-										)}
-										{insight.metadata.date && (
-											<Badge variant="outline">{insight.metadata.date}</Badge>
-										)}
+								{insight.metadata?.value && (
+									<div className="text-muted-foreground text-xs">
+										{insight.metadata.value}
+									</div>
+								)}
+								{insight.metadata?.date && (
+									<div className="text-muted-foreground text-xs">
+										{insight.metadata.date}
 									</div>
 								)}
 							</CardContent>
@@ -186,48 +91,45 @@ export function AlbumInsights({ albumId, userId }: AlbumInsightsProps) {
 					);
 				})}
 			</div>
-
-			<Card className="bg-muted/50">
-				<CardHeader>
-					<CardTitle className="text-lg">More insights coming soon!</CardTitle>
-					<CardDescription>
-						We're analyzing your listening patterns to provide even more
-						personalized insights. Check back later for updates.
-					</CardDescription>
-				</CardHeader>
-			</Card>
 		</div>
 	);
 }
 
-import { Skeleton } from "@repo/ui/skeleton";
-
 function InsightsSkeleton() {
 	return (
 		<div className="space-y-6">
-			<Card>
-				<CardHeader>
-					<Skeleton className="h-4 w-4" />
-					<Skeleton className="mt-2 h-5 w-32" />
-					<Skeleton className="mt-1 h-4 w-64" />
-				</CardHeader>
-			</Card>
+			<Alert>
+				<Brain className="h-4 w-4 animate-pulse" />
+				<AlertTitle>
+					<span className="block h-4 w-32 rounded bg-muted" />
+				</AlertTitle>
+				<AlertDescription>
+					<span className="block h-4 w-64 rounded bg-muted" />
+				</AlertDescription>
+			</Alert>
 			<div className="grid gap-4 md:grid-cols-2">
-				{Array.from({ length: 4 }).map((_, i) => (
-					<Card key={i}>
+				{Array.from({ length: 2 }).map((_, i) => (
+					<Card key={i} className="overflow-hidden">
 						<CardHeader className="pb-3">
 							<div className="flex items-start justify-between">
 								<div className="flex items-center gap-3">
-									<Skeleton className="h-9 w-9 rounded-lg" />
-									<Skeleton className="h-5 w-20" />
+									<div className="rounded-lg bg-muted p-2" />
+									<Badge variant="secondary" className="text-xs">
+										<span className="block h-4 w-16 rounded bg-muted" />
+									</Badge>
 								</div>
 							</div>
-							<Skeleton className="mt-3 h-5 w-48" />
+							<CardTitle className="mt-3 text-lg">
+								<span className="block h-4 w-32 rounded bg-muted" />
+							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<Skeleton className="h-4 w-full" />
-							<Skeleton className="mt-1 h-4 w-3/4" />
-							<Skeleton className="mt-3 h-6 w-24" />
+							<p className="mb-3 text-muted-foreground text-sm">
+								<span className="block h-4 w-48 rounded bg-muted" />
+							</p>
+							<div className="text-muted-foreground text-xs">
+								<span className="block h-4 w-24 rounded bg-muted" />
+							</div>
 						</CardContent>
 					</Card>
 				))}

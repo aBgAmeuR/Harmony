@@ -5,6 +5,8 @@ import { type PropsWithChildren, Suspense } from "react";
 
 import { AppHeader } from "~/components/app-header";
 
+import { getAlbumDetails } from "~/services/details/get-album-details";
+import { AlbumCharts } from "./components/album-charts";
 import { AlbumHeader, AlbumHeaderSkeleton } from "./components/album-header";
 import { AlbumInsights } from "./components/album-insights";
 import { AlbumListeningStats } from "./components/album-listening-stats";
@@ -20,6 +22,8 @@ export default async function DetailAlbumPage({ params }: PageProps) {
 	const { id } = await params;
 	const session = await auth();
 	const userId = session?.user?.id;
+
+	const albumData = await getAlbumDetails({ albumId: id, userId });
 
 	return (
 		<>
@@ -66,42 +70,59 @@ export default async function DetailAlbumPage({ params }: PageProps) {
 						<TabsContent value="overview">
 							<Container className="space-y-6">
 								<div>
-									<h1 className="mb-2 text-2xl font-bold">Album Overview</h1>
+									<h1 className="mb-2 font-bold text-2xl">Album Overview</h1>
 									<p className="text-muted-foreground">
 										Detailed information about this album including release
 										details, popularity, and your listening statistics.
 									</p>
 								</div>
 								<Suspense>
-									<AlbumListeningStats albumId={id} userId={userId} />
+									{albumData.globalStats && (
+										<AlbumListeningStats
+											globalStats={albumData.globalStats}
+											favoriteTrack={albumData.favoriteTrack}
+											monthlyTrend={albumData.monthlyTrend}
+										/>
+									)}
 								</Suspense>
 							</Container>
 						</TabsContent>
 
 						<TabsContent value="tracklist">
 							<Container className="space-y-6">
-								<Suspense>
-									<AlbumTracklist albumId={id} userId={userId} />
-								</Suspense>
+								<AlbumTracklist tracklist={albumData.tracklist} />
 							</Container>
 						</TabsContent>
 
 						<TabsContent value="stats">
 							<Container className="space-y-6">
 								<Suspense>
-									<AlbumListeningStats
-										albumId={id}
-										userId={userId}
-										detailed={true}
-									/>
+									{albumData.globalStats && (
+										<AlbumListeningStats
+											globalStats={albumData.globalStats}
+											favoriteTrack={albumData.favoriteTrack}
+											monthlyTrend={albumData.monthlyTrend}
+											detailed={true}
+										/>
+									)}
 								</Suspense>
+								<AlbumCharts
+									hoursData={albumData.hoursData.filter(
+										(d: any): d is { hour: string; msPlayed: number } =>
+											typeof d.hour === "string",
+									)}
+									daysData={albumData.daysData.filter(
+										(d: any): d is { day: string; msPlayed: number } =>
+											typeof d.day === "string",
+									)}
+								/>
 							</Container>
 						</TabsContent>
 
 						<TabsContent value="insights">
 							<Container className="space-y-6">
 								<Suspense>
-									<AlbumInsights albumId={id} userId={userId} />
+									<AlbumInsights insights={albumData.insights as any} />
 								</Suspense>
 							</Container>
 						</TabsContent>
