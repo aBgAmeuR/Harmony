@@ -14,7 +14,7 @@ type Config = {
 			userId: string | undefined,
 		) => Promise<MusicItemCardProps["item"][] | null>;
 		label: string;
-		showAction?: boolean;
+		actionHref?: (string: string) => string;
 		showRank?: boolean;
 		showHistoricalRankings?: boolean;
 	};
@@ -29,12 +29,13 @@ export const musicListConfig: Config = {
 	rankingArtists: {
 		action: getRankingArtists,
 		label: "artists",
-		showAction: true,
+		actionHref: (id) => `/detail/artist/${id}?back=/rankings/artists`,
 		showRank: true,
 	},
 	rankingAlbums: {
 		action: getRankingAlbums,
 		label: "albums",
+		actionHref: (id) => `/detail/album/${id}?back=/rankings/albums`,
 		showRank: true,
 	},
 	topTracks: {
