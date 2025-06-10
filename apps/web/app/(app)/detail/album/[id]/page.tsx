@@ -41,9 +41,9 @@ export default async function DetailAlbumPage({ params }: PageProps) {
 			<AppHeader items={["Detail", "Album"]} />
 			<div className="flex flex-col gap-8 py-4">
 				<Container>
-					{/* <Suspense fallback={<AlbumHeaderSkeleton />}>
+					<Suspense fallback={<AlbumHeaderSkeleton />}>
 						<AlbumHeader albumId={id} userId={userId} />
-					</Suspense> */}
+					</Suspense>
 				</Container>
 				<div>
 					<Tabs defaultValue="stats" className="w-full">
@@ -74,28 +74,13 @@ export default async function DetailAlbumPage({ params }: PageProps) {
 
 						<TabsContent value="stats">
 							<Container className="space-y-6">
-								{/* <Suspense fallback={<AlbumStatsSkeleton />}>
+								<Suspense fallback={<AlbumStatsSkeleton />}>
 									<AlbumStats albumId={id} userId={userId} />
-								</Suspense> */}
+								</Suspense>
 								<div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
-									<Suspense fallback={<AlbumStreaksSkeleton />}>
+									<Suspense fallback={null}>
 										<AlbumStreaks albumId={id} userId={userId} />
 										<AlbumFirstLastListen albumId={id} userId={userId} />
-										<Card className="border-blue-400/30 dark:bg-background/80">
-											<CardHeader>
-												<Skeleton className="mb-2 h-5 w-40" />
-											</CardHeader>
-											<CardContent className="flex flex-row items-center justify-center gap-6 pt-2">
-												<div className="flex flex-col items-center">
-													<Skeleton className="mb-2 h-10 w-16" />
-													<Skeleton className="h-3 w-20" />
-												</div>
-												<div className="flex flex-col items-center">
-													<Skeleton className="mb-2 h-10 w-16" />
-													<Skeleton className="h-3 w-20" />
-												</div>
-											</CardContent>
-										</Card>
 									</Suspense>
 								</div>
 							</Container>
@@ -103,17 +88,17 @@ export default async function DetailAlbumPage({ params }: PageProps) {
 
 						<TabsContent value="tracks">
 							<Container className="space-y-6">
-								{/* <Suspense>
+								<Suspense>
 									<AlbumTracks data={getAlbumTracksWithStats(userId, id)} />
-								</Suspense> */}
+								</Suspense>
 							</Container>
 						</TabsContent>
 
 						<TabsContent value="trends">
 							<Container className="space-y-6">
-								{/* <Suspense>
+								<Suspense>
 									<AlbumListeningTrends data={getListeningTrends(userId, id)} />
-								</Suspense> */}
+								</Suspense>
 							</Container>
 						</TabsContent>
 					</Tabs>

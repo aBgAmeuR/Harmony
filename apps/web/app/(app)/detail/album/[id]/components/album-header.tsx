@@ -28,25 +28,28 @@ export async function AlbumHeader({ albumId, userId }: AlbumHeaderProps) {
 				className="size-32 rounded-md shadow-lg md:size-48"
 			/>
 			<div className="flex-1">
-				<div className="mb-2 flex items-center gap-4">
-					<h1 className="font-bold text-3xl md:text-4xl">{album.name}</h1>
-					<Button
-						asChild={true}
-						size="sm"
-						className="bg-[#1DB954] text-white hover:bg-[#169c43]"
-						aria-label="Open album in Spotify"
-					>
-						<a
-							href={album.external_urls.spotify}
-							target="_blank"
-							rel="noopener noreferrer"
-							className="inline-flex items-center gap-2 font-semibold"
+				<div className="mb-2 flex flex-col">
+					<p className="text-muted-foreground text-lg">{album.artists[0].name}</p>
+					<div className="flex items-center gap-4">
+						<h1 className="font-bold text-3xl md:text-4xl">{album.name}</h1>
+						<Button
+							asChild={true}
+							size="sm"
+							className="bg-[#1DB954] text-white hover:bg-[#169c43]"
+							aria-label="Open album in Spotify"
 						>
-							<Icons.spotify className="size-4" />
-							<span className="hidden sm:inline">Open</span>
-							<ExternalLink className="size-3" />
-						</a>
-					</Button>
+							<a
+								href={album.external_urls.spotify}
+								target="_blank"
+								rel="noopener noreferrer"
+								className="inline-flex items-center gap-2 font-semibold"
+							>
+								<Icons.spotify className="size-4" />
+								<span className="hidden sm:inline">Open</span>
+								<ExternalLink className="size-3" />
+							</a>
+						</Button>
+					</div>
 				</div>
 				<div className="flex flex-wrap gap-6">
 					<div>
