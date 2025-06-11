@@ -56,12 +56,8 @@ export const getRankingArtists = async (userId: string | undefined) => {
 
 	const topArtists = await prisma.track.groupBy({
 		by: ["artistIds"],
-		_count: {
-			_all: true,
-		},
-		_sum: {
-			msPlayed: true,
-		},
+		_count: { _all: true },
+		_sum: { msPlayed: true },
 		where: {
 			userId,
 			timestamp: {
@@ -69,11 +65,7 @@ export const getRankingArtists = async (userId: string | undefined) => {
 				lt: monthRange.dateEnd,
 			},
 		},
-		orderBy: {
-			_sum: {
-				msPlayed: "desc",
-			},
-		},
+		orderBy: { _sum: { msPlayed: "desc" } },
 	});
 
 	const aggregatedArtists: Record<
@@ -133,12 +125,8 @@ export const getRankingAlbums = async (userId: string | undefined) => {
 
 	const topAlbums = await prisma.track.groupBy({
 		by: ["albumId"],
-		_count: {
-			_all: true,
-		},
-		_sum: {
-			msPlayed: true,
-		},
+		_count: { _all: true },
+		_sum: { msPlayed: true },
 		where: {
 			userId,
 			timestamp: {
@@ -146,11 +134,7 @@ export const getRankingAlbums = async (userId: string | undefined) => {
 				lt: monthRange.dateEnd,
 			},
 		},
-		orderBy: {
-			_sum: {
-				msPlayed: "desc",
-			},
-		},
+		orderBy: { _sum: { msPlayed: "desc" } },
 		take: 50,
 	});
 
