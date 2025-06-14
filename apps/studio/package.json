@@ -4,8 +4,7 @@
 	"scripts": {
 		"dev": "dotenv -e ../../.env -- drizzle-kit studio",
 		"studio": "dotenv -e ../../.env -- drizzle-kit studio",
-		"clean": "git clean -xdf .cache .turbo dist node_modules",
-		"typecheck": "tsc --noEmit --emitDeclarationOnly false"
+		"clean": "git clean -xdf .cache .turbo dist node_modules"
 	},
 	"devDependencies": {
 		"drizzle-kit": "^0.31.1",

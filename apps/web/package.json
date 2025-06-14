@@ -6,7 +6,8 @@
 		"dev": "dotenv -e ../../.env -- next dev --turbopack",
 		"build": "dotenv -e ../../.env -- next build",
 		"start": "dotenv -e ../../.env -- next start",
-		"test": "jest"
+		"test": "jest",
+		"typecheck": "tsc --noEmit --emitDeclarationOnly false"
 	},
 	"dependencies": {
 		"@next/bundle-analyzer": "^15.3.0",

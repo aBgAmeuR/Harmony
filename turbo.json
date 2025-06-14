@@ -28,6 +28,9 @@
 		},
 		"e2e:test": {
 			"cache": false
+		},
+		"typecheck": {
+			"cache": false
 		}
 	}
 }
