@@ -1,7 +1,7 @@
 "use server";
 
 import { auth } from "@repo/auth";
-import { prisma } from "@repo/database";
+import { asc, db, desc, eq, tracks, users } from "@repo/database";
 import { revalidatePath } from "next/cache";
 
 import { isDemo } from "~/lib/utils-server";
@@ -19,9 +19,12 @@ export const getMonthRangeAction = async () => {
 		};
 	}
 
-	const monthsDates = await prisma.user.findFirst({
-		where: { id: session.user.id },
-		select: { timeRangeDateEnd: true, timeRangeDateStart: true },
+	const monthsDates = await db.query.users.findFirst({
+		where: eq(users.id, session.user.id),
+		columns: {
+			timeRangeDateEnd: true,
+			timeRangeDateStart: true,
+		},
 	});
 
 	if (!monthsDates) return null;
@@ -38,10 +41,13 @@ export const setMonthStatsAction = async (dateStart: Date, dateEnd: Date) => {
 	if (!session || !session.user || !session.user.id || isDemo(session))
 		return null;
 
-	await prisma.user.update({
-		where: { id: session.user.id },
-		data: { timeRangeDateStart: dateStart, timeRangeDateEnd: dateEnd },
-	});
+	await db
+		.update(users)
+		.set({
+			timeRangeDateStart: dateStart,
+			timeRangeDateEnd: dateEnd,
+		})
+		.where(eq(users.id, session.user.id));
 
 	revalidatePath("/");
 };
@@ -52,16 +58,16 @@ export const setDefaulMonthStatsAction = async () => {
 	if (!session || !session.user || !session.user.id || isDemo(session))
 		return null;
 
-	const minDate = await prisma.track.findFirst({
-		where: { userId: session.user.id },
-		select: { timestamp: true },
-		orderBy: { timestamp: "asc" },
+	const minDate = await db.query.tracks.findFirst({
+		where: eq(tracks.userId, session.user.id),
+		columns: { timestamp: true },
+		orderBy: asc(tracks.timestamp),
 	});
 
-	const maxDate = await prisma.track.findFirst({
-		where: { userId: session.user.id },
-		select: { timestamp: true },
-		orderBy: { timestamp: "desc" },
+	const maxDate = await db.query.tracks.findFirst({
+		where: eq(tracks.userId, session.user.id),
+		columns: { timestamp: true },
+		orderBy: desc(tracks.timestamp),
 	});
 
 	if (!minDate || !maxDate) return null;

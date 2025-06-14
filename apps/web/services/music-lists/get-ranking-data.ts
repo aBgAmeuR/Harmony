@@ -1,6 +1,6 @@
 "server-only";
 
-import { prisma } from "@repo/database";
+import { and, db, desc, eq, gte, lt, sql, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
 import { getMonthRangeAction } from "~/actions/month-range-actions";
@@ -12,20 +12,23 @@ export const getRankingTracks = async (userId: string | undefined) => {
 	const monthRange = await getMonthRangeAction();
 	if (!monthRange) return null;
 
-	const topTracks = await prisma.track.groupBy({
-		by: ["spotifyId"],
-		_count: { _all: true },
-		_sum: { msPlayed: true },
-		where: {
-			userId,
-			timestamp: {
-				gte: monthRange.dateStart,
-				lt: monthRange.dateEnd,
-			},
-		},
-		orderBy: { _sum: { msPlayed: "desc" } },
-		take: 50,
-	});
+	const topTracks = await db
+		.select({
+			spotifyId: tracks.spotifyId,
+			count: sql<number>`count(*)`,
+			sum: sql<number>`sum(${tracks.msPlayed})`,
+		})
+		.from(tracks)
+		.where(
+			and(
+				eq(tracks.userId, userId),
+				gte(tracks.timestamp, monthRange.dateStart!),
+				lt(tracks.timestamp, monthRange.dateEnd!),
+			),
+		)
+		.groupBy(tracks.spotifyId)
+		.orderBy(desc(sql`sum(${tracks.msPlayed})`))
+		.limit(50);
 
 	const tracksInfos = await spotify.tracks.list(
 		topTracks.map((track) => track.spotifyId),
@@ -35,7 +38,7 @@ export const getRankingTracks = async (userId: string | undefined) => {
 		const topTrack = topTracks.find(
 			(topTrack) => topTrack.spotifyId === track.id,
 		);
-		const msPlayed = Number(topTrack?._sum.msPlayed) || 0;
+		const msPlayed = Number(topTrack?.sum) || 0;
 		return {
 			id: track.id,
 			href: track.external_urls.spotify,
@@ -43,7 +46,7 @@ export const getRankingTracks = async (userId: string | undefined) => {
 			name: track.name,
 			artists: track.artists.map((artist) => artist.name).join(", "),
 			stat1: `${getMsPlayedInMinutes(msPlayed)} minutes`,
-			stat2: `${topTrack?._count?._all || 0} streams`,
+			stat2: `${topTrack?.count || 0} streams`,
 		};
 	});
 };
@@ -54,19 +57,22 @@ export const getRankingArtists = async (userId: string | undefined) => {
 	const monthRange = await getMonthRangeAction();
 	if (!monthRange) return null;
 
-	const topArtists = await prisma.track.groupBy({
-		by: ["artistIds"],
-		_count: { _all: true },
-		_sum: { msPlayed: true },
-		where: {
-			userId,
-			timestamp: {
-				gte: monthRange.dateStart,
-				lt: monthRange.dateEnd,
-			},
-		},
-		orderBy: { _sum: { msPlayed: "desc" } },
-	});
+	const topArtists = await db
+		.select({
+			artistIds: tracks.artistIds,
+			count: sql<number>`count(*)`,
+			sum: sql<number>`sum(${tracks.msPlayed})`,
+		})
+		.from(tracks)
+		.where(
+			and(
+				eq(tracks.userId, userId),
+				gte(tracks.timestamp, monthRange.dateStart!),
+				lt(tracks.timestamp, monthRange.dateEnd!),
+			),
+		)
+		.groupBy(tracks.artistIds)
+		.orderBy(desc(sql`sum(${tracks.msPlayed})`));
 
 	const aggregatedArtists: Record<
 		string,
@@ -83,8 +89,8 @@ export const getRankingArtists = async (userId: string | undefined) => {
 			}
 
 			aggregatedArtists[artistId].totalMsPlayed +=
-				entry._sum.msPlayed || BigInt(0);
-			aggregatedArtists[artistId].trackCount += entry._count._all;
+				BigInt(entry.sum) || BigInt(0);
+			aggregatedArtists[artistId].trackCount += entry.count;
 		});
 	});
 
@@ -123,20 +129,22 @@ export const getRankingAlbums = async (userId: string | undefined) => {
 	const monthRange = await getMonthRangeAction();
 	if (!monthRange) return null;
 
-	const topAlbums = await prisma.track.groupBy({
-		by: ["albumId"],
-		_count: { _all: true },
-		_sum: { msPlayed: true },
-		where: {
-			userId,
-			timestamp: {
-				gte: monthRange.dateStart,
-				lt: monthRange.dateEnd,
-			},
-		},
-		orderBy: { _sum: { msPlayed: "desc" } },
-		take: 50,
-	});
+	const topAlbums = await db
+		.select({
+			albumId: tracks.albumId,
+			count: sql<number>`count(*)`,
+			sum: sql<number>`sum(${tracks.msPlayed})`,
+		})
+		.from(tracks)
+		.where(
+			and(
+				eq(tracks.userId, userId),
+				gte(tracks.timestamp, monthRange.dateStart!),
+				lt(tracks.timestamp, monthRange.dateEnd!),
+			),
+		)
+		.groupBy(tracks.albumId)
+		.orderBy(desc(sql`sum(${tracks.msPlayed})`));
 
 	const albumIds = topAlbums.map((album) => album.albumId);
 	const albumsInfos = await spotify.albums.list(albumIds);
@@ -145,7 +153,7 @@ export const getRankingAlbums = async (userId: string | undefined) => {
 		const topAlbum = topAlbums.find(
 			(topAlbum) => topAlbum.albumId === album.id,
 		);
-		const msPlayed = Number(topAlbum?._sum.msPlayed) || 0;
+		const msPlayed = Number(topAlbum?.sum) || 0;
 		return {
 			id: album.id,
 			href: album.external_urls.spotify,
@@ -153,7 +161,7 @@ export const getRankingAlbums = async (userId: string | undefined) => {
 			name: album.name || "Unknown album",
 			artists: album.artists.map((artist) => artist.name).join(", "),
 			stat1: `${getMsPlayedInMinutes(msPlayed)} minutes`,
-			stat2: `${topAlbum?._count?._all || 0} streams`,
+			stat2: `${topAlbum?.count || 0} streams`,
 		};
 	});
 };

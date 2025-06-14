@@ -1,5 +1,5 @@
 import { auth } from "@repo/auth";
-import { prisma } from "@repo/database";
+import { accounts, db, eq } from "@repo/database";
 import type { SpotifyConfig } from "../../types/SpotifyConfig";
 import type { Logger } from "../Logger";
 import { AuthError } from "../errors";
@@ -103,21 +103,21 @@ export class AuthManager {
 			throw new AuthError("No user session found");
 		}
 
-		const account = await prisma.account.findFirst({
-			where: { userId: session.user.id },
+		const account = await db.query.accounts.findFirst({
+			where: eq(accounts.userId, session.user.id),
 		});
 
-		if (!account?.refresh_token) {
+		if (!account?.refreshToken) {
 			throw new AuthError("No Spotify account linked");
 		}
 
 		// Return existing token if it's still valid
 		if (
-			account.access_token &&
-			account.expires_at &&
-			!this.isTokenExpired(Number(account.expires_at))
+			account.accessToken &&
+			account.expiresAt &&
+			!this.isTokenExpired(Number(account.expiresAt))
 		) {
-			return account.access_token;
+			return account.accessToken;
 		}
 
 		// Create a refresh promise that other calls can wait for
@@ -133,30 +133,30 @@ export class AuthManager {
 	/**
 	 * Refresh the token and update in database
 	 */
-	private async refreshTokenAndUpdate(account: any): Promise<string> {
+	private async refreshTokenAndUpdate(
+		account: typeof accounts.$inferSelect,
+	): Promise<string> {
 		this.logger.log("REFRESHING TOKEN");
 
 		// Refresh the token
-		const data = await this.refreshToken(account.refresh_token);
+		const data = await this.refreshToken(account.refreshToken!);
 		if (!data) {
 			return this.getToken();
 		}
 		const timestamp = Math.floor((Date.now() + data.expires_in * 1000) / 1000);
 
 		// Update the database with new token information
-		await prisma.account.update({
-			where: {
-				provider_providerAccountId: {
-					provider: "spotify",
-					providerAccountId: account.providerAccountId,
-				},
-			},
-			data: {
-				access_token: data.access_token,
-				expires_at: timestamp,
-				refresh_token: data.refresh_token || account.refresh_token, // Only update if new refresh token is provided
-			},
-		});
+		await db
+			.update(accounts)
+			.set({
+				accessToken: data.access_token,
+				expiresAt: timestamp,
+				refreshToken: data.refresh_token || account.refreshToken, // Only update if new refresh token is provided
+			})
+			.where(
+				eq(accounts.provider, "spotify") &&
+					eq(accounts.providerAccountId, account.providerAccountId),
+			);
 
 		return data.access_token;
 	}

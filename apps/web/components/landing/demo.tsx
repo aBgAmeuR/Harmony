@@ -158,11 +158,11 @@ export const Demo = () => {
 						defaultOpen={false}
 						className="relative aspect-video min-h-0 max-w-screen-xl"
 					>
-						<AppSidebar
+						{/* <AppSidebar
 							className="absolute h-full"
 							disable={true}
 							user={user}
-						/>
+						/> */}
 						<SidebarInset className="min-h-full overflow-y-scroll">
 							<main>
 								<AppHeader items={["Package", "Overview"]} demo={false}>
@@ -193,8 +193,8 @@ export const Demo = () => {
 									</TooltipProvider>
 								</AppHeader>
 								<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
-									<TopStatsCards demoData={data.topStats} />
-									<div className="flex flex-col gap-4 md:flex-row">
+									{/* <TopStatsCards demoData={data.topStats} /> */}
+									{/* <div className="flex flex-col gap-4 md:flex-row">
 										<TimeListenedChartComponent
 											data={
 												new Promise((resolve) => resolve(data.timeListened))
@@ -206,7 +206,7 @@ export const Demo = () => {
 												new Promise((resolve) => resolve(data.listeningPattern))
 											}
 										/>
-									</div>
+									</div> */}
 									<div className="grid gap-4 lg:grid-cols-2">
 										<RankingList
 											type="dashboardArtists"

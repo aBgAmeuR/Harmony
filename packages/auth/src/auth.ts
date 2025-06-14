@@ -1,8 +1,7 @@
-/* eslint-disable no-unused-vars */
-import { PrismaAdapter } from "@auth/prisma-adapter";
+import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth, { type NextAuthResult, type DefaultSession } from "next-auth";
 
-import { prisma } from "@repo/database";
+import { db } from "@repo/database";
 import authConfig from "./auth.config";
 
 declare module "next-auth" {
@@ -18,7 +17,7 @@ declare module "next-auth" {
 }
 
 const result = NextAuth({
-	adapter: PrismaAdapter(prisma),
+	adapter: DrizzleAdapter(db),
 	session: {
 		strategy: "jwt",
 	},

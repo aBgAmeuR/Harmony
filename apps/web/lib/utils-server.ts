@@ -1,7 +1,7 @@
 "server-only";
 
 import type { Session } from "@repo/auth";
-import { prisma } from "@repo/database";
+import { db, eq, users } from "@repo/database";
 import { cookies } from "next/headers";
 import { cache } from "react";
 
@@ -61,9 +61,9 @@ export const getMonthRange = cache(async (userId: string, isDemo: boolean) => {
 		};
 	}
 
-	const monthsDates = await prisma.user.findFirst({
-		where: { id: userId },
-		select: { timeRangeDateEnd: true, timeRangeDateStart: true },
+	const monthsDates = await db.query.users.findFirst({
+		where: eq(users.id, userId),
+		columns: { timeRangeDateEnd: true, timeRangeDateStart: true },
 	});
 
 	if (!monthsDates) return null;

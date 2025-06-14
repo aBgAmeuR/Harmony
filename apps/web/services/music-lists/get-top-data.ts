@@ -1,14 +1,14 @@
 "server-only";
 
-import { prisma } from "@repo/database";
+import { db, eq, users } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
 import { getMsPlayedInMinutes } from "~/lib/utils";
 
 export const getTimeRangeStats = async (userId: string) => {
-	return await prisma.user.findFirst({
-		where: { id: userId },
-		select: { timeRangeStats: true },
+	return await db.query.users.findFirst({
+		where: eq(users.id, userId),
+		columns: { timeRangeStats: true },
 	});
 };
 

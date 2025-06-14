@@ -35,14 +35,14 @@ export default async function OverviewPage() {
 	return (
 		<>
 			<AppHeader items={["Package", "Overview"]}>
-				<SelectMonthRange />
+				{/* <SelectMonthRange /> */}
 			</AppHeader>
 			<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
 				<Suspense fallback={<TopStatsCardsSkeleton />}>
-					<TopStatsCards />
+					{/* <TopStatsCards /> */}
 				</Suspense>
 				<div className="flex flex-col gap-4 md:flex-row">
-					<Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
+					{/* <Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
 						<TimeListenedChartComponent
 							data={getMonthlyData(userId, isDemo)}
 							className="flex-1"
@@ -50,11 +50,11 @@ export default async function OverviewPage() {
 					</Suspense>
 					<Suspense fallback={<ListeningPatternChartSkeleton />}>
 						<ListeningPatternChart data={getListeningPatternData(userId)} />
-					</Suspense>
+					</Suspense> */}
 				</div>
 				<div className="grid gap-4 lg:grid-cols-2">
-					<RankingList type="dashboardArtists" className="col-span-1" />
-					<RankingList type="dashboardTracks" className="col-span-1" />
+					{/* <RankingList type="dashboardArtists" className="col-span-1" />
+					<RankingList type="dashboardTracks" className="col-span-1" /> */}
 				</div>
 			</div>
 		</>

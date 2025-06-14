@@ -1,14 +1,13 @@
-import { relations, sql } from "drizzle-orm";
+import { relations } from "drizzle-orm";
 import {
 	bigint,
 	boolean,
 	integer,
 	pgEnum,
 	pgTable,
-	primaryKey,
 	text,
 	timestamp,
-	unique,
+	uniqueIndex,
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
@@ -20,131 +19,121 @@ export const timeRangeStatsEnum = pgEnum("time_range_stats", [
 ]);
 
 export const users = pgTable("User", {
-	id: varchar("id", { length: 256 })
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	name: varchar("name", { length: 256 }),
-	email: varchar("email", { length: 256 }).unique(),
-	emailVerified: timestamp("emailVerified"),
-	image: varchar("image", { length: 256 }),
-	hasPackage: boolean("hasPackage").default(false),
-	timeRangeStats: timeRangeStatsEnum("timeRangeStats").default("medium_term"),
-	timeRangeDateStart: timestamp("timeRangeDateStart").default(
-		new Date("2010-01-01"),
-	),
-	timeRangeDateEnd: timestamp("timeRangeDateEnd").defaultNow(),
-	createdAt: timestamp("createdAt").defaultNow(),
-	updatedAt: timestamp("updatedAt").defaultNow(),
+	id: uuid().primaryKey().defaultRandom(),
+	name: varchar({ length: 256 }),
+	email: varchar({ length: 256 }).unique(),
+	emailVerified: timestamp(),
+	image: varchar({ length: 256 }),
+	hasPackage: boolean().default(false),
+	timeRangeStats: timeRangeStatsEnum().default("medium_term"),
+	timeRangeDateStart: timestamp().default(new Date("2010-01-01")),
+	timeRangeDateEnd: timestamp().defaultNow(),
+	createdAt: timestamp().defaultNow(),
+	updatedAt: timestamp().defaultNow(),
 });
 
 export const accounts = pgTable(
 	"Account",
 	{
-		id: varchar("id", { length: 256 })
-			.primaryKey()
-			.$defaultFn(() => crypto.randomUUID()),
-		userId: varchar("userId", { length: 256 })
+		id: uuid().primaryKey().defaultRandom(),
+		userId: varchar({ length: 256 })
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
-		type: varchar("type", { length: 256 }).notNull(),
-		provider: varchar("provider", { length: 256 }).notNull(),
-		providerAccountId: varchar("providerAccountId", { length: 256 }).notNull(),
-		refreshToken: text("refresh_token"),
-		accessToken: text("access_token"),
-		expiresAt: integer("expires_at"),
-		tokenType: varchar("token_type", { length: 256 }),
-		scope: varchar("scope", { length: 256 }),
-		idToken: text("id_token"),
-		sessionState: varchar("session_state", { length: 256 }),
-		createdAt: timestamp("createdAt").defaultNow(),
-		updatedAt: timestamp("updatedAt").defaultNow(),
+		type: varchar({ length: 256 }).notNull(),
+		provider: varchar({ length: 256 }).notNull(),
+		providerAccountId: varchar({ length: 256 }).notNull(),
+		refreshToken: text(),
+		accessToken: text(),
+		expiresAt: integer(),
+		tokenType: varchar({ length: 256 }),
+		scope: varchar({ length: 256 }),
+		idToken: text(),
+		sessionState: varchar({ length: 256 }),
+		createdAt: timestamp().defaultNow(),
+		updatedAt: timestamp().defaultNow(),
 	},
-	(table) => ({
-		providerAccountUnique: unique().on(table.provider, table.providerAccountId),
-	}),
+	(table) => [
+		uniqueIndex("providerAccount_idx").on(
+			table.provider,
+			table.providerAccountId,
+		),
+	],
 );
 
 export const tracks = pgTable("Track", {
-	id: varchar("id", { length: 256 })
-		.primaryKey()
-		.$defaultFn(() => crypto.randomUUID()),
-	timestamp: timestamp("timestamp").notNull(),
-	platform: varchar("platform", { length: 256 }).notNull(),
-	msPlayed: bigint("msPlayed", { mode: "bigint" }).notNull(),
-	spotifyId: varchar("spotifyId", { length: 22 }).notNull(),
-	artistIds: varchar("artistIds", { length: 22 }).array().notNull(),
-	albumId: varchar("albumId", { length: 22 }).notNull(),
-	albumArtistIds: varchar("albumArtistIds", { length: 22 }).array().notNull(),
-	reasonStart: varchar("reasonStart", { length: 256 }).notNull(),
-	reasonEnd: varchar("reasonEnd", { length: 256 }).notNull(),
-	shuffle: boolean("shuffle"),
-	skipped: boolean("skipped"),
-	offline: boolean("offline"),
-	userId: varchar("userId", { length: 256 })
+	id: uuid().primaryKey().defaultRandom(),
+	timestamp: timestamp().notNull(),
+	platform: varchar({ length: 256 }).notNull(),
+	msPlayed: bigint({ mode: "bigint" }).notNull(),
+	spotifyId: varchar({ length: 22 }).notNull(),
+	artistIds: varchar({ length: 22 }).array().notNull(),
+	albumId: varchar({ length: 22 }).notNull(),
+	albumArtistIds: varchar({ length: 22 }).array().notNull(),
+	reasonStart: varchar({ length: 256 }).notNull(),
+	reasonEnd: varchar({ length: 256 }).notNull(),
+	shuffle: boolean(),
+	skipped: boolean(),
+	offline: boolean(),
+	userId: varchar({ length: 256 })
 		.notNull()
 		.references(() => users.id),
 });
 
 export const packages = pgTable("Package", {
-	id: uuid("id").primaryKey().defaultRandom(),
-	spotifyId: varchar("spotify_id", { length: 256 }),
-	tempFileLink: varchar("tempFileLink", { length: 256 }),
-	uploadStatus: varchar("uploadStatus", { length: 256 }).default("pending"),
-	fileName: varchar("fileName", { length: 256 }).default("package.zip"),
-	fileSize: varchar("fileSize", { length: 256 }).default("0"),
-	userId: varchar("userId", { length: 256 })
+	id: uuid().primaryKey().defaultRandom(),
+	spotifyId: varchar({ length: 256 }),
+	tempFileLink: varchar({ length: 256 }),
+	uploadStatus: varchar({ length: 256 }).default("pending"),
+	fileName: varchar({ length: 256 }).default("package.zip"),
+	fileSize: varchar({ length: 256 }).default("0"),
+	userId: varchar({ length: 256 })
 		.notNull()
 		.references(() => users.id),
-	createdAt: timestamp("createdAt").defaultNow(),
-	updatedAt: timestamp("updatedAt").defaultNow(),
+	createdAt: timestamp().defaultNow(),
+	updatedAt: timestamp().defaultNow(),
 });
 
 export const historicalTrackRankings = pgTable(
 	"HistoricalTrackRanking",
 	{
-		id: varchar("id", { length: 256 })
-			.primaryKey()
-			.$defaultFn(() => crypto.randomUUID()),
-		userId: varchar("userId", { length: 256 })
+		id: uuid().primaryKey().defaultRandom(),
+		userId: varchar({ length: 256 })
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
-		trackId: varchar("trackId", { length: 256 }).notNull(),
-		rank: integer("rank").notNull(),
-		timeRange: timeRangeStatsEnum("timeRange").notNull(),
-		timestamp: timestamp("timestamp").defaultNow(),
+		trackId: varchar({ length: 256 }).notNull(),
+		rank: integer().notNull(),
+		timeRange: timeRangeStatsEnum().notNull(),
+		timestamp: timestamp().defaultNow(),
 	},
-	(table) => ({
-		uniqueRanking: unique().on(
+	(table) => [
+		uniqueIndex("uniqueRanking_idx").on(
 			table.userId,
 			table.trackId,
 			table.timestamp,
 			table.timeRange,
 		),
-	}),
+	],
 );
 
 export const historicalArtistRankings = pgTable(
 	"HistoricalArtistRanking",
 	{
-		id: varchar("id", { length: 256 })
-			.primaryKey()
-			.$defaultFn(() => crypto.randomUUID()),
-		userId: varchar("userId", { length: 256 })
+		id: uuid().primaryKey().defaultRandom(),
+		userId: varchar({ length: 256 })
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
-		artistId: varchar("artistId", { length: 256 }).notNull(),
-		rank: integer("rank").notNull(),
-		timeRange: timeRangeStatsEnum("timeRange").notNull(),
-		timestamp: timestamp("timestamp").defaultNow(),
+		artistId: varchar({ length: 256 }).notNull(),
+		rank: integer().notNull(),
+		timeRange: timeRangeStatsEnum().notNull(),
+		timestamp: timestamp().defaultNow(),
 	},
-	(table) => ({
-		uniqueRanking: unique().on(
+	(table) => [
+		uniqueIndex("uniqueArtistRanking_idx").on(
 			table.userId,
 			table.artistId,
 			table.timestamp,
-			table.timeRange,
 		),
-	}),
+	],
 );
 
 export const usersRelations = relations(users, ({ many }) => ({
