@@ -1,17 +1,16 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { ListSkeleton } from "~/components/list-skeleton";
 import { SelectTimeRangeSkeleton } from "~/components/select-time-range";
 
 export default function Loading() {
 	return (
-		<>
-			<AppHeader items={["Stats", "Top", "Tracks"]} demo={false}>
+		<Layout>
+			<LayoutHeader items={["Stats", "Top", "Tracks"]} demo={false}>
 				<SelectTimeRangeSkeleton />
-			</AppHeader>
-			<Main>
+			</LayoutHeader>
+			<LayoutContent>
 				<ListSkeleton />
-			</Main>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }

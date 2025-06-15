@@ -1,28 +1,27 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 
-import { AppHeader } from "~/components/app-header";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { SelectMonthRange } from "~/components/select-month-range";
+import { ListeningSessionCard, ListeningSessionCardSkeleton } from "~/features/numbers/components/listening-session-card";
+import { NumbersStatsCards, NumbersStatsCardsSkeleton } from "~/features/numbers/components/numbers-stats-cards";
+import { getUserInfos } from "~/lib/utils";
 
-import { NumbersStatsCards, NumbersStatsSkeleton } from "./numbers-stats-cards";
-import {
-	NumbersStatsSessionCard,
-	NumbersStatsSessionSkeleton,
-} from "./numbers-stats-sessions-card";
+export default async function StatsNumbersPage() {
+	const { userId, isDemo } = await getUserInfos();
 
-export default function StatsNumbersPage() {
 	return (
-		<>
-			<AppHeader items={["Package", "Stats", "Numbers"]}>
+		<Layout>
+			<LayoutHeader items={["Package", "Stats", "Numbers"]}>
 				<SelectMonthRange />
-			</AppHeader>
-			<div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4 p-4">
-				<Suspense fallback={<NumbersStatsSessionSkeleton />}>
-					<NumbersStatsSessionCard />
+			</LayoutHeader>
+			<LayoutContent className="mx-auto w-full max-w-7xl">
+				<Suspense fallback={<ListeningSessionCardSkeleton />}>
+					<ListeningSessionCard userId={userId} isDemo={isDemo} />
 				</Suspense>
-				<Suspense fallback={<NumbersStatsSkeleton />}>
-					<NumbersStatsCards />
+				<Suspense fallback={<NumbersStatsCardsSkeleton />}>
+					<NumbersStatsCards userId={userId} isDemo={isDemo} />
 				</Suspense>
-			</div>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }

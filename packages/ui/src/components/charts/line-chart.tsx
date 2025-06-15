@@ -25,6 +25,9 @@ export interface LineChartProps {
 	yAxisReversed?: boolean;
 	yAxisDomain?: [number | string, number | string];
 	showYAxis?: boolean;
+	showDots?: boolean;
+	cursor?: boolean;
+	syncId?: string;
 }
 
 export function ReusableLineChart({
@@ -40,10 +43,13 @@ export function ReusableLineChart({
 	yAxisReversed = false,
 	yAxisDomain,
 	showYAxis = true,
+	showDots = false,
+	cursor = false,
+	syncId,
 }: LineChartProps) {
 	return (
 		<ChartContainer config={config} className={className}>
-			<LineChart data={data} margin={{ left: -38, top: 6, right: 6 }}>
+			<LineChart data={data} margin={{ left: -38, top: 6, right: 6 }} syncId={syncId}>
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
 				<XAxis
 					dataKey={xAxisDataKey}
@@ -57,7 +63,7 @@ export function ReusableLineChart({
 					<YAxis
 						tickLine={false}
 						axisLine={false}
-						ticks={[0, 1, 10, 20, 30, 40, 50]} 
+						ticks={[0, 1, 10, 20, 30, 40, 50]}
 						tickFormatter={yAxisTickFormatter}
 						reversed={yAxisReversed}
 						domain={yAxisDomain}
@@ -70,15 +76,15 @@ export function ReusableLineChart({
 							formatter={tooltipValueFormatter}
 						/>
 					}
-					cursor={false}
+					cursor={cursor}
 				/>
 				<Line
 					type="natural"
 					dataKey={lineDataKey}
 					stroke={`var(--color-${lineDataKey})`}
 					strokeWidth={2}
-					dot={{ fill: `var(--color-${lineDataKey})` }}
-					activeDot={{ r: 6 }}
+					dot={showDots ? { fill: `var(--color-${lineDataKey})` } : false}
+					activeDot={showDots ? { r: 6 } : { r: 4 }}
 				/>
 			</LineChart>
 		</ChartContainer>

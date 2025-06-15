@@ -12,6 +12,8 @@ import type * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { createGradientDefs } from "./chart-color-utils";
 import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
+import { axisTickFormatters } from "./axis-tick-formatters";
+import { chartLabelsFormatter } from "./chart-label-formatter";
 
 export interface AreaChartProps {
 	data: any[];
@@ -19,13 +21,13 @@ export interface AreaChartProps {
 	areaDataKeys: string[];
 	stacked?: boolean;
 	config: ChartConfig;
-	tooltipLabelFormatter?: (value: string, payload: any) => React.ReactNode;
+	tooltipLabelFormatter?: keyof typeof chartLabelsFormatter;
 	tooltipValueFormatter?: React.ComponentProps<
 		typeof ChartTooltipContent
 	>["formatter"];
 	className?: string;
-	yAxisTickFormatter?: (value: any) => string;
-	xAxisTickFormatter?: (value: any) => string;
+	yAxisTickFormatter?: keyof typeof axisTickFormatters;
+	xAxisTickFormatter?: keyof typeof axisTickFormatters;
 	showLegend?: boolean;
 	showYAxis?: boolean;
 }
@@ -61,20 +63,20 @@ export function ReusableAreaChart({
 					axisLine={false}
 					tickMargin={8}
 					minTickGap={32}
-					tickFormatter={xAxisTickFormatter}
+					tickFormatter={xAxisTickFormatter ? axisTickFormatters[xAxisTickFormatter] : undefined}
 				/>
 				{showYAxis && (
 					<YAxis
 						tickLine={false}
 						axisLine={false}
 						tickMargin={8}
-						tickFormatter={yAxisTickFormatter}
+						tickFormatter={yAxisTickFormatter ? axisTickFormatters[yAxisTickFormatter] : undefined}
 					/>
 				)}
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={tooltipLabelFormatter}
+							labelFormatter={(label, payload) => tooltipLabelFormatter ? chartLabelsFormatter[tooltipLabelFormatter](label, payload, null) : undefined}
 							formatter={tooltipValueFormatter}
 						/>
 					}

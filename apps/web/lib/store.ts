@@ -1,3 +1,5 @@
+"use client";
+
 /* eslint-disable no-unused-vars */
 import { cookieStorage } from "@repo/zustand-cookie-storage";
 import { create } from "zustand";

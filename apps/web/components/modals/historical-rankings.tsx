@@ -13,7 +13,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { Spinner } from "@repo/ui/spinner";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle, InfoIcon } from "lucide-react";
-import type { PropsWithChildren, ReactNode } from "react";
+import { type PropsWithChildren, type ReactNode, useEffect } from "react";
 import type { MusicItemCardProps } from "~/components/cards/music-item-card/type";
 import { HistoricalRankingsChart } from "~/components/charts/historical-rankings-chart";
 import { Icons } from "~/components/icons";
@@ -21,17 +21,15 @@ import { useModals } from "~/lib/store";
 
 interface HistoricalRankingsModalProps extends PropsWithChildren {
 	type: "artist" | "track";
-	getHistoricalRankings: (id: string) => Promise<
-		{
-			rank: number | null;
-			timestamp: Date;
-		}[]
-	>;
+	promise: (id: string) => Promise<{
+		rank: number | null;
+		timestamp: Date;
+	}[]>;
 }
 
 export const HistoricalRankingsModal = ({
 	type,
-	getHistoricalRankings,
+	promise,
 	children,
 }: HistoricalRankingsModalProps) => {
 	const { getModalOpen, closeModal } = useModals();
@@ -45,11 +43,15 @@ export const HistoricalRankingsModal = ({
 		isError,
 	} = useQuery({
 		queryKey: ["historical-rankings", type, historicalRankingsIsOpen?.id],
-		queryFn: () => getHistoricalRankings(historicalRankingsIsOpen?.id ?? ""),
+		queryFn: () => promise(historicalRankingsIsOpen?.id ?? ""),
 		enabled: !!historicalRankingsIsOpen?.id,
 		staleTime: Number.POSITIVE_INFINITY,
 		gcTime: 1000 * 60 * 60 * 24, // 24 hours
 	});
+
+	useEffect(() => {
+		console.log("historicalRankingsIsOpen", getModalOpen("historical-rankings"));
+	}, [getModalOpen]);
 
 	return (
 		<>

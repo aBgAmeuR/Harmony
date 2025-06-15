@@ -34,6 +34,7 @@ export function HistoricalRankingsChart({
 			}}
 			yAxisReversed={true}
 			yAxisDomain={[1, 50]}
+			showDots={true}
 			className={className}
 		/>
 	);

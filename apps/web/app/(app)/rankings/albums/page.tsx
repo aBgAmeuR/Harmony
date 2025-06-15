@@ -1,17 +1,19 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
-import { MusicList } from "~/components/lists/music-list";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { SelectMonthRange } from "~/components/select-month-range";
+import { RankingAlbums } from "~/features/rankings/components/ranking-albums";
+import { getUserInfos } from "~/lib/utils";
 
-export default function RankingsAlbumsPage() {
+export default async function RankingsAlbumsPage() {
+	const { userId, isDemo } = await getUserInfos();
+
 	return (
-		<>
-			<AppHeader items={["Package", "Rankings", "Albums"]}>
+		<Layout>
+			<LayoutHeader items={["Package", "Rankings", "Albums"]}>
 				<SelectMonthRange />
-			</AppHeader>
-			<Main>
-				<MusicList type="rankingAlbums" />
-			</Main>
-		</>
+			</LayoutHeader>
+			<LayoutContent>
+				<RankingAlbums userId={userId} isDemo={isDemo} />
+			</LayoutContent>
+		</Layout>
 	);
 }

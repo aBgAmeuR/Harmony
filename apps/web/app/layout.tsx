@@ -52,7 +52,7 @@ export default function RootLayout({
 				className={cn(inter.className, "antialiased")}
 			>
 				<ErrorBoundary errorComponent={Error}>
-					<NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+					{/* <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} /> */}
 					<Providers>{children}</Providers>
 				</ErrorBoundary>
 				<Analytics />

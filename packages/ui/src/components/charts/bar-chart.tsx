@@ -18,6 +18,8 @@ import {
 	YAxis,
 } from "recharts";
 import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
+import { chartLabelsFormatter } from "./chart-label-formatter";
+import { axisTickFormatters } from "./axis-tick-formatters";
 
 export interface BarChartProps {
 	data: any[];
@@ -27,28 +29,25 @@ export interface BarChartProps {
 		value: number;
 		label: string;
 		position?:
-			| "top"
-			| "insideTop"
-			| "bottom"
-			| "insideBottom"
-			| "insideBottomLeft";
+		| "top"
+		| "insideTop"
+		| "bottom"
+		| "insideBottom"
+		| "insideBottomLeft";
 	};
 	config?: ChartConfig;
-	tooltipLabelFormatter?: (
-		value: string,
-		payload: any,
-		context?: any,
-	) => React.ReactNode;
+	tooltipLabelFormatter?: keyof typeof chartLabelsFormatter;
 	tooltipValueFormatter?: React.ComponentProps<
 		typeof ChartTooltipContent
 	>["formatter"];
 	className?: string;
-	yAxisTickFormatter?: (value: any) => string;
+	yAxisTickFormatter?: keyof typeof axisTickFormatters;
 	xAxisTickFormatter?: (value: any) => string;
 	showBarLabels?: boolean;
 	showYAxis?: boolean;
-	barLabelFormatter?: (value: any) => string;
+	barLabelFormatter?: keyof typeof axisTickFormatters;
 	barRadius?: number;
+	labelData?: any;
 }
 
 export function ReusableBarChart({
@@ -71,6 +70,7 @@ export function ReusableBarChart({
 	showYAxis = true,
 	barLabelFormatter,
 	barRadius = 4,
+	labelData,
 }: BarChartProps) {
 	return (
 		<ChartContainer config={config} className={className}>
@@ -87,13 +87,13 @@ export function ReusableBarChart({
 					<YAxis
 						tickLine={false}
 						axisLine={false}
-						tickFormatter={yAxisTickFormatter}
+						tickFormatter={yAxisTickFormatter ? axisTickFormatters[yAxisTickFormatter] : undefined}
 					/>
 				)}
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={tooltipLabelFormatter}
+							labelFormatter={(label, payload) => tooltipLabelFormatter ? chartLabelsFormatter[tooltipLabelFormatter](label, payload, labelData) : undefined}
 							formatter={tooltipValueFormatter}
 						/>
 					}
@@ -110,7 +110,7 @@ export function ReusableBarChart({
 							offset={12}
 							className="fill-foreground"
 							fontSize={12}
-							formatter={barLabelFormatter}
+							formatter={barLabelFormatter ? axisTickFormatters[barLabelFormatter] : undefined}
 						/>
 					)}
 				</Bar>

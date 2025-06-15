@@ -10,12 +10,13 @@ import {
 import { CalendarIcon } from "lucide-react";
 import React, { Suspense } from "react";
 
-import { ListeningPatternChart } from "~/app/(app)/overview/listening-pattern-chart";
-import { RankingList } from "~/app/(app)/overview/ranking-list";
-import { TopStatsCards } from "~/app/(app)/overview/top-stats-cards";
 import { AppHeader } from "~/components/app-header";
 import { AppSidebar } from "~/components/navbar/app-sidebar";
-import { TimeListenedChartComponent } from "../charts/activity/time-listened-chart";
+import { TimeListenedChart } from "~/features/activity/components/time-listened-chart";
+import { ListeningPatternChart } from "~/features/overview/components/listening-pattern-chart";
+import { StatsCards } from "~/features/overview/components/stats-cards";
+import { TopArtistsCard } from "~/features/overview/components/top-artists-card";
+import { TopTracksCard } from "~/features/overview/components/top-tracks-card";
 
 const data = {
 	topStats: {
@@ -145,7 +146,7 @@ const data = {
 
 const user = {
 	name: "Demo",
-	id: process.env.DEMO_ID,
+	id: process.env.DEMO_ID!,
 	hasPackage: true,
 };
 
@@ -193,31 +194,14 @@ export const Demo = () => {
 									</TooltipProvider>
 								</AppHeader>
 								<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
-									<TopStatsCards demoData={data.topStats} />
+									<StatsCards userId={user.id} isDemo={true} data={data.topStats} />
 									<div className="flex flex-col gap-4 md:flex-row">
-										<TimeListenedChartComponent
-											data={
-												new Promise((resolve) => resolve(data.timeListened))
-											}
-											className="flex-1"
-										/>
-										<ListeningPatternChart
-											data={
-												new Promise((resolve) => resolve(data.listeningPattern))
-											}
-										/>
+										<TimeListenedChart userId={user.id} isDemo={true} data={data.timeListened} className="flex-1" />
+										<ListeningPatternChart userId={user.id} isDemo={true} data={data.listeningPattern} />
 									</div>
 									<div className="grid gap-4 lg:grid-cols-2">
-										<RankingList
-											type="dashboardArtists"
-											className="col-span-1"
-											demoData={data.topArtists}
-										/>
-										<RankingList
-											type="dashboardTracks"
-											className="col-span-1"
-											demoData={data.topTracks}
-										/>
+										<TopArtistsCard userId={user.id} isDemo={true} data={data.topArtists} />
+										<TopTracksCard userId={user.id} isDemo={true} data={data.topTracks} />
 									</div>
 								</div>
 							</main>

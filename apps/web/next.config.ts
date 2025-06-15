@@ -23,10 +23,10 @@ const nextConfig: NextConfig = {
 			dynamic: 30,
 			static: 180,
 		},
-		ppr: "incremental",
+		// ppr: "incremental",
 		reactCompiler: true,
-		// dynamicIO: true,
-		// useCache: true,
+		dynamicIO: true,
+		useCache: true,
 	},
 };
 

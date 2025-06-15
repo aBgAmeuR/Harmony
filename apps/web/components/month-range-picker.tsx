@@ -166,45 +166,45 @@ function MonthRangePicker({
 	const selector: QuickSelector[] =
 		minDate && maxDate
 			? [
-					{
-						label: "This year",
-						startMonth:
-							new Date(maxDate.getFullYear(), 0) > minDate
-								? new Date(maxDate.getFullYear(), 0)
-								: minDate,
-						endMonth:
-							new Date(maxDate.getFullYear(), 11) > maxDate
-								? maxDate
-								: new Date(maxDate.getFullYear(), 11),
-					},
-					{
-						label: "Last year",
-						startMonth:
-							new Date(maxDate.getFullYear() - 1, 0) > minDate
-								? new Date(maxDate.getFullYear() - 1, 0)
-								: minDate,
-						endMonth:
-							new Date(maxDate.getFullYear() - 1, 11) > maxDate
-								? maxDate
-								: new Date(maxDate.getFullYear() - 1, 11),
-					},
-					{
-						label: "Last 6 months",
-						startMonth:
-							new Date(addMonths(maxDate, -6)) > minDate
-								? new Date(addMonths(maxDate, -6))
-								: minDate,
-						endMonth: maxDate,
-					},
-					{
-						label: "Last 12 months",
-						startMonth:
-							new Date(addMonths(maxDate, -12)) > minDate
-								? new Date(addMonths(maxDate, -12))
-								: minDate,
-						endMonth: maxDate,
-					},
-				]
+				{
+					label: "This year",
+					startMonth:
+						new Date(maxDate.getFullYear(), 0) > minDate
+							? new Date(maxDate.getFullYear(), 0)
+							: minDate,
+					endMonth:
+						new Date(maxDate.getFullYear(), 11) > maxDate
+							? maxDate
+							: new Date(maxDate.getFullYear(), 11),
+				},
+				{
+					label: "Last year",
+					startMonth:
+						new Date(maxDate.getFullYear() - 1, 0) > minDate
+							? new Date(maxDate.getFullYear() - 1, 0)
+							: minDate,
+					endMonth:
+						new Date(maxDate.getFullYear() - 1, 11) > maxDate
+							? maxDate
+							: new Date(maxDate.getFullYear() - 1, 11),
+				},
+				{
+					label: "Last 6 months",
+					startMonth:
+						new Date(addMonths(maxDate, -6)) > minDate
+							? new Date(addMonths(maxDate, -6))
+							: minDate,
+					endMonth: maxDate,
+				},
+				{
+					label: "Last 12 months",
+					startMonth:
+						new Date(addMonths(maxDate, -12)) > minDate
+							? new Date(addMonths(maxDate, -12))
+							: minDate,
+					endMonth: maxDate,
+				},
+			]
 			: QUICK_SELECTORS;
 
 	if (isMobile) {
@@ -463,17 +463,17 @@ function MonthRangeCal({
 													disabled={
 														(maxDate
 															? menuYear + m.yearOffset >
-																	maxDate?.getFullYear() ||
-																(menuYear + m.yearOffset ===
-																	maxDate?.getFullYear() &&
-																	m.number > maxDate.getMonth())
+															maxDate?.getFullYear() ||
+															(menuYear + m.yearOffset ===
+																maxDate?.getFullYear() &&
+																m.number > maxDate.getMonth())
 															: false) ||
 														(minDate
 															? menuYear + m.yearOffset <
-																	minDate?.getFullYear() ||
-																(menuYear + m.yearOffset ===
-																	minDate?.getFullYear() &&
-																	m.number < minDate.getMonth())
+															minDate?.getFullYear() ||
+															(menuYear + m.yearOffset ===
+																minDate?.getFullYear() &&
+																m.number < minDate.getMonth())
 															: false)
 													}
 													className={cn(
@@ -481,9 +481,9 @@ function MonthRangeCal({
 															variant:
 																(startMonth === m.number &&
 																	menuYear + m.yearOffset === startYear) ||
-																(endMonth === m.number &&
-																	menuYear + m.yearOffset === endYear &&
-																	!rangePending)
+																	(endMonth === m.number &&
+																		menuYear + m.yearOffset === endYear &&
+																		!rangePending)
 																	? (variant?.calendar?.selected ?? "default")
 																	: (variant?.calendar?.main ?? "ghost"),
 														}),

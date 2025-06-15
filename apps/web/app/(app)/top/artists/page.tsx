@@ -1,28 +1,23 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
-import { MusicList } from "~/components/lists/music-list";
-import { HistoricalRankingsModal } from "~/components/modals/historical-rankings";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { SelectTimeRange } from "~/components/select-time-range";
 import { SelectTimeRangeInfo } from "~/components/select-time-range-info";
-import { getHistoricalArtistRankings } from "~/services/historical-rankings";
+import { TopArtists } from "~/features/stats/components/top-artists";
+import { getUserInfos } from "~/lib/utils";
 
-export default function TopArtistsPage() {
+export default async function TopArtistsPage() {
+	const { userId, isDemo } = await getUserInfos();
+
 	return (
-		<>
-			<AppHeader items={["Stats", "Top", "Artists"]}>
+		<Layout>
+			<LayoutHeader items={["Stats", "Top", "Artists"]}>
 				<SelectTimeRangeInfo />
 				<SelectTimeRange />
 				{/* // TODO: Enable this component when it's ready */}
 				{/* <SelectTopLayout /> */}
-			</AppHeader>
-			<Main>
-				<HistoricalRankingsModal
-					type="artist"
-					getHistoricalRankings={getHistoricalArtistRankings}
-				>
-					<MusicList type="topArtists" />
-				</HistoricalRankingsModal>
-			</Main>
-		</>
+			</LayoutHeader>
+			<LayoutContent>
+				<TopArtists userId={userId} isDemo={isDemo} />
+			</LayoutContent>
+		</Layout>
 	);
 }

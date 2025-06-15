@@ -27,4 +27,8 @@ export class SpotifyAPI {
 	async refreshToken() {
 		await this.client.refreshToken();
 	}
+
+	setUserId(userId: string) {
+		this.config.userId = userId;
+	}
 }
