@@ -69,7 +69,7 @@ export function ArtistListeningTrends({ stats }: ArtistListeningTrendsProps) {
 								color: "var(--chart-1)",
 							},
 						}}
-						tooltipLabelFormatter={(value) => `${value}h`}
+						tooltipLabelFormatter="hourSuffix"
 						xAxisTickFormatter={(hour: string) => `${hour}h`}
 						className="aspect-video"
 					/>

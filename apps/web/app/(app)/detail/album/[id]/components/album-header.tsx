@@ -29,7 +29,7 @@ export async function AlbumHeader({ albumId, userId }: AlbumHeaderProps) {
 			/>
 			<div className="flex-1">
 				<div className="mb-2 flex flex-col">
-					<p className="text-muted-foreground text-lg">{album.artists[0].name}</p>
+					<p className="text-lg text-muted-foreground">{album.artists[0].name}</p>
 					<div className="flex items-center gap-4">
 						<h1 className="font-bold text-3xl md:text-4xl">{album.name}</h1>
 						<Button

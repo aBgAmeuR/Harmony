@@ -2,21 +2,21 @@
 
 import { prisma } from "@repo/database";
 import { SpotifyAPI } from "@repo/spotify";
+import { getTimeRangeStats } from "~/features/stats/data/utils";
 import { getUserInfos } from "~/lib/utils";
-import { getTimeRangeStats } from "~/services/music-lists/get-top-data";
 
 export async function getHistoricalTrackRankings(trackId: string) {
-	const { userId } = await getUserInfos();
+	const { userId, isDemo } = await getUserInfos();
 	if (!userId) return [];
 
-	const timeRangeStats = await getTimeRangeStats(userId);
+	const timeRangeStats = await getTimeRangeStats(userId, isDemo);
 	if (!timeRangeStats) return [];
 
 	const res = await prisma.historicalTrackRanking.findMany({
 		where: {
 			userId,
 			trackId,
-			timeRange: timeRangeStats.timeRangeStats,
+			timeRange: timeRangeStats,
 		},
 		orderBy: { timestamp: "asc" },
 	});
@@ -25,10 +25,10 @@ export async function getHistoricalTrackRankings(trackId: string) {
 }
 
 export async function getHistoricalArtistRankings(artistId: string) {
-	const { userId } = await getUserInfos();
+	const { userId, isDemo } = await getUserInfos();
 	if (!userId) return [];
 
-	const timeRangeStats = await getTimeRangeStats(userId);
+	const timeRangeStats = await getTimeRangeStats(userId, isDemo);
 	if (!timeRangeStats) return [];
 
 	const results = await prisma.$queryRaw`
@@ -36,13 +36,13 @@ export async function getHistoricalArtistRankings(artistId: string) {
 		FROM (
 			SELECT DISTINCT timestamp
 			FROM "HistoricalArtistRanking"
-			WHERE "userId" = ${userId} AND "timeRange" = ${timeRangeStats.timeRangeStats}::"TimeRangeStats"
+			WHERE "userId" = ${userId} AND "timeRange" = ${timeRangeStats}::"TimeRangeStats"
 		) d
 		LEFT JOIN "HistoricalArtistRanking" r
 		ON r."timestamp" = d.timestamp
 		AND r."userId" = ${userId}
 		AND r."artistId" = ${artistId}
-		AND r."timeRange" = ${timeRangeStats.timeRangeStats}::"TimeRangeStats"
+		AND r."timeRange" = ${timeRangeStats}::"TimeRangeStats"
 		ORDER BY d.timestamp ASC;
 	`;
 

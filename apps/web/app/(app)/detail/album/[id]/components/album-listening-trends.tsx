@@ -63,7 +63,7 @@ export function AlbumListeningTrends({ data }: AlbumListeningTrendsProps) {
 									color: "var(--chart-1)",
 								},
 							}}
-							tooltipLabelFormatter={(value) => `${value}h`}
+							tooltipLabelFormatter="hourSuffix"
 							xAxisTickFormatter={(hour: string) => `${hour}h`}
 						/>
 					</ChartCardContent>
