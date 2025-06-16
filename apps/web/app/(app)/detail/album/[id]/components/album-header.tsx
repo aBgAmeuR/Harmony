@@ -25,7 +25,7 @@ export async function AlbumHeader({ albumId, userId }: AlbumHeaderProps) {
 			<img
 				src={album.images[0]?.url || "/placeholder.svg"}
 				alt={album.name}
-				className="size-32 rounded-md shadow-lg md:size-48"
+				className="size-32 rounded-md shadow-lg md:size-40"
 			/>
 			<div className="flex-1">
 				<div className="mb-2 flex flex-col">

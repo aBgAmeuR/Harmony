@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card"
-import { ButtonLink } from "@repo/ui/components/button-link"
+import { LinkButton } from "@repo/ui/components/link-button"
 import { Suspense } from "react"
 import { ListSkeleton } from "~/components/list-skeleton"
 import { RankingArtists } from "~/features/rankings/components/ranking-artists"
@@ -19,7 +19,7 @@ export const TopArtistsCard = async ({ data, userId, isDemo }: TopArtistsCardPro
                     <CardTitle>Top Artists</CardTitle>
                     <CardDescription>Top artists you've listened to</CardDescription>
                 </div>
-                <ButtonLink href="/rankings/artists" rightArrow={true} variant="outline">View All</ButtonLink>
+                <LinkButton href="/rankings/artists" rightArrow={true} variant="outline">View All</LinkButton>
             </CardHeader>
             <CardContent>
                 <Suspense fallback={<ListSkeleton length={5} />}>

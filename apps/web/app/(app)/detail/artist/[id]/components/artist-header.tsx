@@ -25,7 +25,7 @@ export async function ArtistHeader({ artistId, userId }: ArtistHeaderProps) {
 			<img
 				src={artist.images[0]?.url || "/placeholder.svg"}
 				alt={artist.name}
-				className="size-24 rounded-full shadow-lg md:size-32"
+				className="size-32 rounded-full shadow-lg md:size-40"
 			/>
 			<div className="flex-1">
 				<div className="mb-2 flex items-center gap-4">

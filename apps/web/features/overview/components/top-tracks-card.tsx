@@ -1,7 +1,5 @@
-import { Button } from "@repo/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card"
-import { ButtonLink } from "@repo/ui/components/button-link"
-import { ArrowRight } from "lucide-react"
+import { LinkButton } from "@repo/ui/components/link-button"
 import { Suspense } from "react"
 import { ListSkeleton } from "~/components/list-skeleton"
 import { RankingTracks } from "~/features/rankings/components/ranking-tracks"
@@ -21,7 +19,7 @@ export const TopTracksCard = async ({ data, userId, isDemo }: TopTracksCardProps
                     <CardTitle>Top Tracks</CardTitle>
                     <CardDescription>Top tracks you've listened to</CardDescription>
                 </div>
-                <ButtonLink href="/rankings/tracks" rightArrow={true} variant="outline">View All</ButtonLink>
+                <LinkButton href="/rankings/tracks" rightArrow={true} variant="outline">View All</LinkButton>
             </CardHeader>
             <CardContent>
                 <Suspense fallback={<ListSkeleton length={5} />}>
