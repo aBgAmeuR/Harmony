@@ -1,22 +1,14 @@
 import { Suspense } from "react";
-
-
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { AlbumHeader, AlbumHeaderSkeleton } from "~/features/detail/album/components/album-header";
+import { ListeningTab } from "~/features/detail/album/components/listening-tab";
 import { StatsTab, StatsTabSkeleton } from "~/features/detail/album/components/stats-tab";
+import { TracksTab } from "~/features/detail/album/components/tracks-tab";
 import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
 import { getUserInfos } from "~/lib/utils";
-import {
-	getAlbumTracksWithStats,
-	getListeningTrends,
-} from "~/services/details/get-album-details";
-import { AlbumListeningTrends } from "./components/album-listening-trends";
-import { AlbumTracks } from "./components/album-tracks";
 
 interface PageProps {
-	params: Promise<{
-		id: string;
-	}>;
+	params: Promise<{ id: string }>;
 }
 
 export default async function DetailAlbumPage({ params }: PageProps) {
@@ -40,12 +32,12 @@ export default async function DetailAlbumPage({ params }: PageProps) {
 					</DetailTabsContent>
 					<DetailTabsContent value="Tracks">
 						<Suspense>
-							<AlbumTracks data={getAlbumTracksWithStats(userId, id)} />
+							<TracksTab albumId={id} userId={userId} />
 						</Suspense>
 					</DetailTabsContent>
 					<DetailTabsContent value="Listening Trends">
 						<Suspense>
-							<AlbumListeningTrends data={getListeningTrends(userId, id)} />
+							<ListeningTab albumId={id} userId={userId} />
 						</Suspense>
 					</DetailTabsContent>
 				</DetailTabs>

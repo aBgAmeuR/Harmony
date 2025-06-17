@@ -2,6 +2,10 @@
 
 import { prisma } from "@repo/database";
 import { format } from "date-fns";
+import {
+	unstable_cacheLife as cacheLife,
+	unstable_cacheTag as cacheTag,
+} from "next/cache";
 import { formatMonth } from "~/lib/utils";
 
 const MS_PER_MINUTE = 60000;
@@ -98,6 +102,10 @@ const fetchFirstAndLastListens = async (albumId: string, userId: string) => {
 };
 
 export const getStatsTabData = async (albumId: string, userId: string) => {
+	"use cache";
+	cacheLife("days");
+	cacheTag(userId, "album-detail", "stats-tab");
+
 	try {
 		const [monthlyStats, dayRecords, [firstListen, lastListen]] =
 			await Promise.all([

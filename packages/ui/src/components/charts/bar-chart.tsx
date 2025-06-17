@@ -42,7 +42,7 @@ export interface BarChartProps {
 	>["formatter"];
 	className?: string;
 	yAxisTickFormatter?: keyof typeof axisTickFormatters;
-	xAxisTickFormatter?: (value: any) => string;
+	xAxisTickFormatter?: keyof typeof axisTickFormatters;
 	showBarLabels?: boolean;
 	showYAxis?: boolean;
 	barLabelFormatter?: keyof typeof axisTickFormatters;
@@ -81,7 +81,7 @@ export function ReusableBarChart({
 					tickLine={false}
 					axisLine={false}
 					tickMargin={8}
-					tickFormatter={xAxisTickFormatter}
+					tickFormatter={xAxisTickFormatter ? axisTickFormatters[xAxisTickFormatter] : undefined}
 				/>
 				{showYAxis && (
 					<YAxis
