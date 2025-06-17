@@ -7,7 +7,7 @@ import { Icons } from "~/components/icons";
 type DetailHeaderProps = PropsWithChildren<{
     imgUrl?: string;
     title: string;
-    subtitle: string;
+    subtitle?: string;
     hrefUrl: string;
     imgRadius: "rounded-full" | "rounded-md";
 }>
@@ -22,7 +22,7 @@ export const DetailHeader = ({ imgUrl, title, subtitle, hrefUrl, children, imgRa
             />
             <div className="flex-1">
                 <div className="mb-2 flex flex-col">
-                    <p className="text-lg text-muted-foreground">{subtitle}</p>
+                    {subtitle && <p className="text-lg text-muted-foreground">{subtitle}</p>}
                     <div className="flex items-center gap-4">
                         <h1 className="font-bold text-3xl md:text-4xl">{title}</h1>
                         <LinkButton

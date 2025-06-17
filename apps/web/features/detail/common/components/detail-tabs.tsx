@@ -4,9 +4,10 @@ import type { PropsWithChildren } from "react";
 
 type DetailTabsProps = PropsWithChildren<{
     tabs: string[];
+    disabledTabs?: string[];
 }>;
 
-export const DetailTabs = ({ tabs, children }: DetailTabsProps) => {
+export const DetailTabs = ({ tabs, disabledTabs, children }: DetailTabsProps) => {
     return (
         <Tabs defaultValue={tabs[0]} className="w-full">
             <div className="border-border border-y py-1">
@@ -17,6 +18,7 @@ export const DetailTabs = ({ tabs, children }: DetailTabsProps) => {
                                 key={`tabTrigger-${tab}`}
                                 value={tab}
                                 className="data-[state=active]:bg-muted data-[state=active]:shadow-none"
+                                disabled={disabledTabs?.includes(tab)}
                             >
                                 {tab}
                             </TabsTrigger>

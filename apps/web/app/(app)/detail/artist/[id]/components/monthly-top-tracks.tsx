@@ -35,15 +35,13 @@ import type {
 
 interface MonthlyTopTracksProps {
 	dataPromise: Promise<{ results: MonthlyTrackData[]; chartRace: ChartRace }>;
-	artistNamePromise: Promise<string | undefined>;
 }
 
 export function MonthlyTopTracks({
 	dataPromise,
-	artistNamePromise,
 }: MonthlyTopTracksProps) {
 	const { results: data, chartRace } = React.use(dataPromise);
-	const artistName = React.use(artistNamePromise);
+	const artistName = "Artist Name";
 	const [date, setDate] = React.useState<Date | undefined>(
 		data.length > 0 ? new Date(`${data[0].month}-01`) : undefined,
 	);
