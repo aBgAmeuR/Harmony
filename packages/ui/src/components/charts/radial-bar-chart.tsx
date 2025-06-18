@@ -8,6 +8,8 @@ import {
 } from "@repo/ui/chart";
 import type * as React from "react";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
+import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
 
 export interface RadialBarChartProps {
 	data: any[];
@@ -16,7 +18,7 @@ export interface RadialBarChartProps {
 	endAngle?: number;
 	innerRadius?: number;
 	outerRadius?: number;
-	tooltipLabelFormatter?: (value: string, payload: any) => React.ReactNode;
+	tooltipLabelFormatter?: TooltipFormatterValues;
 	tooltipValueFormatter?: React.ComponentProps<
 		typeof ChartTooltipContent
 	>["formatter"];
@@ -32,8 +34,8 @@ export function ReusableRadialBarChart({
 	endAngle = 180,
 	innerRadius = 80,
 	outerRadius = 130,
-	tooltipLabelFormatter,
-	tooltipValueFormatter,
+	tooltipLabelFormatter = "normal",
+	tooltipValueFormatter = ChartTooltipFormatter,
 	className = "aspect-square min-w-60 w-full",
 	percentage,
 	centerLabel,
@@ -51,7 +53,7 @@ export function ReusableRadialBarChart({
 					content={
 						<ChartTooltipContent
 							hideLabel
-							labelFormatter={tooltipLabelFormatter}
+							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
 							formatter={tooltipValueFormatter}
 						/>
 					}

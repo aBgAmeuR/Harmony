@@ -10,6 +10,7 @@ import * as React from "react";
 import { Label, Pie, PieChart } from "recharts";
 import { colorizeData } from "./chart-color-utils";
 import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
+import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
 
 export interface PieChartProps {
 	data: any[];
@@ -17,7 +18,7 @@ export interface PieChartProps {
 	nameKey: string;
 	config?: ChartConfig;
 	innerRadius?: number;
-	tooltipLabelFormatter?: (value: string, payload: any) => React.ReactNode;
+	tooltipLabelFormatter?: TooltipFormatterValues;
 	tooltipValueFormatter?: React.ComponentProps<
 		typeof ChartTooltipContent
 	>["formatter"];
@@ -33,7 +34,7 @@ export function ReusablePieChart({
 	nameKey,
 	config = {},
 	innerRadius = 70,
-	tooltipLabelFormatter,
+	tooltipLabelFormatter = "normal",
 	tooltipValueFormatter = ChartTooltipFormatter,
 	className = "aspect-square min-w-60 w-full",
 	strokeWidth = 5,
@@ -48,11 +49,7 @@ export function ReusablePieChart({
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={
-								tooltipLabelFormatter ||
-								((_, payload) =>
-									`${payload[0].payload[nameKey].charAt(0).toUpperCase()}${payload[0].payload[nameKey].slice(1)}`)
-							}
+							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
 							formatter={tooltipValueFormatter}
 						/>
 					}

@@ -7,7 +7,9 @@ import {
 	ChartTooltipContent,
 } from "@repo/ui/chart";
 import type * as React from "react";
-import { Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+import { getTickFormatter, TickFormatterValues } from "./tick-formatters";
+import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
 import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
 
 export interface LineChartProps {
@@ -15,13 +17,13 @@ export interface LineChartProps {
 	xAxisDataKey: string;
 	lineDataKey: string;
 	config: ChartConfig;
-	tooltipLabelFormatter?: (value: string, payload: any) => React.ReactNode;
+	tooltipLabelFormatter?: TooltipFormatterValues;
 	tooltipValueFormatter?: React.ComponentProps<
 		typeof ChartTooltipContent
-	>["formatter"];
+	>["formatter"] | null;
 	className?: string;
-	yAxisTickFormatter?: (value: any) => string;
-	xAxisTickFormatter?: (value: any) => string;
+	yAxisTickFormatter?: TickFormatterValues;
+	xAxisTickFormatter?: TickFormatterValues;
 	yAxisReversed?: boolean;
 	yAxisDomain?: [number | string, number | string];
 	showYAxis?: boolean;
@@ -35,11 +37,11 @@ export function ReusableLineChart({
 	xAxisDataKey,
 	lineDataKey,
 	config,
-	tooltipLabelFormatter,
-	tooltipValueFormatter,
+	tooltipLabelFormatter = "normal",
+	tooltipValueFormatter = ChartTooltipFormatter,
 	className = "aspect-[10/3] w-full",
-	yAxisTickFormatter,
-	xAxisTickFormatter,
+	yAxisTickFormatter = "normal",
+	xAxisTickFormatter = "normal",
 	yAxisReversed = false,
 	yAxisDomain,
 	showYAxis = true,
@@ -56,7 +58,7 @@ export function ReusableLineChart({
 					tickLine={false}
 					axisLine={false}
 					tickMargin={2}
-					tickFormatter={xAxisTickFormatter}
+					tickFormatter={getTickFormatter(xAxisTickFormatter)}
 					dy={10}
 				/>
 				{showYAxis && (
@@ -64,7 +66,7 @@ export function ReusableLineChart({
 						tickLine={false}
 						axisLine={false}
 						ticks={[0, 1, 10, 20, 30, 40, 50]}
-						tickFormatter={yAxisTickFormatter}
+						tickFormatter={getTickFormatter(yAxisTickFormatter)}
 						reversed={yAxisReversed}
 						domain={yAxisDomain}
 					/>
@@ -72,8 +74,8 @@ export function ReusableLineChart({
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={tooltipLabelFormatter}
-							formatter={tooltipValueFormatter}
+							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
+							formatter={tooltipValueFormatter ? tooltipValueFormatter : undefined}
 						/>
 					}
 					cursor={cursor}

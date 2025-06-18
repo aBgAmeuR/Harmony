@@ -1,10 +1,7 @@
 import { cn } from "@repo/ui/lib/utils";
 import { NumberFlow } from "@repo/ui/components/number";
 
-export const chartLabelsFormatter = {
-    hourSuffix: (value: string) => {
-        return `${value}h`;
-    },
+export const tooltipFormatter = {
     average: (value: string, payload: any, data: any) => {
         const percentage = ((payload[0].value - data) / data) * 100;
         return (
@@ -20,4 +17,16 @@ export const chartLabelsFormatter = {
         );
     },
     normal: (value: string) => value,
+    hourSuffix: (value: number | string) => `${value}h`,
 } as const;
+
+export type TooltipFormatterValues = keyof typeof tooltipFormatter;
+
+export const getTooltipFormatter = (value: TooltipFormatterValues | undefined, label: any, payload: any, data?: any) => {
+    if (!value) return undefined;
+
+    const fn = tooltipFormatter[value];
+    if (!fn) return undefined;
+
+    return fn(label, payload, data);
+}

@@ -9,14 +9,15 @@ import {
 import type * as React from "react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
 import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
-import { chartLabelsFormatter } from "./chart-label-formatter";
+import { getTickFormatter, TickFormatterValues } from "./tick-formatters";
+import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
 
 export interface RadarChartProps {
     data: any[];
     angleAxisDataKey: string;
     radarDataKeys: string[];
     config: ChartConfig;
-    tooltipLabelFormatter?: keyof typeof chartLabelsFormatter;
+    tooltipLabelFormatter?: TooltipFormatterValues;
     tooltipValueFormatter?: React.ComponentProps<
         typeof ChartTooltipContent
     >["formatter"];
@@ -27,7 +28,7 @@ export interface RadarChartProps {
         bottom?: number;
         left?: number;
     };
-    angleAxisTickFormatter?: (value: any) => string;
+    angleAxisTickFormatter?: TickFormatterValues;
     angleAxisWidth?: number;
     fillOpacity?: number;
     dotRadius?: number;
@@ -41,11 +42,11 @@ export function ReusableRadarChart({
     angleAxisDataKey,
     radarDataKeys,
     config,
-    tooltipLabelFormatter,
+    tooltipLabelFormatter = "normal",
     tooltipValueFormatter = ChartTooltipFormatter,
     className = "aspect-square min-w-60 w-full",
     margin = { top: 18, right: 18, bottom: 18, left: 18 },
-    angleAxisTickFormatter,
+    angleAxisTickFormatter = "normal",
     angleAxisWidth = 50,
     fillOpacity = 0.6,
     dotRadius = 4,
@@ -60,7 +61,7 @@ export function ReusableRadarChart({
                     cursor={false}
                     content={
                         <ChartTooltipContent
-                            labelFormatter={(label, payload) => tooltipLabelFormatter ? chartLabelsFormatter[tooltipLabelFormatter](label, payload, labelData) : undefined}
+                            labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, labelData)}
                             formatter={tooltipValueFormatter}
                         />
                     }
@@ -68,7 +69,7 @@ export function ReusableRadarChart({
                 <PolarAngleAxis
                     dataKey={angleAxisDataKey}
                     width={angleAxisWidth}
-                    tickFormatter={angleAxisTickFormatter}
+                    tickFormatter={getTickFormatter(angleAxisTickFormatter)}
                 />
                 {showGrid && <PolarGrid />}
                 {radarDataKeys.map((key) => (

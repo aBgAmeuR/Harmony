@@ -18,8 +18,8 @@ import {
 	YAxis,
 } from "recharts";
 import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
-import { chartLabelsFormatter } from "./chart-label-formatter";
-import { axisTickFormatters } from "./axis-tick-formatters";
+import { getTickFormatter, TickFormatterValues } from "./tick-formatters";
+import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
 
 export interface BarChartProps {
 	data: any[];
@@ -36,16 +36,16 @@ export interface BarChartProps {
 		| "insideBottomLeft";
 	};
 	config?: ChartConfig;
-	tooltipLabelFormatter?: keyof typeof chartLabelsFormatter;
+	tooltipLabelFormatter?: TooltipFormatterValues;
 	tooltipValueFormatter?: React.ComponentProps<
 		typeof ChartTooltipContent
 	>["formatter"];
 	className?: string;
-	yAxisTickFormatter?: keyof typeof axisTickFormatters;
-	xAxisTickFormatter?: keyof typeof axisTickFormatters;
+	yAxisTickFormatter?: TickFormatterValues;
+	xAxisTickFormatter?: TickFormatterValues;
 	showBarLabels?: boolean;
 	showYAxis?: boolean;
-	barLabelFormatter?: keyof typeof axisTickFormatters;
+	barLabelFormatter?: TickFormatterValues;
 	barRadius?: number;
 	labelData?: any;
 }
@@ -61,11 +61,11 @@ export function ReusableBarChart({
 			color: "var(--chart-1)",
 		},
 	} as ChartConfig,
-	tooltipLabelFormatter,
+	tooltipLabelFormatter = "normal",
 	tooltipValueFormatter = ChartTooltipFormatter,
 	className = "aspect-[10/3] w-full",
-	yAxisTickFormatter,
-	xAxisTickFormatter,
+	yAxisTickFormatter = "normal",
+	xAxisTickFormatter = "normal",
 	showBarLabels = false,
 	showYAxis = true,
 	barLabelFormatter,
@@ -81,19 +81,19 @@ export function ReusableBarChart({
 					tickLine={false}
 					axisLine={false}
 					tickMargin={8}
-					tickFormatter={xAxisTickFormatter ? axisTickFormatters[xAxisTickFormatter] : undefined}
+					tickFormatter={getTickFormatter(xAxisTickFormatter)}
 				/>
 				{showYAxis && (
 					<YAxis
 						tickLine={false}
 						axisLine={false}
-						tickFormatter={yAxisTickFormatter ? axisTickFormatters[yAxisTickFormatter] : undefined}
+						tickFormatter={getTickFormatter(yAxisTickFormatter)}
 					/>
 				)}
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={(label, payload) => tooltipLabelFormatter ? chartLabelsFormatter[tooltipLabelFormatter](label, payload, labelData) : undefined}
+							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, labelData)}
 							formatter={tooltipValueFormatter}
 						/>
 					}
@@ -110,7 +110,7 @@ export function ReusableBarChart({
 							offset={12}
 							className="fill-foreground"
 							fontSize={12}
-							formatter={barLabelFormatter ? axisTickFormatters[barLabelFormatter] : undefined}
+							formatter={getTickFormatter(barLabelFormatter)}
 						/>
 					)}
 				</Bar>

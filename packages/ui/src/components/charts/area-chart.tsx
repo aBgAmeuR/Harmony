@@ -12,8 +12,8 @@ import type * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import { createGradientDefs } from "./chart-color-utils";
 import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
-import { axisTickFormatters } from "./axis-tick-formatters";
-import { chartLabelsFormatter } from "./chart-label-formatter";
+import { getTickFormatter, TickFormatterValues } from "./tick-formatters";
+import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
 
 export interface AreaChartProps {
 	data: any[];
@@ -21,13 +21,13 @@ export interface AreaChartProps {
 	areaDataKeys: string[];
 	stacked?: boolean;
 	config: ChartConfig;
-	tooltipLabelFormatter?: keyof typeof chartLabelsFormatter;
+	tooltipLabelFormatter?: TooltipFormatterValues;
 	tooltipValueFormatter?: React.ComponentProps<
 		typeof ChartTooltipContent
 	>["formatter"];
 	className?: string;
-	yAxisTickFormatter?: keyof typeof axisTickFormatters;
-	xAxisTickFormatter?: keyof typeof axisTickFormatters;
+	yAxisTickFormatter?: TickFormatterValues;
+	xAxisTickFormatter?: TickFormatterValues;
 	showLegend?: boolean;
 	showYAxis?: boolean;
 }
@@ -38,11 +38,11 @@ export function ReusableAreaChart({
 	areaDataKeys,
 	stacked = false,
 	config,
-	tooltipLabelFormatter,
+	tooltipLabelFormatter = "normal",
 	tooltipValueFormatter = ChartTooltipFormatter,
 	className = "aspect-[10/3] w-full",
-	yAxisTickFormatter,
-	xAxisTickFormatter,
+	yAxisTickFormatter = "normal",
+	xAxisTickFormatter = "normal",
 	showLegend = false,
 	showYAxis = true,
 }: AreaChartProps) {
@@ -63,20 +63,20 @@ export function ReusableAreaChart({
 					axisLine={false}
 					tickMargin={8}
 					minTickGap={32}
-					tickFormatter={xAxisTickFormatter ? axisTickFormatters[xAxisTickFormatter] : undefined}
+					tickFormatter={getTickFormatter(xAxisTickFormatter)}
 				/>
 				{showYAxis && (
 					<YAxis
 						tickLine={false}
 						axisLine={false}
 						tickMargin={8}
-						tickFormatter={yAxisTickFormatter ? axisTickFormatters[yAxisTickFormatter] : undefined}
+						tickFormatter={getTickFormatter(yAxisTickFormatter)}
 					/>
 				)}
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={(label, payload) => tooltipLabelFormatter ? chartLabelsFormatter[tooltipLabelFormatter](label, payload, null) : undefined}
+							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
 							formatter={tooltipValueFormatter}
 						/>
 					}
