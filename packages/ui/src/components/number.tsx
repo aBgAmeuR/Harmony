@@ -18,6 +18,7 @@ export const NumberFlow = ({
 		<NumberFlowPrimitive
 			transformTiming={{ duration, easing: "ease-in-out" }}
 			value={Number(value)}
+			isolate={true}
 			{...props}
 		/>
 	);

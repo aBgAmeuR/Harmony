@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "../../lib/utils";
 import { type ChartTooltipContent, useChart } from "@repo/ui/chart";
 import { NumberFlow } from "@repo/ui/components/number";
 
@@ -9,25 +10,31 @@ type Formatter = React.ComponentProps<typeof ChartTooltipContent>["formatter"];
  * Format chart tooltip values
  * This formatter can handle various data types including time in milliseconds
  */
-export const ChartTooltipFormatter: Formatter = (value, name, item) => {
-	const { config } = useChart();
+export const ChartTooltipFormatter: Formatter = (value, name, item, index, payload) => {
 	const indicatorColor = item?.payload?.fill || item?.color;
-	const label = config[name as keyof typeof config]?.label || name;
+	const label = item?.payload?.label || name;
 
 	return (
-		<div className="flex min-w-[130px] w-full justify-between gap-2 items-center text-xs text-muted-foreground">
-			<div className="flex items-center gap-2">
-				<div
-					className="h-2.5 w-2.5 shrink-0 rounded-[2px] bg-(--color-bg)"
-					style={{ "--color-bg": indicatorColor } as React.CSSProperties}
-				/>
-				{label}
+		<>
+			<div
+				className="shrink-0 rounded-[2px] border-(--color-border) bg-(--color-bg) h-2.5 w-2.5"
+				style={{
+					"--color-bg": indicatorColor,
+					"--color-border": indicatorColor,
+				} as React.CSSProperties}
+			/>
+			<div className="flex flex-1 justify-between leading-none gap-2">
+				<div className="grid gap-1.5">
+					<span className="text-muted-foreground">
+						{label}
+					</span>
+				</div>
+				<span className="text-foreground font-mono font-medium tabular-nums h-3">
+					<NumberFlow value={getMsPlayedInHours(item.value ?? 0, true)} suffix="h" className="-translate-y-[3px]" />
+				</span>
 			</div>
-			<div className="font-medium tabular-nums text-foreground">
-				<NumberFlow value={getMsPlayedInHours(value, true)} suffix="h" />
-			</div>
-		</div>
-	);
+		</>
+	)
 };
 
 const getMsPlayedInHours = (
