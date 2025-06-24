@@ -2,7 +2,7 @@
 
 import { Button } from "@repo/ui/button";
 import { HistoryIcon } from "lucide-react";
-import { useModals } from "~/lib/store";
+import { useHistoricalModalContext } from "~/features/stats/components/historical-provider";
 import type { MusicItemCardProps } from "./type";
 
 type HistoricalRankingsProps = {
@@ -10,11 +10,15 @@ type HistoricalRankingsProps = {
 };
 
 export function HistoricalRankings({ item }: HistoricalRankingsProps) {
-	const { openModal } = useModals();
+	const { setItem } = useHistoricalModalContext();
 
 	return (
 		<Button
-			onClick={() => openModal("historical-rankings", item)}
+			onClick={() => setItem({
+				id: item.id,
+				name: item.name,
+				href: item.href,
+			})}
 			variant="ghost"
 			size="icon"
 		>

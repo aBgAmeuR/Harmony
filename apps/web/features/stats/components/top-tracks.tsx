@@ -1,8 +1,9 @@
 import { MusicList } from "~/components/lists/music-list";
 import type { MusicListConfig } from "~/components/lists/music-list/config";
-import { HistoricalRankingsModal } from "~/components/modals/historical-rankings";
 import { getHistoricalTrackRankings } from "~/services/historical-rankings";
 import { getTopTracks } from "../data/top-tracks";
+import { HistoricalModal } from "./historical-modal";
+import { HistoricalProvider } from "./historical-provider";
 
 const config = {
     label: "tracks",
@@ -19,8 +20,9 @@ export const TopTracks = async ({ userId, isDemo }: TopTracksProps) => {
     const data = await getTopTracks(userId, isDemo);
 
     return (
-        <HistoricalRankingsModal type="track" promise={getHistoricalTrackRankings}>
+        <HistoricalProvider>
             <MusicList data={data} config={config} />
-        </HistoricalRankingsModal>
+            <HistoricalModal promise={getHistoricalTrackRankings} />
+        </HistoricalProvider>
     )
 }
