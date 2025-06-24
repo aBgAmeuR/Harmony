@@ -13,7 +13,7 @@ import { getRankChange, getTimeRangeStats } from "./utils";
 export const getTopTracks = async (userId: string, isDemo: boolean) => {
 	"use cache";
 	cacheLife("hours");
-	cacheTag(userId, "top-tracks");
+	cacheTag(`top-tracks-${userId}`);
 
 	const timeRange = await getTimeRangeStats(userId, isDemo);
 	spotify.setUserId(userId);

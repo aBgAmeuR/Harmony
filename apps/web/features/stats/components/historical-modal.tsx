@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, buttonVariants } from "@repo/ui/button";
+import { Button } from "@repo/ui/button";
+import { LinkButton } from "@repo/ui/components/link-button";
 import {
     Credenza,
     CredenzaContent,
@@ -9,7 +10,6 @@ import {
     CredenzaHeader,
     CredenzaTitle,
 } from "@repo/ui/credenza";
-import { cn } from "@repo/ui/lib/utils";
 import { Spinner } from "@repo/ui/spinner";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle, InfoIcon } from "lucide-react";
@@ -53,7 +53,7 @@ export const HistoricalModal = ({ promise }: HistoricalModalProps) => {
                         See how {item?.name} has ranked over time.
                     </CredenzaDescription>
                 </CredenzaHeader>
-                <div className="rounded-md border bg-muted px-4 py-3 mx-4 mb-2 md:mx-0 md:mb-0">
+                <div className="mx-4 mb-2 rounded-md border bg-muted px-4 py-3 md:mx-0 md:mb-0">
                     <p className="text-sm">
                         <InfoIcon
                             className="-mt-0.5 me-3 inline-flex text-blue-500"
@@ -83,23 +83,17 @@ export const HistoricalModal = ({ promise }: HistoricalModalProps) => {
                     {historicalRankings && <HistoricalChart data={historicalRankings} />}
                 </div>
                 <CredenzaFooter>
-                    <a
-                        className={cn(buttonVariants({ variant: "secondary" }))}
-                        href={item?.href}
-                        target="_blank"
-                        rel="noreferrer"
-                    >
-                        <Icons.spotify className="size-4" />
-                        Open in Spotify
-                    </a>
-                    <Button
-                        variant="outline"
-                        onClick={() => setItem(null)}
-                    >
+                    {item?.href && (
+                        <LinkButton href={item.href} target="_blank" rel="noreferrer" variant="secondary">
+                            <Icons.spotify className="size-4" />
+                            Open in Spotify
+                        </LinkButton>
+                    )}
+                    <Button variant="outline" onClick={() => setItem(null)}>
                         Close
                     </Button>
                 </CredenzaFooter>
             </CredenzaContent>
-        </Credenza>
+        </Credenza >
     );
 };

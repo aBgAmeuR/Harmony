@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, PropsWithChildren } from "react";
+import { type PropsWithChildren, createContext, useContext, useState } from "react";
 
 export type HistoricalModalItem = {
     id: string;

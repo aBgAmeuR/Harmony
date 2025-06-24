@@ -18,7 +18,7 @@ const formatFollowers = (followers: number) => {
 export const getTopArtists = async (userId: string, isDemo: boolean) => {
 	"use cache";
 	cacheLife("hours");
-	cacheTag(userId, "top-artists");
+	cacheTag(`top-artists-${userId}`);
 
 	const timeRange = await getTimeRangeStats(userId, isDemo);
 	spotify.setUserId(userId);

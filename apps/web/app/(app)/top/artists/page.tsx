@@ -1,6 +1,7 @@
+import { Suspense } from "react";
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { SelectTimeRange } from "~/components/select-time-range";
-import { SelectTimeRangeInfo } from "~/components/select-time-range-info";
+import { TimeRangeInfo } from "~/features/stats/components/time-range-info";
+import { TimeRangeSelect, TimeRangeSelectSkeleton } from "~/features/stats/components/time-range-select";
 import { TopArtists } from "~/features/stats/components/top-artists";
 import { getUserInfos } from "~/lib/utils";
 
@@ -10,8 +11,10 @@ export default async function TopArtistsPage() {
 	return (
 		<Layout>
 			<LayoutHeader items={["Stats", "Top", "Artists"]}>
-				<SelectTimeRangeInfo />
-				<SelectTimeRange />
+				<TimeRangeInfo />
+				<Suspense fallback={<TimeRangeSelectSkeleton />}>
+					<TimeRangeSelect userId={userId} isDemo={isDemo} />
+				</Suspense>
 				{/* // TODO: Enable this component when it's ready */}
 				{/* <SelectTopLayout /> */}
 			</LayoutHeader>

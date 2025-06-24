@@ -8,7 +8,7 @@ import {
 import { Info } from "lucide-react";
 import React from "react";
 
-export const SelectTimeRangeInfo = () => {
+export const TimeRangeInfo = () => {
 	return (
 		<TooltipProvider delayDuration={0}>
 			<Tooltip>
