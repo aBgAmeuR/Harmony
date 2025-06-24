@@ -1,12 +1,10 @@
 "use client";
 
 import {
-	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
-	ChartTooltipContent,
+	ChartTooltipContent
 } from "@repo/ui/chart";
-import type * as React from "react";
 import {
 	Bar,
 	BarChart,
@@ -17,12 +15,13 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
-import { getTickFormatter, TickFormatterValues } from "./tick-formatters";
-import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
+import { cn } from "../../lib/utils";
+import { AxisTickFormatters, BaseChartProps } from "./common";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import { getTickFormatter, TickFormatterValues } from "./common/tick-formatters";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
 
-export interface BarChartProps {
-	data: any[];
+export interface BarChartProps extends BaseChartProps, AxisTickFormatters {
 	xAxisDataKey: string;
 	barDataKey: string;
 	referenceLine?: {
@@ -35,14 +34,6 @@ export interface BarChartProps {
 		| "insideBottom"
 		| "insideBottomLeft";
 	};
-	config?: ChartConfig;
-	tooltipLabelFormatter?: TooltipFormatterValues;
-	tooltipValueFormatter?: React.ComponentProps<
-		typeof ChartTooltipContent
-	>["formatter"];
-	className?: string;
-	yAxisTickFormatter?: TickFormatterValues;
-	xAxisTickFormatter?: TickFormatterValues;
 	showBarLabels?: boolean;
 	showYAxis?: boolean;
 	barLabelFormatter?: TickFormatterValues;
@@ -55,15 +46,10 @@ export function ReusableBarChart({
 	xAxisDataKey,
 	barDataKey,
 	referenceLine,
-	config = {
-		[barDataKey]: {
-			label: "Value",
-			color: "var(--chart-1)",
-		},
-	} as ChartConfig,
+	config,
 	tooltipLabelFormatter = "normal",
-	tooltipValueFormatter = ChartTooltipFormatter,
-	className = "aspect-[10/3] w-full",
+	tooltipValueFormatter = "normal",
+	className,
 	yAxisTickFormatter = "normal",
 	xAxisTickFormatter = "normal",
 	showBarLabels = false,
@@ -73,7 +59,7 @@ export function ReusableBarChart({
 	labelData,
 }: BarChartProps) {
 	return (
-		<ChartContainer config={config} className={className}>
+		<ChartContainer config={config} className={cn("aspect-[10/3] w-full", className)}>
 			<BarChart accessibilityLayer data={data} margin={{ top: 24 }}>
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
 				<XAxis
@@ -94,7 +80,7 @@ export function ReusableBarChart({
 					content={
 						<ChartTooltipContent
 							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, labelData)}
-							formatter={tooltipValueFormatter}
+							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
 					cursor={false}

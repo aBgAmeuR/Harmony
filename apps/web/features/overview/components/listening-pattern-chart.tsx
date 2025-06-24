@@ -1,18 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import type {
-    ChartConfig,
-} from "@repo/ui/chart";
 import { ReusableRadarChart } from "@repo/ui/components/charts/radar-chart";
 import { Skeleton } from "@repo/ui/skeleton";
 import { Brain } from "lucide-react";
 import { getListeningPatternData } from "../data/listening-pattern-chart";
-
-const chartConfig = {
-    time: {
-        label: "Time",
-        color: "var(--chart-1)",
-    },
-} satisfies ChartConfig;
 
 type ListeningPatternChartProps = {
     data?: Awaited<ReturnType<typeof getListeningPatternData>>;
@@ -43,8 +33,9 @@ export async function ListeningPatternChart({
                     data={data}
                     angleAxisDataKey="subject"
                     radarDataKeys={["time"]}
-                    config={chartConfig}
+                    config={{ time: { label: "Time Played", color: "var(--chart-1)" } }}
                     className="mx-auto aspect-square size-full w-56 md:w-52 lg:w-64 xl:w-80 2xl:w-[350px]"
+                    tooltipValueFormatter="hourSuffix"
                 />
             </CardContent>
         </Card>

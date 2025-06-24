@@ -1,28 +1,22 @@
 "use client";
 
 import {
-	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
-	ChartTooltipContent,
+	ChartTooltipContent
 } from "@repo/ui/chart";
 import * as React from "react";
 import { Label, Pie, PieChart } from "recharts";
-import { colorizeData } from "./chart-color-utils";
-import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
-import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
+import { cn } from "../../lib/utils";
+import { colorizeData } from "./common/chart-color-utils";
+import { BaseChartProps } from "./common";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
 
-export interface PieChartProps {
-	data: any[];
+export interface PieChartProps extends BaseChartProps {
 	valueDataKey: string;
 	nameKey: string;
-	config?: ChartConfig;
 	innerRadius?: number;
-	tooltipLabelFormatter?: TooltipFormatterValues;
-	tooltipValueFormatter?: React.ComponentProps<
-		typeof ChartTooltipContent
-	>["formatter"];
-	className?: string;
 	strokeWidth?: number;
 	centerLabel?: string;
 	centerValue?: string | number;
@@ -32,11 +26,11 @@ export function ReusablePieChart({
 	data,
 	valueDataKey,
 	nameKey,
-	config = {},
+	config,
 	innerRadius = 70,
 	tooltipLabelFormatter = "normal",
-	tooltipValueFormatter = ChartTooltipFormatter,
-	className = "aspect-square min-w-60 w-full",
+	tooltipValueFormatter = "normal",
+	className,
 	strokeWidth = 5,
 	centerLabel,
 	centerValue,
@@ -44,13 +38,13 @@ export function ReusablePieChart({
 	const colorizedData = React.useMemo(() => colorizeData(data), [data]);
 
 	return (
-		<ChartContainer config={config} className={className}>
+		<ChartContainer config={config} className={cn("aspect-square min-w-60 w-full", className)}>
 			<PieChart margin={{ top: -10, left: -10, right: -10, bottom: -10 }}>
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
 							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
-							formatter={tooltipValueFormatter}
+							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
 					cursor={false}

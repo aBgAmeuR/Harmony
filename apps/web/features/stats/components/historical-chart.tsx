@@ -4,18 +4,14 @@ import { ReusableLineChart } from "@repo/ui/components/charts/line-chart";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 
-interface HistoricalRankingsChartProps {
+interface HistoricalChartProps {
 	data: Array<{
 		timestamp: Date;
 		rank: number | null;
 	}>;
-	className?: string;
 }
 
-export function HistoricalRankingsChart({
-	data,
-	className,
-}: HistoricalRankingsChartProps) {
+export function HistoricalChart({ data }: HistoricalChartProps) {
 	const chartData = data.map((item) => ({
 		date: format(item.timestamp, "dd MMM", { locale: fr }),
 		rank: item.rank,
@@ -26,16 +22,11 @@ export function HistoricalRankingsChart({
 			data={chartData}
 			xAxisDataKey="date"
 			lineDataKey="rank"
-			config={{
-				rank: {
-					label: "Rank",
-					color: "var(--chart-1)",
-				},
-			}}
+			config={{ rank: { label: "Rank", color: "var(--chart-1)" } }}
 			yAxisReversed={true}
 			yAxisDomain={[1, 50]}
 			showDots={true}
-			className={className}
+			className="aspect-video"
 		/>
 	);
 }

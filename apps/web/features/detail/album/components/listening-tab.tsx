@@ -26,6 +26,7 @@ export const ListeningTab = async ({ albumId, userId }: ListeningTabProps) => {
                         xAxisDataKey="month"
                         areaDataKeys={["msPlayed"]}
                         config={{ msPlayed: { label: "Time Played", color: "var(--chart-2)" } }}
+                        tooltipValueFormatter="hourSuffix"
                     />
                 </ChartCardContent>
             </ChartCard>
@@ -45,6 +46,7 @@ export const ListeningTab = async ({ albumId, userId }: ListeningTabProps) => {
                             barDataKey="msPlayed"
                             config={{ msPlayed: { label: "Time Played", color: "var(--chart-1)" } }}
                             tooltipLabelFormatter="hourSuffix"
+                            tooltipValueFormatter="hourSuffix"
                             xAxisTickFormatter="hourSuffix"
                         />
                     </ChartCardContent>
@@ -63,6 +65,7 @@ export const ListeningTab = async ({ albumId, userId }: ListeningTabProps) => {
                             xAxisDataKey="date"
                             barDataKey="msPlayed"
                             config={{ msPlayed: { label: "Time Played", color: "var(--chart-2)" } }}
+                            tooltipValueFormatter="hourSuffix"
                         />
                     </ChartCardContent>
                 </ChartCard>

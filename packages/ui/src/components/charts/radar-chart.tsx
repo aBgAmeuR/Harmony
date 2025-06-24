@@ -1,40 +1,20 @@
 "use client";
 
 import {
-    type ChartConfig,
     ChartContainer,
     ChartTooltip,
-    ChartTooltipContent,
+    ChartTooltipContent
 } from "@repo/ui/chart";
-import type * as React from "react";
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
-import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
-import { getTickFormatter, TickFormatterValues } from "./tick-formatters";
-import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
+import { cn } from "../../lib/utils";
+import { BaseChartProps } from "./common";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import { getTickFormatter } from "./common/tick-formatters";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
 
-export interface RadarChartProps {
-    data: any[];
+export interface RadarChartProps extends BaseChartProps {
     angleAxisDataKey: string;
     radarDataKeys: string[];
-    config: ChartConfig;
-    tooltipLabelFormatter?: TooltipFormatterValues;
-    tooltipValueFormatter?: React.ComponentProps<
-        typeof ChartTooltipContent
-    >["formatter"];
-    className?: string;
-    margin?: {
-        top?: number;
-        right?: number;
-        bottom?: number;
-        left?: number;
-    };
-    angleAxisTickFormatter?: TickFormatterValues;
-    angleAxisWidth?: number;
-    fillOpacity?: number;
-    dotRadius?: number;
-    showDots?: boolean;
-    showGrid?: boolean;
-    labelData?: any;
 }
 
 export function ReusableRadarChart({
@@ -43,42 +23,34 @@ export function ReusableRadarChart({
     radarDataKeys,
     config,
     tooltipLabelFormatter = "normal",
-    tooltipValueFormatter = ChartTooltipFormatter,
-    className = "aspect-square min-w-60 w-full",
-    margin = { top: 18, right: 18, bottom: 18, left: 18 },
-    angleAxisTickFormatter = "normal",
-    angleAxisWidth = 50,
-    fillOpacity = 0.6,
-    dotRadius = 4,
-    showDots = true,
-    showGrid = true,
-    labelData,
+    tooltipValueFormatter = "normal",
+    className,
 }: RadarChartProps) {
     return (
-        <ChartContainer config={config} className={className}>
-            <RadarChart data={data} margin={margin}>
+        <ChartContainer config={config} className={cn("aspect-square min-w-60 w-full", className)}>
+            <RadarChart data={data} margin={{ top: 18, right: 18, bottom: 18, left: 18 }}>
                 <ChartTooltip
                     cursor={false}
                     content={
                         <ChartTooltipContent
-                            labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, labelData)}
-                            formatter={tooltipValueFormatter}
+                            labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
+                            formatter={getChartTooltipFormatter(tooltipValueFormatter)}
                         />
                     }
                 />
                 <PolarAngleAxis
                     dataKey={angleAxisDataKey}
-                    width={angleAxisWidth}
-                    tickFormatter={getTickFormatter(angleAxisTickFormatter)}
+                    width={50}
+                    tickFormatter={getTickFormatter("normal")}
                 />
-                {showGrid && <PolarGrid />}
+                <PolarGrid />
                 {radarDataKeys.map((key) => (
                     <Radar
                         key={key}
                         dataKey={key}
                         fill={`var(--color-${key})`}
-                        fillOpacity={fillOpacity}
-                        dot={showDots ? { r: dotRadius, fillOpacity: 1 } : false}
+                        fillOpacity={0.6}
+                        dot={{ r: 4, fillOpacity: 1 }}
                     />
                 ))}
             </RadarChart>

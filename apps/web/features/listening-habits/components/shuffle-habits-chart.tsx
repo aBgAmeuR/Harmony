@@ -52,9 +52,6 @@ export const ShuffleHabitsChart = async ({
                         data={[data]}
                         barDataKeys={["shuffled", "notShuffled"]}
                         config={chartConfig}
-                        endAngle={180}
-                        innerRadius={80}
-                        outerRadius={130}
                         percentage={shufflePercentage}
                         centerLabel="Tracks Shuffled"
                     />

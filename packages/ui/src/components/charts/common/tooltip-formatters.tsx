@@ -22,7 +22,7 @@ export const tooltipFormatter = {
 
 export type TooltipFormatterValues = keyof typeof tooltipFormatter;
 
-export const getTooltipFormatter = (value: TooltipFormatterValues | undefined, label: any, payload: any, data?: any) => {
+export const getTooltipFormatter = (value: keyof typeof tooltipFormatter | undefined, label: any, payload: any, data?: any) => {
     if (!value) return undefined;
 
     const fn = tooltipFormatter[value];

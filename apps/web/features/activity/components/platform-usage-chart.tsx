@@ -76,6 +76,7 @@ export const PlatformUsageChart = async ({
                     stacked={true}
                     config={chartConfig}
                     yAxisTickFormatter="msToHours"
+                    tooltipValueFormatter="hourSuffix"
                     showLegend={true}
                 />
             </ChartCardContent>

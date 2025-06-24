@@ -38,7 +38,6 @@ export const TimeEvolutionCharts = async ({
                         config={{ value: { label: "Tracks", color: "var(--chart-1)" } }}
                         showYAxis={false}
                         className="aspect-video size-full"
-                        tooltipValueFormatter={null}
                         cursor={true}
                         syncId="first-time-evolution"
                     />
@@ -57,7 +56,6 @@ export const TimeEvolutionCharts = async ({
                         config={{ value: { label: "Albums", color: "var(--chart-2)" } }}
                         showYAxis={false}
                         className="aspect-video size-full"
-                        tooltipValueFormatter={null}
                         cursor={true}
                         syncId="first-time-evolution"
                     />
@@ -76,7 +74,6 @@ export const TimeEvolutionCharts = async ({
                         config={{ value: { label: "Artists", color: "var(--chart-3)" } }}
                         showYAxis={false}
                         className="aspect-video size-full"
-                        tooltipValueFormatter={null}
                         cursor={true}
                         syncId="first-time-evolution"
                     />

@@ -50,9 +50,6 @@ export const SkippedHabitsChart = async ({
                         data={[data]}
                         barDataKeys={["skipped", "notSkipped"]}
                         config={chartConfig}
-                        endAngle={180}
-                        innerRadius={80}
-                        outerRadius={130}
                         percentage={skippedPercentage}
                         centerLabel="Tracks Skipped"
                     />

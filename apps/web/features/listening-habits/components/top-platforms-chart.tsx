@@ -38,11 +38,13 @@ export const TopPlatformsChart = async ({
             />
             <ChartCardContent>
                 <ReusablePieChart
+                    config={{ msPlayed: { label: "Time Played", color: "var(--chart-1)" } }}
                     data={data}
                     valueDataKey="msPlayed"
                     nameKey="platform"
                     centerLabel="Hours listened"
                     centerValue={`${getMsPlayedInHours(totalListeningTime, false)}h`}
+                    tooltipValueFormatter="hourSuffix"
                 />
             </ChartCardContent>
         </ChartCard>

@@ -13,8 +13,8 @@ import { cn } from "@repo/ui/lib/utils";
 import { Spinner } from "@repo/ui/spinner";
 import { useQuery } from "@tanstack/react-query";
 import { AlertCircle, InfoIcon } from "lucide-react";
-import { HistoricalRankingsChart } from "~/components/charts/historical-rankings-chart";
 import { Icons } from "~/components/icons";
+import { HistoricalChart } from "./historical-chart";
 import { useHistoricalModalContext } from "./historical-provider";
 
 type HistoricalModalProps = {
@@ -53,7 +53,7 @@ export const HistoricalModal = ({ promise }: HistoricalModalProps) => {
                         See how {item?.name} has ranked over time.
                     </CredenzaDescription>
                 </CredenzaHeader>
-                <div className="rounded-md border bg-muted px-4 py-3">
+                <div className="rounded-md border bg-muted px-4 py-3 mx-4 mb-2 md:mx-0 md:mb-0">
                     <p className="text-sm">
                         <InfoIcon
                             className="-mt-0.5 me-3 inline-flex text-blue-500"
@@ -80,12 +80,7 @@ export const HistoricalModal = ({ promise }: HistoricalModalProps) => {
                             </p>
                         </div>
                     )}
-                    {historicalRankings && (
-                        <HistoricalRankingsChart
-                            data={historicalRankings}
-                            className="aspect-video w-full"
-                        />
-                    )}
+                    {historicalRankings && <HistoricalChart data={historicalRankings} />}
                 </div>
                 <CredenzaFooter>
                     <a

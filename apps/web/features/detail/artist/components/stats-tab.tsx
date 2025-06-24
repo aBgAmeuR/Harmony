@@ -28,6 +28,7 @@ export const StatsTab = async ({ artistId, userId }: StatsTabProps) => {
                         xAxisDataKey="month"
                         showYAxis={false}
                         config={{ msPlayed: { label: "Time Played", color: "var(--chart-2)" } }}
+                        tooltipValueFormatter="hourSuffix"
                     />
                 </ChartCardContent>
             </ChartCard>
@@ -46,6 +47,7 @@ export const StatsTab = async ({ artistId, userId }: StatsTabProps) => {
                         showYAxis={false}
                         config={{ msPlayed: { label: "Time Played", color: "var(--chart-1)" } }}
                         tooltipLabelFormatter="hourSuffix"
+                        tooltipValueFormatter="hourSuffix"
                         xAxisTickFormatter="hourSuffix"
                         className="aspect-video"
                     />

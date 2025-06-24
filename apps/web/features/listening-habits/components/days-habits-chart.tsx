@@ -41,7 +41,7 @@ export const DaysHabitsChart = async ({
                     showBarLabels={true}
                     yAxisTickFormatter="msToHours"
                     barLabelFormatter="msToHoursWithDecimal"
-                    tooltipLabelFormatter="normal"
+                    tooltipValueFormatter="hourSuffix"
                     barRadius={8}
                 />
             </ChartCardContent>

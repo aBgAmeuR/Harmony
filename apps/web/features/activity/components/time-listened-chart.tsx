@@ -45,15 +45,14 @@ export const TimeListenedChart = async ({
 			</ChartCardHeader>
 			<ChartCardContent>
 				<ReusableBarChart
+					config={{ value: { label: "Time Played", color: "var(--chart-1)" } }}
 					data={data.data}
 					xAxisDataKey="month"
 					barDataKey="value"
-					referenceLine={{
-						value: data.average,
-						label: "Average",
-					}}
+					referenceLine={{ value: data.average, label: "Average" }}
 					showYAxis={false}
 					tooltipLabelFormatter="average"
+					tooltipValueFormatter="hourSuffix"
 					labelData={data.average}
 				/>
 			</ChartCardContent>

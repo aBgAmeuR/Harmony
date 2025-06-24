@@ -1,28 +1,18 @@
 "use client";
 
 import {
-	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
-	ChartTooltipContent,
+	ChartTooltipContent
 } from "@repo/ui/chart";
-import type * as React from "react";
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
-import { getTooltipFormatter, TooltipFormatterValues } from "./tooltip-formatters";
-import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
+import { cn } from "../../lib/utils";
+import { BaseChartProps } from "./common";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
 
-export interface RadialBarChartProps {
-	data: any[];
+export interface RadialBarChartProps extends BaseChartProps {
 	barDataKeys: string[];
-	config: ChartConfig;
-	endAngle?: number;
-	innerRadius?: number;
-	outerRadius?: number;
-	tooltipLabelFormatter?: TooltipFormatterValues;
-	tooltipValueFormatter?: React.ComponentProps<
-		typeof ChartTooltipContent
-	>["formatter"];
-	className?: string;
 	percentage?: number;
 	centerLabel?: string;
 }
@@ -31,22 +21,19 @@ export function ReusableRadialBarChart({
 	data,
 	barDataKeys,
 	config,
-	endAngle = 180,
-	innerRadius = 80,
-	outerRadius = 130,
 	tooltipLabelFormatter = "normal",
-	tooltipValueFormatter = ChartTooltipFormatter,
-	className = "aspect-square min-w-60 w-full",
+	tooltipValueFormatter = "normal",
+	className,
 	percentage,
 	centerLabel,
 }: RadialBarChartProps) {
 	return (
-		<ChartContainer config={config} className={className}>
+		<ChartContainer config={config} className={cn("aspect-square min-w-60 w-full", className)}>
 			<RadialBarChart
 				data={data}
-				endAngle={endAngle}
-				innerRadius={innerRadius}
-				outerRadius={outerRadius}
+				endAngle={180}
+				innerRadius={80}
+				outerRadius={130}
 			>
 				<ChartTooltip
 					cursor={false}
@@ -54,7 +41,7 @@ export function ReusableRadialBarChart({
 						<ChartTooltipContent
 							hideLabel
 							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
-							formatter={tooltipValueFormatter}
+							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
 				/>
