@@ -1,7 +1,7 @@
 import { Suspense } from "react";
+import { DateRangeSelector } from "~/components/date-range-selector/date-range-selector";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { SelectMonthRange } from "~/components/select-month-range";
 
 import { PlatformUsageChart, PlatformUsageChartSkeleton } from "~/features/activity/components/platform-usage-chart";
 import { TimeEvolutionCharts, TimeEvolutionChartsSkeleton } from "~/features/activity/components/time-evolution-charts";
@@ -14,7 +14,7 @@ export default async function StatsActivityPage() {
 	return (
 		<Layout>
 			<LayoutHeader items={["Package", "Stats", "Activity"]}>
-				<SelectMonthRange />
+				<DateRangeSelector />
 			</LayoutHeader>
 			<LayoutContent className="mx-auto w-full max-w-6xl">
 				<Suspense fallback={<TimeListenedChartSkeleton />}>

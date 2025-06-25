@@ -25,7 +25,9 @@ export default async function OverviewPage() {
 	return (
 		<Layout>
 			<LayoutHeader items={["Package", "Overview"]}>
-				<SelectMonthRange />
+				<Suspense>
+					<SelectMonthRange />
+				</Suspense>
 			</LayoutHeader>
 			<LayoutContent className="mx-auto w-full max-w-screen-2xl pt-2">
 				<Suspense fallback={<StatsCardsSkeleton />}>
