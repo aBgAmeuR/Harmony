@@ -1,9 +1,10 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../../../components/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
 
-@import "tw-animate-css";
 @plugin "tailwindcss-motion";
 
 @custom-variant dark (&:is(.dark *));
@@ -345,5 +346,21 @@
 
 	.custom-button::after {
 		@apply !hidden;
+	}
+
+	h1 {
+		@apply scroll-m-20 text-4xl font-extrabold tracking-tight text-balance;
+	}
+
+	h2 {
+		@apply scroll-m-20 pb-2 text-3xl font-semibold tracking-tight
+	}
+
+	h3 {
+		@apply scroll-m-20 text-2xl font-semibold tracking-tight;
+	}
+
+	h4 {
+		@apply scroll-m-20 text-xl font-semibold tracking-tight;
 	}
 }

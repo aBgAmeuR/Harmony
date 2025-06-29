@@ -1,10 +1,11 @@
 "use client";
 
+import { useTransition } from "react";
+import { LoaderCircle } from "lucide-react";
+
 import { signIn } from "@repo/auth/actions";
 import { Button, type buttonVariants } from "@repo/ui/button";
-import { type VariantProps, cn } from "@repo/ui/lib/utils";
-import { LoaderCircle } from "lucide-react";
-import { useTransition } from "react";
+import { cn, type VariantProps } from "@repo/ui/lib/utils";
 
 type GetDemoBtnProps = {
 	label: string;

@@ -1,10 +1,10 @@
 "server-only";
 
 import type { SpotifyConfig } from "../types/SpotifyConfig";
-import { Logger } from "./Logger";
 import { AlbumManager } from "./album/AlbumManager";
 import { ArtistManager } from "./artist/ArtistManager";
 import { HttpClient } from "./http/HttpClient";
+import { Logger } from "./Logger";
 import { MeManager } from "./me/MeManager";
 import { TrackManager } from "./track/TrackManager";
 
@@ -26,5 +26,9 @@ export class SpotifyAPI {
 
 	async refreshToken() {
 		await this.client.refreshToken();
+	}
+
+	setUserId(userId: string) {
+		this.config.userId = userId;
 	}
 }

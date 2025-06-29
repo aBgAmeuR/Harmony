@@ -1,17 +1,20 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
+import { DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
 import { ListSkeleton } from "~/components/list-skeleton";
-import { SelectMonthRangeSkeleton } from "~/components/select-month-range";
 
 export default function Loading() {
 	return (
-		<>
-			<AppHeader items={["Package", "Rankings", "Albums"]} demo={false}>
-				<SelectMonthRangeSkeleton />
-			</AppHeader>
-			<Main>
+		<Layout>
+			<LayoutHeader items={["Package", "Rankings", "Albums"]} demo={false}>
+				<DateRangeSelectorSkeleton />
+			</LayoutHeader>
+			<LayoutContent>
 				<ListSkeleton />
-			</Main>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }

@@ -1,27 +1,26 @@
-import { Session, auth } from "@repo/auth";
 import { cache } from "react";
+import { format, localeFormat } from "light-date";
+import { redirect } from "next/navigation";
+
+import { auth } from "@repo/auth";
 
 export const getMsPlayedInMinutes = (msPlayed: number | string) =>
 	(Number(msPlayed) / (1000 * 60)).toFixed(2);
 
-export const getMsPlayedInHours = (
-	msPlayed: number | string | (string | number)[],
-	showDecimals = true,
-) => {
-	const hours = Number(msPlayed) / (1000 * 60 * 60);
+export const formatMonth = (date: Date) =>
+	`${localeFormat(date, "{MMMM}")} ${format(date, "{yyyy}")}`;
 
-	if (showDecimals) {
-		return hours.toFixed(2);
-	}
-
-	return Math.floor(hours).toString();
-};
+export const msToHours = (ms: number) => ms / 1000 / 60 / 60;
 
 export const getUserInfos = cache(async () => {
 	const session = await auth();
 	const userId = session?.user?.id;
 	const isDemo = session?.user?.name === "Demo";
 	const hasPackage = session?.user?.hasPackage;
+
+	if (!userId) {
+		redirect("/login");
+	}
 
 	return {
 		userId,

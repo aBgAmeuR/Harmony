@@ -1,8 +1,9 @@
 "server-only";
 
-import { type User, auth } from "@repo/auth";
-import { prisma } from "@repo/database";
 import { NextResponse } from "next/server";
+
+import { auth, type User } from "@repo/auth";
+import { prisma } from "@repo/database";
 
 import { isDemo } from "~/lib/utils-server";
 

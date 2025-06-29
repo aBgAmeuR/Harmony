@@ -1,14 +1,17 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
 import { ListSkeleton } from "~/components/list-skeleton";
 
 export default function Loading() {
 	return (
-		<>
-			<AppHeader items={["Stats", "Recently Played"]} demo={false} />
-			<Main>
+		<Layout>
+			<LayoutHeader items={["Stats", "Recently Played"]} />
+			<LayoutContent>
 				<ListSkeleton showRank={false} />
-			</Main>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }

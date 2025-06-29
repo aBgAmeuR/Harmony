@@ -1,8 +1,9 @@
+import React from "react";
+import { Info } from "lucide-react";
+
 import { signOut } from "@repo/auth/actions";
 import { Button } from "@repo/ui/button";
 import { CardContent } from "@repo/ui/card";
-import { Info } from "lucide-react";
-import React from "react";
 
 export const DemoStep = () => {
 	return (

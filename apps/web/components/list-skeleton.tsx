@@ -1,5 +1,6 @@
-import { Separator } from "@repo/ui/separator";
 import React from "react";
+
+import { Separator } from "@repo/ui/separator";
 
 import { CardSkeleton } from "./cards/music-item-card/skeleton";
 

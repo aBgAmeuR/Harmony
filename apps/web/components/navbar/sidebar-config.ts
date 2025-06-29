@@ -1,3 +1,14 @@
+import {
+	ArrowRightLeft,
+	Binary,
+	CalendarRange,
+	ChartNoAxesCombined,
+	Github,
+	type LucideIcon,
+	Milestone,
+	UsersRound,
+} from "lucide-react";
+
 import { AudioLinesIcon } from "@repo/ui/icons/audio-lines";
 import { ChartLineIcon } from "@repo/ui/icons/chart-line";
 import { Disc3Icon } from "@repo/ui/icons/disc-3";
@@ -9,16 +20,7 @@ import { PackageIcon } from "@repo/ui/icons/package";
 import { TrendingUpIcon } from "@repo/ui/icons/trending-up";
 import { TrendingUpDownIcon } from "@repo/ui/icons/trending-up-down";
 import { UserIcon } from "@repo/ui/icons/user";
-import {
-	ArrowRightLeft,
-	Binary,
-	CalendarRange,
-	ChartNoAxesCombined,
-	Github,
-	type LucideIcon,
-	Milestone,
-	UsersRound,
-} from "lucide-react";
+
 import { Icons } from "../icons";
 
 export type SidebarItem = {

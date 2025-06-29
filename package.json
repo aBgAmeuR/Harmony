@@ -13,8 +13,7 @@
 		"e2e:test": "turbo run e2e:test"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
-		"@nedcloarbr/biome-config": "1.9.1",
+		"@biomejs/biome": "2.0.6",
 		"playwright": "^1.52.0",
 		"prettier": "^3.4.2",
 		"tsx": "4.19.2",

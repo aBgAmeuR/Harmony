@@ -1,12 +1,13 @@
-import { auth } from "@repo/auth";
-import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
+import type React from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { cookies } from "next/headers";
-import type React from "react";
+import NextTopLoader from "nextjs-toploader";
+
+import { auth } from "@repo/auth";
+import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 
 import { AppSidebar } from "~/components/navbar/app-sidebar";
 
-import NextTopLoader from "nextjs-toploader";
 import Error from "../error";
 
 export default async function AppLayout({

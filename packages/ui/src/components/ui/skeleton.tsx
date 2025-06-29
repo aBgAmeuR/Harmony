@@ -4,7 +4,7 @@ function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
 	if (props.children) {
 		return (
 			<div
-				className={cn("bg-accent animate-pulse rounded-md", className)}
+				className={cn("animate-pulse rounded-md bg-accent", className)}
 				{...props}
 			>
 				<div className="invisible">{props.children}</div>
@@ -15,7 +15,7 @@ function Skeleton({ className, ...props }: React.ComponentProps<"div">) {
 	return (
 		<div
 			data-slot="skeleton"
-			className={cn("bg-accent animate-pulse rounded-md", className)}
+			className={cn("animate-pulse rounded-md bg-accent", className)}
 			{...props}
 		/>
 	);

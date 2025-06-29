@@ -23,12 +23,12 @@ const nextConfig: NextConfig = {
 			dynamic: 30,
 			static: 180,
 		},
-		ppr: "incremental",
+		// ppr: "incremental",
 		reactCompiler: true,
-		// dynamicIO: true,
-		// useCache: true,
+		dynamicIO: true,
+		useCache: true,
 	},
 };
 
-const config: NextConfig = withBundleAnalyzer(nextConfig);
+const config: NextConfig = nextConfig;
 export default config;

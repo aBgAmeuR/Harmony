@@ -1,3 +1,6 @@
+import type * as React from "react";
+import type { LucideIcon } from "lucide-react";
+
 import {
 	SidebarGroup,
 	SidebarGroupContent,
@@ -5,8 +8,6 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@repo/ui/sidebar";
-import type { LucideIcon } from "lucide-react";
-import type * as React from "react";
 
 type NavSecondaryProps = {
 	items: {

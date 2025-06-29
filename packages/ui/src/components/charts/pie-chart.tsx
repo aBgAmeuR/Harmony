@@ -1,27 +1,24 @@
 "use client";
 
+import * as React from "react";
+import { Label, Pie, PieChart } from "recharts";
+
 import {
-	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@repo/ui/chart";
-import * as React from "react";
-import { Label, Pie, PieChart } from "recharts";
-import { colorizeData } from "./chart-color-utils";
-import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
 
-export interface PieChartProps {
-	data: any[];
+import { cn } from "../../lib/utils";
+import type { BaseChartProps } from "./common";
+import { colorizeData } from "./common/chart-color-utils";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
+
+export interface PieChartProps extends BaseChartProps {
 	valueDataKey: string;
 	nameKey: string;
-	config?: ChartConfig;
 	innerRadius?: number;
-	tooltipLabelFormatter?: (value: string, payload: any) => React.ReactNode;
-	tooltipValueFormatter?: React.ComponentProps<
-		typeof ChartTooltipContent
-	>["formatter"];
-	className?: string;
 	strokeWidth?: number;
 	centerLabel?: string;
 	centerValue?: string | number;
@@ -31,11 +28,11 @@ export function ReusablePieChart({
 	data,
 	valueDataKey,
 	nameKey,
-	config = {},
+	config,
 	innerRadius = 70,
-	tooltipLabelFormatter,
-	tooltipValueFormatter = ChartTooltipFormatter,
-	className = "aspect-square min-w-60 w-full",
+	tooltipLabelFormatter = "normal",
+	tooltipValueFormatter = "normal",
+	className,
 	strokeWidth = 5,
 	centerLabel,
 	centerValue,
@@ -43,17 +40,18 @@ export function ReusablePieChart({
 	const colorizedData = React.useMemo(() => colorizeData(data), [data]);
 
 	return (
-		<ChartContainer config={config} className={className}>
+		<ChartContainer
+			config={config}
+			className={cn("aspect-square w-full min-w-60", className)}
+		>
 			<PieChart margin={{ top: -10, left: -10, right: -10, bottom: -10 }}>
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={
-								tooltipLabelFormatter ||
-								((_, payload) =>
-									`${payload[0].payload[nameKey].charAt(0).toUpperCase()}${payload[0].payload[nameKey].slice(1)}`)
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(tooltipLabelFormatter, label, payload, null)
 							}
-							formatter={tooltipValueFormatter}
+							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
 					cursor={false}
@@ -79,7 +77,7 @@ export function ReusablePieChart({
 										<tspan
 											x={viewBox.cx}
 											y={viewBox.cy}
-											className="fill-foreground text-3xl font-bold"
+											className="fill-foreground font-bold text-3xl"
 										>
 											{centerValue}
 										</tspan>

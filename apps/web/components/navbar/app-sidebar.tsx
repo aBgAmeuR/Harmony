@@ -1,5 +1,9 @@
 "use client";
 
+import type * as React from "react";
+import { ChevronsUpDown } from "lucide-react";
+
+import type { User } from "@repo/auth";
 import {
 	Sidebar,
 	SidebarContent,
@@ -11,11 +15,9 @@ import {
 	SidebarRail,
 } from "@repo/ui/sidebar";
 import { Skeleton } from "@repo/ui/skeleton";
-import { ChevronsUpDown } from "lucide-react";
-import type * as React from "react";
 
-import type { User } from "@repo/auth";
 import { NavMain } from "~/components/navbar/nav-main";
+
 import { CommandMenu } from "../command-menu";
 import { NavHeader } from "./nav-header";
 import { NavSecondary } from "./nav-secondary";

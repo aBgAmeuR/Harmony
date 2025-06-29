@@ -1,9 +1,10 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
+import type * as React from "react";
 import { Moon, SunMedium } from "lucide-react";
 import { useTheme } from "next-themes";
-import type * as React from "react";
+
+import { Button } from "@repo/ui/button";
 
 export function ThemeToggle(props: React.ComponentProps<typeof Button>) {
 	const { setTheme, theme } = useTheme();

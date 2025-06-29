@@ -1,14 +1,20 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
-import { MusicList } from "~/components/lists/music-list";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import { RecentlyPlayed } from "~/features/stats/components/recently-played";
+import { getUserInfos } from "~/lib/utils";
 
-export default function RecentlyPlayedPage() {
+export default async function RecentlyPlayedPage() {
+	const { userId } = await getUserInfos();
+
 	return (
-		<>
-			<AppHeader items={["Stats", "Recently Played"]} />
-			<Main>
-				<MusicList type="recentlyPlayed" />
-			</Main>
-		</>
+		<Layout>
+			<LayoutHeader items={["Stats", "Recently Played"]} />
+			<LayoutContent>
+				<RecentlyPlayed userId={userId} />
+			</LayoutContent>
+		</Layout>
 	);
 }

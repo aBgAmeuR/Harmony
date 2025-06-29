@@ -1,10 +1,11 @@
 "use client";
 
-import { signOut } from "@repo/auth/actions";
-import { Button } from "@repo/ui/button";
+import React, { Suspense } from "react";
 import { AlertCircle, ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { Suspense } from "react";
+
+import { signOut } from "@repo/auth/actions";
+import { Button } from "@repo/ui/button";
 
 import { Icons } from "~/components/icons";
 import { ThemeToggle } from "~/components/theme-toggle";

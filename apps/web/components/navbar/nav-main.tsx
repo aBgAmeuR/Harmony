@@ -1,5 +1,12 @@
 "use client";
 
+import { useRef } from "react";
+import { ChevronRight } from "lucide-react";
+import { PrefetchKind } from "next/dist/client/components/router-reducer/router-reducer-types";
+import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { usePathname } from "next/navigation";
+import { useRouter } from "nextjs-toploader/app";
+
 import {
 	Collapsible,
 	CollapsibleContent,
@@ -18,12 +25,7 @@ import {
 	SidebarMenuSubItem,
 	useSidebar,
 } from "@repo/ui/sidebar";
-import { ChevronRight } from "lucide-react";
-import { PrefetchKind } from "next/dist/client/components/router-reducer/router-reducer-types";
-import type { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { usePathname } from "next/navigation";
-import { useRouter } from "nextjs-toploader/app";
-import { useRef } from "react";
+
 import type { SidebarItem } from "./sidebar-config";
 
 // Utility: isActive

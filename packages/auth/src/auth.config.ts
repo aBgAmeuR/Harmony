@@ -1,7 +1,8 @@
-import { prisma } from "@repo/database";
 import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Spotify from "next-auth/providers/spotify";
+
+import { prisma } from "@repo/database";
 
 export default {
 	providers: [

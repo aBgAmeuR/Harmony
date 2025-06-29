@@ -1,5 +1,6 @@
-import { AccordionIcons } from "@repo/ui/components/accordion-icons";
 import { Music, RefreshCw, Share2, Shield, Zap } from "lucide-react";
+
+import { AccordionIcons } from "@repo/ui/components/accordion-icons";
 
 const items = [
 	{

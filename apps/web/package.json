@@ -3,7 +3,7 @@
 	"name": "web",
 	"version": "1.0.0",
 	"scripts": {
-		"dev": "dotenv -e ../../.env -- next dev --turbopack",
+		"dev": "dotenv -e ../../.env -- next dev",
 		"build": "dotenv -e ../../.env -- next build",
 		"start": "dotenv -e ../../.env -- next start",
 		"test": "jest"
@@ -13,7 +13,7 @@
 		"@repo/ui": "workspace:*",
 		"@tanstack/react-query": "^5.62.7",
 		"@vercel/analytics": "^1.5.0",
-		"babel-plugin-react-compiler": "19.0.0-beta-e993439-20250405",
+		"babel-plugin-react-compiler": "19.1.0-rc.2",
 		"@uploadthing/react": "^7.3.0",
 		"date-fns": "^4.1.0",
 		"fflate": "^0.8.2",

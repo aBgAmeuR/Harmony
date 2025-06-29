@@ -1,5 +1,10 @@
 "use client";
 
+import React from "react";
+import { format } from "date-fns";
+import _ from "lodash";
+import { ArrowLeft, ArrowRight, Music4 } from "lucide-react";
+
 import { Button } from "@repo/ui/button";
 import {
 	Card,
@@ -13,13 +18,8 @@ import { MonthPicker } from "@repo/ui/components/monthpicker";
 import { cn } from "@repo/ui/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@repo/ui/popover";
 import { Separator } from "@repo/ui/separator";
-import { format } from "date-fns";
-import { ArrowLeft, ArrowRight, Music4 } from "lucide-react";
-import React from "react";
-import { MusicItemCard } from "~/components/cards/music-item-card";
-import { msToMinutes } from "~/components/charts/utils/time-formatters";
 
-import _ from "lodash";
+import { MusicItemCard } from "~/components/cards/music-item-card";
 import { TrackRaceChartComponent } from "~/components/charts/artist/track-race-chart";
 import {
 	ChartCard,
@@ -27,6 +27,7 @@ import {
 	ChartCardHeader,
 	ChartCardHeaderContent,
 } from "~/components/charts/utils/chart-card";
+import { msToMinutes } from "~/components/charts/utils/time-formatters";
 import { TrendBadge } from "~/components/trend-badge";
 import type {
 	ChartRace,
@@ -35,15 +36,11 @@ import type {
 
 interface MonthlyTopTracksProps {
 	dataPromise: Promise<{ results: MonthlyTrackData[]; chartRace: ChartRace }>;
-	artistNamePromise: Promise<string | undefined>;
 }
 
-export function MonthlyTopTracks({
-	dataPromise,
-	artistNamePromise,
-}: MonthlyTopTracksProps) {
+export function MonthlyTopTracks({ dataPromise }: MonthlyTopTracksProps) {
 	const { results: data, chartRace } = React.use(dataPromise);
-	const artistName = React.use(artistNamePromise);
+	const artistName = "Artist Name";
 	const [date, setDate] = React.useState<Date | undefined>(
 		data.length > 0 ? new Date(`${data[0].month}-01`) : undefined,
 	);

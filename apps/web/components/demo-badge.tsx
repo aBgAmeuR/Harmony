@@ -1,6 +1,7 @@
+import React from "react";
+
 import { auth } from "@repo/auth";
 import { Badge } from "@repo/ui/badge";
-import React from "react";
 
 export const DemoBadge = async () => {
 	const session = await auth();
