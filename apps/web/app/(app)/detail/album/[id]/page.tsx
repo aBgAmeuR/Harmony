@@ -1,10 +1,24 @@
 import { Suspense } from "react";
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { AlbumHeader, AlbumHeaderSkeleton } from "~/features/detail/album/components/album-header";
+
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import {
+	AlbumHeader,
+	AlbumHeaderSkeleton,
+} from "~/features/detail/album/components/album-header";
 import { ListeningTab } from "~/features/detail/album/components/listening-tab";
-import { StatsTab, StatsTabSkeleton } from "~/features/detail/album/components/stats-tab";
+import {
+	StatsTab,
+	StatsTabSkeleton,
+} from "~/features/detail/album/components/stats-tab";
 import { TracksTab } from "~/features/detail/album/components/tracks-tab";
-import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
+import {
+	DetailTabs,
+	DetailTabsContent,
+} from "~/features/detail/common/components/detail-tabs";
 import { getUserInfos } from "~/lib/utils";
 
 interface PageProps {

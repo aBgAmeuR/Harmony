@@ -1,11 +1,13 @@
 "server-only";
 
-import { spotify } from "@repo/spotify";
 import { formatDistanceToNowStrict } from "date-fns";
 import {
 	unstable_cacheLife as cacheLife,
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
+
+import { spotify } from "@repo/spotify";
+
 import { getMsPlayedInMinutes } from "~/lib/utils";
 
 export const getRecentlyPlayedData = async (userId: string) => {

@@ -1,32 +1,42 @@
 "use client";
 
-import { type PropsWithChildren, createContext, useContext, useState } from "react";
+import {
+	createContext,
+	type PropsWithChildren,
+	useContext,
+	useState,
+} from "react";
 
 export type HistoricalModalItem = {
-    id: string;
-    name: string;
-    href?: string;
+	id: string;
+	name: string;
+	href?: string;
 };
 
 interface HistoricalModalContextValue {
-    item: HistoricalModalItem | null;
-    setItem: (item: HistoricalModalItem | null) => void;
+	item: HistoricalModalItem | null;
+	setItem: (item: HistoricalModalItem | null) => void;
 }
 
-const HistoricalModalContext = createContext<HistoricalModalContextValue | undefined>(undefined);
+const HistoricalModalContext = createContext<
+	HistoricalModalContextValue | undefined
+>(undefined);
 
 export const useHistoricalModalContext = () => {
-    const ctx = useContext(HistoricalModalContext);
-    if (!ctx) throw new Error("useHistoricalModalContext must be used within a HistoricalProvider");
-    return ctx;
+	const ctx = useContext(HistoricalModalContext);
+	if (!ctx)
+		throw new Error(
+			"useHistoricalModalContext must be used within a HistoricalProvider",
+		);
+	return ctx;
 };
 
 export const HistoricalProvider = ({ children }: PropsWithChildren) => {
-    const [item, setItem] = useState<HistoricalModalItem | null>(null);
+	const [item, setItem] = useState<HistoricalModalItem | null>(null);
 
-    return (
-        <HistoricalModalContext.Provider value={{ item, setItem }}>
-            {children}
-        </HistoricalModalContext.Provider>
-    );
+	return (
+		<HistoricalModalContext.Provider value={{ item, setItem }}>
+			{children}
+		</HistoricalModalContext.Provider>
+	);
 };

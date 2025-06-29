@@ -1,6 +1,7 @@
+import { Music2 } from "lucide-react";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { cn } from "@repo/ui/lib/utils";
-import { Music2 } from "lucide-react";
 
 type MusicItemCardImageProps = {
 	src?: string;

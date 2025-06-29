@@ -1,11 +1,13 @@
 "server-only";
 
-import { prisma } from "@repo/database";
 import { format } from "date-fns";
 import {
 	unstable_cacheLife as cacheLife,
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
+
+import { prisma } from "@repo/database";
+
 import { formatMonth } from "~/lib/utils";
 
 const MS_PER_MINUTE = 60000;

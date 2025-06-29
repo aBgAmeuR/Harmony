@@ -1,10 +1,11 @@
-import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
-import { Separator } from "@repo/ui/separator";
 import { Info } from "lucide-react";
 
-import { MusicItemCard } from "~/components/cards/music-item-card";
+import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
+import { Separator } from "@repo/ui/separator";
 
+import { MusicItemCard } from "~/components/cards/music-item-card";
 import type { MusicItemCardProps } from "~/components/cards/music-item-card/type";
+
 import type { MusicListConfig } from "./config";
 import { MusicListError } from "./error";
 
@@ -13,10 +14,7 @@ type MusicListProps = {
 	config: MusicListConfig;
 };
 
-export const MusicList = async ({
-	data,
-	config
-}: MusicListProps) => {
+export const MusicList = async ({ data, config }: MusicListProps) => {
 	if (!data) return <MusicListError />;
 
 	return (

@@ -1,13 +1,15 @@
 "use client";
 
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+
 import {
 	ChartContainer,
 	ChartTooltip,
-	ChartTooltipContent
+	ChartTooltipContent,
 } from "@repo/ui/chart";
-import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+
 import { cn } from "../../lib/utils";
-import { AxisTickFormatters, BaseChartProps } from "./common";
+import type { AxisTickFormatters, BaseChartProps } from "./common";
 import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
 import { getTickFormatter } from "./common/tick-formatters";
 import { getTooltipFormatter } from "./common/tooltip-formatters";
@@ -42,8 +44,15 @@ export function ReusableLineChart({
 	syncId,
 }: LineChartProps) {
 	return (
-		<ChartContainer config={config} className={cn("aspect-[10/3] w-full", className)}>
-			<LineChart data={data} margin={{ left: -38, top: 6, right: 6 }} syncId={syncId}>
+		<ChartContainer
+			config={config}
+			className={cn("aspect-[10/3] w-full", className)}
+		>
+			<LineChart
+				data={data}
+				margin={{ left: -38, top: 6, right: 6 }}
+				syncId={syncId}
+			>
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
 				<XAxis
 					dataKey={xAxisDataKey}
@@ -66,7 +75,9 @@ export function ReusableLineChart({
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(tooltipLabelFormatter, label, payload, null)
+							}
 							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
@@ -83,4 +94,4 @@ export function ReusableLineChart({
 			</LineChart>
 		</ChartContainer>
 	);
-} 
+}

@@ -1,5 +1,7 @@
-import { prisma } from "@repo/database";
 import { type NextRequest, NextResponse } from "next/server";
+
+import { prisma } from "@repo/database";
+
 import { updateHistoricalRankings } from "~/services/historical-rankings";
 
 export const runtime = "nodejs";

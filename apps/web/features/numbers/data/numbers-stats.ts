@@ -1,13 +1,15 @@
 "server-only";
 
-import { prisma } from "@repo/database";
-import { spotify } from "@repo/spotify";
-import type { Track as SpotifyTrack } from "@repo/spotify/types";
 import { format } from "light-date";
 import {
 	unstable_cacheLife as cacheLife,
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
+
+import { prisma } from "@repo/database";
+import { spotify } from "@repo/spotify";
+import type { Track as SpotifyTrack } from "@repo/spotify/types";
+
 import { getMonthRange } from "~/lib/dal";
 
 const getTracks = async (userId: string, minDate: Date, maxDate: Date) =>

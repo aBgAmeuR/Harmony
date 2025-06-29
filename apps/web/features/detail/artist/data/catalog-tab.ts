@@ -3,6 +3,7 @@
 import { prisma } from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { Album, Track } from "@repo/spotify/types";
+
 import { getMsPlayedInMinutes } from "~/lib/utils";
 
 export const getCatalogTabData = async (artistId: string, userId: string) => {

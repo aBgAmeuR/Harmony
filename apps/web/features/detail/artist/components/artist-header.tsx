@@ -1,36 +1,45 @@
-import { notFound } from "next/navigation"
-import { DetailHeader, DetailHeaderSkeleton, DetailHeaderStat, DetailHeaderStatSkeleton } from "../../common/components/detail-header"
-import { getArtistHeaderData } from "../data/artist-header"
+import { notFound } from "next/navigation";
+
+import {
+	DetailHeader,
+	DetailHeaderSkeleton,
+	DetailHeaderStat,
+	DetailHeaderStatSkeleton,
+} from "../../common/components/detail-header";
+import { getArtistHeaderData } from "../data/artist-header";
 
 type ArtistHeaderProps = {
-    artistId: string
-    userId: string
-}
+	artistId: string;
+	userId: string;
+};
 
 export const ArtistHeader = async ({ artistId, userId }: ArtistHeaderProps) => {
-    const artist = await getArtistHeaderData(artistId, userId)
-    if (!artist || !artist.artist) return notFound()
+	const artist = await getArtistHeaderData(artistId, userId);
+	if (!artist || !artist.artist) return notFound();
 
-    return (
-        <DetailHeader
-            imgUrl={artist.artist.images[0]?.url}
-            title={artist.artist.name || "Unknown Artist"}
-            hrefUrl={artist.artist.external_urls.spotify}
-            imgRadius="rounded-full"
-        >
-            <DetailHeaderStat label="Followers" value={artist.artist.followers.total} />
-            <DetailHeaderStat label="Total Time" value={artist.totalMinutes} />
-            <DetailHeaderStat label="Total Plays" value={artist.totalStreams} />
-        </DetailHeader>
-    )
-}
+	return (
+		<DetailHeader
+			imgUrl={artist.artist.images[0]?.url}
+			title={artist.artist.name || "Unknown Artist"}
+			hrefUrl={artist.artist.external_urls.spotify}
+			imgRadius="rounded-full"
+		>
+			<DetailHeaderStat
+				label="Followers"
+				value={artist.artist.followers.total}
+			/>
+			<DetailHeaderStat label="Total Time" value={artist.totalMinutes} />
+			<DetailHeaderStat label="Total Plays" value={artist.totalStreams} />
+		</DetailHeader>
+	);
+};
 
 export const ArtistHeaderSkeleton = () => {
-    return (
-        <DetailHeaderSkeleton imgRadius="rounded-full">
-            <DetailHeaderStatSkeleton label="Followers" />
-            <DetailHeaderStatSkeleton label="Total Time" />
-            <DetailHeaderStatSkeleton label="Total Plays" />
-        </DetailHeaderSkeleton>
-    )
-}
+	return (
+		<DetailHeaderSkeleton imgRadius="rounded-full">
+			<DetailHeaderStatSkeleton label="Followers" />
+			<DetailHeaderStatSkeleton label="Total Time" />
+			<DetailHeaderStatSkeleton label="Total Plays" />
+		</DetailHeaderSkeleton>
+	);
+};

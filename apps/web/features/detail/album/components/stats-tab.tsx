@@ -1,7 +1,17 @@
+import {
+	Calendar,
+	CalendarDays,
+	Clock,
+	Flame,
+	PlayCircle,
+	TrendingUp,
+} from "lucide-react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Skeleton } from "@repo/ui/skeleton";
-import { Calendar, CalendarDays, Clock, Flame, PlayCircle, TrendingUp } from "lucide-react";
+
 import { StatCard, StatCardSkeleton } from "~/components/cards/stat-card";
+
 import { getStatsTabData } from "../data/stats-tab";
 
 type StatsTabProps = {
@@ -98,10 +108,30 @@ export const StatsTabSkeleton = () => {
 	return (
 		<>
 			<div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-				<StatCardSkeleton title="Total Time" value="100 minutes" icon={Clock} description="Total listening time" />
-				<StatCardSkeleton title="Total Plays" value="888" icon={PlayCircle} description="Total number of plays" />
-				<StatCardSkeleton title="Monthly Average" value="88 plays" icon={TrendingUp} description="Average plays per month" />
-				<StatCardSkeleton title="Best Month" value="January 2025" icon={Calendar} description="Best month" />
+				<StatCardSkeleton
+					title="Total Time"
+					value="100 minutes"
+					icon={Clock}
+					description="Total listening time"
+				/>
+				<StatCardSkeleton
+					title="Total Plays"
+					value="888"
+					icon={PlayCircle}
+					description="Total number of plays"
+				/>
+				<StatCardSkeleton
+					title="Monthly Average"
+					value="88 plays"
+					icon={TrendingUp}
+					description="Average plays per month"
+				/>
+				<StatCardSkeleton
+					title="Best Month"
+					value="January 2025"
+					icon={Calendar}
+					description="Best month"
+				/>
 			</div>
 			<div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
 				<Card className="border-orange-400/30 dark:bg-background/80">

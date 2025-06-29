@@ -1,3 +1,6 @@
+import React from "react";
+import { Info } from "lucide-react";
+
 import { Button } from "@repo/ui/button";
 import {
 	Tooltip,
@@ -5,8 +8,6 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/tooltip";
-import { Info } from "lucide-react";
-import React from "react";
 
 export const TimeRangeInfo = () => {
 	return (

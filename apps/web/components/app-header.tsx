@@ -1,3 +1,5 @@
+import React, { type PropsWithChildren, Suspense } from "react";
+
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -7,7 +9,6 @@ import {
 } from "@repo/ui/breadcrumb";
 import { Separator } from "@repo/ui/separator";
 import { SidebarTrigger } from "@repo/ui/sidebar";
-import React, { type PropsWithChildren, Suspense } from "react";
 
 import { BackBtn } from "./back-btn";
 import { DemoBadge } from "./demo-badge";

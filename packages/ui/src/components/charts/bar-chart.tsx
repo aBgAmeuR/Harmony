@@ -1,11 +1,6 @@
 "use client";
 
 import {
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent
-} from "@repo/ui/chart";
-import {
 	Bar,
 	BarChart,
 	CartesianGrid,
@@ -15,10 +10,20 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
+
+import {
+	ChartContainer,
+	ChartTooltip,
+	ChartTooltipContent,
+} from "@repo/ui/chart";
+
 import { cn } from "../../lib/utils";
-import { AxisTickFormatters, BaseChartProps } from "./common";
+import type { AxisTickFormatters, BaseChartProps } from "./common";
 import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
-import { getTickFormatter, TickFormatterValues } from "./common/tick-formatters";
+import {
+	getTickFormatter,
+	type TickFormatterValues,
+} from "./common/tick-formatters";
 import { getTooltipFormatter } from "./common/tooltip-formatters";
 
 export interface BarChartProps extends BaseChartProps, AxisTickFormatters {
@@ -28,11 +33,11 @@ export interface BarChartProps extends BaseChartProps, AxisTickFormatters {
 		value: number;
 		label: string;
 		position?:
-		| "top"
-		| "insideTop"
-		| "bottom"
-		| "insideBottom"
-		| "insideBottomLeft";
+			| "top"
+			| "insideTop"
+			| "bottom"
+			| "insideBottom"
+			| "insideBottomLeft";
 	};
 	showBarLabels?: boolean;
 	showYAxis?: boolean;
@@ -59,7 +64,10 @@ export function ReusableBarChart({
 	labelData,
 }: BarChartProps) {
 	return (
-		<ChartContainer config={config} className={cn("aspect-[10/3] w-full", className)}>
+		<ChartContainer
+			config={config}
+			className={cn("aspect-[10/3] w-full", className)}
+		>
 			<BarChart accessibilityLayer data={data} margin={{ top: 24 }}>
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
 				<XAxis
@@ -79,7 +87,14 @@ export function ReusableBarChart({
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, labelData)}
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(
+									tooltipLabelFormatter,
+									label,
+									payload,
+									labelData,
+								)
+							}
 							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}

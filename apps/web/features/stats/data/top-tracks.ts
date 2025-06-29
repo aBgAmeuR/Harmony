@@ -1,13 +1,15 @@
 "server-only";
 
-import { prisma } from "@repo/database";
-import { spotify } from "@repo/spotify";
-
 import {
 	unstable_cacheLife as cacheLife,
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
+
+import { prisma } from "@repo/database";
+import { spotify } from "@repo/spotify";
+
 import { getMsPlayedInMinutes } from "~/lib/utils";
+
 import { getRankChange, getTimeRangeStats } from "./utils";
 
 export const getTopTracks = async (userId: string, isDemo: boolean) => {

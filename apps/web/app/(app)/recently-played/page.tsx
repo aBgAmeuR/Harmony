@@ -1,4 +1,8 @@
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
 import { RecentlyPlayed } from "~/features/stats/components/recently-played";
 import { getUserInfos } from "~/lib/utils";
 

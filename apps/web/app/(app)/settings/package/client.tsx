@@ -7,7 +7,10 @@ import { useRouter } from "next/navigation";
 import { useSession } from "@repo/auth";
 import { toast } from "@repo/ui/sonner";
 
-import { PROCESSING_STEPS_NAME, type ProcessingStepType } from "~/app/api/package/new/PackageStreamer";
+import {
+	PROCESSING_STEPS_NAME,
+	type ProcessingStepType,
+} from "~/app/api/package/new/PackageStreamer";
 import { readStreamResponse } from "~/lib/utils";
 
 import { CompleteStep } from "./steps-components/complete-step";
@@ -22,7 +25,8 @@ type PackageProgressData = {
 
 export const Client = () => {
 	const [processingProgress, setProcessingProgress] = useState(0);
-	const [processingSteps, setProcessingSteps] = useState<ProcessingStepType[]>();
+	const [processingSteps, setProcessingSteps] =
+		useState<ProcessingStepType[]>();
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const { data: session, update } = useSession();
 	const router = useRouter();

@@ -6,7 +6,6 @@ import type {
 	Track,
 	UserPrivate,
 } from "../../types";
-
 import { Manager } from "../Manager";
 
 export class MeManager extends Manager {

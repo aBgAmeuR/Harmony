@@ -1,16 +1,18 @@
 "use client";
 
-import { cn } from "../../lib/utils";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
 import {
 	ChartContainer,
 	ChartLegend,
 	ChartLegendContent,
 	ChartTooltip,
-	ChartTooltipContent
+	ChartTooltipContent,
 } from "@repo/ui/chart";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
+import { cn } from "../../lib/utils";
+import type { AxisTickFormatters, BaseChartProps } from "./common";
 import { createGradientDefs } from "./common/chart-color-utils";
-import { AxisTickFormatters, BaseChartProps } from "./common";
 import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
 import { getTickFormatter } from "./common/tick-formatters";
 import { getTooltipFormatter } from "./common/tooltip-formatters";
@@ -44,7 +46,10 @@ export function ReusableAreaChart({
 	}));
 
 	return (
-		<ChartContainer config={config} className={cn("aspect-[10/3] w-full", className)}>
+		<ChartContainer
+			config={config}
+			className={cn("aspect-[10/3] w-full", className)}
+		>
 			<AreaChart data={data}>
 				{createGradientDefs(chartItems)}
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
@@ -67,7 +72,9 @@ export function ReusableAreaChart({
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(tooltipLabelFormatter, label, payload, null)
+							}
 							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}

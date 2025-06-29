@@ -1,5 +1,7 @@
 "use client";
 
+import * as React from "react";
+
 import {
 	ChartRace,
 	type ChartRaceSeries,
@@ -11,7 +13,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/select";
-import * as React from "react";
+
 import {
 	ChartCard,
 	ChartCardContent,

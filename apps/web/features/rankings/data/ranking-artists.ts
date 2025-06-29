@@ -1,11 +1,13 @@
 "server-only";
 
-import { prisma } from "@repo/database";
-import { spotify } from "@repo/spotify";
 import {
 	unstable_cacheLife as cacheLife,
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
+
+import { prisma } from "@repo/database";
+import { spotify } from "@repo/spotify";
+
 import { getMonthRange } from "~/lib/dal";
 import { getMsPlayedInMinutes } from "~/lib/utils";
 

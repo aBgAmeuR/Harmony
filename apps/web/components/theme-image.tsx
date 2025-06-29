@@ -1,9 +1,10 @@
 "use client";
 
-import { useTheme } from "next-themes";
 import Image from "next/image";
+import { useTheme } from "next-themes";
 
 import type { VariantProps } from "@repo/ui/lib/utils";
+
 import { useMounted } from "~/hooks/use-mounted";
 
 type ThemeImageProps = {

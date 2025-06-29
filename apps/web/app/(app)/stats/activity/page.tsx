@@ -1,10 +1,26 @@
 import { Suspense } from "react";
 
-import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { PlatformUsageChart, PlatformUsageChartSkeleton } from "~/features/activity/components/platform-usage-chart";
-import { TimeEvolutionCharts, TimeEvolutionChartsSkeleton } from "~/features/activity/components/time-evolution-charts";
-import { TimeListenedChart, TimeListenedChartSkeleton } from "~/features/activity/components/time-listened-chart";
+import {
+	DateRangeSelector,
+	DateRangeSelectorSkeleton,
+} from "~/components/date-range-selector/date-range-selector";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import {
+	PlatformUsageChart,
+	PlatformUsageChartSkeleton,
+} from "~/features/activity/components/platform-usage-chart";
+import {
+	TimeEvolutionCharts,
+	TimeEvolutionChartsSkeleton,
+} from "~/features/activity/components/time-evolution-charts";
+import {
+	TimeListenedChart,
+	TimeListenedChartSkeleton,
+} from "~/features/activity/components/time-listened-chart";
 import { getUserInfos } from "~/lib/utils";
 
 export default async function StatsActivityPage() {

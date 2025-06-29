@@ -1,3 +1,6 @@
+import React, { Suspense } from "react";
+import { CalendarIcon } from "lucide-react";
+
 import { Button } from "@repo/ui/button";
 import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -7,8 +10,6 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/tooltip";
-import { CalendarIcon } from "lucide-react";
-import React, { Suspense } from "react";
 
 import { AppHeader } from "~/components/app-header";
 import { AppSidebar } from "~/components/navbar/app-sidebar";
@@ -194,14 +195,35 @@ export const Demo = () => {
 									</TooltipProvider>
 								</AppHeader>
 								<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
-									<StatsCards userId={user.id} isDemo={true} data={data.topStats} />
+									<StatsCards
+										userId={user.id}
+										isDemo={true}
+										data={data.topStats}
+									/>
 									<div className="flex flex-col gap-4 md:flex-row">
-										<TimeListenedChart userId={user.id} isDemo={true} data={data.timeListened} className="flex-1" />
-										<ListeningPatternChart userId={user.id} isDemo={true} data={data.listeningPattern} />
+										<TimeListenedChart
+											userId={user.id}
+											isDemo={true}
+											data={data.timeListened}
+											className="flex-1"
+										/>
+										<ListeningPatternChart
+											userId={user.id}
+											isDemo={true}
+											data={data.listeningPattern}
+										/>
 									</div>
 									<div className="grid gap-4 lg:grid-cols-2">
-										<TopArtistsCard userId={user.id} isDemo={true} data={data.topArtists} />
-										<TopTracksCard userId={user.id} isDemo={true} data={data.topTracks} />
+										<TopArtistsCard
+											userId={user.id}
+											isDemo={true}
+											data={data.topArtists}
+										/>
+										<TopTracksCard
+											userId={user.id}
+											isDemo={true}
+											data={data.topTracks}
+										/>
 									</div>
 								</div>
 							</main>

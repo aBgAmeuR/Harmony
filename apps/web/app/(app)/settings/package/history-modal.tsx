@@ -1,3 +1,6 @@
+import { Suspense } from "react";
+import { History } from "lucide-react";
+
 import { prisma } from "@repo/database";
 import { Button } from "@repo/ui/button";
 import {
@@ -18,8 +21,7 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/table";
-import { History } from "lucide-react";
-import { Suspense } from "react";
+
 import { getUserInfos } from "~/lib/utils";
 
 export const HistoryModal = async () => {

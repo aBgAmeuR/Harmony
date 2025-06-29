@@ -1,8 +1,9 @@
 "server-only";
 
-import { spotify } from "@repo/spotify";
-import { unstable_cacheLife as cacheLife } from "next/cache";
 import { cache } from "react";
+import { unstable_cacheLife as cacheLife } from "next/cache";
+
+import { spotify } from "@repo/spotify";
 
 export const getAlbumDetails = cache(
 	async (albumId: string, userId: string) => {

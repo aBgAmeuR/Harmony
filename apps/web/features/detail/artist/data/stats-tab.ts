@@ -1,8 +1,12 @@
 "server-only";
 
+import {
+	unstable_cacheLife as cacheLife,
+	unstable_cacheTag as cacheTag,
+} from "next/cache";
+
 import { prisma } from "@repo/database";
-import { unstable_cacheLife as cacheLife } from "next/cache";
-import { unstable_cacheTag as cacheTag } from "next/cache";
+
 import { formatMonth } from "~/lib/utils";
 
 export const getStatsTabData = async (artistId: string, userId: string) => {

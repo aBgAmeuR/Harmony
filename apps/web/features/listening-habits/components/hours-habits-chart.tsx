@@ -1,10 +1,12 @@
 import { ReusableAreaChart } from "@repo/ui/components/charts/area-chart";
 import { Skeleton } from "@repo/ui/skeleton";
+
 import {
 	ChartCard,
 	ChartCardContent,
 	ChartCardHeader,
 } from "~/components/charts/utils/chart-card";
+
 import { getHoursHabitsData } from "../data/hours-habits";
 
 type HoursHabitsChartComponentProps = {
@@ -36,14 +38,16 @@ export const HoursHabitsChart = async ({
 					areaDataKeys={["msPlayed"]}
 					xAxisDataKey="hour"
 					showYAxis={false}
-					config={{ msPlayed: { label: "Time Played", color: "var(--chart-2)" } }}
+					config={{
+						msPlayed: { label: "Time Played", color: "var(--chart-2)" },
+					}}
 					xAxisTickFormatter="msToHours"
 					tooltipValueFormatter="hourSuffix"
 				/>
 			</ChartCardContent>
 		</ChartCard>
 	);
-}
+};
 
 export const HoursHabitsChartSkeleton = () => {
 	return (

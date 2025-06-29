@@ -1,8 +1,10 @@
-import type { ChartConfig } from "@repo/ui/chart";
 import type * as React from "react";
+
+import type { ChartConfig } from "@repo/ui/chart";
+
+import type { ChartTooltipFormatter } from "./chart-tooltip-formatter";
 import type { TickFormatterValues } from "./tick-formatters";
-import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
-import { TooltipFormatterValues } from "./tooltip-formatters";
+import type { TooltipFormatterValues } from "./tooltip-formatters";
 
 export interface BaseChartProps {
 	data: any[];
@@ -41,7 +43,12 @@ export interface BarChartProps extends BaseChartProps, AxisTickFormatters {
 	referenceLine?: {
 		value: number;
 		label: string;
-		position?: "top" | "insideTop" | "bottom" | "insideBottom" | "insideBottomLeft";
+		position?:
+			| "top"
+			| "insideTop"
+			| "bottom"
+			| "insideBottom"
+			| "insideBottomLeft";
 	};
 	/** Whether to show bar labels */
 	showBarLabels?: boolean;
@@ -146,7 +153,8 @@ export interface ChartRaceSeries {
 	data: Array<Record<string, any>>;
 }
 
-export interface ChartRaceProps extends Omit<BaseChartProps, 'tooltipLabelFormatter'> {
+export interface ChartRaceProps
+	extends Omit<BaseChartProps, "tooltipLabelFormatter"> {
 	/** Array of series to display */
 	series: ChartRaceSeries[];
 	/** The data key for the X-axis */
@@ -167,13 +175,13 @@ export interface ChartRaceProps extends Omit<BaseChartProps, 'tooltipLabelFormat
 
 // Union type for all chart props
 export type ChartProps =
-	| (AreaChartProps & { type: 'area' })
-	| (BarChartProps & { type: 'bar' })
-	| (LineChartProps & { type: 'line' })
-	| (PieChartProps & { type: 'pie' })
-	| (RadarChartProps & { type: 'radar' })
-	| (RadialBarChartProps & { type: 'radial-bar' })
-	| (ChartRaceProps & { type: 'race' });
+	| (AreaChartProps & { type: "area" })
+	| (BarChartProps & { type: "bar" })
+	| (LineChartProps & { type: "line" })
+	| (PieChartProps & { type: "pie" })
+	| (RadarChartProps & { type: "radar" })
+	| (RadialBarChartProps & { type: "radial-bar" })
+	| (ChartRaceProps & { type: "race" });
 
 // Common chart configuration type
 export interface CommonChartConfig {

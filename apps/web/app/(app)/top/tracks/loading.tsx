@@ -1,4 +1,8 @@
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
 import { ListSkeleton } from "~/components/list-skeleton";
 import { TimeRangeSelectSkeleton } from "~/features/stats/components/time-range-select";
 

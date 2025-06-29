@@ -1,7 +1,8 @@
-import { auth } from "@repo/auth";
+import { cache } from "react";
 import { format, localeFormat } from "light-date";
 import { redirect } from "next/navigation";
-import { cache } from "react";
+
+import { auth } from "@repo/auth";
 
 export const getMsPlayedInMinutes = (msPlayed: number | string) =>
 	(Number(msPlayed) / (1000 * 60)).toFixed(2);

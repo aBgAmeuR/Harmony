@@ -1,5 +1,9 @@
 import { DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
 import { ListSkeleton } from "~/components/list-skeleton";
 
 export default function Loading() {

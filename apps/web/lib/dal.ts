@@ -1,5 +1,6 @@
-import { prisma } from "@repo/database";
 import { cache } from "react";
+
+import { prisma } from "@repo/database";
 
 export const getMonthRange = cache(async (userId: string, isDemo: boolean) => {
 	if (isDemo) {

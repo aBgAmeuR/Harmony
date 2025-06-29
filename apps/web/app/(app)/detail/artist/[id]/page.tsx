@@ -1,9 +1,23 @@
 import { Suspense } from "react";
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { ArtistHeader, ArtistHeaderSkeleton } from "~/features/detail/artist/components/artist-header";
+
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import {
+	ArtistHeader,
+	ArtistHeaderSkeleton,
+} from "~/features/detail/artist/components/artist-header";
 import { CatalogTab } from "~/features/detail/artist/components/catalog-tab";
-import { StatsTab, StatsTabSkeleton } from "~/features/detail/artist/components/stats-tab";
-import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
+import {
+	StatsTab,
+	StatsTabSkeleton,
+} from "~/features/detail/artist/components/stats-tab";
+import {
+	DetailTabs,
+	DetailTabsContent,
+} from "~/features/detail/common/components/detail-tabs";
 import { getUserInfos } from "~/lib/utils";
 
 interface PageProps {
@@ -23,7 +37,10 @@ export default async function DetailArtistPage({ params }: PageProps) {
 						<ArtistHeader artistId={id} userId={userId} />
 					</Suspense>
 				</div>
-				<DetailTabs tabs={["Statistics", "Monthly Tracks", "Catalog"]} disabledTabs={["Monthly Tracks"]}>
+				<DetailTabs
+					tabs={["Statistics", "Monthly Tracks", "Catalog"]}
+					disabledTabs={["Monthly Tracks"]}
+				>
 					<DetailTabsContent value="Statistics">
 						<Suspense fallback={<StatsTabSkeleton />}>
 							<StatsTab artistId={id} userId={userId} />

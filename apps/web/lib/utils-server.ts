@@ -1,9 +1,10 @@
 "server-only";
 
+import { cache } from "react";
+import { cookies } from "next/headers";
+
 import type { Session } from "@repo/auth";
 import { prisma } from "@repo/database";
-import { cookies } from "next/headers";
-import { cache } from "react";
 
 export const isDemo = (session: Session | null) =>
 	session?.user?.name === "Demo";

@@ -1,8 +1,9 @@
 import { auth } from "@repo/auth";
 import { prisma } from "@repo/database";
+
 import type { SpotifyConfig } from "../../types/SpotifyConfig";
-import type { Logger } from "../Logger";
 import { AuthError } from "../errors";
+import type { Logger } from "../Logger";
 
 interface SpotifyTokenResponse {
 	access_token: string;

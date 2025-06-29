@@ -1,10 +1,12 @@
 "server-only";
 
-import { prisma } from "@repo/database";
 import {
 	unstable_cacheLife as cacheLife,
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
+
+import { prisma } from "@repo/database";
+
 import type { TimeRange } from "../types/time-range";
 
 export const getTimeRangeData = async (

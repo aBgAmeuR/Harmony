@@ -1,22 +1,22 @@
 import { Skeleton } from "@repo/ui/skeleton";
+
 import { getTimeRangeData } from "../data/time-range";
 import { TimeRangeSelectClient } from "./time-range-select-client";
 
 type TimeRangeSelectProps = {
-    userId: string;
-    isDemo: boolean;
-}
+	userId: string;
+	isDemo: boolean;
+};
 
-export const TimeRangeSelect = async ({ userId, isDemo }: TimeRangeSelectProps) => {
-    const timeRange = await getTimeRangeData(userId, isDemo);
+export const TimeRangeSelect = async ({
+	userId,
+	isDemo,
+}: TimeRangeSelectProps) => {
+	const timeRange = await getTimeRangeData(userId, isDemo);
 
-    return (
-        <TimeRangeSelectClient timeRange={timeRange} />
-    )
-}
+	return <TimeRangeSelectClient timeRange={timeRange} />;
+};
 
 export const TimeRangeSelectSkeleton = () => {
-    return (
-        <Skeleton className="h-9 w-[180px] rounded-md" />
-    )
-}
+	return <Skeleton className="h-9 w-[180px] rounded-md" />;
+};

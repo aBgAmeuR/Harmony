@@ -1,6 +1,7 @@
 import { ReusableBarChart } from "@repo/ui/components/charts/bar-chart";
 import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
+
 import {
 	ChartCard,
 	ChartCardContent,
@@ -8,6 +9,7 @@ import {
 	ChartCardHeaderContent,
 } from "~/components/charts/utils/chart-card";
 import { msToHours } from "~/lib/utils";
+
 import { getTimeListenedData } from "../data/time-listened";
 
 type TimeListenedChartProps = {
@@ -37,10 +39,12 @@ export const TimeListenedChart = async ({
 			>
 				<ChartCardHeaderContent
 					title="Average time listened"
-					description={<NumberFlow
-						value={msToHours(data.average).toFixed(2)}
-						suffix=" hours"
-					/>}
+					description={
+						<NumberFlow
+							value={msToHours(data.average).toFixed(2)}
+							suffix=" hours"
+						/>
+					}
 				/>
 			</ChartCardHeader>
 			<ChartCardContent>
@@ -62,7 +66,9 @@ export const TimeListenedChart = async ({
 
 export const TimeListenedChartSkeleton = ({
 	className,
-}: { className?: string }) => {
+}: {
+	className?: string;
+}) => {
 	return (
 		<ChartCard className={className}>
 			<ChartCardHeader

@@ -1,5 +1,4 @@
 import type { SpotifyConfig } from "../../types/SpotifyConfig";
-import type { Logger } from "../Logger";
 import {
 	BadRequestError,
 	ForbiddenError,
@@ -7,6 +6,7 @@ import {
 	RatelimitError,
 	UnauthorizedError,
 } from "../errors";
+import type { Logger } from "../Logger";
 import { AuthManager } from "./AuthManager";
 
 export class HttpClient {

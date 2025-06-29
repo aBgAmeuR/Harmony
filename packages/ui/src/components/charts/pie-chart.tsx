@@ -1,15 +1,17 @@
 "use client";
 
+import * as React from "react";
+import { Label, Pie, PieChart } from "recharts";
+
 import {
 	ChartContainer,
 	ChartTooltip,
-	ChartTooltipContent
+	ChartTooltipContent,
 } from "@repo/ui/chart";
-import * as React from "react";
-import { Label, Pie, PieChart } from "recharts";
+
 import { cn } from "../../lib/utils";
+import type { BaseChartProps } from "./common";
 import { colorizeData } from "./common/chart-color-utils";
-import { BaseChartProps } from "./common";
 import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
 import { getTooltipFormatter } from "./common/tooltip-formatters";
 
@@ -38,12 +40,17 @@ export function ReusablePieChart({
 	const colorizedData = React.useMemo(() => colorizeData(data), [data]);
 
 	return (
-		<ChartContainer config={config} className={cn("aspect-square min-w-60 w-full", className)}>
+		<ChartContainer
+			config={config}
+			className={cn("aspect-square w-full min-w-60", className)}
+		>
 			<PieChart margin={{ top: -10, left: -10, right: -10, bottom: -10 }}>
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={(label, payload) => getTooltipFormatter(tooltipLabelFormatter, label, payload, null)}
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(tooltipLabelFormatter, label, payload, null)
+							}
 							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
@@ -70,7 +77,7 @@ export function ReusablePieChart({
 										<tspan
 											x={viewBox.cx}
 											y={viewBox.cy}
-											className="fill-foreground text-3xl font-bold"
+											className="fill-foreground font-bold text-3xl"
 										>
 											{centerValue}
 										</tspan>

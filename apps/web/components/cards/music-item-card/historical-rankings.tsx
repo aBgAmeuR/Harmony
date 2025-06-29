@@ -1,8 +1,11 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
 import { HistoryIcon } from "lucide-react";
+
+import { Button } from "@repo/ui/button";
+
 import { useHistoricalModalContext } from "~/features/stats/components/historical-provider";
+
 import type { MusicItemCardProps } from "./type";
 
 type HistoricalRankingsProps = {
@@ -14,11 +17,13 @@ export function HistoricalRankings({ item }: HistoricalRankingsProps) {
 
 	return (
 		<Button
-			onClick={() => setItem({
-				id: item.id,
-				name: item.name,
-				href: item.href,
-			})}
+			onClick={() =>
+				setItem({
+					id: item.id,
+					name: item.name,
+					href: item.href,
+				})
+			}
 			variant="ghost"
 			size="icon"
 		>

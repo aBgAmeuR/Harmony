@@ -1,10 +1,12 @@
 "server-only";
 
-import { prisma } from "@repo/database";
 import {
 	unstable_cacheLife as cacheLife,
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
+
+import { prisma } from "@repo/database";
+
 import { getAlbumDetails } from "./utils";
 
 export const getTracksTabData = async (albumId: string, userId: string) => {

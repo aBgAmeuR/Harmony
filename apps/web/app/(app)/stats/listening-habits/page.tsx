@@ -1,12 +1,34 @@
 import { Suspense } from "react";
 
-import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { DaysHabitsChart, DaysHabitsChartSkeleton } from "~/features/listening-habits/components/days-habits-chart";
-import { HoursHabitsChart, HoursHabitsChartSkeleton } from "~/features/listening-habits/components/hours-habits-chart";
-import { ShuffleHabitsChart, ShuffleHabitsChartSkeleton } from "~/features/listening-habits/components/shuffle-habits-chart";
-import { SkippedHabitsChart, SkippedHabitsChartSkeleton } from "~/features/listening-habits/components/skipped-habits-chart";
-import { TopPlatformsChart, TopPlatformsChartSkeleton } from "~/features/listening-habits/components/top-platforms-chart";
+import {
+	DateRangeSelector,
+	DateRangeSelectorSkeleton,
+} from "~/components/date-range-selector/date-range-selector";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import {
+	DaysHabitsChart,
+	DaysHabitsChartSkeleton,
+} from "~/features/listening-habits/components/days-habits-chart";
+import {
+	HoursHabitsChart,
+	HoursHabitsChartSkeleton,
+} from "~/features/listening-habits/components/hours-habits-chart";
+import {
+	ShuffleHabitsChart,
+	ShuffleHabitsChartSkeleton,
+} from "~/features/listening-habits/components/shuffle-habits-chart";
+import {
+	SkippedHabitsChart,
+	SkippedHabitsChartSkeleton,
+} from "~/features/listening-habits/components/skipped-habits-chart";
+import {
+	TopPlatformsChart,
+	TopPlatformsChartSkeleton,
+} from "~/features/listening-habits/components/top-platforms-chart";
 import { getUserInfos } from "~/lib/utils";
 
 export default async function StatsListeningHabitsPage() {

@@ -1,5 +1,6 @@
-import { Card, CardContent, CardFooter } from "@repo/ui/card";
 import Balancer from "react-wrap-balancer";
+
+import { Card, CardContent, CardFooter } from "@repo/ui/card";
 
 import { GetDemoBtn } from "../get-demo-btn";
 import { GetStartedBtn } from "./get-started-btn";

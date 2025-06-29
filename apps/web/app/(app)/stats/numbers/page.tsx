@@ -1,9 +1,22 @@
 import { Suspense } from "react";
 
-import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { ListeningSessionCard, ListeningSessionCardSkeleton } from "~/features/numbers/components/listening-session-card";
-import { NumbersStatsCards, NumbersStatsCardsSkeleton } from "~/features/numbers/components/numbers-stats-cards";
+import {
+	DateRangeSelector,
+	DateRangeSelectorSkeleton,
+} from "~/components/date-range-selector/date-range-selector";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import {
+	ListeningSessionCard,
+	ListeningSessionCardSkeleton,
+} from "~/features/numbers/components/listening-session-card";
+import {
+	NumbersStatsCards,
+	NumbersStatsCardsSkeleton,
+} from "~/features/numbers/components/numbers-stats-cards";
 import { getUserInfos } from "~/lib/utils";
 
 export default async function StatsNumbersPage() {

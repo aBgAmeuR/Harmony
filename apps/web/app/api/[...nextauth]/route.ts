@@ -1,6 +1,6 @@
-import { handlers } from "@repo/auth";
-
 import type { NextRequest } from "next/server";
+
+import { handlers } from "@repo/auth";
 
 // @ts-ignore
 export const GET: (req: NextRequest) => Promise<Response> = handlers.GET;
