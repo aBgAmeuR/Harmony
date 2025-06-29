@@ -1,31 +1,31 @@
 {
-	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
-	"extends": [
-		"@nedcloarbr/biome-config/react",
-		"@nedcloarbr/biome-config/ignore"
-	],
+	"$schema": "https://biomejs.dev/schemas/2.0.6/schema.json",
 	"vcs": {
 		"enabled": false,
 		"clientKind": "git",
 		"useIgnoreFile": true
 	},
 	"files": {
-		"ignoreUnknown": false,
-		"ignore": ["ui", "/.next/", ".turbo"]
+		"ignoreUnknown": false
 	},
 	"formatter": {
 		"enabled": true,
 		"indentStyle": "tab"
 	},
-	"organizeImports": {
-		"enabled": true
-	},
 	"linter": {
 		"enabled": true,
+		"domains": {
+			"next": "all",
+			"react": "all",
+			"project": "all"
+		},
 		"rules": {
 			"recommended": true,
 			"nursery": {
-				"useSortedClasses": "error"
+				"useSortedClasses": {
+					"level": "warn",
+					"fix": "safe"
+				}
 			},
 			"complexity": {
 				"noForEach": "off"
@@ -44,6 +44,32 @@
 				"useButtonType": "off",
 				"noNoninteractiveTabindex": "off",
 				"noLabelWithoutControl": "off"
+			},
+			"correctness": {
+				"useImportExtensions": "off"
+			}
+		}
+	},
+	"assist": {
+		"actions": {
+			"source": {
+				"organizeImports": {
+					"level": "on",
+					"options": {
+						"groups": [
+							["**/*.scss", "**/*.css"],
+							":NODE:",
+							"react",
+							[":PACKAGE:", "!@repo/**"],
+							":BLANK_LINE:",
+							"@repo/**",
+							":BLANK_LINE:",
+							":ALIAS:",
+							":BLANK_LINE:",
+							"**/*"
+						]
+					}
+				}
 			}
 		}
 	},
