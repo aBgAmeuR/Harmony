@@ -101,7 +101,7 @@ export const useDateRange = ({
 		from: dateRange.dateStart,
 		to: dateRange.dateEnd,
 	});
-	const [preset, setPreset] = useState<PresetType | null>(
+	const [preset, setPreset] = useState<PresetType>(
 		getPreset(selectedRange, minMaxDateRange),
 	);
 
