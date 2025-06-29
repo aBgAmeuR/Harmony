@@ -1,8 +1,10 @@
 "use server";
 
 import { revalidatePath, revalidateTag } from "next/cache";
+
 import { getUserInfos } from "~/lib/utils";
-import { setDateRange } from "./date-range";
+
+import { getDateRangeSliderData, setDateRange } from "./date-range";
 
 export const setDateRangeAction = async (dateStart: Date, dateEnd: Date) => {
 	const { userId, isDemo } = await getUserInfos();
@@ -12,5 +14,13 @@ export const setDateRangeAction = async (dateStart: Date, dateEnd: Date) => {
 	await setDateRange(userId, dateStart, dateEnd);
 
 	revalidateTag(userId);
-	revalidatePath("/*");
+	revalidatePath("/(app)/");
+};
+
+export const getDateRangeSliderDataAction = async () => {
+	const { userId } = await getUserInfos();
+
+	if (!userId) return;
+
+	return await getDateRangeSliderData(userId);
 };

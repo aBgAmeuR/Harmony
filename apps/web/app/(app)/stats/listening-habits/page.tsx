@@ -1,6 +1,7 @@
 import { Suspense } from "react";
+
+import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { SelectMonthRange } from "~/components/select-month-range";
 import { DaysHabitsChart, DaysHabitsChartSkeleton } from "~/features/listening-habits/components/days-habits-chart";
 import { HoursHabitsChart, HoursHabitsChartSkeleton } from "~/features/listening-habits/components/hours-habits-chart";
 import { ShuffleHabitsChart, ShuffleHabitsChartSkeleton } from "~/features/listening-habits/components/shuffle-habits-chart";
@@ -14,7 +15,9 @@ export default async function StatsListeningHabitsPage() {
 	return (
 		<Layout>
 			<LayoutHeader items={["Package", "Stats", "Listening Habits"]}>
-				<SelectMonthRange />
+				<Suspense fallback={<DateRangeSelectorSkeleton />}>
+					<DateRangeSelector />
+				</Suspense>
 			</LayoutHeader>
 			<LayoutContent className="mx-auto w-full max-w-6xl lg:flex-row">
 				<div className="flex flex-1 flex-col gap-4">

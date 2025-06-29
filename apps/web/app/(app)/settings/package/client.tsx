@@ -1,14 +1,15 @@
 "use client";
 
+import { useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
+
 import { useSession } from "@repo/auth";
 import { toast } from "@repo/ui/sonner";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import {
-	PROCESSING_STEPS_NAME,
-	type ProcessingStepType,
-} from "~/app/api/package/new/PackageStreamer";
+
+import { PROCESSING_STEPS_NAME, type ProcessingStepType } from "~/app/api/package/new/PackageStreamer";
 import { readStreamResponse } from "~/lib/utils";
+
 import { CompleteStep } from "./steps-components/complete-step";
 import { ProcessingStep } from "./steps-components/processing-step";
 import { UploadStep } from "./steps-components/upload-step";
@@ -21,11 +22,11 @@ type PackageProgressData = {
 
 export const Client = () => {
 	const [processingProgress, setProcessingProgress] = useState(0);
-	const [processingSteps, setProcessingSteps] =
-		useState<ProcessingStepType[]>();
+	const [processingSteps, setProcessingSteps] = useState<ProcessingStepType[]>();
 	const [errorMessage, setErrorMessage] = useState<string>();
 	const { data: session, update } = useSession();
 	const router = useRouter();
+	const queryClient = useQueryClient();
 
 	const isProcessingComplete =
 		processingSteps?.length &&
@@ -63,6 +64,7 @@ export const Client = () => {
 							...session,
 							user: { ...session?.user, hasPackage: true },
 						});
+						queryClient.invalidateQueries();
 						router.refresh();
 					}
 				},

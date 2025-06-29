@@ -1,5 +1,7 @@
+import { Suspense } from "react";
+
+import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { SelectMonthRange } from "~/components/select-month-range";
 import { RankingTracks } from "~/features/rankings/components/ranking-tracks";
 import { getUserInfos } from "~/lib/utils";
 
@@ -9,7 +11,9 @@ export default async function RankingsTracksPage() {
 	return (
 		<Layout>
 			<LayoutHeader items={["Package", "Rankings", "Tracks"]}>
-				<SelectMonthRange />
+				<Suspense fallback={<DateRangeSelectorSkeleton />}>
+					<DateRangeSelector />
+				</Suspense>
 			</LayoutHeader>
 			<LayoutContent>
 				<RankingTracks userId={userId} isDemo={isDemo} />

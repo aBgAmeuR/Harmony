@@ -1,6 +1,7 @@
 import { Suspense } from "react";
+
+import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { SelectMonthRange } from "~/components/select-month-range";
 import { UserHasNotPackage } from "~/components/user-has-not-package";
 import { TimeListenedChart, TimeListenedChartSkeleton } from "~/features/activity/components/time-listened-chart";
 import { ListeningPatternChart, ListeningPatternChartSkeleton } from "~/features/overview/components/listening-pattern-chart";
@@ -25,8 +26,8 @@ export default async function OverviewPage() {
 	return (
 		<Layout>
 			<LayoutHeader items={["Package", "Overview"]}>
-				<Suspense>
-					<SelectMonthRange />
+				<Suspense fallback={<DateRangeSelectorSkeleton />}>
+					<DateRangeSelector />
 				</Suspense>
 			</LayoutHeader>
 			<LayoutContent className="mx-auto w-full max-w-screen-2xl pt-2">

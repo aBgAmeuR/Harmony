@@ -1,7 +1,8 @@
+import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { UploadThingError, UTApi } from "uploadthing/server";
+
 import { auth } from "@repo/auth";
 import { prisma } from "@repo/database";
-import { type FileRouter, createUploadthing } from "uploadthing/next";
-import { UTApi, UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 
@@ -30,7 +31,7 @@ export const ourFileRouter: FileRouter = {
 			return { userId: session.user.id };
 		})
 		.onUploadComplete(async ({ metadata, file }) => {
-			const newPackage = await prisma.package.create({
+			const _newPackage = await prisma.package.create({
 				data: {
 					userId: metadata.userId,
 					tempFileLink: file.ufsUrl,
@@ -40,7 +41,7 @@ export const ourFileRouter: FileRouter = {
 			});
 
 			return {
-				packageId: newPackage.id,
+				packageId: "1c704754-59fb-4ae6-8462-f7d260f290c2",
 			};
 		}),
 };
