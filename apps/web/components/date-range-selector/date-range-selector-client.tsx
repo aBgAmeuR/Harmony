@@ -14,7 +14,7 @@ import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/select";
 import { Separator } from "@repo/ui/separator";
 import { toast } from "@repo/ui/sonner";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@repo/ui/tooltip"
 
 import { DateUtils } from "~/lib/date-utils";
 
@@ -111,28 +111,32 @@ export const DateRangeSelectorClient = ({ dateRange, minMaxDateRange, isDemo }: 
 
                     <CredenzaFooter className="flex-col! gap-4">
                         <Separator className="my-2" />
-                        <div className="flex w-full gap-2">
-                            <CredenzaClose asChild={true}>
-                                <Button variant="outline" className="flex-1" disabled={isPending}>
-                                    Cancel
-                                </Button>
-                            </CredenzaClose>
-                            {isDemo ? (
-                                <Tooltip>
-                                    <TooltipTrigger asChild={true}>
-                                        <Button className="flex-1" disabled={true}>Apply</Button>
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                        <p>This feature is not available in demo mode</p>
-                                    </TooltipContent>
-                                </Tooltip>
-                            ) : (
-                                <Button onClick={() => mutate()} className="flex-1" disabled={isPending}>
-                                    {isPending && <Loader2 className="size-4 animate-spin" />}
-                                    Apply
-                                </Button>
-                            )}
-                        </div>
+                        <TooltipProvider>
+                            <div className="flex w-full gap-2">
+                                <CredenzaClose asChild={true}>
+                                    <Button variant="outline" className="flex-1" disabled={isPending}>
+                                        Cancel
+                                    </Button>
+                                </CredenzaClose>
+                                {isDemo ? (
+                                    <Tooltip>
+                                        <TooltipTrigger asChild={true}>
+                                            <span tabIndex={0} className="flex-1">
+                                                <Button className="w-full" disabled={true}>Apply</Button>
+                                            </span>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                            <p>This feature is not available in demo mode</p>
+                                        </TooltipContent>
+                                    </Tooltip>
+                                ) : (
+                                    <Button onClick={() => mutate()} className="flex-1" disabled={isPending}>
+                                        {isPending && <Loader2 className="size-4 animate-spin" />}
+                                        Apply
+                                    </Button>
+                                )}
+                            </div>
+                        </TooltipProvider>
                     </CredenzaFooter>
                 </CredenzaContent>
             </Credenza>
