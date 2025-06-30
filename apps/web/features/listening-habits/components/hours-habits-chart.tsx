@@ -43,6 +43,7 @@ export const HoursHabitsChart = async ({
 					}}
 					xAxisTickFormatter="msToHours"
 					tooltipValueFormatter="hourSuffix"
+					tooltipLabelFormatter="hourSuffix"
 				/>
 			</ChartCardContent>
 		</ChartCard>
