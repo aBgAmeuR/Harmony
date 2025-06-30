@@ -45,12 +45,12 @@ export const TimeRangeSelectClient = ({
 		},
 	});
 
-	return (
+	if (isDemo) return (
 		<TooltipProvider>
 			<Tooltip>
 				<TooltipTrigger asChild={true}>
 					<span tabIndex={0}>
-						<Select value={timeRange} onValueChange={mutate} disabled={isPending || isDemo}>
+						<Select disabled={true}>
 							<SelectTrigger className="w-[180px]">
 								<SelectValue placeholder="Select time range" />
 							</SelectTrigger>
@@ -69,5 +69,20 @@ export const TimeRangeSelectClient = ({
 				</TooltipContent>
 			</Tooltip>
 		</TooltipProvider>
+	);
+
+	return (
+		<Select value={timeRange} onValueChange={mutate} disabled={isPending}>
+			<SelectTrigger className="w-[180px]">
+				<SelectValue placeholder="Select time range" />
+			</SelectTrigger>
+			<SelectContent>
+				{SELECT_OPTIONS.map((option) => (
+					<SelectItem key={option.value} value={option.value}>
+						{option.label}
+					</SelectItem>
+				))}
+			</SelectContent>
+		</Select>
 	);
 };
