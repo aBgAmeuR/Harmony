@@ -5,9 +5,8 @@
 @source "../../../components/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
 
+@plugin "@tailwindcss/typography";
 @plugin "tailwindcss-motion";
-
-@custom-variant dark (&:is(.dark *));
 
 @custom-variant dark (&:is(.dark *));
 
@@ -312,14 +311,14 @@
 	body {
 		@apply bg-background text-foreground;
 	}
-	button:not(:disabled), [role="button"]:not(:disabled) {
+	button:not(:disabled),
+	[role="button"]:not(:disabled) {
 		cursor: pointer;
 	}
 }
 @layer components {
 	.custom-button {
-		@apply
-			!w-26
+		@apply !w-26
 			!h-8
 			!bg-primary
 			!text-primary-foreground
@@ -348,7 +347,7 @@
 		@apply !hidden;
 	}
 
-	h1 {
+	/* h1 {
 		@apply scroll-m-20 text-4xl font-extrabold tracking-tight text-balance;
 	}
 
@@ -362,5 +361,5 @@
 
 	h4 {
 		@apply scroll-m-20 text-xl font-semibold tracking-tight;
-	}
+	} */
 }

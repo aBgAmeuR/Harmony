@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 import { AudioLinesIcon } from "@repo/ui/icons/audio-lines";
+import { BookTextIcon } from "@repo/ui/icons/book-text";
 import { ChartLineIcon } from "@repo/ui/icons/chart-line";
 import { Disc3Icon } from "@repo/ui/icons/disc-3";
 import { HistoryIcon } from "@repo/ui/icons/history";
@@ -166,6 +167,11 @@ export const data: SidebarConfig = {
 			title: "About",
 			url: "/settings/about",
 			icon: InfoIcon as LucideIcon,
+		},
+		{
+			title: "Changelog",
+			url: "/changelog",
+			icon: BookTextIcon as LucideIcon,
 		},
 	],
 	navSecondary: [
