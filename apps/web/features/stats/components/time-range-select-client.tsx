@@ -50,7 +50,7 @@ export const TimeRangeSelectClient = ({
 			<Tooltip>
 				<TooltipTrigger asChild={true}>
 					<span tabIndex={0}>
-						<Select disabled={true}>
+						<Select value="medium_term" disabled={true}>
 							<SelectTrigger className="w-[180px]">
 								<SelectValue placeholder="Select time range" />
 							</SelectTrigger>
