@@ -6,7 +6,6 @@ import {
 	ChartCardContent,
 	ChartCardHeader,
 } from "~/components/charts/utils/chart-card";
-import { getMsPlayedInHours } from "~/components/charts/utils/time-formatters";
 
 import { getDaysHabitsData } from "../data/days-habits";
 

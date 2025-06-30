@@ -14,7 +14,7 @@ export const TimeRangeSelect = async ({
 }: TimeRangeSelectProps) => {
 	const timeRange = await getTimeRangeData(userId, isDemo);
 
-	return <TimeRangeSelectClient timeRange={timeRange} />;
+	return <TimeRangeSelectClient timeRange={timeRange} isDemo={isDemo} />;
 };
 
 export const TimeRangeSelectSkeleton = () => {
