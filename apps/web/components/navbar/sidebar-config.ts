@@ -3,6 +3,7 @@ import {
 	Binary,
 	CalendarRange,
 	ChartNoAxesCombined,
+	GemIcon,
 	Github,
 	type LucideIcon,
 	Milestone,
@@ -133,6 +134,11 @@ export const data: SidebarConfig = {
 		},
 	],
 	advanced: [
+		{
+			title: "Forgotten Gems",
+			url: "/forgotten-gems",
+			icon: GemIcon as LucideIcon,
+		},
 		{
 			title: "Milestones",
 			url: "/milestones",

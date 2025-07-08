@@ -57,9 +57,9 @@ export function AppSidebar({
 					disable={disable}
 					hasPackage={hasPackage}
 				/>
-				{/* {hasPackage ? (
+				{hasPackage ? (
 					<NavMain items={data.advanced} label="Advanced" disable={disable} />
-				) : null} */}
+				) : null}
 				<NavMain items={data.settings} label="Settings" disable={disable} />
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
