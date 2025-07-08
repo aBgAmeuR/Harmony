@@ -10,7 +10,7 @@
 		"studio": "turbo run studio",
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",
-		"e2e:test": "turbo run e2e:test"
+		"e2e": "turbo run e2e"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.6",
