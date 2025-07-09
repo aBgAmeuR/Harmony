@@ -1,7 +1,9 @@
-/* eslint-disable no-unused-vars */
-import { cookieStorage } from "@repo/zustand-cookie-storage";
+"use client";
+
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+
+import { cookieStorage } from "@repo/zustand-cookie-storage";
 
 interface ListLayoutStore {
 	list_layout: "grid" | "list";
@@ -47,40 +49,3 @@ export const useUserPreferences = create(
 		},
 	),
 );
-
-interface ModalsStore {
-	openModals: {
-		[key: string]: {
-			data: any;
-		};
-	};
-	setOpenModals: (openModals: ModalsStore["openModals"]) => void;
-	openModal: (modalId: string, data: unknown) => void;
-	closeModal: (modalId: string) => void;
-	closeAllModals: () => void;
-	getModalOpen: (modalId: string) => { data: any } | undefined;
-}
-
-export const useModals = create<ModalsStore>((set, get) => ({
-	openModals: {},
-	setOpenModals: (openModals: ModalsStore["openModals"]) => set({ openModals }),
-	openModal: (modalId: string, data: any) =>
-		set((state) => ({
-			openModals: {
-				...state.openModals,
-				[modalId]: { data },
-			},
-		})),
-	closeModal: (modalId: string) =>
-		set((state) => ({
-			openModals: {
-				...state.openModals,
-				[modalId]: { data: undefined },
-			},
-		})),
-	closeAllModals: () => set({ openModals: {} }),
-	getModalOpen: (modalId: string) => {
-		const modal = get().openModals[modalId];
-		return modal ? modal.data : undefined;
-	},
-}));

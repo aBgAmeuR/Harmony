@@ -1,10 +1,10 @@
-import { HTMLAttributes } from "react";
+import type { HTMLAttributes } from "react";
 
 export type AnimIconType = HTMLAttributes<HTMLDivElement> & {
-  size?: string;
-}
+	size?: string;
+};
 
 export type AnimIconHandle = {
-  startAnimation: () => void;
-  stopAnimation: () => void;
-}
+	startAnimation: () => void;
+	stopAnimation: () => void;
+};

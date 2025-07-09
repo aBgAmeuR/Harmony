@@ -1,7 +1,9 @@
+import React from "react";
+import { CloudUpload, Files, Package } from "lucide-react";
+
 import { CardContent } from "@repo/ui/card";
 import { toast } from "@repo/ui/sonner";
-import { CloudUpload, Files, Package } from "lucide-react";
-import React from "react";
+
 import { UploadButton } from "~/lib/uploadthing";
 import { verifPackage } from "~/services/packages/verif-package";
 

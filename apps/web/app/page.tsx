@@ -1,5 +1,4 @@
 import { CTASection } from "~/components/landing/cta";
-import { Demo } from "~/components/landing/demo";
 import { FAQ } from "~/components/landing/faq";
 import { Features } from "~/components/landing/features";
 import { Footer } from "~/components/landing/footer";
@@ -11,7 +10,7 @@ export default async function HomePage() {
 		<div className="flex h-full min-h-screen flex-col">
 			<Navbar />
 			<Hero />
-			<Demo />
+			{/* <Demo /> */}
 			<Features />
 			<FAQ />
 			<CTASection />

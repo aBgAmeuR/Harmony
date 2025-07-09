@@ -1,17 +1,30 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
-import { MusicList } from "~/components/lists/music-list";
-import { SelectMonthRange } from "~/components/select-month-range";
+import { Suspense } from "react";
 
-export default function RankingsTracksPage() {
+import {
+	DateRangeSelector,
+	DateRangeSelectorSkeleton,
+} from "~/components/date-range-selector/date-range-selector";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import { RankingTracks } from "~/features/rankings/components/ranking-tracks";
+import { getUserInfos } from "~/lib/utils";
+
+export default async function RankingsTracksPage() {
+	const { userId, isDemo } = await getUserInfos();
+
 	return (
-		<>
-			<AppHeader items={["Package", "Rankings", "Tracks"]}>
-				<SelectMonthRange />
-			</AppHeader>
-			<Main>
-				<MusicList type="rankingTracks" />
-			</Main>
-		</>
+		<Layout>
+			<LayoutHeader items={["Package", "Rankings", "Tracks"]}>
+				<Suspense fallback={<DateRangeSelectorSkeleton />}>
+					<DateRangeSelector />
+				</Suspense>
+			</LayoutHeader>
+			<LayoutContent>
+				<RankingTracks userId={userId} isDemo={isDemo} />
+			</LayoutContent>
+		</Layout>
 	);
 }

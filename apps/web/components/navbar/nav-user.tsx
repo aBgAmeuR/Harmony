@@ -1,5 +1,16 @@
 "use client";
 
+import { useState } from "react";
+import {
+	ChevronsUpDown,
+	Eye,
+	EyeOff,
+	LogOut,
+	Moon,
+	SunMedium,
+} from "lucide-react";
+import { useTheme } from "next-themes";
+
 import type { User } from "@repo/auth";
 import { signOut } from "@repo/auth/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
@@ -30,16 +41,6 @@ import {
 	SidebarMenuItem,
 	useSidebar,
 } from "@repo/ui/sidebar";
-import {
-	ChevronsUpDown,
-	Eye,
-	EyeOff,
-	LogOut,
-	Moon,
-	SunMedium,
-} from "lucide-react";
-import { useTheme } from "next-themes";
-import { useState } from "react";
 
 import { useMounted } from "~/hooks/use-mounted";
 import { useUserPreferences } from "~/lib/store";

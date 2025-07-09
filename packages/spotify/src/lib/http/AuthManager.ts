@@ -1,8 +1,9 @@
 import { auth } from "@repo/auth";
 import { accounts, db, eq } from "@repo/database";
+
 import type { SpotifyConfig } from "../../types/SpotifyConfig";
-import type { Logger } from "../Logger";
 import { AuthError } from "../errors";
+import type { Logger } from "../Logger";
 
 interface SpotifyTokenResponse {
 	access_token: string;
@@ -107,17 +108,17 @@ export class AuthManager {
 			where: eq(accounts.userId, session.user.id),
 		});
 
-		if (!account?.refreshToken) {
+		if (!account?.refresh_token) {
 			throw new AuthError("No Spotify account linked");
 		}
 
 		// Return existing token if it's still valid
 		if (
-			account.accessToken &&
-			account.expiresAt &&
-			!this.isTokenExpired(Number(account.expiresAt))
+			account.access_token &&
+			account.expires_at &&
+			!this.isTokenExpired(Number(account.expires_at))
 		) {
-			return account.accessToken;
+			return account.access_token;
 		}
 
 		// Create a refresh promise that other calls can wait for
@@ -139,7 +140,7 @@ export class AuthManager {
 		this.logger.log("REFRESHING TOKEN");
 
 		// Refresh the token
-		const data = await this.refreshToken(account.refreshToken!);
+		const data = await this.refreshToken(account.refresh_token!);
 		if (!data) {
 			return this.getToken();
 		}
@@ -149,9 +150,9 @@ export class AuthManager {
 		await db
 			.update(accounts)
 			.set({
-				accessToken: data.access_token,
-				expiresAt: timestamp,
-				refreshToken: data.refresh_token || account.refreshToken, // Only update if new refresh token is provided
+				access_token: data.access_token,
+				expires_at: timestamp,
+				refresh_token: data.refresh_token || account.refresh_token, // Only update if new refresh token is provided
 			})
 			.where(
 				eq(accounts.provider, "spotify") &&

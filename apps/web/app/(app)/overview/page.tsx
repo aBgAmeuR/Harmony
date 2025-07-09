@@ -1,62 +1,73 @@
+
 import { Suspense } from "react";
 
-import { AppHeader } from "~/components/app-header";
-import { SelectMonthRange } from "~/components/select-month-range";
-
-import { getMonthlyData } from "../../../services/charts/activity";
-
 import {
-	TimeListenedChartComponent,
-	TimeListenedChartSkeleton,
-} from "~/components/charts/activity/time-listened-chart";
+	DateRangeSelector,
+	DateRangeSelectorSkeleton,
+} from "~/components/date-range-selector/date-range-selector";
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
 import { UserHasNotPackage } from "~/components/user-has-not-package";
-import { getUserInfos } from "~/lib/utils";
-import { getListeningPatternData } from "./get-listening-pattern-data";
+import {
+	TimeListenedChart,
+	TimeListenedChartSkeleton,
+} from "~/features/activity/components/time-listened-chart";
 import {
 	ListeningPatternChart,
 	ListeningPatternChartSkeleton,
-} from "./listening-pattern-chart";
-import { RankingList } from "./ranking-list";
-import { TopStatsCards, TopStatsCardsSkeleton } from "./top-stats-cards";
+} from "~/features/overview/components/listening-pattern-chart";
+import {
+	StatsCards,
+	StatsCardsSkeleton,
+} from "~/features/overview/components/stats-cards";
+import { TopArtistsCard } from "~/features/overview/components/top-artists-card";
+import { TopTracksCard } from "~/features/overview/components/top-tracks-card";
+import { getUserInfos } from "~/lib/utils";
 
 export default async function OverviewPage() {
 	const { userId, isDemo, hasPackage } = await getUserInfos();
 
 	if (!hasPackage)
 		return (
-			<>
-				<AppHeader items={["Package", "Overview"]} />
-				<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
+			<Layout>
+				<LayoutHeader items={["Package", "Overview"]} />
+				<LayoutContent className="mx-auto w-full max-w-screen-2xl pt-2">
 					<UserHasNotPackage />
-				</div>
-			</>
+				</LayoutContent>
+			</Layout>
 		);
 
 	return (
-		<>
-			<AppHeader items={["Package", "Overview"]}>
-				{/* <SelectMonthRange /> */}
-			</AppHeader>
-			<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
-				<Suspense fallback={<TopStatsCardsSkeleton />}>
-					{/* <TopStatsCards /> */}
+		<Layout>
+			<LayoutHeader items={["Package", "Overview"]}>
+				<Suspense fallback={<DateRangeSelectorSkeleton />}>
+					<DateRangeSelector />
+				</Suspense>
+			</LayoutHeader>
+			<LayoutContent className="mx-auto w-full max-w-screen-2xl pt-2">
+				<Suspense fallback={<StatsCardsSkeleton />}>
+					<StatsCards userId={userId} isDemo={isDemo} />
 				</Suspense>
 				<div className="flex flex-col gap-4 md:flex-row">
-					{/* <Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
-						<TimeListenedChartComponent
-							data={getMonthlyData(userId, isDemo)}
+					<Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
+						<TimeListenedChart
+							userId={userId}
+							isDemo={isDemo}
 							className="flex-1"
 						/>
 					</Suspense>
 					<Suspense fallback={<ListeningPatternChartSkeleton />}>
-						<ListeningPatternChart data={getListeningPatternData(userId)} />
-					</Suspense> */}
+						<ListeningPatternChart userId={userId} isDemo={isDemo} />
+					</Suspense>
 				</div>
 				<div className="grid gap-4 lg:grid-cols-2">
-					{/* <RankingList type="dashboardArtists" className="col-span-1" />
-					<RankingList type="dashboardTracks" className="col-span-1" /> */}
+					<TopArtistsCard userId={userId} isDemo={isDemo} />
+					<TopTracksCard userId={userId} isDemo={isDemo} />
 				</div>
-			</div>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }

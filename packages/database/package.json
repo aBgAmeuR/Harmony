@@ -6,7 +6,8 @@
 	},
 	"scripts": {
 		"dev": "tsup src/* --watch",
-		"generate": "dotenv -e ../../.env -- drizzle-kit generate"
+		"generate": "dotenv -e ../../.env -- drizzle-kit generate",
+		"db:push": "dotenv -e ../../.env -- drizzle-kit push"
 	},
 	"dependencies": {
 		"dotenv": "^16.4.7",
@@ -23,5 +24,8 @@
 		"tsup": "^8.3.5",
 		"tsx": "4.19.2",
 		"typescript": "^5"
+	},
+	"browser": {
+		"perf_hooks": false
 	}
 }

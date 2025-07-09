@@ -5,6 +5,7 @@ import {
 	integer,
 	pgEnum,
 	pgTable,
+	primaryKey,
 	text,
 	timestamp,
 	uniqueIndex,
@@ -36,27 +37,26 @@ export const accounts = pgTable(
 	"Account",
 	{
 		id: uuid().primaryKey().defaultRandom(),
-		userId: varchar({ length: 256 })
+		userId: uuid()
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
-		type: varchar({ length: 256 }).notNull(),
-		provider: varchar({ length: 256 }).notNull(),
-		providerAccountId: varchar({ length: 256 }).notNull(),
-		refreshToken: text(),
-		accessToken: text(),
-		expiresAt: integer(),
-		tokenType: varchar({ length: 256 }),
-		scope: varchar({ length: 256 }),
-		idToken: text(),
-		sessionState: varchar({ length: 256 }),
-		createdAt: timestamp().defaultNow(),
-		updatedAt: timestamp().defaultNow(),
+		type: text().notNull(),
+		provider: text().notNull(),
+		providerAccountId: text().notNull(),
+		refresh_token: text(),
+		access_token: text(),
+		expires_at: integer(),
+		token_type: text(),
+		scope: text(),
+		id_token: text(),
+		session_state: text(),
 	},
-	(table) => [
-		uniqueIndex("providerAccount_idx").on(
-			table.provider,
-			table.providerAccountId,
-		),
+	(account) => [
+		{
+			compoundKey: primaryKey({
+				columns: [account.provider, account.providerAccountId],
+			}),
+		},
 	],
 );
 
@@ -74,7 +74,7 @@ export const tracks = pgTable("Track", {
 	shuffle: boolean(),
 	skipped: boolean(),
 	offline: boolean(),
-	userId: varchar({ length: 256 })
+	userId: uuid()
 		.notNull()
 		.references(() => users.id),
 });
@@ -86,7 +86,7 @@ export const packages = pgTable("Package", {
 	uploadStatus: varchar({ length: 256 }).default("pending"),
 	fileName: varchar({ length: 256 }).default("package.zip"),
 	fileSize: varchar({ length: 256 }).default("0"),
-	userId: varchar({ length: 256 })
+	userId: uuid()
 		.notNull()
 		.references(() => users.id),
 	createdAt: timestamp().defaultNow(),
@@ -97,7 +97,7 @@ export const historicalTrackRankings = pgTable(
 	"HistoricalTrackRanking",
 	{
 		id: uuid().primaryKey().defaultRandom(),
-		userId: varchar({ length: 256 })
+		userId: uuid()
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
 		trackId: varchar({ length: 256 }).notNull(),
@@ -119,7 +119,7 @@ export const historicalArtistRankings = pgTable(
 	"HistoricalArtistRanking",
 	{
 		id: uuid().primaryKey().defaultRandom(),
-		userId: varchar({ length: 256 })
+		userId: uuid()
 			.notNull()
 			.references(() => users.id, { onDelete: "cascade" }),
 		artistId: varchar({ length: 256 }).notNull(),

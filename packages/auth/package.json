@@ -4,6 +4,7 @@
 	"private": true,
 	"type": "module",
 	"dependencies": {
+		"dotenv": "^16.4.7",
 		"@auth/drizzle-adapter": "^1.9.1",
 		"@auth/prisma-adapter": "2.7.2",
 		"next-auth": "^5.0.0-beta.27"
@@ -12,7 +13,7 @@
 		"@repo/database": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@types/node": "^22",
-		"@types/react": "19.0.2",
+		"@types/react": "19.1.0",
 		"typescript": "^5"
 	},
 	"exports": {

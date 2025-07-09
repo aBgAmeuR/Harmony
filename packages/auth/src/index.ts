@@ -1,7 +1,7 @@
 import NextAuth, { type Session, type User } from "next-auth";
-import { auth, handlers, signIn, signOut } from "./auth";
-
 import { SessionProvider, useSession } from "next-auth/react";
+
+import { auth, handlers, signIn, signOut } from "./auth";
 import authConfig from "./auth.config";
 
 const middleware: any = NextAuth(authConfig).auth(async (req) => {

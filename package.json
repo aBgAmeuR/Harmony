@@ -11,11 +11,11 @@
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",
 		"e2e:test": "turbo run e2e:test",
-		"typecheck": "turbo run typecheck"
+		"typecheck": "turbo run typecheck",
+		"db:push": "turbo run db:push"
 	},
 	"devDependencies": {
-		"@biomejs/biome": "1.9.4",
-		"@nedcloarbr/biome-config": "1.9.1",
+		"@biomejs/biome": "2.0.6",
 		"playwright": "^1.52.0",
 		"prettier": "^3.4.2",
 		"tsx": "4.19.2",

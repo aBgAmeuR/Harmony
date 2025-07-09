@@ -1,7 +1,3 @@
-import { Badge } from "@repo/ui/badge";
-import { buttonVariants } from "@repo/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { cn } from "@repo/ui/lib/utils";
 import {
 	BarChart2,
 	Calendar,
@@ -17,6 +13,11 @@ import {
 	Users,
 } from "lucide-react";
 import Link from "next/link";
+
+import { Badge } from "@repo/ui/badge";
+import { buttonVariants } from "@repo/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { cn } from "@repo/ui/lib/utils";
 
 import { AppHeader } from "~/components/app-header";
 import { Icons } from "~/components/icons";

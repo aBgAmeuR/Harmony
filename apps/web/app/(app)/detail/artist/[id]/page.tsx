@@ -1,134 +1,63 @@
-import { auth } from "@repo/auth";
-import { cn } from "@repo/ui/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
-import { type PropsWithChildren, Suspense } from "react";
-
-import { AppHeader } from "~/components/app-header";
+import { Suspense } from "react";
 
 import {
-	getArtistDetails,
-	getArtistListeningTrends,
-} from "~/actions/get-artist-stats-action";
-import { getMonthlyTopTracks } from "~/services/details/get-monthly-top-tracks";
-import { ArtistHeader, ArtistHeaderSkeleton } from "./components/artist-header";
-import { ArtistListeningTrends } from "./components/artist-listening-trends";
-import { MonthlyTopTracks } from "./components/monthly-top-tracks";
-import { TracksAlbumLists } from "./tracks-album-lists";
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import {
+	ArtistHeader,
+	ArtistHeaderSkeleton,
+} from "~/features/detail/artist/components/artist-header";
+import { CatalogTab } from "~/features/detail/artist/components/catalog-tab";
+import {
+	StatsTab,
+	StatsTabSkeleton,
+} from "~/features/detail/artist/components/stats-tab";
+import {
+	DetailTabs,
+	DetailTabsContent,
+} from "~/features/detail/common/components/detail-tabs";
+import { getUserInfos } from "~/lib/utils";
 
 interface PageProps {
-	params: Promise<{
-		id: string;
-	}>;
+	params: Promise<{ id: string }>;
 }
 
 export default async function DetailArtistPage({ params }: PageProps) {
 	const { id } = await params;
-	const session = await auth();
-	const userId = session?.user?.id;
+	const { userId } = await getUserInfos();
 
 	return (
-		<>
-			<AppHeader items={["Detail", "Artist"]} />
-			<div className="flex flex-col gap-8 py-4">
-				<Container>
+		<Layout>
+			<LayoutHeader items={["Detail", "Artist"]} />
+			<LayoutContent className="px-0">
+				<div className="mx-auto w-full max-w-7xl px-4">
 					<Suspense fallback={<ArtistHeaderSkeleton />}>
 						<ArtistHeader artistId={id} userId={userId} />
 					</Suspense>
-				</Container>
-				<div>
-					<Tabs defaultValue="stats" className="w-full">
-						<div className="mb-4 border-border border-y py-1">
-							<Container>
-								<TabsList className="bg-transparent">
-									<TabsTrigger
-										value="overview"
-										className="data-[state=active]:bg-muted data-[state=active]:shadow-none"
-										disabled={true}
-									>
-										Overview
-									</TabsTrigger>
-									<TabsTrigger
-										value="stats"
-										className="data-[state=active]:bg-muted data-[state=active]:shadow-none"
-									>
-										Statistics
-									</TabsTrigger>
-									<TabsTrigger
-										value="monthly-tracks"
-										className="data-[state=active]:bg-muted data-[state=active]:shadow-none"
-									>
-										Monthly Tracks
-									</TabsTrigger>
-									<TabsTrigger
-										value="catalog"
-										className="data-[state=active]:bg-muted data-[state=active]:shadow-none"
-									>
-										Catalog
-									</TabsTrigger>
-								</TabsList>
-							</Container>
-						</div>
-
-						<TabsContent value="overview">
-							<Container className="space-y-6">
-								<h1 className="font-bold text-2xl">Overview</h1>
-								<p className="text-muted-foreground">
-									Here you can find an overview of the artist's statistics and
-									information.
-								</p>
-							</Container>
-						</TabsContent>
-
-						<TabsContent value="stats">
-							<Container className="space-y-6">
-								<Suspense>
-									<ArtistListeningTrends
-										stats={getArtistListeningTrends(userId, id)}
-									/>
-								</Suspense>
-							</Container>
-						</TabsContent>
-
-						<TabsContent value="monthly-tracks">
-							<Container className="space-y-6">
-								<Suspense>
-									<MonthlyTopTracks
-										dataPromise={getMonthlyTopTracks(userId, id, 5)}
-										artistNamePromise={getArtistDetails(id).then(
-											(artist) => artist?.name,
-										)}
-									/>
-								</Suspense>
-							</Container>
-						</TabsContent>
-
-						<TabsContent value="catalog">
-							<Container className="space-y-6">
-								<Suspense>
-									<TracksAlbumLists
-										artistId={id}
-										sessionId={userId}
-										showAll={true}
-									/>
-								</Suspense>
-							</Container>
-						</TabsContent>
-					</Tabs>
 				</div>
-			</div>
-		</>
+				<DetailTabs
+					tabs={["Statistics", "Monthly Tracks", "Catalog"]}
+					disabledTabs={["Monthly Tracks"]}
+				>
+					<DetailTabsContent value="Statistics">
+						<Suspense fallback={<StatsTabSkeleton />}>
+							<StatsTab artistId={id} userId={userId} />
+						</Suspense>
+					</DetailTabsContent>
+					<DetailTabsContent value="Monthly Tracks">
+						{/* <Suspense>
+							<MonthlyTopTracks dataPromise={getMonthlyTopTracks(userId, id, 5)} />
+						</Suspense> */}
+					</DetailTabsContent>
+					<DetailTabsContent value="Catalog">
+						<Suspense>
+							<CatalogTab artistId={id} userId={userId} />
+						</Suspense>
+					</DetailTabsContent>
+				</DetailTabs>
+			</LayoutContent>
+		</Layout>
 	);
 }
-
-const Container = ({
-	children,
-	className,
-}: PropsWithChildren<{
-	className?: string;
-}>) => {
-	return (
-		<div className={cn("mx-auto w-full max-w-7xl px-4", className)}>
-			{children}
-		</div>
-	);
-};

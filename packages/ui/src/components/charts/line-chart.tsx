@@ -1,30 +1,29 @@
 "use client";
 
+import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
+
 import {
-	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@repo/ui/chart";
-import type * as React from "react";
-import { Line, LineChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
 
-export interface LineChartProps {
-	data: any[];
+import { cn } from "../../lib/utils";
+import type { AxisTickFormatters, BaseChartProps } from "./common";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import { getTickFormatter } from "./common/tick-formatters";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
+
+export interface LineChartProps extends BaseChartProps, AxisTickFormatters {
 	xAxisDataKey: string;
 	lineDataKey: string;
-	config: ChartConfig;
-	tooltipLabelFormatter?: (value: string, payload: any) => React.ReactNode;
-	tooltipValueFormatter?: React.ComponentProps<
-		typeof ChartTooltipContent
-	>["formatter"];
 	className?: string;
-	yAxisTickFormatter?: (value: any) => string;
-	xAxisTickFormatter?: (value: any) => string;
 	yAxisReversed?: boolean;
 	yAxisDomain?: [number | string, number | string];
 	showYAxis?: boolean;
+	showDots?: boolean;
+	cursor?: boolean;
+	syncId?: string;
 }
 
 export function ReusableLineChart({
@@ -32,33 +31,43 @@ export function ReusableLineChart({
 	xAxisDataKey,
 	lineDataKey,
 	config,
-	tooltipLabelFormatter,
-	tooltipValueFormatter,
-	className = "aspect-[10/3] w-full",
-	yAxisTickFormatter,
-	xAxisTickFormatter,
+	tooltipLabelFormatter = "normal",
+	tooltipValueFormatter = "normal",
+	className,
+	yAxisTickFormatter = "normal",
+	xAxisTickFormatter = "normal",
 	yAxisReversed = false,
 	yAxisDomain,
 	showYAxis = true,
+	showDots = false,
+	cursor = false,
+	syncId,
 }: LineChartProps) {
 	return (
-		<ChartContainer config={config} className={className}>
-			<LineChart data={data} margin={{ left: -38, top: 6, right: 6 }}>
+		<ChartContainer
+			config={config}
+			className={cn("aspect-[10/3] w-full", className)}
+		>
+			<LineChart
+				data={data}
+				margin={{ left: -38, top: 6, right: 6 }}
+				syncId={syncId}
+			>
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
 				<XAxis
 					dataKey={xAxisDataKey}
 					tickLine={false}
 					axisLine={false}
 					tickMargin={2}
-					tickFormatter={xAxisTickFormatter}
+					tickFormatter={getTickFormatter(xAxisTickFormatter)}
 					dy={10}
 				/>
 				{showYAxis && (
 					<YAxis
 						tickLine={false}
 						axisLine={false}
-						ticks={[0, 1, 10, 20, 30, 40, 50]} 
-						tickFormatter={yAxisTickFormatter}
+						ticks={[0, 1, 10, 20, 30, 40, 50]}
+						tickFormatter={getTickFormatter(yAxisTickFormatter)}
 						reversed={yAxisReversed}
 						domain={yAxisDomain}
 					/>
@@ -66,21 +75,23 @@ export function ReusableLineChart({
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={tooltipLabelFormatter}
-							formatter={tooltipValueFormatter}
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(tooltipLabelFormatter, label, payload, null)
+							}
+							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
-					cursor={false}
+					cursor={cursor}
 				/>
 				<Line
 					type="natural"
 					dataKey={lineDataKey}
 					stroke={`var(--color-${lineDataKey})`}
 					strokeWidth={2}
-					dot={{ fill: `var(--color-${lineDataKey})` }}
-					activeDot={{ r: 6 }}
+					dot={showDots ? { fill: `var(--color-${lineDataKey})` } : false}
+					activeDot={showDots ? { r: 6 } : { r: 4 }}
 				/>
 			</LineChart>
 		</ChartContainer>
 	);
-} 
+}

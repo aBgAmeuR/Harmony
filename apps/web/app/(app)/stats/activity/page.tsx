@@ -1,52 +1,51 @@
 import { Suspense } from "react";
 
-import { AppHeader } from "~/components/app-header";
-import { SelectMonthRange } from "~/components/select-month-range";
-
 import {
-	FirstTimeEvolutionCharts,
-	FirstTimeEvolutionChartsSkeleton,
-} from "~/components/charts/activity/first-time-evolution-charts";
+	DateRangeSelector,
+	DateRangeSelectorSkeleton,
+} from "~/components/date-range-selector/date-range-selector";
 import {
-	PlatformUsageChartComponent,
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import {
+	PlatformUsageChart,
 	PlatformUsageChartSkeleton,
-} from "~/components/charts/activity/platform-usage-chart";
+} from "~/features/activity/components/platform-usage-chart";
 import {
-	TimeListenedChartComponent,
+	TimeEvolutionCharts,
+	TimeEvolutionChartsSkeleton,
+} from "~/features/activity/components/time-evolution-charts";
+import {
+	TimeListenedChart,
 	TimeListenedChartSkeleton,
-} from "~/components/charts/activity/time-listened-chart";
+} from "~/features/activity/components/time-listened-chart";
 import { getUserInfos } from "~/lib/utils";
-import {
-	getFirstTimeListenedData,
-	getMonthlyData,
-	getMonthlyPlatformData,
-} from "~/services/charts/activity";
 
 export default async function StatsActivityPage() {
 	const { userId, isDemo } = await getUserInfos();
 
 	return (
-		<>
-			<AppHeader items={["Package", "Stats", "Activity"]}>
-				<SelectMonthRange />
-			</AppHeader>
-			<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 p-4">
+		<Layout>
+			<LayoutHeader items={["Package", "Stats", "Activity"]}>
+				<Suspense fallback={<DateRangeSelectorSkeleton />}>
+					<DateRangeSelector />
+				</Suspense>
+			</LayoutHeader>
+			<LayoutContent className="mx-auto w-full max-w-6xl">
 				<Suspense fallback={<TimeListenedChartSkeleton />}>
-					<TimeListenedChartComponent data={getMonthlyData(userId, isDemo)} />
+					<TimeListenedChart userId={userId} isDemo={isDemo} />
 				</Suspense>
 
 				<Suspense fallback={<PlatformUsageChartSkeleton />}>
-					<PlatformUsageChartComponent
-						data={getMonthlyPlatformData(userId, isDemo)}
-					/>
+					<PlatformUsageChart userId={userId} isDemo={isDemo} />
 				</Suspense>
 
-				<Suspense fallback={<FirstTimeEvolutionChartsSkeleton />}>
-					<FirstTimeEvolutionCharts
-						data={getFirstTimeListenedData(userId, isDemo)}
-					/>
+				<Suspense fallback={<TimeEvolutionChartsSkeleton />}>
+					<TimeEvolutionCharts userId={userId} isDemo={isDemo} />
 				</Suspense>
-			</div>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }

@@ -1,5 +1,9 @@
 "use client";
 
+import type * as React from "react";
+import { ChevronsUpDown } from "lucide-react";
+
+import type { User } from "@repo/auth";
 import {
 	Sidebar,
 	SidebarContent,
@@ -11,11 +15,9 @@ import {
 	SidebarRail,
 } from "@repo/ui/sidebar";
 import { Skeleton } from "@repo/ui/skeleton";
-import { ChevronsUpDown } from "lucide-react";
-import type * as React from "react";
 
-import type { User } from "@repo/auth";
 import { NavMain } from "~/components/navbar/nav-main";
+
 import { CommandMenu } from "../command-menu";
 import { NavHeader } from "./nav-header";
 import { NavSecondary } from "./nav-secondary";
@@ -40,14 +42,14 @@ export function AppSidebar({
 				<NavHeader {...data.header} />
 			</SidebarHeader>
 			<SidebarContent>
-				{disable ? null : (
+				{/* {disable ? null : (
 					<div className="px-2">
 						<CommandMenu
 							hasPackage={hasPackage}
 							isDemo={user?.name === "Demo"}
 						/>
 					</div>
-				)}
+				)} */}
 				<NavMain items={data.stats} label="Stats" disable={disable} />
 				<NavMain
 					items={data.package}
@@ -55,9 +57,6 @@ export function AppSidebar({
 					disable={disable}
 					hasPackage={hasPackage}
 				/>
-				{/* {hasPackage ? (
-					<NavMain items={data.advanced} label="Advanced" disable={disable} />
-				) : null} */}
 				<NavMain items={data.settings} label="Settings" disable={disable} />
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>

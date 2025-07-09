@@ -1,18 +1,19 @@
-import { prisma } from "@repo/database";
-import { spotify } from "@repo/spotify";
+import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
-import { extractZipAndGetFiles, parseZipFiles } from "~/lib/zip";
-
+import { prisma } from "@repo/database";
+import { spotify } from "@repo/spotify";
 import type { ArtistSimplified, Track } from "@repo/spotify/types";
+
+import { extractZipAndGetFiles, parseZipFiles } from "~/lib/zip";
 import type { DataType } from "~/types/data";
+
 import { utapi } from "../../uploadthing/core";
 import {
 	ApiError,
 	batchArray,
 	createJsonResponse,
 	isAuthenticatedOrThrow,
-	isRateLimitedOrThrow,
 } from "../api-utils";
 import { getPackage, setPackageStatus } from "../package-utils";
 import { PackageStreamer, PackageStreamerError } from "./PackageStreamer";
@@ -48,6 +49,7 @@ export async function POST(req: Request) {
 				} finally {
 					controller.enqueue(new TextEncoder().encode("{}\n"));
 					controller.close();
+					revalidateTag(userId);
 				}
 			},
 		});
@@ -332,4 +334,3 @@ async function setDefaulMonthStats(userId: string) {
 		});
 	});
 }
-

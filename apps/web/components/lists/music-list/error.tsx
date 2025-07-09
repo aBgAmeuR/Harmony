@@ -1,7 +1,8 @@
 "use client";
 
-import { Button } from "@repo/ui/button";
 import { CircleAlert } from "lucide-react";
+
+import { Button } from "@repo/ui/button";
 
 export const MusicListError = () => {
 	return (

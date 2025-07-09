@@ -1,6 +1,21 @@
 /* eslint-disable no-undef */
 "use client";
 
+import * as React from "react";
+import {
+	Eye,
+	EyeOff,
+	Github,
+	Home,
+	LogOut,
+	Moon,
+	PanelLeft,
+	Search,
+	SunMedium,
+} from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+
 import { signOut } from "@repo/auth";
 import { Button } from "@repo/ui/button";
 import {
@@ -14,20 +29,6 @@ import {
 } from "@repo/ui/command";
 import { DialogTitle } from "@repo/ui/dialog";
 import { useSidebar } from "@repo/ui/sidebar";
-import {
-	Eye,
-	EyeOff,
-	Github,
-	Home,
-	LogOut,
-	Moon,
-	PanelLeft,
-	Search,
-	SunMedium,
-} from "lucide-react";
-import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
-import * as React from "react";
 
 import { useUserPreferences } from "~/lib/store";
 

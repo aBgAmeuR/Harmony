@@ -1,8 +1,8 @@
-import bundleAnalyzer from "@next/bundle-analyzer";
+import createMDX from "@next/mdx";
 import type { NextConfig } from "next";
 
-const withBundleAnalyzer = bundleAnalyzer({
-	enabled: process.env.ANALYZE === "true",
+const withMDX = createMDX({
+	// Add markdown plugins here, as desired
 });
 
 const nextConfig: NextConfig = {
@@ -23,12 +23,14 @@ const nextConfig: NextConfig = {
 			dynamic: 30,
 			static: 180,
 		},
-		ppr: "incremental",
+		nodeMiddleware: true,
+		// ppr: "incremental",
 		reactCompiler: true,
-		// dynamicIO: true,
-		// useCache: true,
+		dynamicIO: true,
+		useCache: true,
 	},
+	pageExtensions: ["mdx", "ts", "tsx"],
 };
 
-const config: NextConfig = withBundleAnalyzer(nextConfig);
+const config: NextConfig = withMDX(nextConfig);
 export default config;

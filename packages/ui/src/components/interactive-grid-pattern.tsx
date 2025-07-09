@@ -2,6 +2,7 @@
 
 import type React from "react";
 import { useEffect, useState } from "react";
+
 import { cn } from "../lib/utils";
 
 /**
@@ -49,7 +50,7 @@ export function InteractiveGridPattern({
 		}, 1000);
 
 		return () => clearInterval(interval);
-	}, []);
+	}, [width, height]);
 
 	return (
 		<svg
@@ -65,6 +66,7 @@ export function InteractiveGridPattern({
 				const x = (index % horizontal) * width;
 				const y = Math.floor(index / horizontal) * height;
 				return (
+					// biome-ignore lint/a11y/noStaticElementInteractions: expected
 					<rect
 						key={index}
 						x={x}

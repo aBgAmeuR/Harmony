@@ -1,4 +1,4 @@
-import { AppHeader } from "~/components/app-header";
+import { Clock, Layers, LineChart, Sparkles } from "lucide-react";
 
 import {
 	Card,
@@ -8,8 +8,10 @@ import {
 	CardTitle,
 } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
-import { Clock, Layers, LineChart, Sparkles } from "lucide-react";
+
+import { AppHeader } from "~/components/app-header";
 import { getUserInfos } from "~/lib/utils";
+
 import { Client } from "./client";
 import { DocsModal } from "./docs-modal";
 import { HistoryModal } from "./history-modal";

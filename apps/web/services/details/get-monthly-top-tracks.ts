@@ -1,7 +1,9 @@
+import _ from "lodash";
+
 import { prisma } from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { Track } from "@repo/spotify/types";
-import _ from "lodash";
+
 import { generateMonthRange, getMonthIndex } from "./utils";
 
 type MonthlyTrack = {

@@ -1,6 +1,7 @@
-import { Button } from "@repo/ui/button";
 import { CircleHelp } from "lucide-react";
 import Link from "next/link";
+
+import { Button } from "@repo/ui/button";
 
 import { Icons } from "~/components/icons";
 import { ThemeToggle } from "~/components/theme-toggle";

@@ -1,122 +1,61 @@
-import { auth } from "@repo/auth";
-import { cn } from "@repo/ui/lib/utils";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
-import { type PropsWithChildren, Suspense } from "react";
+import { Suspense } from "react";
 
-import { AppHeader } from "~/components/app-header";
-
-import { Card, CardContent, CardHeader } from "@repo/ui/card";
-import { Skeleton } from "@repo/ui/skeleton";
-import { notFound } from "next/navigation";
 import {
-	getAlbumTracksWithStats,
-	getListeningTrends,
-} from "~/services/details/get-album-details";
-import { AlbumFirstLastListen } from "./components/album-first-last-listen";
-import { AlbumHeader, AlbumHeaderSkeleton } from "./components/album-header";
-import { AlbumListeningTrends } from "./components/album-listening-trends";
-import { AlbumStats } from "./components/album-stats";
-import { AlbumStatsSkeleton } from "./components/album-stats-skeleton";
-import { AlbumStreaks } from "./components/album-streaks";
-import { AlbumStreaksSkeleton } from "./components/album-streaks-skeleton";
-import { AlbumTracks } from "./components/album-tracks";
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import {
+	AlbumHeader,
+	AlbumHeaderSkeleton,
+} from "~/features/detail/album/components/album-header";
+import { ListeningTab } from "~/features/detail/album/components/listening-tab";
+import {
+	StatsTab,
+	StatsTabSkeleton,
+} from "~/features/detail/album/components/stats-tab";
+import { TracksTab } from "~/features/detail/album/components/tracks-tab";
+import {
+	DetailTabs,
+	DetailTabsContent,
+} from "~/features/detail/common/components/detail-tabs";
+import { getUserInfos } from "~/lib/utils";
 
 interface PageProps {
-	params: Promise<{
-		id: string;
-	}>;
+	params: Promise<{ id: string }>;
 }
 
 export default async function DetailAlbumPage({ params }: PageProps) {
 	const { id } = await params;
-	const session = await auth();
-	const userId = session?.user?.id;
-
-	if (!userId) {
-		notFound();
-	}
+	const { userId } = await getUserInfos();
 
 	return (
-		<>
-			<AppHeader items={["Detail", "Album"]} />
-			<div className="flex flex-col gap-8 py-4">
-				<Container>
+		<Layout>
+			<LayoutHeader items={["Detail", "Album"]} />
+			<LayoutContent className="px-0">
+				<div className="mx-auto w-full max-w-7xl px-4">
 					<Suspense fallback={<AlbumHeaderSkeleton />}>
 						<AlbumHeader albumId={id} userId={userId} />
 					</Suspense>
-				</Container>
-				<div>
-					<Tabs defaultValue="stats" className="w-full">
-						<div className="mb-4 border-border border-y py-1">
-							<Container>
-								<TabsList className="bg-transparent">
-									<TabsTrigger
-										value="stats"
-										className="data-[state=active]:bg-muted data-[state=active]:shadow-none"
-									>
-										Statistics
-									</TabsTrigger>
-									<TabsTrigger
-										value="tracks"
-										className="data-[state=active]:bg-muted data-[state=active]:shadow-none"
-									>
-										Tracks
-									</TabsTrigger>
-									<TabsTrigger
-										value="trends"
-										className="data-[state=active]:bg-muted data-[state=active]:shadow-none"
-									>
-										Listening Trends
-									</TabsTrigger>
-								</TabsList>
-							</Container>
-						</div>
-
-						<TabsContent value="stats">
-							<Container className="space-y-6">
-								<Suspense fallback={<AlbumStatsSkeleton />}>
-									<AlbumStats albumId={id} userId={userId} />
-								</Suspense>
-								<div className="mt-8 grid grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
-									<Suspense fallback={null}>
-										<AlbumStreaks albumId={id} userId={userId} />
-										<AlbumFirstLastListen albumId={id} userId={userId} />
-									</Suspense>
-								</div>
-							</Container>
-						</TabsContent>
-
-						<TabsContent value="tracks">
-							<Container className="space-y-6">
-								<Suspense>
-									<AlbumTracks data={getAlbumTracksWithStats(userId, id)} />
-								</Suspense>
-							</Container>
-						</TabsContent>
-
-						<TabsContent value="trends">
-							<Container className="space-y-6">
-								<Suspense>
-									<AlbumListeningTrends data={getListeningTrends(userId, id)} />
-								</Suspense>
-							</Container>
-						</TabsContent>
-					</Tabs>
 				</div>
-			</div>
-		</>
+				<DetailTabs tabs={["Statistics", "Tracks", "Listening Trends"]}>
+					<DetailTabsContent value="Statistics">
+						<Suspense fallback={<StatsTabSkeleton />}>
+							<StatsTab albumId={id} userId={userId} />
+						</Suspense>
+					</DetailTabsContent>
+					<DetailTabsContent value="Tracks">
+						<Suspense>
+							<TracksTab albumId={id} userId={userId} />
+						</Suspense>
+					</DetailTabsContent>
+					<DetailTabsContent value="Listening Trends">
+						<Suspense>
+							<ListeningTab albumId={id} userId={userId} />
+						</Suspense>
+					</DetailTabsContent>
+				</DetailTabs>
+			</LayoutContent>
+		</Layout>
 	);
 }
-
-const Container = ({
-	children,
-	className,
-}: PropsWithChildren<{
-	className?: string;
-}>) => {
-	return (
-		<div className={cn("mx-auto w-full max-w-7xl px-4", className)}>
-			{children}
-		</div>
-	);
-};

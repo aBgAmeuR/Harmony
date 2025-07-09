@@ -1,7 +1,6 @@
 {
 	"$schema": "https://turbo.build/schema.json",
 	"globalDependencies": ["**/.env"],
-	"ui": "tui",
 	"envMode": "loose",
 	"tasks": {
 		"build": {
@@ -14,7 +13,6 @@
 			"persistent": true
 		},
 		"start": {
-			"dependsOn": ["^build"],
 			"cache": false,
 			"persistent": true
 		},
@@ -30,6 +28,9 @@
 			"cache": false
 		},
 		"typecheck": {
+			"cache": false
+		},
+		"db:push": {
 			"cache": false
 		}
 	}

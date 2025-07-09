@@ -1,7 +1,8 @@
-import { buttonVariants } from "@repo/ui/button";
-import { cn } from "@repo/ui/lib/utils";
 import { ArrowRight, GithubIcon } from "lucide-react";
 import Link from "next/link";
+
+import { buttonVariants } from "@repo/ui/button";
+import { cn } from "@repo/ui/lib/utils";
 
 import { GetDemoBtn } from "../get-demo-btn";
 import { Announcement } from "./announcement";

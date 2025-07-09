@@ -1,9 +1,10 @@
-import "dotenv/config";
-
+import dotenv from "dotenv";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
 import * as schema from "./schema";
+
+dotenv.config();
 
 const getEnvVariable = (name: string) => {
 	const value = process.env[name];
@@ -11,6 +12,6 @@ const getEnvVariable = (name: string) => {
 	return value;
 };
 
-export const client = postgres(getEnvVariable("DATABASE_URL"));
+export const pool = postgres(getEnvVariable("DATABASE_URL"), { max: 1 });
 
-export const db = drizzle(client, { schema });
+export const db = drizzle(pool, { schema });

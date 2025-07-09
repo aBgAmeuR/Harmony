@@ -1,7 +1,8 @@
-import { cn } from "@repo/ui/lib/utils";
-import { Separator } from "@repo/ui/separator";
 import { ArrowRightIcon, LayoutDashboard, TriangleAlert } from "lucide-react";
 import Link from "next/link";
+
+import { cn } from "@repo/ui/lib/utils";
+import { Separator } from "@repo/ui/separator";
 
 type AnnouncementProps = {
 	className?: string;

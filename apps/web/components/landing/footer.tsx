@@ -1,6 +1,7 @@
-import { Button } from "@repo/ui/button";
 import { Github } from "lucide-react";
 import Link from "next/link";
+
+import { Button } from "@repo/ui/button";
 
 import { GetDemoBtn } from "../get-demo-btn";
 import { ThemeToggle } from "../theme-toggle";

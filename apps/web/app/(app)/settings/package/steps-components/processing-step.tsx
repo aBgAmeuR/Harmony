@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+
 import { CardContent } from "@repo/ui/card";
 import { NumberFlow } from "@repo/ui/components/number";
 import { cn } from "@repo/ui/lib/utils";
@@ -9,7 +11,7 @@ import {
 	StepperSeparator,
 	StepperTitle,
 } from "@repo/ui/stepper";
-import React, { useEffect, useState } from "react";
+
 import type { ProcessingStepType } from "~/app/api/package/new/PackageStreamer";
 
 type ProcessingStepProps = {

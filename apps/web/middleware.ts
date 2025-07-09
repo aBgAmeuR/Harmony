@@ -1,12 +1,8 @@
-// export { middleware } from "@repo/auth";
-
-import { NextResponse } from "next/server";
-
-export default function middleware() {
-	return NextResponse.next();
-}
+export { middleware } from "@repo/auth";
 
 export const config = {
-	matcher: ["/((?!api|_next/static|_next/image|favicon.ico|demo|images).*)"],
-	// unstable_allowDynamic: ["**/node_modules/@prisma/client/runtime/library.js"],
+	matcher: [
+		"/((?!api|_next/static|_next/image|favicon.ico|demo|images|web-app-manifest-512x512.png|web-app-manifest-192x192.png).*)",
+	],
+	runtime: "nodejs",
 };

@@ -1,7 +1,8 @@
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
-import NextAuth, { type NextAuthResult, type DefaultSession } from "next-auth";
+import NextAuth, { type DefaultSession, type NextAuthResult } from "next-auth";
 
-import { db } from "@repo/database";
+import { accounts, db, users } from "@repo/database";
+
 import authConfig from "./auth.config";
 
 declare module "next-auth" {
@@ -17,7 +18,11 @@ declare module "next-auth" {
 }
 
 const result = NextAuth({
-	adapter: DrizzleAdapter(db),
+	adapter: DrizzleAdapter(db, {
+		usersTable: users,
+		accountsTable: accounts,
+	}),
+	debug: true,
 	session: {
 		strategy: "jwt",
 	},

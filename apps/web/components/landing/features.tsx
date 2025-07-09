@@ -1,6 +1,7 @@
+import { BarChart2, Calendar, Music } from "lucide-react";
+
 import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
-import { BarChart2, Calendar, Music } from "lucide-react";
 
 import { ThemeImage } from "../theme-image";
 

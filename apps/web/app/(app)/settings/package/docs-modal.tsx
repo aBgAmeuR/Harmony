@@ -1,3 +1,12 @@
+import {
+	Clock,
+	Download,
+	FileText,
+	HelpCircle,
+	Mail,
+	Settings,
+} from "lucide-react";
+
 import { Button } from "@repo/ui/button";
 import {
 	Dialog,
@@ -9,14 +18,6 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@repo/ui/dialog";
-import {
-	Clock,
-	Download,
-	FileText,
-	HelpCircle,
-	Mail,
-	Settings,
-} from "lucide-react";
 
 export const DocsModal = () => {
 	return (

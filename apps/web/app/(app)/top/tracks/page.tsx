@@ -1,28 +1,35 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
-import { MusicList } from "~/components/lists/music-list";
-import { HistoricalRankingsModal } from "~/components/modals/historical-rankings";
-import { SelectTimeRange } from "~/components/select-time-range";
-import { SelectTimeRangeInfo } from "~/components/select-time-range-info";
-import { getHistoricalTrackRankings } from "~/services/historical-rankings";
+import { Suspense } from "react";
+
+import {
+	Layout,
+	LayoutContent,
+	LayoutHeader,
+} from "~/components/layouts/layout";
+import { SelectListLayout } from "~/features/stats/components/select-list-layout";
+import { TimeRangeInfo } from "~/features/stats/components/time-range-info";
+import {
+	TimeRangeSelect,
+	TimeRangeSelectSkeleton,
+} from "~/features/stats/components/time-range-select";
+import { TopTracks } from "~/features/stats/components/top-tracks";
+import { getUserInfos } from "~/lib/utils";
 
 export default async function TopTracksPage() {
+	const { userId, isDemo } = await getUserInfos();
+
 	return (
-		<>
-			<AppHeader items={["Stats", "Top", "Tracks"]}>
-				<SelectTimeRangeInfo />
-				<SelectTimeRange />
+		<Layout>
+			<LayoutHeader items={["Stats", "Top", "Tracks"]}>
+				<TimeRangeInfo />
+				<Suspense fallback={<TimeRangeSelectSkeleton />}>
+					<TimeRangeSelect userId={userId} isDemo={isDemo} />
+				</Suspense>
 				{/* // TODO: Enable this component when it's ready */}
-				{/* <SelectTopLayout /> */}
-			</AppHeader>
-			<Main>
-				<HistoricalRankingsModal
-					type="track"
-					getHistoricalRankings={getHistoricalTrackRankings}
-				>
-					<MusicList type="topTracks" />
-				</HistoricalRankingsModal>
-			</Main>
-		</>
+				{/* <SelectListLayout /> */}
+			</LayoutHeader>
+			<LayoutContent>
+				<TopTracks userId={userId} isDemo={isDemo} />
+			</LayoutContent>
+		</Layout>
 	);
 }
