@@ -1,7 +1,8 @@
+import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { UploadThingError, UTApi } from "uploadthing/server";
+
 import { auth } from "@repo/auth";
 import { db, packages } from "@repo/database";
-import { type FileRouter, createUploadthing } from "uploadthing/next";
-import { UTApi, UploadThingError } from "uploadthing/server";
 
 const f = createUploadthing();
 

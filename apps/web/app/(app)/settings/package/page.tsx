@@ -50,8 +50,8 @@ export default async function SettingsPackagePage() {
 						{isDemo ? <DemoStep /> : <Client />}
 
 						<CardFooter className="mt-2 justify-between">
-							<DocsModal />
-							<HistoryModal />
+							{/* <DocsModal />
+							<HistoryModal /> */}
 						</CardFooter>
 					</Card>
 				</div>

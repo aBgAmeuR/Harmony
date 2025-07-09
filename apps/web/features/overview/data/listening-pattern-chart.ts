@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, db, sql, sum, tracks } from "@repo/database";
 
 import { getMonthRange } from "~/lib/dal";
 
@@ -19,23 +19,21 @@ export const getListeningPatternData = async (
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const listeningTime: { period: string; time: bigint }[] =
-		await prisma.$queryRaw`
-    SELECT
-      CASE
-        WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 6 AND 12 THEN 'Morning'
-        WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 12 AND 14 THEN 'Noon'
-        WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 14 AND 18 THEN 'Afternoon'
-        WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 18 AND 20 THEN 'Early Evening'
-        WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 20 AND 24 THEN 'Late Evening'
-        ELSE 'Night'
-      END AS period,
-      SUM("msPlayed") AS time
-    FROM "Track"
-    WHERE "userId" = ${userId}
-      AND timestamp BETWEEN ${monthRange.dateStart} AND ${monthRange.dateEnd}
-    GROUP BY period 
-  `;
+	const listeningTime = await db
+		.select({
+			period: sql<string>`CASE
+				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 6 AND 12 THEN 'Morning'
+				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 12 AND 14 THEN 'Noon'
+				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 14 AND 18 THEN 'Afternoon'
+				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 18 AND 20 THEN 'Early Evening'
+				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 20 AND 24 THEN 'Late Evening'
+				ELSE 'Night'
+				END AS period`,
+			time: sum(tracks.msPlayed),
+		})
+		.from(tracks)
+		.where(auth(userId, { monthRange }))
+		.groupBy(({ period }) => period);
 
 	const sortedListeningTime = listeningTime
 		?.map((data) => ({

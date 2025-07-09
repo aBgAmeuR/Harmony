@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, count, db, desc, sum, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
 import { getMonthRange } from "~/lib/dal";
@@ -22,34 +22,34 @@ export const getRankingArtistsData = async (
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const topArtists = await prisma.track.groupBy({
-		by: ["artistIds"],
-		_count: { _all: true },
-		_sum: { msPlayed: true },
-		where: {
-			userId,
-			timestamp: { gte: monthRange.dateStart, lt: monthRange.dateEnd },
-		},
-		orderBy: { _sum: { msPlayed: "desc" } },
-	});
+	const topArtists = await db
+		.select({
+			artistIds: tracks.artistIds,
+			count: count(),
+			sum: sum(tracks.msPlayed),
+		})
+		.from(tracks)
+		.groupBy(tracks.artistIds)
+		.where(auth(userId, { monthRange }))
+		.orderBy(({ sum }) => desc(sum))
+		.limit(limit);
 
 	const aggregatedArtists: Record<
 		string,
-		{ totalMsPlayed: bigint; trackCount: number }
+		{ totalMsPlayed: number; trackCount: number }
 	> = {};
 
 	topArtists.forEach((entry) => {
 		entry.artistIds.forEach((artistId) => {
 			if (!aggregatedArtists[artistId]) {
 				aggregatedArtists[artistId] = {
-					totalMsPlayed: BigInt(0),
+					totalMsPlayed: 0,
 					trackCount: 0,
 				};
 			}
 
-			aggregatedArtists[artistId].totalMsPlayed +=
-				entry._sum.msPlayed || BigInt(0);
-			aggregatedArtists[artistId].trackCount += entry._count._all;
+			aggregatedArtists[artistId].totalMsPlayed += Number(entry.sum) || 0;
+			aggregatedArtists[artistId].trackCount += entry.count;
 		});
 	});
 

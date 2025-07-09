@@ -2,7 +2,7 @@
 
 import { revalidatePath, revalidateTag } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { db, eq, users } from "@repo/database";
 
 import { getUserInfos } from "~/lib/utils";
 
@@ -16,10 +16,10 @@ export const setTimeRangeAction = async (timeRange: TimeRange) => {
 	if (!["short_term", "medium_term", "long_term"].includes(timeRange))
 		return null;
 
-	await prisma.user.update({
-		where: { id: userId },
-		data: { timeRangeStats: timeRange },
-	});
+	await db
+		.update(users)
+		.set({ timeRangeStats: timeRange })
+		.where(eq(users.id, userId));
 
 	revalidateTag(`time-range-${userId}`);
 	revalidateTag(`top-artists-${userId}`);
