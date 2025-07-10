@@ -4,7 +4,7 @@ import {
 	LayoutHeader,
 } from "~/components/layouts/layout";
 import { RecentlyPlayed } from "~/features/stats/components/recently-played";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export default async function RecentlyPlayedPage() {
 	const { userId } = await getUserInfos();

@@ -10,7 +10,7 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import { AppHeader } from "~/components/app-header";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 import { Client } from "./client";
 import { DocsModal } from "./docs-modal";

@@ -4,7 +4,7 @@ import { prisma } from "@repo/database";
 import { SpotifyAPI } from "@repo/spotify";
 
 import { getTimeRangeStats } from "~/features/stats/data/utils";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export async function getHistoricalTrackRankings(trackId: string) {
 	const { userId, isDemo } = await getUserInfos();

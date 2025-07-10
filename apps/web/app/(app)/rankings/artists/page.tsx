@@ -10,7 +10,7 @@ import {
 	LayoutHeader,
 } from "~/components/layouts/layout";
 import { RankingArtists } from "~/features/rankings/components/ranking-artists";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export default async function RankingsArtistsPage() {
 	const { userId, isDemo } = await getUserInfos();

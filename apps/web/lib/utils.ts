@@ -1,8 +1,4 @@
-import { cache } from "react";
 import { format, localeFormat } from "light-date";
-import { redirect } from "next/navigation";
-
-import { auth } from "@repo/auth";
 
 export const getMsPlayedInMinutes = (msPlayed: number | string) =>
 	(Number(msPlayed) / (1000 * 60)).toFixed(2);
@@ -11,23 +7,6 @@ export const formatMonth = (date: Date) =>
 	`${localeFormat(date, "{MMMM}")} ${format(date, "{yyyy}")}`;
 
 export const msToHours = (ms: number) => ms / 1000 / 60 / 60;
-
-export const getUserInfos = cache(async () => {
-	const session = await auth();
-	const userId = session?.user?.id;
-	const isDemo = session?.user?.name === "Demo";
-	const hasPackage = session?.user?.hasPackage;
-
-	if (!userId) {
-		redirect("/api/login");
-	}
-
-	return {
-		userId,
-		isDemo,
-		hasPackage,
-	};
-});
 
 /**
  * Reads a ReadableStream line by line and processes each JSON line

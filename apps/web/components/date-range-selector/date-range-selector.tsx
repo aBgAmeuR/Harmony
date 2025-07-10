@@ -1,6 +1,6 @@
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 import { getDateRange, getMinMaxDateRange } from "./date-range";
 import { DateRangeSelectorClient } from "./date-range-selector-client";

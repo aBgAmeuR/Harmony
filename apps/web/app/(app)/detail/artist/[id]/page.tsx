@@ -18,7 +18,7 @@ import {
 	DetailTabs,
 	DetailTabsContent,
 } from "~/features/detail/common/components/detail-tabs";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 interface PageProps {
 	params: Promise<{ id: string }>;

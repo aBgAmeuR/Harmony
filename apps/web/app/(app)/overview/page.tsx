@@ -10,13 +10,11 @@ import {
 	LayoutContent,
 	LayoutHeader,
 } from "~/components/layouts/layout";
-import { UserHasNotPackage } from "~/components/user-has-not-package";
 import {
 	TimeListenedChart,
 	TimeListenedChartSkeleton,
 } from "~/features/activity/components/time-listened-chart";
 import {
-	ListeningPatternChart,
 	ListeningPatternChartSkeleton,
 } from "~/features/overview/components/listening-pattern-chart";
 import {
@@ -25,20 +23,20 @@ import {
 } from "~/features/overview/components/stats-cards";
 import { TopArtistsCard } from "~/features/overview/components/top-artists-card";
 import { TopTracksCard } from "~/features/overview/components/top-tracks-card";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export default async function OverviewPage() {
 	const { userId, isDemo, hasPackage } = await getUserInfos();
 
-	if (!hasPackage)
-		return (
-			<Layout>
-				<LayoutHeader items={["Package", "Overview"]} />
-				<LayoutContent className="mx-auto w-full max-w-screen-2xl pt-2">
-					<UserHasNotPackage />
-				</LayoutContent>
-			</Layout>
-		);
+	// if (!hasPackage)
+	// 	return (
+	// 		<Layout>
+	// 			<LayoutHeader items={["Package", "Overview"]} />
+	// 			<LayoutContent className="mx-auto w-full max-w-screen-2xl pt-2">
+	// 				<UserHasNotPackage />
+	// 			</LayoutContent>
+	// 		</Layout>
+	// 	);
 
 	return (
 		<Layout>
@@ -52,7 +50,7 @@ export default async function OverviewPage() {
 					<StatsCards userId={userId} isDemo={isDemo} />
 				</Suspense>
 				<div className="flex flex-col gap-4 md:flex-row">
-					<Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
+					{/* <Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
 						<TimeListenedChart
 							userId={userId}
 							isDemo={isDemo}
@@ -61,7 +59,7 @@ export default async function OverviewPage() {
 					</Suspense>
 					<Suspense fallback={<ListeningPatternChartSkeleton />}>
 						<ListeningPatternChart userId={userId} isDemo={isDemo} />
-					</Suspense>
+					</Suspense> */}
 				</div>
 				<div className="grid gap-4 lg:grid-cols-2">
 					<TopArtistsCard userId={userId} isDemo={isDemo} />

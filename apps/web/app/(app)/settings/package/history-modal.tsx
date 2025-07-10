@@ -21,7 +21,7 @@ import {
 	TableRow,
 } from "@repo/ui/table";
 
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export const HistoryModal = async () => {
 	return (

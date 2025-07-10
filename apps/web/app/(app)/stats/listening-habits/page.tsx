@@ -29,7 +29,7 @@ import {
 	TopPlatformsChart,
 	TopPlatformsChartSkeleton,
 } from "~/features/listening-habits/components/top-platforms-chart";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export default async function StatsListeningHabitsPage() {
 	const { userId, isDemo } = await getUserInfos();

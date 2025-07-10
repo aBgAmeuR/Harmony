@@ -10,7 +10,7 @@ import {
 	LayoutHeader,
 } from "~/components/layouts/layout";
 import { RankingTracks } from "~/features/rankings/components/ranking-tracks";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export default async function RankingsTracksPage() {
 	const { userId, isDemo } = await getUserInfos();

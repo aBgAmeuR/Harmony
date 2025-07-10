@@ -28,7 +28,7 @@ export const Client = () => {
 	const [processingSteps, setProcessingSteps] =
 		useState<ProcessingStepType[]>();
 	const [errorMessage, setErrorMessage] = useState<string>();
-	const { data: session, update } = useSession();
+	// const { data: session, update } = useSession();
 	const router = useRouter();
 	const queryClient = useQueryClient();
 
@@ -64,12 +64,12 @@ export const Client = () => {
 						cancelStream().catch(console.error);
 					} else if (progressData.percentage >= 100) {
 						cancelStream().catch(console.error);
-						await update({
-							...session,
-							user: { ...session?.user, hasPackage: true },
-						});
-						queryClient.invalidateQueries();
-						router.refresh();
+						// await update({
+						// 	...session,
+						// 	user: { ...session?.user, hasPackage: true },
+						// });
+						// queryClient.invalidateQueries();
+						// router.refresh();
 					}
 				},
 				onError: (error) => {
