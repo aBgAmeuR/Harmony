@@ -116,7 +116,7 @@ importers:
         version: 2.15.4(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       uploadthing:
         specifier: ^7.5.2
-        version: 7.7.3(next@15.4.0-canary.116(@babel/core@7.27.7)(@playwright/test@1.53.2)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.11)
+        version: 7.7.3(next@15.4.0-canary.116(@playwright/test@1.53.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.11)
       zod:
         specifier: ^3.24.2
         version: 3.25.67
@@ -382,7 +382,7 @@ importers:
         version: 1.3.4
       uploadthing:
         specifier: ^7.5.2
-        version: 7.7.3(next@15.4.0-canary.116(@babel/core@7.27.7)(@playwright/test@1.53.2)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.11)
+        version: 7.7.3(next@15.4.0-canary.116(@playwright/test@1.53.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.11)
       vaul:
         specifier: ^1.1.2
         version: 1.1.2(@types/react-dom@19.1.0(@types/react@19.1.0))(@types/react@19.1.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -437,7 +437,7 @@ importers:
         specifier: workspace:*
         version: link:../config-typescript
       '@types/node':
-        specifier: ^22.15.34
+        specifier: ^22
         version: 22.15.34
       typescript:
         specifier: ^5
@@ -7553,7 +7553,7 @@ snapshots:
       '@uploadthing/shared': 7.1.9
       file-selector: 0.6.0
       react: 19.1.0
-      uploadthing: 7.7.3(next@15.4.0-canary.116(@babel/core@7.27.7)(@playwright/test@1.53.2)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.11)
+      uploadthing: 7.7.3(next@15.4.0-canary.116(@playwright/test@1.53.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.11)
     optionalDependencies:
       next: 15.4.0-canary.116(@babel/core@7.27.7)(@playwright/test@1.53.2)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
 
@@ -11075,7 +11075,7 @@ snapshots:
       registry-auth-token: 3.3.2
       registry-url: 3.1.0
 
-  uploadthing@7.7.3(next@15.4.0-canary.116(@babel/core@7.27.7)(@playwright/test@1.53.2)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.11):
+  uploadthing@7.7.3(next@15.4.0-canary.116(@playwright/test@1.53.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(tailwindcss@4.1.11):
     dependencies:
       '@effect/platform': 0.85.2(effect@3.16.8)
       '@standard-schema/spec': 1.0.0-beta.4

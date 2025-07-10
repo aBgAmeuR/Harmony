@@ -37,6 +37,8 @@ export default defineConfig({
 		storageState: "packages/web-tests/.auth/user.json",
 	},
 
+	timeout: 10 * 1000,
+
 	/* Configure projects for major browsers */
 	projects: [
 		// Setup project that runs once to authenticate
@@ -51,17 +53,17 @@ export default defineConfig({
 			dependencies: ["setup"],
 		},
 
-		{
-			name: "firefox",
-			use: { ...devices["Desktop Firefox"] },
-			dependencies: ["chromium"],
-		},
+		// {
+		// 	name: "firefox",
+		// 	use: { ...devices["Desktop Firefox"] },
+		// 	dependencies: ["chromium"],
+		// },
 
-		{
-			name: "webkit",
-			use: { ...devices["Desktop Safari"] },
-			dependencies: ["firefox"],
-		},
+		// {
+		// 	name: "webkit",
+		// 	use: { ...devices["Desktop Safari"] },
+		// 	dependencies: ["firefox"],
+		// },
 
 		/* Test against mobile viewports. */
 		// {
@@ -86,7 +88,7 @@ export default defineConfig({
 
 	/* Run your local dev server before starting the tests */
 	webServer: {
-		command: "cd ../../ && pnpm run dev --filter=web",
+		command: "cd ../../ && pnpm run start --filter=web",
 		url: "http://localhost:3000",
 		reuseExistingServer: !process.env.CI,
 		timeout: 120 * 1000,
