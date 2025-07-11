@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-import { useSession } from "@repo/auth";
 import { toast } from "@repo/ui/sonner";
 
 import {
@@ -68,8 +67,8 @@ export const Client = () => {
 						// 	...session,
 						// 	user: { ...session?.user, hasPackage: true },
 						// });
-						// queryClient.invalidateQueries();
-						// router.refresh();
+						queryClient.invalidateQueries();
+						router.refresh();
 					}
 				},
 				onError: (error) => {

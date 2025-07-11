@@ -38,12 +38,12 @@ export const getUserInfos = cache(async () => {
 	const hasPackage = session?.user?.hasPackage;
 
 	if (!userId) {
-		redirect("/api/login");
+		return redirect("/api/login");
 	}
 
 	return {
 		userId,
 		isDemo,
-		hasPackage,
+		hasPackage: hasPackage ?? false,
 	};
 });

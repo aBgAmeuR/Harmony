@@ -1,4 +1,3 @@
-import React from "react";
 import { Info } from "lucide-react";
 
 import { Button } from "@repo/ui/button";

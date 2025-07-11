@@ -6,7 +6,17 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import {
+	and,
+	auth,
+	count,
+	db,
+	desc,
+	eq,
+	sql,
+	sum,
+	tracks,
+} from "@repo/database";
 
 import { formatMonth } from "~/lib/utils";
 
@@ -39,7 +49,7 @@ const calculateMaxStreak = (dayRecords: { timestamp: string }[]): number => {
 };
 
 const getTopMonth = (
-	monthlyStats: { month: string; msplayed: number; count: number }[],
+	monthlyStats: { month: string; msplayed: string | null; count: number }[],
 ) => {
 	if (monthlyStats.length === 0) {
 		return { month: "N/A", msPlayed: 0 };
@@ -52,54 +62,46 @@ const getTopMonth = (
 	const topMonthData = sortedByPlaytime[0];
 	return {
 		month: formatMonth(new Date(topMonthData.month)),
-		msPlayed: Math.round(Number(topMonthData.msplayed) / MS_PER_MINUTE),
+		msPlayed: Math.round(Number(topMonthData.msplayed ?? 0) / MS_PER_MINUTE),
 	};
 };
 
-const fetchMonthlyStats = async (
-	albumId: string,
-	userId: string,
-): Promise<{ month: string; msplayed: number; count: number }[]> => {
-	return await prisma.$queryRaw<
-		{ month: string; msplayed: number; count: number }[]
-	>`
-		SELECT TO_CHAR(timestamp, 'YYYY-MM') as month, 
-			   SUM("msPlayed") as msplayed, 
-			   COUNT(*) as count
-		FROM "Track"
-		WHERE "userId" = ${userId} 
-		AND "albumId" = ${albumId}
-		GROUP BY month
-		ORDER BY month ASC
-	`;
+const fetchMonthlyStats = async (albumId: string, userId: string) => {
+	return await db
+		.select({
+			month: sql<string>`TO_CHAR(${tracks.timestamp}, 'YYYY-MM')`,
+			msplayed: sum(tracks.msPlayed),
+			count: count(),
+		})
+		.from(tracks)
+		.where(and(auth(userId), eq(tracks.albumId, albumId)))
+		.groupBy(({ month }) => month)
+		.orderBy(({ month }) => month);
 };
 
-const fetchDayRecords = async (
-	albumId: string,
-	userId: string,
-): Promise<{ timestamp: string }[]> => {
-	return await prisma.$queryRaw<{ timestamp: string }[]>`
-		SELECT TO_CHAR(timestamp, 'YYYY-MM-DD') as timestamp
-		FROM "Track"
-		WHERE "userId" = ${userId} 
-		AND "albumId" = ${albumId}
-		GROUP BY timestamp
-		ORDER BY timestamp ASC
-	`;
+const fetchDayRecords = async (albumId: string, userId: string) => {
+	return await db
+		.select({
+			timestamp: sql<string>`TO_CHAR(${tracks.timestamp}, 'YYYY-MM-DD')`,
+		})
+		.from(tracks)
+		.where(and(auth(userId), eq(tracks.albumId, albumId)))
+		.groupBy(({ timestamp }) => timestamp)
+		.orderBy(({ timestamp }) => timestamp);
 };
 
 const fetchFirstAndLastListens = async (albumId: string, userId: string) => {
 	return await Promise.all([
-		prisma.track.findFirst({
-			where: { userId, albumId },
-			orderBy: { timestamp: "asc" },
-			select: { timestamp: true },
-		}),
-		prisma.track.findFirst({
-			where: { userId, albumId },
-			orderBy: { timestamp: "desc" },
-			select: { timestamp: true },
-		}),
+		db
+			.select({ timestamp: tracks.timestamp })
+			.from(tracks)
+			.where(and(auth(userId), eq(tracks.albumId, albumId)))
+			.orderBy(tracks.timestamp),
+		db
+			.select({ timestamp: tracks.timestamp })
+			.from(tracks)
+			.where(and(auth(userId), eq(tracks.albumId, albumId)))
+			.orderBy(desc(tracks.timestamp)),
 	]);
 };
 
@@ -139,11 +141,11 @@ export const getStatsTabData = async (albumId: string, userId: string) => {
 			topMonth,
 			maxStreak,
 			totalDays: dayRecords.length,
-			firstListen: firstListen?.timestamp
-				? format(firstListen.timestamp, "MMMM d, yyyy")
+			firstListen: firstListen[0]?.timestamp
+				? format(firstListen[0].timestamp, "MMMM d, yyyy")
 				: null,
-			lastListen: lastListen?.timestamp
-				? format(lastListen.timestamp, "MMMM d, yyyy")
+			lastListen: lastListen[0]?.timestamp
+				? format(lastListen[0].timestamp, "MMMM d, yyyy")
 				: null,
 		};
 	} catch (error) {

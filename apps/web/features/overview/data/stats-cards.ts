@@ -22,7 +22,7 @@ export const getStatsCardsData = async (userId: string, isDemo: boolean) => {
 		.where(auth(userId, { monthRange }));
 
 	const uniqueArtistsQuery = db
-		.select({ count: count() })
+		.select({ count: count(tracks.artistIds) })
 		.from(tracks)
 		.where(auth(userId, { monthRange }))
 		.groupBy(tracks.artistIds);

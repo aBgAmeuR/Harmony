@@ -23,7 +23,7 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 const MIN_PLAY_DURATION_MS = 10000;
-const TRACK_BATCH_SIZE = 10000;
+const TRACK_BATCH_SIZE = 5000;
 
 export async function POST(req: Request) {
 	const packageSteamer = new PackageStreamer();

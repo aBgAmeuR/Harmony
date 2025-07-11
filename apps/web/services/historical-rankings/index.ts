@@ -1,6 +1,12 @@
 "use server";
 
-import { prisma } from "@repo/database";
+import {
+	and,
+	db,
+	eq,
+	historicalArtistRankings,
+	historicalTrackRankings,
+} from "@repo/database";
 import { SpotifyAPI } from "@repo/spotify";
 
 import { getTimeRangeStats } from "~/features/stats/data/utils";
@@ -13,16 +19,38 @@ export async function getHistoricalTrackRankings(trackId: string) {
 	const timeRangeStats = await getTimeRangeStats(userId, isDemo);
 	if (!timeRangeStats) return [];
 
-	const res = await prisma.historicalTrackRanking.findMany({
-		where: {
-			userId,
-			trackId,
-			timeRange: timeRangeStats,
-		},
-		orderBy: { timestamp: "asc" },
-	});
+	const distinctTimestamps = db
+		.selectDistinct({ timestamp: historicalTrackRankings.timestamp })
+		.from(historicalTrackRankings)
+		.where(
+			and(
+				eq(historicalTrackRankings.userId, userId),
+				eq(historicalTrackRankings.timeRange, timeRangeStats),
+			),
+		)
+		.as("distinct_timestamps");
 
-	return res;
+	const results = await db
+		.select({
+			timestamp: distinctTimestamps.timestamp,
+			rank: historicalTrackRankings.rank,
+		})
+		.from(distinctTimestamps)
+		.leftJoin(
+			historicalTrackRankings,
+			and(
+				eq(historicalTrackRankings.timestamp, distinctTimestamps.timestamp),
+				eq(historicalTrackRankings.userId, userId),
+				eq(historicalTrackRankings.trackId, trackId),
+				eq(historicalTrackRankings.timeRange, timeRangeStats),
+			),
+		)
+		.orderBy(distinctTimestamps.timestamp);
+
+	return results.map((row) => ({
+		timestamp: row.timestamp ? new Date(row.timestamp) : new Date(),
+		rank: row.rank ?? null,
+	}));
 }
 
 export async function getHistoricalArtistRankings(artistId: string) {
@@ -32,27 +60,38 @@ export async function getHistoricalArtistRankings(artistId: string) {
 	const timeRangeStats = await getTimeRangeStats(userId, isDemo);
 	if (!timeRangeStats) return [];
 
-	const results = await prisma.$queryRaw`
-		SELECT d.timestamp, r.rank
-		FROM (
-			SELECT DISTINCT timestamp
-			FROM "HistoricalArtistRanking"
-			WHERE "userId" = ${userId} AND "timeRange" = ${timeRangeStats}::"TimeRangeStats"
-		) d
-		LEFT JOIN "HistoricalArtistRanking" r
-		ON r."timestamp" = d.timestamp
-		AND r."userId" = ${userId}
-		AND r."artistId" = ${artistId}
-		AND r."timeRange" = ${timeRangeStats}::"TimeRangeStats"
-		ORDER BY d.timestamp ASC;
-	`;
+	const distinctTimestamps = db
+		.selectDistinct({ timestamp: historicalArtistRankings.timestamp })
+		.from(historicalArtistRankings)
+		.where(
+			and(
+				eq(historicalArtistRankings.userId, userId),
+				eq(historicalArtistRankings.timeRange, timeRangeStats),
+			),
+		)
+		.as("distinct_timestamps");
 
-	return (results as Array<{ timestamp: string; rank: number | null }>).map(
-		(row) => ({
-			rank: row.rank,
-			timestamp: new Date(row.timestamp),
-		}),
-	);
+	const results = await db
+		.select({
+			timestamp: distinctTimestamps.timestamp,
+			rank: historicalArtistRankings.rank,
+		})
+		.from(distinctTimestamps)
+		.leftJoin(
+			historicalArtistRankings,
+			and(
+				eq(historicalArtistRankings.timestamp, distinctTimestamps.timestamp),
+				eq(historicalArtistRankings.userId, userId),
+				eq(historicalArtistRankings.artistId, artistId),
+				eq(historicalArtistRankings.timeRange, timeRangeStats),
+			),
+		)
+		.orderBy(distinctTimestamps.timestamp);
+
+	return results.map((row) => ({
+		timestamp: row.timestamp ? new Date(row.timestamp) : new Date(),
+		rank: row.rank ?? null,
+	}));
 }
 
 export async function updateHistoricalRankings(userId: string) {
@@ -90,13 +129,9 @@ export async function updateHistoricalRankings(userId: string) {
 			allArtistRankings.push(...artistRankings);
 		}
 
-		await prisma.$transaction([
-			prisma.historicalTrackRanking.createMany({
-				data: allTrackRankings,
-			}),
-			prisma.historicalArtistRanking.createMany({
-				data: allArtistRankings,
-			}),
+		await Promise.all([
+			db.insert(historicalTrackRankings).values(allTrackRankings),
+			db.insert(historicalArtistRankings).values(allArtistRankings),
 		]);
 	} catch (error) {
 		console.error(error);

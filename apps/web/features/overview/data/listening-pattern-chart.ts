@@ -19,16 +19,20 @@ export const getListeningPatternData = async (
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
+	const periodCase = sql<string>`
+		CASE
+			WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 6 AND 12 THEN 'Morning'
+			WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 12 AND 14 THEN 'Noon'
+			WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 14 AND 18 THEN 'Afternoon'
+			WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 18 AND 20 THEN 'Early Evening'
+			WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 20 AND 24 THEN 'Late Evening'
+			ELSE 'Night'
+		END
+	`;
+
 	const listeningTime = await db
 		.select({
-			period: sql<string>`CASE
-				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 6 AND 12 THEN 'Morning'
-				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 12 AND 14 THEN 'Noon'
-				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 14 AND 18 THEN 'Afternoon'
-				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 18 AND 20 THEN 'Early Evening'
-				WHEN EXTRACT(HOUR FROM timestamp) BETWEEN 20 AND 24 THEN 'Late Evening'
-				ELSE 'Night'
-				END AS period`,
+			period: periodCase,
 			time: sum(tracks.msPlayed),
 		})
 		.from(tracks)

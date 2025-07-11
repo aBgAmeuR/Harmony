@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, db, sql, sum, tracks } from "@repo/database";
 
 import { getMonthRange } from "~/lib/dal";
 import { formatMonth } from "~/lib/utils";
@@ -17,29 +17,27 @@ export const getTimeListenedData = async (userId: string, isDemo: boolean) => {
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const tracks = await prisma.$queryRaw<
-		{ month: string; totalmsplayed: number }[]
-	>`
-    SELECT TO_CHAR(timestamp, 'YYYY-MM') as month, SUM("msPlayed") as totalmsplayed
-    FROM "Track"
-    WHERE "userId" = ${userId} 
-      AND "timestamp" >= ${monthRange.dateStart} 
-      AND "timestamp" < ${monthRange.dateEnd}
-    GROUP BY month
-    ORDER BY month ASC
-  `;
+	const tracksData = await db
+		.select({
+			month: sql<string>`TO_CHAR(timestamp, 'YYYY-MM')`,
+			totalmsplayed: sum(tracks.msPlayed),
+		})
+		.from(tracks)
+		.where(auth(userId, { monthRange }))
+		.groupBy(({ month }) => month)
+		.orderBy(({ month }) => month);
 
 	const data: Record<string, number> = {};
 	let totalMsPlayed = 0;
 
-	tracks.forEach((track) => {
+	tracksData.forEach((track) => {
 		const date = new Date(track.month);
 		const key = formatMonth(date);
 		data[key] = Number(track.totalmsplayed);
 		totalMsPlayed += Number(track.totalmsplayed);
 	});
 
-	const average = totalMsPlayed / tracks.length;
+	const average = totalMsPlayed / tracksData.length;
 
 	return {
 		data: Object.entries(data).map(([key, value]) => ({

@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { and, arrayOverlaps, auth, db, sql, sum, tracks } from "@repo/database";
 
 import { formatMonth } from "~/lib/utils";
 
@@ -20,22 +20,24 @@ export const getStatsTabData = async (artistId: string, userId: string) => {
 	}));
 
 	const [hourData, monthData] = await Promise.all([
-		prisma.$queryRaw<{ hour: bigint; msplayed: bigint }[]>`
-            SELECT
-                EXTRACT(HOUR FROM timestamp) AS hour,
-                SUM("msPlayed") AS msplayed
-            FROM "Track"
-            WHERE "userId" = ${userId} AND ${artistId} = ANY("artistIds")
-            GROUP BY hour
-            ORDER BY hour ASC
-    `,
-		prisma.$queryRaw<{ month: string; totalmsplayed: number }[]>`
-            SELECT TO_CHAR(timestamp, 'YYYY-MM') as month, SUM("msPlayed") as totalmsplayed
-            FROM "Track"
-            WHERE "userId" = ${userId} AND ${artistId} = ANY("artistIds")
-            GROUP BY month
-            ORDER BY month ASC
-    `,
+		db
+			.select({
+				hour: sql<number>`EXTRACT(HOUR FROM ${tracks.timestamp})`,
+				msplayed: sum(tracks.msPlayed),
+			})
+			.from(tracks)
+			.where(and(auth(userId), arrayOverlaps(tracks.artistIds, [artistId])))
+			.groupBy(({ hour }) => hour)
+			.orderBy(({ hour }) => hour),
+		db
+			.select({
+				month: sql<string>`TO_CHAR(${tracks.timestamp}, 'YYYY-MM')`,
+				totalmsplayed: sum(tracks.msPlayed),
+			})
+			.from(tracks)
+			.where(and(auth(userId), arrayOverlaps(tracks.artistIds, [artistId])))
+			.groupBy(({ month }) => month)
+			.orderBy(({ month }) => month),
 	]);
 
 	const monthDataClean: Record<string, number> = {};

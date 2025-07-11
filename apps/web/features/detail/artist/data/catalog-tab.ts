@@ -1,38 +1,66 @@
 "server-only";
 
-import { prisma } from "@repo/database";
+import {
+	and,
+	arrayOverlaps,
+	auth,
+	count,
+	db,
+	desc,
+	or,
+	sum,
+	tracks,
+} from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { Album, Track } from "@repo/spotify/types";
 
 import { getMsPlayedInMinutes } from "~/lib/utils";
 
 export const getCatalogTabData = async (artistId: string, userId: string) => {
-	const topTracksQuery = prisma.track.groupBy({
-		by: ["spotifyId"],
-		_count: true,
-		_sum: { msPlayed: true },
-		where: {
-			userId,
-			OR: [
-				{ artistIds: { has: artistId } },
-				{ albumArtistIds: { has: artistId } },
-			],
-		},
-		orderBy: { _sum: { msPlayed: "desc" } },
-		take: 30,
-	});
+	const topTracksQuery = db
+		.select({
+			spotifyId: tracks.spotifyId,
+			msPlayed: sum(tracks.msPlayed),
+			count: count(),
+		})
+		.from(tracks)
+		.where(
+			and(
+				auth(userId),
+				or(
+					arrayOverlaps(tracks.artistIds, [artistId]),
+					arrayOverlaps(tracks.albumArtistIds, [artistId]),
+				),
+			),
+		)
+		.groupBy(tracks.spotifyId)
+		.orderBy(({ msPlayed }) => desc(msPlayed))
+		.limit(30);
 
-	const topAlbumsQuery = prisma.$queryRaw<
-		{ albumId: string; _count: number; _sum: bigint }[]
-	>`
-        SELECT "albumId", COUNT(*) as _count, SUM("msPlayed") as _sum
-        FROM "Track"
-        WHERE "userId" = ${userId} AND ("albumArtistIds"::text[] @> ARRAY[${artistId}]::text[])
-        GROUP BY "albumId"
-        HAVING COUNT(DISTINCT "spotifyId") >= 2
-        ORDER BY _sum DESC
-        LIMIT 20
-  `;
+	const topAlbumsQuery = db
+		.select({
+			albumId: tracks.albumId,
+			msPlayed: sum(tracks.msPlayed),
+			count: count(),
+		})
+		.from(tracks)
+		.where(and(auth(userId), arrayOverlaps(tracks.albumArtistIds, [artistId])))
+		.groupBy(tracks.albumId)
+		.orderBy(({ msPlayed }) => desc(msPlayed))
+		.limit(20);
+
+	// TODO: ("albumArtistIds"::text[] @> ARRAY[${artistId}]::text[])
+	// 	const topAlbumsQuery = prisma.$queryRaw<
+	// 		{ albumId: string; _count: number; _sum: bigint }[]
+	// 	>`
+	//         SELECT "albumId", COUNT(*) as _count, SUM("msPlayed") as _sum
+	//         FROM "Track"
+	//         WHERE "userId" = ${userId} AND ("albumArtistIds"::text[] @> ARRAY[${artistId}]::text[])
+	//         GROUP BY "albumId"
+	//         HAVING COUNT(DISTINCT "spotifyId") >= 2
+	//         ORDER BY _sum DESC
+	//         LIMIT 20
+	//   `;
 
 	const [topTracks, topAlbums] = await Promise.all([
 		topTracksQuery,
@@ -44,21 +72,21 @@ export const getCatalogTabData = async (artistId: string, userId: string) => {
 		spotify.albums.list(topAlbums.map((album) => album.albumId)),
 	]);
 
-	const tracks = tracksInfos.map((track) => {
+	const tracksData = tracksInfos.map((track) => {
 		const findTrack = topTracks.find(
 			(topTrack) => topTrack.spotifyId === track.id,
 		);
 
 		return formatItem(
 			track,
-			findTrack?._sum.msPlayed || BigInt(0),
-			findTrack?._count || 0,
+			findTrack?.msPlayed ? BigInt(findTrack.msPlayed) : BigInt(0),
+			findTrack?.count || 0,
 			"track",
 		);
 	});
 
-	const albums = (() => {
-		// Group albums with the same name
+	const albumsData = (() => {
+		// TODO: Group albums with the same name
 		const albumGroups: Record<
 			string,
 			{
@@ -71,20 +99,20 @@ export const getCatalogTabData = async (artistId: string, userId: string) => {
 			const key = album.name ?? "";
 			const stats = topAlbums.find(
 				(topAlbum) => topAlbum.albumId === album.id,
-			) || { _sum: null, _count: 0 };
+			) || { msPlayed: null, count: 0 };
 			const statSum =
-				stats._sum !== null && stats._sum !== undefined
-					? BigInt(stats._sum)
+				stats.msPlayed !== null && stats.msPlayed !== undefined
+					? BigInt(stats.msPlayed)
 					: BigInt(0);
 			if (!albumGroups[key]) {
 				albumGroups[key] = {
 					base: album,
 					totalMs: statSum,
-					totalCount: stats._count || 0,
+					totalCount: stats.count || 0,
 				};
 			} else {
 				albumGroups[key].totalMs += statSum;
-				albumGroups[key].totalCount += stats._count || 0;
+				albumGroups[key].totalCount += stats.count || 0;
 			}
 		}
 		return Object.values(albumGroups).map(({ base, totalMs, totalCount }) => {
@@ -93,8 +121,8 @@ export const getCatalogTabData = async (artistId: string, userId: string) => {
 	})();
 
 	return {
-		tracks,
-		albums,
+		tracks: tracksData,
+		albums: albumsData,
 	};
 };
 

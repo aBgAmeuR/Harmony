@@ -26,7 +26,9 @@ export const getDateRange = async (userId: string, isDemo: boolean) => {
 		columns: { timeRangeDateEnd: true, timeRangeDateStart: true },
 	});
 
-	if (!dates) return DEFAULT_DATE_RANGE;
+	if (!dates || !dates.timeRangeDateStart || !dates.timeRangeDateEnd) {
+		return DEFAULT_DATE_RANGE;
+	}
 
 	return {
 		dateStart: dates.timeRangeDateStart,

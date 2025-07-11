@@ -18,6 +18,7 @@ export function auth(
 	userId: string,
 	options?: {
 		monthRange?: { dateStart: Date; dateEnd: Date };
+		trackId?: string;
 	},
 ) {
 	const clauses = [eq(tracks.userId, userId)];
@@ -27,5 +28,9 @@ export function auth(
 			lt(tracks.timestamp, options.monthRange.dateEnd),
 		);
 	}
+	if (options?.trackId) {
+		clauses.push(eq(tracks.spotifyId, options.trackId));
+	}
+
 	return and(...clauses);
 }
