@@ -5,6 +5,7 @@ import {
 	NotFoundError,
 	RatelimitError,
 	UnauthorizedError,
+	WhitelistError,
 } from "../errors";
 import type { Logger } from "../Logger";
 import { AuthManager } from "./AuthManager";
@@ -98,7 +99,10 @@ export class HttpClient {
 			case 401:
 				return new UnauthorizedError(url, { data });
 			case 403:
-				return new ForbiddenError(url, { data });
+				if (data) {
+					return new ForbiddenError(url, { data });
+				}
+				return new WhitelistError(url);
 			case 404:
 				return new NotFoundError(url);
 			case 429:

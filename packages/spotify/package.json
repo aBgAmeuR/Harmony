@@ -12,6 +12,10 @@
 		},
 		"./types": {
 			"types": "./src/types/index.ts"
+		},
+		"./errors": {
+			"types": "./src/lib/errors/index.ts",
+			"default": "./dist/lib/errors/index.js"
 		}
 	},
 	"devDependencies": {

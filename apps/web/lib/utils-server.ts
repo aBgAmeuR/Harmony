@@ -1,7 +1,6 @@
 "server-only";
 
 import { cache } from "react";
-import { cookies } from "next/headers";
 
 import type { Session } from "@repo/auth";
 import { prisma } from "@repo/database";
@@ -30,3 +29,14 @@ export const getMonthRange = cache(async (userId: string, isDemo: boolean) => {
 		dateEnd: monthsDates.timeRangeDateEnd,
 	};
 });
+
+export async function tryCatch<T>(
+	promise: Promise<T>,
+): Promise<{ data: T; error: null } | { data: null; error: Error }> {
+	try {
+		const data = await promise;
+		return { data, error: null };
+	} catch (error) {
+		return { data: null, error: error as Error };
+	}
+}

@@ -109,3 +109,23 @@ export class RequestRetriesExceededError extends Error {
 		this.name = "RequestRetriesExceededError";
 	}
 }
+
+export class WhitelistError extends Error {
+	public data: Record<string, unknown> = {};
+	name = WhitelistError.name;
+
+	constructor(
+		public url: string,
+		extra: {
+			stack?: string;
+			data?: Record<string, unknown>;
+		} = {},
+	) {
+		super(
+			"You are not registered in the Spotify developer whitelist for this development mode app. Please contact the team to be added.",
+		);
+
+		if (extra.stack) this.stack = extra.stack;
+		if (extra.data) this.data = extra.data;
+	}
+}
