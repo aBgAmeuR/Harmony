@@ -14,7 +14,7 @@ type MusicListProps = {
 	config: MusicListConfig;
 };
 
-export const MusicList = async ({ data, config }: MusicListProps) => {
+export const MusicList = ({ data, config }: MusicListProps) => {
 	if (!data) return <MusicListError />;
 
 	return (

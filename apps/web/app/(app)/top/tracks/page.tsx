@@ -24,8 +24,7 @@ export default async function TopTracksPage() {
 				<Suspense fallback={<TimeRangeSelectSkeleton />}>
 					<TimeRangeSelect userId={userId} isDemo={isDemo} />
 				</Suspense>
-				{/* // TODO: Enable this component when it's ready */}
-				{/* <SelectListLayout /> */}
+				<SelectListLayout />
 			</LayoutHeader>
 			<LayoutContent>
 				<TopTracks userId={userId} isDemo={isDemo} />

@@ -1,4 +1,4 @@
-import { MusicList } from "~/components/lists/music-list";
+import { MusicLayout } from "~/components/lists/music-layout";
 import type { MusicListConfig } from "~/components/lists/music-list/config";
 import { getHistoricalArtistRankings } from "~/services/historical-rankings";
 
@@ -22,7 +22,7 @@ export const TopArtists = async ({ userId, isDemo }: TopArtistsProps) => {
 
 	return (
 		<HistoricalProvider>
-			<MusicList data={data} config={config} />
+			<MusicLayout data={data} config={config} />
 			<HistoricalModal promise={getHistoricalArtistRankings} />
 		</HistoricalProvider>
 	);

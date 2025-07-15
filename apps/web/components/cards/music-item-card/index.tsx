@@ -30,14 +30,17 @@ export const MusicItemCard = ({
 		>
 			{layout === "grid" ? (
 				<>
-					<AspectRatio>
-						<Image
-							src={item.image}
-							alt={item.name}
-							href={item.href}
-							layout={layout}
-						/>
-					</AspectRatio>
+					<div className="relative w-full">
+						{rank && <Rank rank={rank} rankChange={item.rankChange} layout={layout} className="absolute top-2 left-2 z-10" />}
+						<AspectRatio>
+							<Image
+								src={item.image}
+								alt={item.name}
+								href={item.href}
+								layout={layout}
+							/>
+						</AspectRatio>
+					</div>
 					<Content item={item} />
 					<Stats stat1={item.stat1} stat2={item.stat2} layout={layout} />
 				</>
