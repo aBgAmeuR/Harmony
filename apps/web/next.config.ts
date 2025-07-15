@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
 			static: 180,
 		},
 		nodeMiddleware: true,
-		// ppr: "incremental",
+		clientSegmentCache: true,
 		reactCompiler: true,
 		dynamicIO: true,
 		useCache: true,

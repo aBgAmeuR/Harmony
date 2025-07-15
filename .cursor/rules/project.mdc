@@ -67,7 +67,7 @@ Each application and package has its own configurations and dependencies, allowi
 
 ### Database
 
-The project uses Prisma for database management. The database configurations are stored in the `database` package. The `schema.prisma` file defines the database schema.
+The project uses Drizzle for database management. The database configurations are stored in the `database` package. The `src/schema.ts` file defines the database schema.
 
 ## Code Style and Structure
 

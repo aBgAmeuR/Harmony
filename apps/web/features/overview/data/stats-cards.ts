@@ -22,10 +22,16 @@ export const getStatsCardsData = async (userId: string, isDemo: boolean) => {
 		.where(auth(userId, { monthRange }));
 
 	const uniqueArtistsQuery = db
-		.select({ count: count(tracks.artistIds) })
-		.from(tracks)
-		.where(auth(userId, { monthRange }))
-		.groupBy(tracks.artistIds);
+		.select({
+			count: sql<number>`COUNT(DISTINCT "subquery".unnest)`.mapWith(Number),
+		})
+		.from(
+			db
+				.select({ artist_id: sql<string>`unnest(${tracks.artistIds})` })
+				.from(tracks)
+				.where(auth(userId, { monthRange }))
+				.as("subquery"),
+		);
 
 	const mostActiveDayQuery = db
 		.select({
