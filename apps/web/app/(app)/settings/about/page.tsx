@@ -12,7 +12,6 @@ import {
 	Shield,
 	Users,
 } from "lucide-react";
-import Link from "next/link";
 
 import { Badge } from "@repo/ui/badge";
 import { buttonVariants } from "@repo/ui/button";
@@ -21,6 +20,7 @@ import { cn } from "@repo/ui/lib/utils";
 
 import { AppHeader } from "~/components/app-header";
 import { Icons } from "~/components/icons";
+import { config } from "~/lib/config";
 
 export default async function SettingsAboutPage() {
 	return (
@@ -67,12 +67,12 @@ export default async function SettingsAboutPage() {
 
 								<div className="mb-4 flex items-center gap-2">
 									<span className="text-muted-foreground">Version</span>
-									<span className="font-medium">2.3</span>
+									<span className="font-medium">{config.appVersion}</span>
 									<Badge>Stable</Badge>
 								</div>
 
 								<a
-									href="https://github.com/aBgAmeuR/Harmony"
+									href={config.githubRepo}
 									className={cn(buttonVariants({ variant: "secondary" }))}
 									target="_blank"
 									rel="noopener noreferrer"
