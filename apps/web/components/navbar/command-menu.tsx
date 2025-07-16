@@ -32,11 +32,11 @@ import { useSidebar } from "@repo/ui/sidebar";
 
 import { useUserPreferences } from "~/lib/store";
 
-import { Icons } from "./icons";
+import { Icons } from "../icons";
 import {
 	type SidebarItem,
 	data as sidebarConfig,
-} from "./navbar/sidebar-config";
+} from "./sidebar-config";
 
 type CommandMenuProps = {
 	hasPackage?: boolean;
@@ -104,7 +104,7 @@ export function CommandMenu({
 			<CommandDialog open={open} onOpenChange={setOpen}>
 				<DialogTitle className="sr-only">Search Menu</DialogTitle>
 				<CommandInput placeholder="Type a command or search..." />
-				<CommandList className="pb-10">
+				<CommandList className="mb-10">
 					<CommandEmpty>No results found.</CommandEmpty>
 					<CommandGroupSidebar
 						heading="Stats"
@@ -131,7 +131,7 @@ export function CommandMenu({
 					<CommandSeparator />
 					<CommandGroup heading="Quicks Actions">
 						<CommandItem
-							className="!py-2"
+							className="!py-2 cursor-pointer"
 							onSelect={() => runCommand(() => router.push("/"))}
 						>
 							<Home />
@@ -139,7 +139,7 @@ export function CommandMenu({
 						</CommandItem>
 						{!isDemo && (
 							<CommandItem
-								className="!py-2"
+								className="!py-2 cursor-pointer"
 								onSelect={() => runCommand(() => setShowEmail(!showEmail))}
 							>
 								{showEmail ? <Eye /> : <EyeOff />}
@@ -147,7 +147,7 @@ export function CommandMenu({
 							</CommandItem>
 						)}
 						<CommandItem
-							className="!py-2"
+							className="!py-2 cursor-pointer"
 							onSelect={() =>
 								runCommand(() =>
 									signOut({
@@ -160,14 +160,14 @@ export function CommandMenu({
 							{isDemo ? "Exit Demo" : "Log out"}
 						</CommandItem>
 						<CommandItem
-							className="!py-2"
+							className="!py-2 cursor-pointer"
 							onSelect={() => runCommand(() => toggleSidebar())}
 						>
 							<PanelLeft />
 							Toggle Sidebar
 						</CommandItem>
 						<CommandItem
-							className="!py-2"
+							className="!py-2 cursor-pointer"
 							onSelect={() =>
 								runCommand(() => setTheme(theme === "light" ? "dark" : "light"))
 							}
@@ -179,7 +179,7 @@ export function CommandMenu({
 					<CommandSeparator />
 					<CommandGroup heading="Social">
 						<CommandItem
-							className="!py-2"
+							className="!py-2 cursor-pointer"
 							onSelect={() =>
 								runCommand(() =>
 									window.open("https://github.com/aBgAmeuR/Harmony", "_blank"),
@@ -200,7 +200,7 @@ export function CommandMenu({
 						<Button
 							variant="ghost"
 							size="sm"
-							className="w-fit cursor-default text-muted-foreground hover:bg-background hover:text-muted-foreground"
+							className="w-fit text-muted-foreground hover:bg-background hover:text-muted-foreground"
 						>
 							Enter
 							<kbd className="-me-1 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] font-medium text-[0.625rem] text-muted-foreground/70">
@@ -249,7 +249,7 @@ const CommandGroupSidebar = ({
 							onSelect={() => {
 								runCommand(() => router.push(subItem.url));
 							}}
-							className="!py-2"
+							className="!py-2 cursor-pointer"
 						>
 							<subItem.icon className="!size-4" />
 							{subItem.title}
@@ -265,7 +265,7 @@ const CommandGroupSidebar = ({
 						onSelect={() => {
 							runCommand(() => router.push(navItem.url));
 						}}
-						className="!py-2"
+						className="!py-2 cursor-pointer"
 					>
 						<navItem.icon className="!size-4" />
 						{navItem.title}
