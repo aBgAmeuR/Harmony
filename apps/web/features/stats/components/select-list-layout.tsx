@@ -3,6 +3,7 @@
 import { AlignJustify, Grid2x2 } from "lucide-react";
 
 import { Label } from "@repo/ui/label";
+import { Skeleton } from "@repo/ui/skeleton";
 import { Switch } from "@repo/ui/switch";
 
 import { useListLayout } from "~/lib/store";
@@ -20,7 +21,7 @@ export const SelectListLayout = () => {
 					onCheckedChange={(checked) =>
 						setListLayout(checked ? "grid" : "list")
 					}
-					className="peer [&_span]:data-[state=checked]:rtl:-translate-x-full absolute inset-0 h-[inherit] w-auto data-[slot=switch-thumb]:bg-primary data-[state=checked]:bg-input/50 data-[state=unchecked]:bg-input/50 dark:data-[state=checked]:[&_[data-slot=switch-thumb]]:bg-primary-foreground dark:data-[state=unchecked]:[&_[data-slot=switch-thumb]]:bg-foreground [&_span]:h-full [&_span]:w-1/2 [&_span]:transition-transform [&_span]:duration-300 [&_span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&_span]:data-[state=checked]:translate-x-full"
+					className="peer [&_span]:data-[state=checked]:rtl:-translate-x-full absolute inset-0 h-[inherit] w-auto data-[slot=switch-thumb]:bg-primary data-[state=checked]:bg-input/50 data-[state=unchecked]:bg-input/50 dark:data-[state=checked]:[&_[data-slot=switch-thumb]]:bg-primary dark:data-[state=unchecked]:[&_[data-slot=switch-thumb]]:bg-primary [&_span]:h-full [&_span]:w-1/2 [&_span]:transition-transform [&_span]:duration-300 [&_span]:ease-[cubic-bezier(0.16,1,0.3,1)] [&_span]:data-[state=checked]:translate-x-full"
 				/>
 				<span className="pointer-events-none relative ms-0.5 flex min-w-8 items-center justify-center text-center peer-data-[state=checked]:text-muted-foreground/70">
 					<AlignJustify size={16} aria-hidden="true" />
@@ -33,5 +34,11 @@ export const SelectListLayout = () => {
 				Labeled switch
 			</Label>
 		</div>
+	);
+};
+
+export const SelectListLayoutSkeleton = () => {
+	return (
+		<Skeleton className="h-9 w-[68px] rounded-full" />
 	);
 };
