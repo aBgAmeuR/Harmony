@@ -18,7 +18,7 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { NavMain } from "~/components/navbar/nav-main";
 
-import { CommandMenu } from "../command-menu";
+import { CommandMenu } from "./command-menu";
 import { NavHeader } from "./nav-header";
 import { NavSecondary } from "./nav-secondary";
 import { NavUser } from "./nav-user";

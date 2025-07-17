@@ -77,6 +77,7 @@ export function NavUser({ user }: NavUserProps) {
 							<SidebarMenuButton
 								size="lg"
 								className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+								tooltip={user.name ?? user.email ?? 'User'}
 							>
 								<Avatar className="size-8 rounded-lg">
 									<AvatarImage src={user.image ?? ""} alt={user.name ?? ""} />
