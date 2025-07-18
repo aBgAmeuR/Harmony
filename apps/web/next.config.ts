@@ -26,7 +26,7 @@ const nextConfig: NextConfig = {
 		nodeMiddleware: true,
 		clientSegmentCache: true,
 		reactCompiler: true,
-		dynamicIO: true,
+		cacheComponents: true,
 		useCache: true,
 	},
 	pageExtensions: ["mdx", "ts", "tsx"],
