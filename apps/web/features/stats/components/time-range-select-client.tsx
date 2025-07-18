@@ -51,7 +51,7 @@ export const TimeRangeSelectClient = ({
 				<TooltipTrigger asChild={true}>
 					<span tabIndex={0}>
 						<Select value="medium_term" disabled={true}>
-							<SelectTrigger className="w-[180px]">
+							<SelectTrigger className="w-[150px]" size="sm">
 								<SelectValue placeholder="Select time range" />
 							</SelectTrigger>
 							<SelectContent>
@@ -73,7 +73,7 @@ export const TimeRangeSelectClient = ({
 
 	return (
 		<Select value={timeRange} onValueChange={mutate} disabled={isPending}>
-			<SelectTrigger className="w-[180px]">
+			<SelectTrigger className="w-[150px]" size="sm">
 				<SelectValue placeholder="Select time range" />
 			</SelectTrigger>
 			<SelectContent>

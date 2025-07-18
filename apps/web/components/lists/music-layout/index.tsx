@@ -32,7 +32,7 @@ export const MusicLayout = ({ data, config }: MusicLayoutProps) => {
                     rank={config.showRank ? index + 1 : undefined}
                     showAction={!!config.actionHref}
                     showHistoricalRankings={config.showHistoricalRankings}
-                    actionHref={config.actionHref?.(item.id)}
+                    actionHref={config.actionHref}
                     layout={listLayout}
                 />
             ))}

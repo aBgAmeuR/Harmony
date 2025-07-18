@@ -1,4 +1,4 @@
-import { MusicList } from "~/components/lists/music-list";
+import { MusicLayout } from "~/components/lists/music-layout";
 import type { MusicListConfig } from "~/components/lists/music-list/config";
 
 import { getRecentlyPlayedData } from "../data/recently-played";
@@ -14,5 +14,5 @@ type RecentlyPlayedProps = {
 export const RecentlyPlayed = async ({ userId }: RecentlyPlayedProps) => {
 	const data = await getRecentlyPlayedData(userId);
 
-	return <MusicList data={data} config={config} />;
+	return <MusicLayout data={data} config={config} />;
 };
