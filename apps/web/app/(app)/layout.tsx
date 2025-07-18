@@ -8,20 +8,16 @@ import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 
 import { AppSidebar } from "~/components/navbar/app-sidebar";
 
-import Error from "../error";
+import ErrorComponent from "../error";
 
-export default async function AppLayout({
-	children,
-}: Readonly<{
-	children: React.ReactNode;
-}>) {
+export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	const cookieStorage = await cookies();
-	const sideBarState = cookieStorage.get("sidebar:state")?.value || "true";
+	const defaultOpen = cookieStorage.get("sidebar_state")?.value === "true";
 	const session = await auth();
 
 	return (
-		<ErrorBoundary errorComponent={Error}>
-			<SidebarProvider defaultOpen={sideBarState === "true"}>
+		<ErrorBoundary errorComponent={ErrorComponent}>
+			<SidebarProvider defaultOpen={defaultOpen}>
 				<AppSidebar user={session?.user} />
 				<SidebarInset>
 					<NextTopLoader

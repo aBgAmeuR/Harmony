@@ -31,7 +31,7 @@ export const ourFileRouter: FileRouter = {
 			return { userId: session.user.id };
 		})
 		.onUploadComplete(async ({ metadata, file }) => {
-			const _newPackage = await prisma.package.create({
+			const newPackage = await prisma.package.create({
 				data: {
 					userId: metadata.userId,
 					tempFileLink: file.ufsUrl,
@@ -41,7 +41,7 @@ export const ourFileRouter: FileRouter = {
 			});
 
 			return {
-				packageId: "1c704754-59fb-4ae6-8462-f7d260f290c2",
+				packageId: newPackage.id,
 			};
 		}),
 };
