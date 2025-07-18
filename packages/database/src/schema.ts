@@ -8,7 +8,6 @@ import {
 	primaryKey,
 	text,
 	timestamp,
-	uniqueIndex,
 	uuid,
 	varchar,
 } from "drizzle-orm/pg-core";
@@ -93,48 +92,27 @@ export const packages = pgTable("Package", {
 	updatedAt: timestamp().defaultNow(),
 });
 
-export const historicalTrackRankings = pgTable(
-	"HistoricalTrackRanking",
-	{
-		id: uuid().primaryKey().defaultRandom(),
-		userId: uuid()
-			.notNull()
-			.references(() => users.id, { onDelete: "cascade" }),
-		trackId: varchar({ length: 256 }).notNull(),
-		rank: integer().notNull(),
-		timeRange: timeRangeStatsEnum().notNull(),
-		timestamp: timestamp().defaultNow(),
-	},
-	(table) => [
-		uniqueIndex("uniqueRanking_idx").on(
-			table.userId,
-			table.trackId,
-			table.timestamp,
-			table.timeRange,
-		),
-	],
-);
+export const historicalTrackRankings = pgTable("HistoricalTrackRanking", {
+	id: uuid().primaryKey().defaultRandom(),
+	userId: uuid()
+		.notNull()
+		.references(() => users.id, { onDelete: "cascade" }),
+	trackId: varchar({ length: 256 }).notNull(),
+	rank: integer().notNull(),
+	timeRange: timeRangeStatsEnum().notNull(),
+	timestamp: timestamp().defaultNow(),
+});
 
-export const historicalArtistRankings = pgTable(
-	"HistoricalArtistRanking",
-	{
-		id: uuid().primaryKey().defaultRandom(),
-		userId: uuid()
-			.notNull()
-			.references(() => users.id, { onDelete: "cascade" }),
-		artistId: varchar({ length: 256 }).notNull(),
-		rank: integer().notNull(),
-		timeRange: timeRangeStatsEnum().notNull(),
-		timestamp: timestamp().defaultNow(),
-	},
-	(table) => [
-		uniqueIndex("uniqueArtistRanking_idx").on(
-			table.userId,
-			table.artistId,
-			table.timestamp,
-		),
-	],
-);
+export const historicalArtistRankings = pgTable("HistoricalArtistRanking", {
+	id: uuid().primaryKey().defaultRandom(),
+	userId: uuid()
+		.notNull()
+		.references(() => users.id, { onDelete: "cascade" }),
+	artistId: varchar({ length: 256 }).notNull(),
+	rank: integer().notNull(),
+	timeRange: timeRangeStatsEnum().notNull(),
+	timestamp: timestamp().defaultNow(),
+});
 
 export const usersRelations = relations(users, ({ many }) => ({
 	accounts: many(accounts),

@@ -2,7 +2,6 @@
 
 BEGIN;
 
--- 1. Renommer le type enum d'abord
 DO $$
 BEGIN
     IF EXISTS (SELECT 1 FROM pg_type WHERE typname = 'TimeRangeStats') THEN
@@ -11,7 +10,6 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
--- 2. Renommer la colonne Package avant la migration
 DO $$
 BEGIN
     IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Package' AND column_name = 'spotify_id') THEN
@@ -20,7 +18,6 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
--- 3. Supprimer toutes les contraintes de clés étrangères
 DO $$
 BEGIN
     IF EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'Track_userId_fkey') THEN
@@ -45,7 +42,6 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
--- 4. Supprimer les index existants
 DO $$
 BEGIN
     IF EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'User_email_key') THEN
@@ -74,7 +70,6 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
--- 5. Créer les colonnes temporaires UUID pour toutes les tables
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'User' AND column_name = 'temp_uuid_id') THEN
@@ -123,22 +118,6 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
--- 6. Générer les nouveaux UUIDs pour User (table principale)
--- UPDATE "User" 
--- SET temp_uuid_id = (
---     SELECT uuid_generate_v5(
---         uuid_ns_oid(), 
---         CONCAT(
---             SUBSTRING(CONCAT('legacy', id), 1, 8), '-',
---             SUBSTRING(CONCAT('legacy', id), 9, 4), '-',
---             SUBSTRING(CONCAT('legacy', id), 13, 4), '-',
---             SUBSTRING(CONCAT('legacy', id), 17, 4), '-',
---             SUBSTRING(CONCAT('legacy', id), 21, 12)
---         )
---     )
--- );
-
--- Alternative si uuid_generate_v5 n'est pas disponible :
 UPDATE "User" 
 SET temp_uuid_id = (
     CONCAT(
@@ -150,7 +129,6 @@ SET temp_uuid_id = (
     )
 )::UUID;
 
--- 7. Mettre à jour les références userId dans toutes les tables liées
 UPDATE "Track" 
 SET temp_userId = (
     SELECT temp_uuid_id FROM "User" 
@@ -181,7 +159,6 @@ SET temp_userId = (
     WHERE "User".id = "HistoricalArtistRanking"."userId"
 );
 
--- 8. Vérifier qu'aucune référence n'est NULL
 SELECT 'Track' as table_name, COUNT(*) as null_refs FROM "Track" WHERE temp_userId IS NULL AND "userId" IS NOT NULL
 UNION ALL
 SELECT 'Package' as table_name, COUNT(*) as null_refs FROM "Package" WHERE temp_userId IS NULL AND "userId" IS NOT NULL
@@ -192,7 +169,6 @@ SELECT 'HistoricalTrackRanking' as table_name, COUNT(*) as null_refs FROM "Histo
 UNION ALL
 SELECT 'HistoricalArtistRanking' as table_name, COUNT(*) as null_refs FROM "HistoricalArtistRanking" WHERE temp_userId IS NULL AND "userId" IS NOT NULL;
 
--- 9. Supprimer les anciennes colonnes et renommer les nouvelles
 -- User table
 ALTER TABLE "User" DROP COLUMN id;
 ALTER TABLE "User" RENAME COLUMN temp_uuid_id TO id;
@@ -227,7 +203,6 @@ ALTER TABLE "HistoricalArtistRanking" RENAME COLUMN temp_uuid_id TO id;
 ALTER TABLE "HistoricalArtistRanking" DROP COLUMN "userId";
 ALTER TABLE "HistoricalArtistRanking" RENAME COLUMN temp_userId TO "userId";
 
--- 10. Appliquer les autres modifications de colonnes
 ALTER TABLE "Track" ALTER COLUMN "id" SET DEFAULT gen_random_uuid();
 ALTER TABLE "Track" ALTER COLUMN "timestamp" SET DATA TYPE timestamp;
 ALTER TABLE "Track" ALTER COLUMN "platform" SET DATA TYPE varchar(256);
@@ -293,7 +268,6 @@ ALTER TABLE "HistoricalArtistRanking" ALTER COLUMN "timestamp" SET DATA TYPE tim
 ALTER TABLE "HistoricalArtistRanking" ALTER COLUMN "timestamp" SET DEFAULT now();
 ALTER TABLE "HistoricalArtistRanking" ALTER COLUMN "timestamp" DROP NOT NULL;
 
--- 11. Créer les clés primaires
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE table_name = 'User' AND constraint_type = 'PRIMARY KEY') THEN
@@ -322,7 +296,6 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
--- 12. Recréer les contraintes de clés étrangères
 DO $$
 BEGIN
     IF NOT EXISTS (SELECT 1 FROM information_schema.table_constraints WHERE constraint_name = 'Track_userId_User_id_fk') THEN
@@ -347,20 +320,6 @@ BEGIN
 END
 $$ LANGUAGE plpgsql;
 
--- 13. Recréer les index
-DO $$
-BEGIN
-    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'uniqueRanking_idx') THEN
-        CREATE UNIQUE INDEX "uniqueRanking_idx" ON "HistoricalTrackRanking" USING btree ("userId","trackId","timestamp","timeRange");
-    END IF;
-    
-    IF NOT EXISTS (SELECT 1 FROM pg_indexes WHERE indexname = 'uniqueArtistRanking_idx') THEN
-        CREATE UNIQUE INDEX "uniqueArtistRanking_idx" ON "HistoricalArtistRanking" USING btree ("userId","artistId","timestamp");
-    END IF;
-END
-$$ LANGUAGE plpgsql;
-
--- 14. Supprimer les colonnes Account et ajouter la contrainte email unique
 DO $$
 BEGIN
     IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Account' AND column_name = 'createdAt') THEN
@@ -372,8 +331,6 @@ BEGIN
     END IF;
 END
 $$ LANGUAGE plpgsql;
-
--- 15. Vider les tables et ajouter la contrainte unique sur email
 
 DO $$
 BEGIN
