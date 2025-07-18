@@ -24,7 +24,7 @@ export const getSkippedHabitsData = async (userId: string, isDemo: boolean) => {
 		.from(tracks)
 		.where(auth(userId, { monthRange }))
 		.groupBy(tracks.skipped);
-		
+
 	return {
 		skipped: skippeds.find((skipped) => skipped.skipped === true)?.count || 0,
 		notSkipped:

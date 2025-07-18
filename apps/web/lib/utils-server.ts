@@ -47,3 +47,14 @@ export const getUserInfos = cache(async () => {
 		hasPackage: hasPackage ?? false,
 	};
 });
+
+export async function tryCatch<T>(
+	promise: Promise<T>,
+): Promise<{ data: T; error: null } | { data: null; error: Error }> {
+	try {
+		const data = await promise;
+		return { data, error: null };
+	} catch (error) {
+		return { data: null, error: error as Error };
+	}
+}

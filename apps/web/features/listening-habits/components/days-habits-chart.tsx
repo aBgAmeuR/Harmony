@@ -36,9 +36,7 @@ export const DaysHabitsChart = async ({
 					data={data}
 					xAxisDataKey="day"
 					barDataKey="msPlayed"
-					config={{
-						msPlayed: { label: "Time Played", color: "var(--chart-1)" },
-					}}
+					config={{ msPlayed: { label: "Time Played", color: "var(--chart-1)" } }}
 					showYAxis={false}
 					className="aspect-video"
 					showBarLabels={true}

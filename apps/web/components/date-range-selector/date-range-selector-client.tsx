@@ -1,8 +1,8 @@
- "use client";
+"use client";
 
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
-import { CalendarRangeIcon, Loader2 } from "lucide-react";
+import { ArrowRight, ChevronsUpDown, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useTopLoader } from "nextjs-toploader";
 
@@ -89,11 +89,20 @@ export const DateRangeSelectorClient = ({
 				<CredenzaTrigger asChild={true}>
 					<Button
 						variant="outline"
+						size="sm"
 						aria-label="Select date range"
-						className="w-[200px] justify-between"
+						className="w-[220px] justify-between text-xs"
 					>
-						{`${DateUtils.formatDate(dateRange.dateStart, "month-year-short")} - ${DateUtils.formatDate(dateRange.dateEnd, "month-year-short")}`}
-						<CalendarRangeIcon className="size-4 text-muted-foreground" />
+						<div className="flex items-center gap-1.5">
+							<span className="text-muted-foreground text-xs">Range</span>
+							<div className="flex items-center gap-1">
+								<span>{DateUtils.formatDate(dateRange.dateStart, "month-year-short")}</span>
+								<ArrowRight className="size-3 translate-y-px" />
+								<span>{DateUtils.formatDate(dateRange.dateEnd, "month-year-short")}</span>
+							</div>
+						</div>
+						{/* <CalendarRangeIcon className="size-4 text-muted-foreground" /> */}
+						<ChevronsUpDown className="size-4 text-muted-foreground" />
 					</Button>
 				</CredenzaTrigger>
 
@@ -231,13 +240,13 @@ const DateSelector = ({
 					onValueChange={(value) => {
 						const newDate = isFromDate
 							? DateUtils.getFirstDayOfMonth(
-									selectedDate.getFullYear(),
-									Number.parseInt(value) - 1,
-								)
+								selectedDate.getFullYear(),
+								Number.parseInt(value) - 1,
+							)
 							: DateUtils.getLastDayOfMonth(
-									selectedDate.getFullYear(),
-									Number.parseInt(value) - 1,
-								);
+								selectedDate.getFullYear(),
+								Number.parseInt(value) - 1,
+							);
 						onDateChange(newDate);
 					}}
 				>
@@ -258,13 +267,13 @@ const DateSelector = ({
 					onValueChange={(value) => {
 						const newDate = isFromDate
 							? DateUtils.getFirstDayOfMonth(
-									Number.parseInt(value),
-									selectedDate.getMonth(),
-								)
+								Number.parseInt(value),
+								selectedDate.getMonth(),
+							)
 							: DateUtils.getLastDayOfMonth(
-									Number.parseInt(value),
-									selectedDate.getMonth(),
-								);
+								Number.parseInt(value),
+								selectedDate.getMonth(),
+							);
 						onDateChange(newDate);
 					}}
 				>

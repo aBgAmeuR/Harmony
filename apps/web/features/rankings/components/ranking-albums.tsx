@@ -1,11 +1,11 @@
-import { MusicList } from "~/components/lists/music-list";
+import { MusicLayout } from "~/components/lists/music-layout";
 import type { MusicListConfig } from "~/components/lists/music-list/config";
 
 import { getRankingAlbumsData } from "../data/ranking-albums";
 
 const config = {
 	label: "albums",
-	actionHref: (id) => `/detail/album/${id}?back=/rankings/albums`,
+	actionHref: "rankingAlbum",
 	showRank: true,
 } satisfies MusicListConfig;
 
@@ -22,9 +22,7 @@ export const RankingAlbums = async ({
 	isDemo,
 	limit,
 }: RankingAlbumsProps) => {
-	if (!data) {
-		data = await getRankingAlbumsData(userId, isDemo, limit);
-	}
+	data ??= await getRankingAlbumsData(userId, isDemo, limit);
 
-	return <MusicList data={data} config={config} />;
+	return <MusicLayout data={data} config={config} />;
 };
