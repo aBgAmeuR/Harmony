@@ -23,5 +23,5 @@ export const DateRangeSelector = async () => {
 };
 
 export const DateRangeSelectorSkeleton = () => {
-	return <Skeleton className="h-8 w-[220px] rounded-md" />;
+	return <Skeleton className="h-8 w-[180px] rounded-md sm:w-[220px]" />;
 };

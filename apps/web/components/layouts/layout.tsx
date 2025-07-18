@@ -71,7 +71,6 @@ export const LayoutHeader = ({
 						<DemoBadge />
 					</Suspense>
 				)}
-				<BackBtn />
 			</div>
 			<div className="flex items-center gap-1">{children}</div>
 		</header>
