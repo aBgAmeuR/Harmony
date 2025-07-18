@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 "use client";
 
 import * as React from "react";
@@ -16,7 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 
-import { signOut } from "@repo/auth";
+import { signOut } from "@repo/auth/actions";
 import { Button } from "@repo/ui/button";
 import {
 	CommandDialog,
@@ -189,7 +188,7 @@ export function CommandMenu({
 							<Github className="!size-4" />
 							Github
 						</CommandItem>
-					</CommandGroup>
+					</CommandGroup> 
 				</CommandList>
 				<div className="absolute bottom-[-0.1px] flex h-10 w-full items-center justify-between rounded-b-lg border-border border-t bg-popover p-2">
 					<div className="flex items-center justify-center gap-1">

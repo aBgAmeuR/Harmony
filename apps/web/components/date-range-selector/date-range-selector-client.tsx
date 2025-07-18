@@ -101,7 +101,6 @@ export const DateRangeSelectorClient = ({
 								<span>{DateUtils.formatDate(dateRange.dateEnd, "month-year-short")}</span>
 							</div>
 						</div>
-						{/* <CalendarRangeIcon className="size-4 text-muted-foreground" /> */}
 						<ChevronsUpDown className="size-4 text-muted-foreground" />
 					</Button>
 				</CredenzaTrigger>
@@ -234,7 +233,7 @@ const DateSelector = ({
 	return (
 		<div className="flex flex-col gap-2">
 			<h4 className="font-medium text-muted-foreground text-sm">{label}</h4>
-			<ButtonGroup>
+			<ButtonGroup className="max-sm:flex-row">
 				<Select
 					value={String(selectedDate.getMonth() + 1)}
 					onValueChange={(value) => {

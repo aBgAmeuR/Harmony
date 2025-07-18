@@ -42,14 +42,14 @@ export function AppSidebar({
 				<NavHeader {...data.header} />
 			</SidebarHeader>
 			<SidebarContent>
-				{/* {disable ? null : (
+				{disable ? null : (
 					<div className="px-2">
 						<CommandMenu
 							hasPackage={hasPackage}
 							isDemo={user?.name === "Demo"}
 						/>
 					</div>
-				)} */}
+				)}
 				<NavMain items={data.stats} label="Stats" disable={disable} />
 				<NavMain
 					items={data.package}

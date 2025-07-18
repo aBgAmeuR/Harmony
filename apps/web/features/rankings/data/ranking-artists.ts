@@ -32,7 +32,7 @@ export const getRankingArtistsData = async (
 		.groupBy(tracks.artistIds)
 		.where(auth(userId, { monthRange }))
 		.orderBy(({ sum }) => desc(sum))
-		.limit(limit);
+		.limit(limit * 2);
 
 	const aggregatedArtists: Record<
 		string,
@@ -41,25 +41,19 @@ export const getRankingArtistsData = async (
 
 	topArtists.forEach((entry) => {
 		entry.artistIds.forEach((artistId) => {
-			if (!aggregatedArtists[artistId]) {
-				aggregatedArtists[artistId] = {
-					totalMsPlayed: 0,
-					trackCount: 0,
-				};
-			}
-
+			aggregatedArtists[artistId] ??= { totalMsPlayed: 0, trackCount: 0 };
 			aggregatedArtists[artistId].totalMsPlayed += Number(entry.sum) || 0;
 			aggregatedArtists[artistId].trackCount += entry.count;
 		});
 	});
 
 	const sortedArtists = Object.entries(aggregatedArtists)
-		.map(([artistId, stats]) => ({
+		.map(([artistId, { totalMsPlayed, trackCount }]) => ({
 			artistId,
-			totalMsPlayed: stats.totalMsPlayed,
-			trackCount: stats.trackCount,
+			totalMsPlayed,
+			trackCount,
 		}))
-		.sort((a, b) => Number(b.totalMsPlayed - a.totalMsPlayed))
+		.sort((a, b) => b.totalMsPlayed - a.totalMsPlayed)
 		.slice(0, limit);
 
 	spotify.setUserId(userId);

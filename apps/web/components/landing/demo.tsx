@@ -18,6 +18,7 @@ import { TopArtistsCard } from "~/features/overview/components/top-artists-card"
 import { TopTracksCard } from "~/features/overview/components/top-tracks-card";
 
 import { LayoutHeader } from "../layouts/layout";
+import { AppSidebar } from "../navbar/app-sidebar";
 
 const data = {
 	topStats: {
@@ -160,11 +161,11 @@ export const Demo = () => {
 						defaultOpen={false}
 						className="relative aspect-video min-h-0 max-w-screen-xl"
 					>
-						{/* <AppSidebar
+						<AppSidebar
 							className="absolute h-full"
 							disable={true}
 							user={user}
-						/> */}
+						/>
 						<SidebarInset className="min-h-full overflow-y-scroll">
 							<main>
 								<LayoutHeader items={["Package", "Overview"]} demo={false}>

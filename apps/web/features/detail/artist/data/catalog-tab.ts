@@ -8,6 +8,7 @@ import {
 	db,
 	desc,
 	or,
+	sql,
 	sum,
 	tracks,
 } from "@repo/database";
@@ -46,21 +47,9 @@ export const getCatalogTabData = async (artistId: string, userId: string) => {
 		.from(tracks)
 		.where(and(auth(userId), arrayOverlaps(tracks.albumArtistIds, [artistId])))
 		.groupBy(tracks.albumId)
+		.having(sql<number>`COUNT(DISTINCT ${tracks.spotifyId}) >= 2`)
 		.orderBy(({ msPlayed }) => desc(msPlayed))
 		.limit(20);
-
-	// TODO: ("albumArtistIds"::text[] @> ARRAY[${artistId}]::text[])
-	// 	const topAlbumsQuery = prisma.$queryRaw<
-	// 		{ albumId: string; _count: number; _sum: bigint }[]
-	// 	>`
-	//         SELECT "albumId", COUNT(*) as _count, SUM("msPlayed") as _sum
-	//         FROM "Track"
-	//         WHERE "userId" = ${userId} AND ("albumArtistIds"::text[] @> ARRAY[${artistId}]::text[])
-	//         GROUP BY "albumId"
-	//         HAVING COUNT(DISTINCT "spotifyId") >= 2
-	//         ORDER BY _sum DESC
-	//         LIMIT 20
-	//   `;
 
 	const [topTracks, topAlbums] = await Promise.all([
 		topTracksQuery,
@@ -86,7 +75,6 @@ export const getCatalogTabData = async (artistId: string, userId: string) => {
 	});
 
 	const albumsData = (() => {
-		// TODO: Group albums with the same name
 		const albumGroups: Record<
 			string,
 			{

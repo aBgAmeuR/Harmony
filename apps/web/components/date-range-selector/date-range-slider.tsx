@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import { cn } from "@repo/ui/lib/utils";
+import { Skeleton } from "@repo/ui/skeleton";
 import { Slider } from "@repo/ui/slider";
 
 import { DateUtils } from "~/lib/date-utils";
@@ -56,7 +57,29 @@ export const DateRangeSlider = ({
 		]);
 	}, [selectedDateRange, findClosestIndex]);
 
-	if (isLoading || !data || data.length === 0) return null;
+	if (isLoading) return (
+		<div>
+			<div className="flex h-12 w-full items-end px-3" aria-hidden="true">
+				{new Array(32).fill(0).map((_, i) => (
+					<div
+						key={i}
+						className="flex flex-1 justify-center"
+						style={{ height: `${Math.random() * 100}%` }}
+					>
+						<Skeleton className="size-full rounded-none" />
+					</div>
+				))}
+			</div>
+			<Slider
+				value={[0, 100]}
+				max={32}
+				min={0}
+				disabled={true}
+			/>
+		</div>
+	)
+
+	if (!data || data.length === 0) return null;
 
 	const maxCount = Math.max(...data.map((item) => item.value));
 
