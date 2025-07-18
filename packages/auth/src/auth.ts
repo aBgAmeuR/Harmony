@@ -22,7 +22,6 @@ const result = NextAuth({
 		usersTable: users,
 		accountsTable: accounts,
 	}),
-	debug: true,
 	session: {
 		strategy: "jwt",
 	},
