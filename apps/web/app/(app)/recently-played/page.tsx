@@ -1,9 +1,6 @@
-import {
-	Layout,
-	LayoutContent,
-	LayoutHeader,
-} from "~/components/layouts/layout";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { RecentlyPlayed } from "~/features/stats/components/recently-played";
+import { SelectListLayout } from "~/features/stats/components/select-list-layout";
 import { getUserInfos } from "~/lib/utils";
 
 export default async function RecentlyPlayedPage() {
@@ -11,7 +8,9 @@ export default async function RecentlyPlayedPage() {
 
 	return (
 		<Layout>
-			<LayoutHeader items={["Stats", "Recently Played"]} />
+			<LayoutHeader items={["Stats", "Recently Played"]}>
+				<SelectListLayout />
+			</LayoutHeader>
 			<LayoutContent>
 				<RecentlyPlayed userId={userId} />
 			</LayoutContent>

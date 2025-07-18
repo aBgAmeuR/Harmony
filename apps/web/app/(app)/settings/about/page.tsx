@@ -4,7 +4,7 @@ import { LinkButton } from "@repo/ui/components/link-button";
 
 import { Icons } from "~/components/icons";
 import { Layout, LayoutHeader } from "~/components/layouts/layout";
-
+import { config } from "~/lib/config";
 
 export default async function SettingsAboutPage() {
 	return (
@@ -14,7 +14,7 @@ export default async function SettingsAboutPage() {
 				<div className="mb-8 text-center">
 					<div className="flex items-center gap-4">
 						<Icons.logo className="size-16" />
-						<h1 className="font-bold text-3xl">Harmony</h1>
+						<h1 className="font-bold text-3xl">{config.appName}</h1>
 					</div>
 				</div>
 
@@ -65,7 +65,7 @@ export default async function SettingsAboutPage() {
 							<LinkButton
 								variant="outline"
 								size="sm"
-								href="https://github.com/aBgAmeuR/Harmony"
+								href={config.githubRepo}
 								target="_blank"
 								rel="noopener noreferrer"
 							>
@@ -88,7 +88,7 @@ export default async function SettingsAboutPage() {
 
 				<div className="mt-16 border-t pt-8 text-center">
 					<p className="text-muted-foreground text-sm">
-						Harmony is not affiliated with Spotify AB.
+						{config.appName} is not affiliated with Spotify AB.
 					</p>
 				</div>
 			</div>

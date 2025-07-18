@@ -1,4 +1,4 @@
-import { MusicList } from "~/components/lists/music-list";
+import { MusicLayout } from "~/components/lists/music-layout";
 import type { MusicListConfig } from "~/components/lists/music-list/config";
 import { tryCatch } from "~/lib/utils-server";
 
@@ -20,5 +20,5 @@ export const RecentlyPlayed = async ({ userId }: RecentlyPlayedProps) => {
 		return <WhitelistErrorComponent />;
 	}
 
-	return <MusicList data={data} config={config} />;
+	return <MusicLayout data={data} config={config} />;
 };

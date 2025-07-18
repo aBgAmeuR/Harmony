@@ -18,5 +18,5 @@ export const TimeRangeSelect = async ({
 };
 
 export const TimeRangeSelectSkeleton = () => {
-	return <Skeleton className="h-9 w-[180px] rounded-md" />;
+	return <Skeleton className="h-8 w-[150px] rounded-md" />;
 };

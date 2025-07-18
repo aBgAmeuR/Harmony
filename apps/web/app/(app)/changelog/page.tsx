@@ -7,6 +7,7 @@ import { Separator } from "@repo/ui/separator";
 
 import { getAllChangelogEntries, getVersionBadgeVariant } from "~/lib/changelog";
 import { getMDXComponents, } from "~/mdx-components";
+import { config } from "~/lib/config";
 
 export default function ChangelogPage() {
     const changelog = getAllChangelogEntries();
@@ -59,7 +60,7 @@ export default function ChangelogPage() {
             <div className="mt-16 border-t pt-8 text-center">
                 <p className="text-muted-foreground text-sm">
                     Questions or feedback?{" "}
-                    <Link href="https://github.com/aBgAmeuR/Harmony" target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">
+                    <Link href={config.githubRepo} target="_blank" rel="noopener noreferrer" className="underline hover:no-underline">
                         Get in touch
                     </Link>
                 </p>

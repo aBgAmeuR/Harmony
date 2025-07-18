@@ -42,7 +42,11 @@ export const LayoutHeader = ({
 		<header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
 			<div className="flex items-center gap-2 ">
 				<SidebarTrigger className="-ml-1" />
-				<Separator orientation="vertical" className="mr-2 h-4" />
+				<BackBtn />
+				<Separator
+					orientation="vertical"
+					className="mx-2 data-[orientation=vertical]:h-4"
+				/>
 				<Breadcrumb>
 					<BreadcrumbList className="flex-nowrap">
 						{items.slice(0, -1).map((item, index) => (
@@ -51,7 +55,7 @@ export const LayoutHeader = ({
 									<BreadcrumbPage className="line-clamp-1 break-all text-muted-foreground text-sm">
 										{item}
 									</BreadcrumbPage>
-								</BreadcrumbItem>
+									components/lists/music-list/index.tsx	</BreadcrumbItem>
 								<BreadcrumbSeparator className="hidden md:block" />
 							</React.Fragment>
 						))}
@@ -67,9 +71,8 @@ export const LayoutHeader = ({
 						<DemoBadge />
 					</Suspense>
 				)}
-				<BackBtn />
 			</div>
-			<div className="flex items-center gap-2">{children}</div>
+			<div className="flex items-center gap-1">{children}</div>
 		</header>
 	);
 };

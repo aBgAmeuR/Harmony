@@ -2,9 +2,11 @@
 
 import { useState } from "react";
 import {
+	AlignJustify,
 	ChevronsUpDown,
 	Eye,
 	EyeOff,
+	Grid2x2,
 	LogOut,
 	Moon,
 	SunMedium,
@@ -43,7 +45,7 @@ import {
 } from "@repo/ui/sidebar";
 
 import { useMounted } from "~/hooks/use-mounted";
-import { useUserPreferences } from "~/lib/store";
+import { useListLayout, useUserPreferences } from "~/lib/store";
 
 // import { deleteUserAction } from "@/actions/user/delete-user-action";
 
@@ -55,6 +57,7 @@ export function NavUser({ user }: NavUserProps) {
 	const { setTheme, theme } = useTheme();
 	const [deleteConfirmation, setDeleteConfirmation] = useState("");
 	const { showEmail, setShowEmail } = useUserPreferences();
+	const { list_layout, setListLayout } = useListLayout();
 	const isDemo = user.name === "Demo";
 	const isMounted = useMounted();
 	const { isMobile } = useSidebar();
@@ -159,6 +162,20 @@ export function NavUser({ user }: NavUserProps) {
 									</Button>
 								</DropdownMenuItem>
 							) : null}
+							<DropdownMenuItem asChild={true}>
+								<Button
+									onClick={(e) => {
+										e.preventDefault();
+										setListLayout(list_layout === "grid" ? "list" : "grid");
+									}}
+									className="flex w-full cursor-pointer items-center justify-between"
+									variant="ghost"
+									size="sm"
+								>
+									List layout
+									{list_layout === "grid" ? <Grid2x2 size={18} /> : <AlignJustify size={18} />}
+								</Button>
+							</DropdownMenuItem>
 							<DropdownMenuItem asChild={true}>
 								<Button
 									onClick={(e) => {
