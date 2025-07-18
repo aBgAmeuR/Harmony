@@ -29,7 +29,7 @@ export const MusicList = ({ data, config }: MusicListProps) => {
 						rank={config.showRank ? index + 1 : undefined}
 						showAction={!!config.actionHref}
 						showHistoricalRankings={config.showHistoricalRankings}
-						actionHref={config.actionHref?.(item.id)}
+						actionHref={config.actionHref}
 					/>
 					{index < data.length - 1 && <Separator />}
 				</div>

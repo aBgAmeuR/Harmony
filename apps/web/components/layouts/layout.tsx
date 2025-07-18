@@ -55,7 +55,7 @@ export const LayoutHeader = ({
 									<BreadcrumbPage className="line-clamp-1 break-all text-muted-foreground text-sm">
 										{item}
 									</BreadcrumbPage>
-								</BreadcrumbItem>
+									components/lists/music-list/index.tsx	</BreadcrumbItem>
 								<BreadcrumbSeparator className="hidden md:block" />
 							</React.Fragment>
 						))}
