@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { AlertCircle, ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -36,7 +36,7 @@ export default function Error({ error, reset }: ErrorProps) {
 	);
 }
 
-function ErrorContent({ error }: ErrorProps) {
+function ErrorContent({ error, reset }: ErrorProps) {
 	const searchParams = useSearchParams();
 	const errorParams = searchParams.get("error") as ErrorType | null;
 	const router = useRouter();
@@ -60,7 +60,9 @@ function ErrorContent({ error }: ErrorProps) {
 						Error Code: <span>{errorParams || error.digest || "Unknown"}</span>
 					</p>
 					<div className="flex justify-center gap-2">
-						<Button onClick={() => router.refresh()}>Try again</Button>
+						<Button onClick={() => reset?.() || router.refresh()}>
+							Try again
+						</Button>
 						<Button
 							className="group"
 							variant="ghost"

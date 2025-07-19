@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { CardContent } from "@repo/ui/card";
 import { NumberFlow } from "@repo/ui/components/number";
@@ -87,7 +87,7 @@ export const ProcessingStep = ({
 										className={cn(
 											"text-sm",
 											step.status === "processing" &&
-												"font-medium text-foreground",
+											"font-medium text-foreground",
 											step.status === "completed" && "text-muted-foreground",
 											step.status === "error" && "text-destructive",
 										)}

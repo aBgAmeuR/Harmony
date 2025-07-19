@@ -3,7 +3,7 @@
 import { NextResponse } from "next/server";
 
 import { auth, type User } from "@repo/auth";
-import { prisma } from "@repo/database";
+import { db } from "@repo/database";
 
 import { isDemo } from "~/lib/utils-server";
 
@@ -27,17 +27,17 @@ export async function isAuthenticatedOrThrow(): Promise<User & { id: string }> {
 }
 
 export async function isRateLimitedOrThrow(userId: string, time: number) {
-	const lastPackage = await prisma.package.findFirst({
-		where: { userId },
-		orderBy: { createdAt: "desc" },
-		select: { createdAt: true },
+	const lastPackage = await db.query.packages.findFirst({
+		where: (packages, { eq }) => eq(packages.userId, userId),
+		orderBy: (packages, { desc }) => desc(packages.createdAt),
+		columns: { createdAt: true },
 	});
 
 	if (!lastPackage) {
 		return false;
 	}
 
-	const lastPackageTime = lastPackage.createdAt.getTime();
+	const lastPackageTime = lastPackage.createdAt?.getTime() ?? 0;
 	const timeSinceLastUpload = Date.now() - lastPackageTime;
 	const timeLeft = time - timeSinceLastUpload;
 

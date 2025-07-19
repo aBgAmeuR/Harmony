@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Info } from "lucide-react";
 
 import { Button } from "@repo/ui/button";
@@ -14,25 +14,25 @@ export const TimeRangeInfo = () => {
 		<TooltipProvider delayDuration={0}>
 			<Tooltip>
 				<TooltipTrigger asChild={true}>
-					<Button variant="ghost" size="icon">
+					<Button variant="ghost" size="icon" className="size-8">
 						<Info />
 					</Button>
 				</TooltipTrigger>
-				<TooltipContent className="px-2 py-1 text-xs">
-					<ul>
-						<li>
-							<strong className="font-mono">Long Term</strong>: calculated from
-							~1 year
-						</li>
-						<li>
-							<strong className="font-mono">Medium Term</strong>: approximately
-							last 6 months
-						</li>
-						<li>
-							<strong className="font-mono">Short Term</strong>: approximately
-							last 4 weeks
-						</li>
-					</ul>
+				<TooltipContent className="py-3">
+					<div className="space-y-1">
+						<p className="font-medium text-[13px]">Time Range Definitions</p>
+						<ul className="text-muted-foreground text-xs">
+							<li>
+								<span className="font-mono">Long Term</span> : ~1 year of data
+							</li>
+							<li>
+								<span className="font-mono">Medium Term</span> : last 6 months
+							</li>
+							<li>
+								<span className="font-mono">Short Term</span> : last 4 weeks
+							</li>
+						</ul>
+					</div>
 				</TooltipContent>
 			</Tooltip>
 		</TooltipProvider>

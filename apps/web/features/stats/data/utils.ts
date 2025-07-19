@@ -2,18 +2,19 @@
 
 import { cache } from "react";
 
-import { prisma } from "@repo/database";
+import { db, eq, users } from "@repo/database";
 
 export const getTimeRangeStats = cache(
 	async (userId: string, isDemo: boolean) => {
 		if (isDemo) return "medium_term";
 
-		const timeRangeStats = await prisma.user.findFirst({
-			where: { id: userId },
-			select: { timeRangeStats: true },
+		const timeRangeStats = await db.query.users.findFirst({
+			where: eq(users.id, userId),
+			columns: { timeRangeStats: true },
 		});
 
-		if (!timeRangeStats) throw new Error("Time range stats not found");
+		if (!timeRangeStats || !timeRangeStats.timeRangeStats)
+			throw new Error("Time range stats not found");
 
 		return timeRangeStats.timeRangeStats;
 	},

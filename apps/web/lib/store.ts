@@ -10,10 +10,18 @@ interface ListLayoutStore {
 	setListLayout: (list_layout: "grid" | "list") => void;
 }
 
-export const useListLayout = create<ListLayoutStore>((set) => ({
-	list_layout: "list",
-	setListLayout: (list_layout) => set({ list_layout }),
-}));
+export const useListLayout = create(
+	persist<ListLayoutStore>(
+		(set) => ({
+			list_layout: "list",
+			setListLayout: (list_layout) => set({ list_layout }),
+		}),
+		{
+			name: "list-layout",
+			storage: createJSONStorage(() => cookieStorage),
+		},
+	),
+);
 
 interface SideBarStore {
 	isSidebarOpen: boolean;

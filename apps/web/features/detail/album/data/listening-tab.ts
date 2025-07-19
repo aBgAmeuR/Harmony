@@ -1,12 +1,13 @@
 "server-only";
 
+import { cache } from "react";
 import { format } from "date-fns";
 import {
 	unstable_cacheLife as cacheLife,
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { and, auth, db, eq, sum, tracks } from "@repo/database";
 
 import { formatMonth } from "~/lib/utils";
 
@@ -25,11 +26,7 @@ export const getListeningTabData = async (albumId: string, userId: string) => {
 };
 
 async function getAlbumMonthlyTrends(userId: string, albumId: string) {
-	const rows = await prisma.track.groupBy({
-		by: ["albumId", "timestamp"],
-		where: { userId, albumId },
-		_sum: { msPlayed: true },
-	});
+	const rows = await getRows(userId, albumId);
 
 	const dates = rows.map((row) => (row.timestamp as Date).getTime());
 	if (dates.length === 0) return [];
@@ -47,7 +44,7 @@ async function getAlbumMonthlyTrends(userId: string, albumId: string) {
 	for (const row of rows) {
 		const date = row.timestamp as Date;
 		const key = formatMonth(date);
-		monthlyMap[key] = (monthlyMap[key] || 0) + Number(row._sum.msPlayed || 0);
+		monthlyMap[key] = (monthlyMap[key] || 0) + Number(row.msPlayed || 0);
 	}
 
 	return Object.entries(monthlyMap).map(([month, msPlayed]) => ({
@@ -62,17 +59,13 @@ async function getAlbumHourDistribution(userId: string, albumId: string) {
 		msPlayed: 0,
 	}));
 
-	const rows = await prisma.track.groupBy({
-		by: ["albumId", "timestamp"],
-		where: { userId, albumId },
-		_sum: { msPlayed: true },
-	});
+	const rows = await getRows(userId, albumId);
 
 	const hourMap: Record<number, number> = {};
 	for (const row of rows) {
 		const date = row.timestamp as Date;
 		const hour = date.getHours();
-		hourMap[hour] = (hourMap[hour] || 0) + Number(row._sum.msPlayed || 0);
+		hourMap[hour] = (hourMap[hour] || 0) + Number(row.msPlayed || 0);
 	}
 
 	return listeningHabits.map((habit) => ({
@@ -82,16 +75,12 @@ async function getAlbumHourDistribution(userId: string, albumId: string) {
 }
 
 async function getAlbumTopDays(userId: string, albumId: string) {
-	const rows = await prisma.track.groupBy({
-		by: ["albumId", "timestamp"],
-		where: { userId, albumId },
-		_sum: { msPlayed: true },
-	});
+	const rows = await getRows(userId, albumId);
 
 	const dayMap: Record<string, number> = {};
 	for (const row of rows) {
 		const key = format(row.timestamp, "MMMM d, yyyy");
-		dayMap[key] = (dayMap[key] || 0) + Number(row._sum.msPlayed || 0);
+		dayMap[key] = (dayMap[key] || 0) + Number(row.msPlayed || 0);
 	}
 
 	return Object.entries(dayMap)
@@ -99,3 +88,15 @@ async function getAlbumTopDays(userId: string, albumId: string) {
 		.slice(0, 10)
 		.map(([date, msPlayed]) => ({ date, msPlayed: Number(msPlayed) }));
 }
+
+const getRows = cache(async (userId: string, albumId: string) => {
+	return await db
+		.select({
+			albumId: tracks.albumId,
+			timestamp: tracks.timestamp,
+			msPlayed: sum(tracks.msPlayed),
+		})
+		.from(tracks)
+		.where(and(auth(userId), eq(tracks.albumId, albumId)))
+		.groupBy(tracks.albumId, tracks.timestamp);
+});

@@ -9,21 +9,21 @@ import {
 } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
 
-import { AppHeader } from "~/components/app-header";
-import { getUserInfos } from "~/lib/utils";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { getUserInfos } from "~/lib/utils-server";
 
 import { Client } from "./client";
+import { DemoStep } from "./steps-components/demo-step";
 import { DocsModal } from "./docs-modal";
 import { HistoryModal } from "./history-modal";
-import { DemoStep } from "./steps-components/demo-step";
 
 export default async function SettingsPackagePage() {
 	const { isDemo } = await getUserInfos();
 
 	return (
-		<>
-			<AppHeader items={["Settings", "Package"]} />
-			<div className="flex flex-1 flex-col items-center justify-center gap-4 p-4 pt-0">
+		<Layout>
+			<LayoutHeader items={["Settings", "Package"]} />
+			<LayoutContent className="items-center justify-center">
 				<div>
 					<div className="mb-8 text-center">
 						<h1 className="mb-3 bg-gradient-to-r from-primary to-primary/70 bg-clip-text font-bold text-3xl text-transparent">
@@ -55,8 +55,8 @@ export default async function SettingsPackagePage() {
 						</CardFooter>
 					</Card>
 				</div>
-			</div>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }
 

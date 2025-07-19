@@ -1,14 +1,14 @@
 "use client";
 
-import Error from "../error";
+import ErrorComponent from "../error";
 
 export default function ErrorPage() {
-	const error = {
+	const errorConfig = {
 		message:
 			"An unexpected error occurred. Please try again or contact support if the issue persists.",
 		name: "Error",
 	};
 	const reset = () => window.location.reload();
 
-	return <Error error={error} reset={reset} />;
+	return <ErrorComponent error={errorConfig} reset={reset} />;
 }

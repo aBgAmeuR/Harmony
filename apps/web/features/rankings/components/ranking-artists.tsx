@@ -1,11 +1,11 @@
-import { MusicList } from "~/components/lists/music-list";
+import { MusicLayout } from "~/components/lists/music-layout";
 import type { MusicListConfig } from "~/components/lists/music-list/config";
 
 import { getRankingArtistsData } from "../data/ranking-artists";
 
 const defaultConfig = {
 	label: "artists",
-	actionHref: (id) => `/detail/artist/${id}?back=/rankings/artists`,
+	actionHref: "rankingArtist",
 	showRank: true,
 } satisfies MusicListConfig;
 
@@ -24,9 +24,7 @@ export const RankingArtists = async ({
 	limit,
 	config,
 }: RankingArtistsProps) => {
-	if (!data) {
-		data = await getRankingArtistsData(userId, isDemo, limit);
-	}
+	data ??= await getRankingArtistsData(userId, isDemo, limit);
 
-	return <MusicList data={data} config={{ ...defaultConfig, ...config }} />;
+	return <MusicLayout data={data} config={{ ...defaultConfig, ...config }} />;
 };

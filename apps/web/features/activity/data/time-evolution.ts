@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, db, tracks } from "@repo/database";
 
 import { getMonthRange } from "~/lib/dal";
 import { formatMonth } from "~/lib/utils";
@@ -17,17 +17,16 @@ export const getTimeEvolutionData = async (userId: string, isDemo: boolean) => {
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const firstPlays = await prisma.track.findMany({
-		where: { userId },
-		orderBy: { timestamp: "asc" },
-		distinct: ["spotifyId", "userId"],
-		select: {
-			timestamp: true,
-			spotifyId: true,
-			albumId: true,
-			artistIds: true,
-		},
-	});
+	const firstPlays = await db
+		.selectDistinctOn([tracks.spotifyId, tracks.userId], {
+			timestamp: tracks.timestamp,
+			spotifyId: tracks.spotifyId,
+			albumId: tracks.albumId,
+			artistIds: tracks.artistIds,
+		})
+		.from(tracks)
+		.where(auth(userId, { monthRange }))
+		.orderBy(tracks.spotifyId, tracks.userId, tracks.timestamp);
 
 	if (firstPlays.length === 0) return null;
 

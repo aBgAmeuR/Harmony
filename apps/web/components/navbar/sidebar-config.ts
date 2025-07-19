@@ -24,6 +24,7 @@ import { TrendingUpDownIcon } from "@repo/ui/icons/trending-up-down";
 import { UserIcon } from "@repo/ui/icons/user";
 
 import { Icons } from "../icons";
+import { config } from "~/lib/config";
 
 export type SidebarItem = {
 	title: string;
@@ -48,7 +49,7 @@ type SidebarConfig = {
 
 export const data: SidebarConfig = {
 	header: {
-		name: "Harmony",
+		name: config.appName,
 		Logo: Icons.logo,
 	},
 	stats: [
@@ -183,7 +184,7 @@ export const data: SidebarConfig = {
 	navSecondary: [
 		{
 			title: "Github",
-			url: "https://github.com/aBgAmeuR/Harmony",
+			url: config.githubRepo,
 			icon: Github,
 		},
 	],

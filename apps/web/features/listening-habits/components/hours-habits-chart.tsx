@@ -38,10 +38,8 @@ export const HoursHabitsChart = async ({
 					areaDataKeys={["msPlayed"]}
 					xAxisDataKey="hour"
 					showYAxis={false}
-					config={{
-						msPlayed: { label: "Time Played", color: "var(--chart-2)" },
-					}}
-					xAxisTickFormatter="msToHours"
+					config={{ msPlayed: { label: "Time Played", color: "var(--chart-2)" } }}
+					xAxisTickFormatter="hourSuffix"
 					tooltipValueFormatter="hourSuffix"
 					tooltipLabelFormatter="hourSuffix"
 				/>

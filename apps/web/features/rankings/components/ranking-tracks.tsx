@@ -1,9 +1,9 @@
-import { MusicList } from "~/components/lists/music-list";
+import { MusicLayout } from "~/components/lists/music-layout";
 import type { MusicListConfig } from "~/components/lists/music-list/config";
 
 import { getRankingTracksData } from "../data/ranking-tracks";
 
-const config = {
+const defaultConfig = {
 	label: "tracks",
 	showRank: true,
 } satisfies MusicListConfig;
@@ -13,6 +13,7 @@ type RankingTracksProps = {
 	userId: string;
 	isDemo: boolean;
 	limit?: number;
+	config?: Partial<MusicListConfig>;
 };
 
 export const RankingTracks = async ({
@@ -20,10 +21,9 @@ export const RankingTracks = async ({
 	userId,
 	isDemo,
 	limit,
+	config,
 }: RankingTracksProps) => {
-	if (!data) {
-		data = await getRankingTracksData(userId, isDemo, limit);
-	}
+	data ??= await getRankingTracksData(userId, isDemo, limit);
 
-	return <MusicList data={data} config={config} />;
+	return <MusicLayout data={data} config={{ ...defaultConfig, ...config }} />;
 };

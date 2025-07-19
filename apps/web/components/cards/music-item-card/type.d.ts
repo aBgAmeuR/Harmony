@@ -1,3 +1,5 @@
+import type { ACTIONS_HREF } from ".";
+
 export type MusicItemCardProps = {
 	item: {
 		id: string;
@@ -13,7 +15,7 @@ export type MusicItemCardProps = {
 	rank?: number;
 	showAction?: boolean;
 	showHistoricalRankings?: boolean;
-	actionHref?: string;
+	actionHref?: keyof typeof ACTIONS_HREF;
 	layout?: "grid" | "list";
 	className?: string;
 };
