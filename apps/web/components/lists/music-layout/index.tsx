@@ -19,12 +19,13 @@ type MusicLayoutProps = {
 
 export const MusicLayout = ({ data, config }: MusicLayoutProps) => {
     const listLayout = useListLayout((state) => state.list_layout);
+    const layout = config.layout ?? listLayout;
 
     // TODO: handle error
     if (!data) return <MusicListError />;
 
     return (
-        <div className={cn(listLayout === "grid" ? "grid grid-cols-2 xs:grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7" : "flex flex-col")}>
+        <div className={cn(layout === "grid" ? "grid grid-cols-2 xs:grid-cols-3 gap-4 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7" : "flex flex-col")}>
             {data.map((item, index) => (
                 <MusicItemCard
                     key={`${item.id}-${index}-${config.label}`}
@@ -33,7 +34,7 @@ export const MusicLayout = ({ data, config }: MusicLayoutProps) => {
                     showAction={!!config.actionHref}
                     showHistoricalRankings={config.showHistoricalRankings}
                     actionHref={config.actionHref}
-                    layout={listLayout}
+                    layout={layout}
                 />
             ))}
             {data.length === 0 && (

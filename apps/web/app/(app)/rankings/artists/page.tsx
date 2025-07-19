@@ -4,7 +4,7 @@ import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { RankingArtists } from "~/features/rankings/components/ranking-artists";
 import { SelectListLayout } from "~/features/stats/components/select-list-layout";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export default async function RankingsArtistsPage() {
 	const { userId, isDemo } = await getUserInfos();

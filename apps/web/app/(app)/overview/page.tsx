@@ -1,30 +1,15 @@
+
 import { Suspense } from "react";
 
-import {
-	DateRangeSelector,
-	DateRangeSelectorSkeleton,
-} from "~/components/date-range-selector/date-range-selector";
-import {
-	Layout,
-	LayoutContent,
-	LayoutHeader,
-} from "~/components/layouts/layout";
+import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { UserHasNotPackage } from "~/components/user-has-not-package";
-import {
-	TimeListenedChart,
-	TimeListenedChartSkeleton,
-} from "~/features/activity/components/time-listened-chart";
-import {
-	ListeningPatternChart,
-	ListeningPatternChartSkeleton,
-} from "~/features/overview/components/listening-pattern-chart";
-import {
-	StatsCards,
-	StatsCardsSkeleton,
-} from "~/features/overview/components/stats-cards";
+import { TimeListenedChart, TimeListenedChartSkeleton } from "~/features/activity/components/time-listened-chart";
+import { ListeningPatternChart, ListeningPatternChartSkeleton } from "~/features/overview/components/listening-pattern-chart";
+import { StatsCards, StatsCardsSkeleton } from "~/features/overview/components/stats-cards";
 import { TopArtistsCard } from "~/features/overview/components/top-artists-card";
 import { TopTracksCard } from "~/features/overview/components/top-tracks-card";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export default async function OverviewPage() {
 	const { userId, isDemo, hasPackage } = await getUserInfos();

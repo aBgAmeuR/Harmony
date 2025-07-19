@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, count, db, desc, sum, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
 import { getMonthRange } from "~/lib/dal";
@@ -22,17 +22,17 @@ export const getRankingAlbumsData = async (
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const topAlbums = await prisma.track.groupBy({
-		by: ["albumId"],
-		_count: { _all: true },
-		_sum: { msPlayed: true },
-		where: {
-			userId,
-			timestamp: { gte: monthRange.dateStart, lt: monthRange.dateEnd },
-		},
-		orderBy: { _sum: { msPlayed: "desc" } },
-		take: limit,
-	});
+	const topAlbums = await db
+		.select({
+			albumId: tracks.albumId,
+			count: count(),
+			sum: sum(tracks.msPlayed),
+		})
+		.from(tracks)
+		.groupBy(tracks.albumId)
+		.where(auth(userId, { monthRange }))
+		.orderBy(({ sum }) => desc(sum))
+		.limit(limit);
 
 	const albumIds = topAlbums.map((album) => album.albumId);
 	spotify.setUserId(userId);
@@ -42,7 +42,7 @@ export const getRankingAlbumsData = async (
 		const topAlbum = topAlbums.find(
 			(topAlbum) => topAlbum.albumId === album.id,
 		);
-		const msPlayed = Number(topAlbum?._sum.msPlayed) || 0;
+		const msPlayed = Number(topAlbum?.sum) || 0;
 		return {
 			id: album.id,
 			href: album.external_urls.spotify,
@@ -50,7 +50,7 @@ export const getRankingAlbumsData = async (
 			name: album.name || "Unknown album",
 			artists: album.artists.map((artist) => artist.name).join(", "),
 			stat1: `${getMsPlayedInMinutes(msPlayed)} minutes`,
-			stat2: `${topAlbum?._count?._all || 0} streams`,
+			stat2: `${topAlbum?.count || 0} streams`,
 		};
 	});
 };

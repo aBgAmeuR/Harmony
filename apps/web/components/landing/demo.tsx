@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
 import { CalendarIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/button";
@@ -11,13 +11,14 @@ import {
 	TooltipTrigger,
 } from "@repo/ui/tooltip";
 
-import { AppHeader } from "~/components/app-header";
-import { AppSidebar } from "~/components/navbar/app-sidebar";
 import { TimeListenedChart } from "~/features/activity/components/time-listened-chart";
 import { ListeningPatternChart } from "~/features/overview/components/listening-pattern-chart";
 import { StatsCards } from "~/features/overview/components/stats-cards";
 import { TopArtistsCard } from "~/features/overview/components/top-artists-card";
 import { TopTracksCard } from "~/features/overview/components/top-tracks-card";
+
+import { LayoutHeader } from "../layouts/layout";
+import { AppSidebar } from "../navbar/app-sidebar";
 
 const data = {
 	topStats: {
@@ -167,7 +168,7 @@ export const Demo = () => {
 						/>
 						<SidebarInset className="min-h-full overflow-y-scroll">
 							<main>
-								<AppHeader items={["Package", "Overview"]} demo={false}>
+								<LayoutHeader items={["Package", "Overview"]} demo={false}>
 									<TooltipProvider delayDuration={0}>
 										<Tooltip>
 											<TooltipTrigger
@@ -193,7 +194,7 @@ export const Demo = () => {
 											</TooltipContent>
 										</Tooltip>
 									</TooltipProvider>
-								</AppHeader>
+								</LayoutHeader>
 								<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
 									<StatsCards
 										userId={user.id}

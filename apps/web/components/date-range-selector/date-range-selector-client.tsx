@@ -91,17 +91,16 @@ export const DateRangeSelectorClient = ({
 						variant="outline"
 						size="sm"
 						aria-label="Select date range"
-						className="w-[220px] justify-between text-xs"
+						className="w-[180px] justify-between text-xs sm:w-[220px]"
 					>
 						<div className="flex items-center gap-1.5">
-							<span className="text-muted-foreground text-xs">Range</span>
+							<span className="hidden text-muted-foreground text-xs sm:block">Range</span>
 							<div className="flex items-center gap-1">
-								<span>{DateUtils.formatDate(dateRange.dateStart, "month-year-short")}</span>
-								<ArrowRight className="size-3 translate-y-px" />
+								<span >{DateUtils.formatDate(dateRange.dateStart, "month-year-short")}</span>
+								<ArrowRight className="size-3" />
 								<span>{DateUtils.formatDate(dateRange.dateEnd, "month-year-short")}</span>
 							</div>
 						</div>
-						{/* <CalendarRangeIcon className="size-4 text-muted-foreground" /> */}
 						<ChevronsUpDown className="size-4 text-muted-foreground" />
 					</Button>
 				</CredenzaTrigger>
@@ -234,7 +233,7 @@ const DateSelector = ({
 	return (
 		<div className="flex flex-col gap-2">
 			<h4 className="font-medium text-muted-foreground text-sm">{label}</h4>
-			<ButtonGroup>
+			<ButtonGroup className="max-sm:flex-row">
 				<Select
 					value={String(selectedDate.getMonth() + 1)}
 					onValueChange={(value) => {

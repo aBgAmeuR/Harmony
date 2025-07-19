@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, db, tracks } from "@repo/database";
 
 import { getMonthRange } from "~/lib/dal";
 
@@ -19,21 +19,21 @@ export const getListeningSessionData = async (
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const tracks = await prisma.track.findMany({
-		where: {
-			userId,
-			timestamp: { gte: monthRange.dateStart, lt: monthRange.dateEnd },
-		},
-		select: { timestamp: true, msPlayed: true },
-		orderBy: [{ timestamp: "asc" }],
-	});
+	const tracksData = await db
+		.select({
+			timestamp: tracks.timestamp,
+			msPlayed: tracks.msPlayed,
+		})
+		.from(tracks)
+		.where(auth(userId, { monthRange }))
+		.orderBy(tracks.timestamp);
 
 	const sessionDurations: number[] = [];
 	let currentSessionStart: Date | null = null;
 	let currentSessionDuration = 0;
 
-	for (let i = 0; i < tracks.length; i++) {
-		const track = tracks[i];
+	for (let i = 0; i < tracksData.length; i++) {
+		const track = tracksData[i];
 		const trackTime = track.timestamp;
 
 		if (!currentSessionStart) {
@@ -54,7 +54,7 @@ export const getListeningSessionData = async (
 			}
 		}
 
-		if (i === tracks.length - 1) {
+		if (i === tracksData.length - 1) {
 			sessionDurations.push(currentSessionDuration);
 		}
 	}

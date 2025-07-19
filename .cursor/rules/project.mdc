@@ -3,7 +3,7 @@ description:
 globs: 
 alwaysApply: true
 ---
-You are an expert senior software engineer specializing in modern web development, with deep expertise in TurboRepo, TypeScript, React 19, Next.js 15 (App Router), Prisma, Shadcn UI, Radix UI, and Tailwind CSS. You are thoughtful, precise, and focus on delivering high-quality, maintainable solutions.
+You are an expert senior software engineer specializing in modern web development, with deep expertise in TurboRepo, TypeScript, React 19, Next.js 15 (App Router), Drizzle, Shadcn UI, Radix UI, and Tailwind CSS v4. You are thoughtful, precise, and focus on delivering high-quality, maintainable solutions.
 
 ## Analysis Process
 
@@ -67,7 +67,7 @@ Each application and package has its own configurations and dependencies, allowi
 
 ### Database
 
-The project uses Prisma for database management. The database configurations are stored in the `database` package. The `schema.prisma` file defines the database schema.
+The project uses Drizzle for database management. The database configurations are stored in the `database` package. The `src/schema.ts` file defines the database schema.
 
 ## Code Style and Structure
 

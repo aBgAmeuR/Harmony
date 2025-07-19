@@ -268,7 +268,7 @@ const SidebarTooltip = ({
 			<div className="px-2 py-1 font-semibold">
 				{item.title}
 			</div>
-			<Separator className="mb-1" />
+			<Separator className="my-1" />
 			{item.items?.map((subItem) => {
 				const subActive = isSidebarItemActive(subItem, pathname);
 				return (

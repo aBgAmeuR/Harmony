@@ -1,6 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
 
-import { prisma } from "@repo/database";
+import { db } from "@repo/database";
 
 import { updateHistoricalRankings } from "~/services/historical-rankings";
 
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 	}
 
 	try {
-		const users = await prisma.user.findMany();
+		const users = await db.query.users.findMany();
 
 		await Promise.all(users.map((user) => updateHistoricalRankings(user.id)));
 

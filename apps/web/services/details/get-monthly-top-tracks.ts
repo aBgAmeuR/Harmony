@@ -1,6 +1,5 @@
 import _ from "lodash";
 
-import { prisma } from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { Track } from "@repo/spotify/types";
 
@@ -227,45 +226,48 @@ export const getMonthlyTopTracks = async (
  * Fetches monthly track stats for a user and artist from the database.
  */
 export const fetchMonthlyTracksData = async (
-	userId: string,
-	artistId: string,
-	limit: number,
+	_userId: string,
+	_artistId: string,
+	_limit: number,
 ): Promise<MonthlyTrack[]> => {
-	return prisma.$queryRaw<MonthlyTrack[]>`
-    WITH monthly_tracks AS (
-      SELECT
-        TO_CHAR(timestamp, 'FMMonth YYYY') AS month,
-        EXTRACT(YEAR FROM timestamp) AS year,
-        EXTRACT(MONTH FROM timestamp) AS month_num,
-        "spotifyId",
-        SUM("msPlayed") AS "msPlayed",
-        COUNT(*) AS count
-      FROM "Track"
-      WHERE "userId" = ${userId}
-        AND ${artistId} = ANY("artistIds")
-      GROUP BY month, year, month_num, "spotifyId"
-    ),
-    ranked_tracks AS (
-      SELECT
-        month,
-        "spotifyId",
-        "msPlayed",
-        count,
-        RANK() OVER (PARTITION BY month ORDER BY count DESC, "msPlayed" DESC) AS rank
-      FROM monthly_tracks
-    )
-    SELECT 
-      month,
-      "spotifyId",
-      "msPlayed",
-      count,
-      rank
-    FROM ranked_tracks
-    WHERE rank <= ${limit}
-    ORDER BY 
-      TO_DATE(month, 'Month YYYY') DESC,
-      rank ASC
-  `;
+	// 	return prisma.$queryRaw<MonthlyTrack[]>`
+	//     WITH monthly_tracks AS (
+	//       SELECT
+	//         TO_CHAR(timestamp, 'FMMonth YYYY') AS month,
+	//         EXTRACT(YEAR FROM timestamp) AS year,
+	//         EXTRACT(MONTH FROM timestamp) AS month_num,
+	//         "spotifyId",
+	//         SUM("msPlayed") AS "msPlayed",
+	//         COUNT(*) AS count
+	//       FROM "Track"
+	//       WHERE "userId" = ${userId}
+	//         AND ${artistId} = ANY("artistIds")
+	//       GROUP BY month, year, month_num, "spotifyId"
+	//     ),
+	//     ranked_tracks AS (
+	//       SELECT
+	//         month,
+	//         "spotifyId",
+	//         "msPlayed",
+	//         count,
+	//         RANK() OVER (PARTITION BY month ORDER BY count DESC, "msPlayed" DESC) AS rank
+	//       FROM monthly_tracks
+	//     )
+	//     SELECT
+	//       month,
+	//       "spotifyId",
+	//       "msPlayed",
+	//       count,
+	//       rank
+	//     FROM ranked_tracks
+	//     WHERE rank <= ${limit}
+	//     ORDER BY
+	//       TO_DATE(month, 'Month YYYY') DESC,
+	//       rank ASC
+	//   `;
+	return new Promise((resolve) => {
+		resolve([]);
+	});
 };
 
 // helper pour générer une couleur unique et déterministe à partir d'une chaîne

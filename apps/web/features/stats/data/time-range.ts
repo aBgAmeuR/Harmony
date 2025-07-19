@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { db, eq, users } from "@repo/database";
 
 import type { TimeRange } from "../types/time-range";
 
@@ -19,9 +19,9 @@ export const getTimeRangeData = async (
 
 	if (isDemo) return "medium_term";
 
-	const timeRange = await prisma.user.findFirst({
-		where: { id: userId },
-		select: { timeRangeStats: true },
+	const timeRange = await db.query.users.findFirst({
+		where: eq(users.id, userId),
+		columns: { timeRangeStats: true },
 	});
 
 	return timeRange?.timeRangeStats || "medium_term";

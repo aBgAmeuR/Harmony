@@ -1,6 +1,6 @@
 import { cache } from "react";
 
-import { prisma } from "@repo/database";
+import { db, eq, users } from "@repo/database";
 
 export const getMonthRange = cache(async (userId: string, isDemo: boolean) => {
 	if (isDemo) {
@@ -11,12 +11,17 @@ export const getMonthRange = cache(async (userId: string, isDemo: boolean) => {
 		};
 	}
 
-	const monthsDates = await prisma.user.findFirst({
-		where: { id: userId },
-		select: { timeRangeDateEnd: true, timeRangeDateStart: true },
+	const monthsDates = await db.query.users.findFirst({
+		where: eq(users.id, userId),
+		columns: { timeRangeDateEnd: true, timeRangeDateStart: true },
 	});
 
-	if (!monthsDates) throw new Error("User not found");
+	if (
+		!monthsDates ||
+		!monthsDates.timeRangeDateStart ||
+		!monthsDates.timeRangeDateEnd
+	)
+		throw new Error("User not found");
 
 	return {
 		dateStart: monthsDates.timeRangeDateStart,

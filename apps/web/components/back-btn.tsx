@@ -1,7 +1,7 @@
 "use client";
 
-import type { ButtonHTMLAttributes } from "react";
 import { ArrowLeftIcon } from "lucide-react";
+import type { ButtonHTMLAttributes } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@repo/ui/button";

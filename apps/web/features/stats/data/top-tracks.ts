@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { db, desc, eq, historicalTrackRankings } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
 import { getMsPlayedInMinutes } from "~/lib/utils";
@@ -21,16 +21,19 @@ export const getTopTracks = async (userId: string, isDemo: boolean) => {
 	spotify.setUserId(userId);
 
 	const [previousRankings, tracks] = await Promise.all([
-		prisma.historicalTrackRanking.findMany({
-			where: { userId, timeRange },
-			orderBy: { timestamp: "desc" },
-			select: { trackId: true, rank: true },
-			take: 50,
-		}),
+		db
+			.select({
+				trackId: historicalTrackRankings.trackId,
+				rank: historicalTrackRankings.rank,
+			})
+			.from(historicalTrackRankings)
+			.where(eq(historicalTrackRankings.userId, userId))
+			.orderBy(desc(historicalTrackRankings.timestamp))
+			.limit(50),
 		spotify.me.top("tracks", timeRange),
 	]);
 
-	return tracks.map((track, index) => {
+	return tracks.map((track, index: number) => {
 		const previous = previousRankings.find((r) => r.trackId === track.id);
 		const rankChange = getRankChange(previous?.rank, index + 1);
 		return {
@@ -38,7 +41,9 @@ export const getTopTracks = async (userId: string, isDemo: boolean) => {
 			image: track.album.images[0].url,
 			name: track.name,
 			href: track.external_urls.spotify,
-			artists: track.artists.map((artist) => artist.name).join(", "),
+			artists: track.artists
+				.map((artist: { name: string }) => artist.name)
+				.join(", "),
 			stat1: `${track.popularity}% popularity`,
 			stat2: `${getMsPlayedInMinutes(track.duration_ms)} minutes`,
 			rankChange,

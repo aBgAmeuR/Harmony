@@ -5,4 +5,5 @@ export type MusicListConfig = {
 	actionHref?: keyof typeof ACTIONS_HREF;
 	showRank?: boolean;
 	showHistoricalRankings?: boolean;
+	layout?: "grid" | "list";
 };

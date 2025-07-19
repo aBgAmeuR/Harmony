@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { db, desc, eq, historicalArtistRankings } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
 import { getRankChange, getTimeRangeStats } from "./utils";
@@ -25,12 +25,15 @@ export const getTopArtists = async (userId: string, isDemo: boolean) => {
 	spotify.setUserId(userId);
 
 	const [previousRankings, artists] = await Promise.all([
-		prisma.historicalArtistRanking.findMany({
-			where: { userId, timeRange },
-			orderBy: { timestamp: "desc" },
-			select: { artistId: true, rank: true },
-			take: 50,
-		}),
+		db
+			.select({
+				artistId: historicalArtistRankings.artistId,
+				rank: historicalArtistRankings.rank,
+			})
+			.from(historicalArtistRankings)
+			.where(eq(historicalArtistRankings.userId, userId))
+			.orderBy(desc(historicalArtistRankings.timestamp))
+			.limit(50),
 		spotify.me.top("artists", timeRange),
 	]);
 

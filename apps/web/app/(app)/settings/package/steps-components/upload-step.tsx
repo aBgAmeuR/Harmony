@@ -1,4 +1,3 @@
-import React from "react";
 import { CloudUpload, Files, Package } from "lucide-react";
 
 import { CardContent } from "@repo/ui/card";
@@ -24,17 +23,17 @@ export const UploadStep = ({
 	return (
 		<CardContent className="group/upload mx-6 rounded-xl border-2 border-border border-dashed p-8 text-center transition-transform duration-500 hover:border-muted-foreground hover:duration-200">
 			<div className="isolate flex justify-center">
-				<>
-					<div className="-rotate-6 group-hover/upload:-translate-x-5 group-hover/upload:-rotate-12 group-hover/upload:-translate-y-0.5 relative top-1.5 left-2.5 grid size-12 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:duration-200">
-						<Files className="size-6 text-muted-foreground" />
-					</div>
-					<div className="group-hover/upload:-translate-y-0.5 relative z-10 grid size-12 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:duration-200">
-						<Package className="size-6 text-muted-foreground" />
-					</div>
-					<div className="group-hover/upload:-translate-y-0.5 relative top-1.5 right-2.5 grid size-12 rotate-6 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:translate-x-5 group-hover/upload:rotate-12 group-hover/upload:duration-200">
-						<CloudUpload className="size-6 text-muted-foreground" />
-					</div>
-				</>
+
+				<div className="-rotate-6 group-hover/upload:-translate-x-5 group-hover/upload:-rotate-12 group-hover/upload:-translate-y-0.5 relative top-1.5 left-2.5 grid size-12 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:duration-200">
+					<Files className="size-6 text-muted-foreground" />
+				</div>
+				<div className="group-hover/upload:-translate-y-0.5 relative z-10 grid size-12 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:duration-200">
+					<Package className="size-6 text-muted-foreground" />
+				</div>
+				<div className="group-hover/upload:-translate-y-0.5 relative top-1.5 right-2.5 grid size-12 rotate-6 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:translate-x-5 group-hover/upload:rotate-12 group-hover/upload:duration-200">
+					<CloudUpload className="size-6 text-muted-foreground" />
+				</div>
+
 			</div>
 			<h2 className="mt-6 font-medium text-foreground">
 				Upload Your Spotify Data Package

@@ -1,7 +1,7 @@
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
-import { prisma } from "@repo/database";
+import { db, eq, tracks, users } from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { ArtistSimplified, Track } from "@repo/spotify/types";
 
@@ -23,7 +23,7 @@ export const runtime = "nodejs";
 export const maxDuration = 60;
 
 const MIN_PLAY_DURATION_MS = 10000;
-const TRACK_BATCH_SIZE = 10000;
+const TRACK_BATCH_SIZE = 5000;
 
 export async function POST(req: Request) {
 	const packageSteamer = new PackageStreamer();
@@ -80,7 +80,7 @@ async function processUserPackage(
 		);
 	}
 
-	await prisma.track.deleteMany({ where: { userId } });
+	await db.delete(tracks).where(eq(tracks.userId, userId));
 	packageSteamer.emit(5, "Extracting files from archive", "processing");
 
 	const processingResult = await processPackageFile(
@@ -107,10 +107,7 @@ async function processUserPackage(
 		});
 	}
 
-	await prisma.user.update({
-		where: { id: userId },
-		data: { hasPackage: true },
-	});
+	await db.update(users).set({ hasPackage: true }).where(eq(users.id, userId));
 
 	await setDefaulMonthStats(userId);
 
@@ -208,17 +205,21 @@ function extractValidTrackUris(data: DataType[][]) {
 /**
  * Saves processed tracks to the database in batches
  */
-async function saveTracksToDatabase(tracks: ProcessedTrack[], userId: string) {
-	const trackBatches = batchArray(tracks, TRACK_BATCH_SIZE);
+async function saveTracksToDatabase(
+	newTracks: ProcessedTrack[],
+	userId: string,
+) {
+	const trackBatches = batchArray(newTracks, TRACK_BATCH_SIZE);
 	await Promise.all(
 		trackBatches.map(async (batch) => {
-			await prisma.track.createMany({
-				data: batch.map((track) => ({
+			await db.insert(tracks).values(
+				batch.map((track) => ({
 					...track,
 					timestamp: new Date(track.timestamp),
+					msPlayed: BigInt(track.msPlayed),
 					userId,
 				})),
-			});
+			);
 		}),
 	);
 }
@@ -311,26 +312,24 @@ function mapTrackDataForDb(
 }
 
 async function setDefaulMonthStats(userId: string) {
-	await prisma.$transaction(async (tx) => {
+	await db.transaction(async (tx) => {
 		const [minDate, maxDate] = await Promise.all([
-			tx.track.findFirst({
-				where: { userId },
-				select: { timestamp: true },
-				orderBy: { timestamp: "asc" },
+			tx.query.tracks.findFirst({
+				where: (tracks, { eq }) => eq(tracks.userId, userId),
+				orderBy: (tracks, { asc }) => asc(tracks.timestamp),
 			}),
-			tx.track.findFirst({
-				where: { userId },
-				select: { timestamp: true },
-				orderBy: { timestamp: "desc" },
+			tx.query.tracks.findFirst({
+				where: (tracks, { eq }) => eq(tracks.userId, userId),
+				orderBy: (tracks, { desc }) => desc(tracks.timestamp),
 			}),
 		]);
 
-		await tx.user.update({
-			where: { id: userId },
-			data: {
+		await tx
+			.update(users)
+			.set({
 				timeRangeDateStart: minDate?.timestamp,
 				timeRangeDateEnd: maxDate?.timestamp,
-			},
-		});
+			})
+			.where(eq(users.id, userId));
 	});
 }

@@ -6,7 +6,7 @@ import { ListeningTab } from "~/features/detail/album/components/listening-tab";
 import { StatsTab, StatsTabSkeleton } from "~/features/detail/album/components/stats-tab";
 import { TracksTab } from "~/features/detail/album/components/tracks-tab";
 import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 interface PageProps {
 	params: Promise<{ id: string }>;

@@ -6,25 +6,28 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, db, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { Track as SpotifyTrack } from "@repo/spotify/types";
 
 import { getMonthRange } from "~/lib/dal";
 
-const getTracks = async (userId: string, minDate: Date, maxDate: Date) =>
-	prisma.track.findMany({
-		where: { userId, timestamp: { gte: minDate, lt: maxDate } },
-		select: {
-			timestamp: true,
-			msPlayed: true,
-			spotifyId: true,
-			artistIds: true,
-			offline: true,
-			reasonStart: true,
-		},
-		orderBy: { timestamp: "asc" },
-	});
+const getTracks = async (
+	userId: string,
+	monthRange: { dateStart: Date; dateEnd: Date },
+) =>
+	db
+		.select({
+			timestamp: tracks.timestamp,
+			msPlayed: tracks.msPlayed,
+			spotifyId: tracks.spotifyId,
+			artistIds: tracks.artistIds,
+			offline: tracks.offline,
+			reasonStart: tracks.reasonStart,
+		})
+		.from(tracks)
+		.where(auth(userId, { monthRange }))
+		.orderBy(tracks.timestamp);
 
 type DayStats = {
 	totalPlayed: number;
@@ -40,11 +43,7 @@ export const getNumbersStatsData = async (userId: string, isDemo: boolean) => {
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const tracks = await getTracks(
-		userId,
-		monthRange.dateStart,
-		monthRange.dateEnd,
-	);
+	const tracks = await getTracks(userId, monthRange);
 
 	if (tracks.length === 0)
 		return {
