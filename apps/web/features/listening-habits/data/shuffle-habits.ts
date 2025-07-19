@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, count, db, tracks } from "@repo/database";
 
 import { getMonthRange } from "~/lib/dal";
 
@@ -16,19 +16,18 @@ export const getShuffleHabitsData = async (userId: string, isDemo: boolean) => {
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const shuffles = await prisma.track.groupBy({
-		by: ["shuffle"],
-		_count: { _all: true },
-		where: {
-			userId,
-			timestamp: { gte: monthRange.dateStart, lt: monthRange.dateEnd },
-		},
-	});
+	const shuffles = await db
+		.select({
+			shuffle: tracks.shuffle,
+			count: count(),
+		})
+		.from(tracks)
+		.where(auth(userId, { monthRange }))
+		.groupBy(tracks.shuffle);
 
 	return {
-		shuffled:
-			shuffles.find((shuffle) => shuffle.shuffle === true)?._count?._all || 0,
+		shuffled: shuffles.find((shuffle) => shuffle.shuffle === true)?.count || 0,
 		notShuffled:
-			shuffles.find((shuffle) => shuffle.shuffle === false)?._count?._all || 1,
+			shuffles.find((shuffle) => shuffle.shuffle === false)?.count || 1,
 	};
 };

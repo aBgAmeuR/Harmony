@@ -1,5 +1,6 @@
 "use client";
 
+import { AspectRatio } from "@repo/ui/aspect-ratio";
 import { Skeleton } from "@repo/ui/skeleton";
 
 const useRandomWidth = (index: number, min: number, max: number) => {
@@ -27,7 +28,13 @@ export const CardSkeleton = ({
 	if (layout === "grid")
 		return (
 			<article className="flex h-full flex-col items-start space-y-2">
-				<Skeleton className="aspect-square size-full cursor-pointer rounded-md object-cover" />
+				<div className="relative w-full">
+					<AspectRatio>
+						<Skeleton className="aspect-square size-full cursor-pointer rounded-md object-cover" />
+					</AspectRatio>
+				</div>
+
+
 				<div className="inline-flex w-full flex-col gap-1">
 					<Skeleton className="h-4" style={{ maxWidth: `${titleWidth}px` }} />
 					<Skeleton
@@ -36,10 +43,8 @@ export const CardSkeleton = ({
 					/>
 				</div>
 				<div className="flex w-full flex-row items-end justify-between">
-					<Skeleton className="h-3 w-7" />
-					<Skeleton className="h-3 w-5" />
-					{/* <p className="text-sm text-muted-foreground">239.57min</p> */}
-					{/* <p className="text-sm text-muted-foreground">65x</p> */}
+					<Skeleton className="h-3 w-12" />
+					<Skeleton className="h-3 w-8" />
 				</div>
 			</article>
 		);

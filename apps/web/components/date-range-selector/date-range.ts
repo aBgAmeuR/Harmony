@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { asc, auth, count, db, eq, sql, tracks, users } from "@repo/database";
 
 import { DateUtils } from "~/lib/date-utils";
 
@@ -21,12 +21,14 @@ export const getDateRange = async (userId: string, isDemo: boolean) => {
 
 	if (isDemo) return DEFAULT_DATE_RANGE;
 
-	const dates = await prisma.user.findFirst({
-		where: { id: userId },
-		select: { timeRangeDateEnd: true, timeRangeDateStart: true },
+	const dates = await db.query.users.findFirst({
+		where: (users, { eq }) => eq(users.id, userId),
+		columns: { timeRangeDateEnd: true, timeRangeDateStart: true },
 	});
 
-	if (!dates) return DEFAULT_DATE_RANGE;
+	if (!dates || !dates.timeRangeDateStart || !dates.timeRangeDateEnd) {
+		return DEFAULT_DATE_RANGE;
+	}
 
 	return {
 		dateStart: dates.timeRangeDateStart,
@@ -39,10 +41,10 @@ export const setDateRange = async (
 	dateStart: Date,
 	dateEnd: Date,
 ) => {
-	await prisma.user.update({
-		where: { id: userId },
-		data: { timeRangeDateStart: dateStart, timeRangeDateEnd: dateEnd },
-	});
+	await db
+		.update(users)
+		.set({ timeRangeDateStart: dateStart, timeRangeDateEnd: dateEnd })
+		.where(eq(users.id, userId));
 };
 
 export const getMinMaxDateRange = async (userId: string) => {
@@ -51,15 +53,15 @@ export const getMinMaxDateRange = async (userId: string) => {
 	cacheTag(userId, "min-max-date-range");
 
 	const [minDate, maxDate] = await Promise.all([
-		prisma.track.findFirst({
-			where: { userId },
-			select: { timestamp: true },
-			orderBy: { timestamp: "asc" },
+		db.query.tracks.findFirst({
+			where: (tracks, { eq }) => eq(tracks.userId, userId),
+			orderBy: (tracks, { asc }) => asc(tracks.timestamp),
+			columns: { timestamp: true },
 		}),
-		prisma.track.findFirst({
-			where: { userId },
-			select: { timestamp: true },
-			orderBy: { timestamp: "desc" },
+		db.query.tracks.findFirst({
+			where: (tracks, { eq }) => eq(tracks.userId, userId),
+			orderBy: (tracks, { desc }) => desc(tracks.timestamp),
+			columns: { timestamp: true },
 		}),
 	]);
 
@@ -84,25 +86,27 @@ export const getDateRangeSliderData = async (userId: string) => {
 	cacheLife("days");
 	cacheTag(userId, "date-range-slider-data");
 
-	const tracks = await prisma.$queryRaw<{ month: string; count: number }[]>`
-    SELECT TO_CHAR(timestamp, 'YYYY-MM') as month, COUNT(*) as count
-    FROM "Track"
-    WHERE "userId" = ${userId}
-    GROUP BY month
-    ORDER BY month ASC
-  `;
+	const tracksData = await db
+		.select({
+			month: sql<string>`TO_CHAR(timestamp, 'YYYY-MM')`,
+			count: count(),
+		})
+		.from(tracks)
+		.where(auth(userId))
+		.groupBy(({ month }) => month)
+		.orderBy(({ month }) => asc(month));
 
-	if (tracks.length === 0) {
+	if (tracksData.length === 0) {
 		return [];
 	}
 
 	const tracksMap = new Map<string, number>();
-	tracks.forEach((track) => {
+	tracksData.forEach((track) => {
 		tracksMap.set(track.month, Number(track.count));
 	});
 
-	const firstMonth = new Date(tracks[0].month);
-	const lastMonth = new Date(tracks[tracks.length - 1].month);
+	const firstMonth = new Date(tracksData[0].month);
+	const lastMonth = new Date(tracksData[tracksData.length - 1].month);
 
 	const result: { date: Date; value: number }[] = [];
 	let currentMonth = new Date(

@@ -10,7 +10,9 @@
 		"studio": "turbo run studio",
 		"format-and-lint": "biome check .",
 		"format-and-lint:fix": "biome check . --write",
-		"e2e": "turbo run e2e"
+		"e2e": "turbo run e2e",
+		"typecheck": "turbo run typecheck",
+		"db:push": "turbo run db:push"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.6",
@@ -22,9 +24,6 @@
 	"dependencies": {
 		"dotenv": "^16.4.7",
 		"dotenv-cli": "^8.0.0"
-	},
-	"prisma": {
-		"schema": "packages/database/prisma/schema.prisma"
 	},
 	"packageManager": "pnpm@10.10.0",
 	"engines": {

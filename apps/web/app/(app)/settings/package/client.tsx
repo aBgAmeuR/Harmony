@@ -4,7 +4,6 @@ import { useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
-import { useSession } from "@repo/auth";
 import { toast } from "@repo/ui/sonner";
 
 import {
@@ -28,7 +27,7 @@ export const Client = () => {
 	const [processingSteps, setProcessingSteps] =
 		useState<ProcessingStepType[]>();
 	const [errorMessage, setErrorMessage] = useState<string>();
-	const { data: session, update } = useSession();
+	// const { data: session, update } = useSession();
 	const router = useRouter();
 	const queryClient = useQueryClient();
 
@@ -64,10 +63,10 @@ export const Client = () => {
 						cancelStream().catch(console.error);
 					} else if (progressData.percentage >= 100) {
 						cancelStream().catch(console.error);
-						await update({
-							...session,
-							user: { ...session?.user, hasPackage: true },
-						});
+						// await update({
+						// 	...session,
+						// 	user: { ...session?.user, hasPackage: true },
+						// });
 						queryClient.invalidateQueries();
 						router.refresh();
 					}

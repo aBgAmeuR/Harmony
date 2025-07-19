@@ -21,7 +21,7 @@ import {
 	TimeListenedChart,
 	TimeListenedChartSkeleton,
 } from "~/features/activity/components/time-listened-chart";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export default async function StatsActivityPage() {
 	const { userId, isDemo } = await getUserInfos();

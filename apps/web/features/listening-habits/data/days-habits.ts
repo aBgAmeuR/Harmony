@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, db, sql, sum, tracks } from "@repo/database";
 
 import { getMonthRange } from "~/lib/dal";
 
@@ -16,15 +16,14 @@ export const getDaysHabitsData = async (userId: string, isDemo: boolean) => {
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const data: { day: bigint; time: bigint }[] = await prisma.$queryRaw`
-    SELECT
-      EXTRACT(DOW FROM timestamp) AS day,
-      SUM("msPlayed") AS time
-    FROM "Track"
-    WHERE "userId" = ${userId}
-      AND timestamp BETWEEN ${monthRange.dateStart} AND ${monthRange.dateEnd}
-    GROUP BY day
-  `;
+	const data = await db
+		.select({
+			day: sql<bigint>`EXTRACT(DOW FROM timestamp)`,
+			time: sum(tracks.msPlayed),
+		})
+		.from(tracks)
+		.where(auth(userId, { monthRange }))
+		.groupBy(({ day }) => day);
 
 	const daysOfWeek = [
 		"Sunday",

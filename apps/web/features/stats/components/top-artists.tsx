@@ -1,10 +1,12 @@
-import { MusicList } from "~/components/lists/music-list";
+import { MusicLayout } from "~/components/lists/music-layout";
 import type { MusicListConfig } from "~/components/lists/music-list/config";
+import { tryCatch } from "~/lib/utils-server";
 import { getHistoricalArtistRankings } from "~/services/historical-rankings";
 
 import { getTopArtists } from "../data/top-artists";
 import { HistoricalModal } from "./historical-modal";
 import { HistoricalProvider } from "./historical-provider";
+import { WhitelistError as WhitelistErrorComponent } from "./whitelist-error";
 
 const config = {
 	label: "artists",
@@ -18,11 +20,15 @@ type TopArtistsProps = {
 };
 
 export const TopArtists = async ({ userId, isDemo }: TopArtistsProps) => {
-	const data = await getTopArtists(userId, isDemo);
+	const { data, error } = await tryCatch(getTopArtists(userId, isDemo));
+
+	if (error?.name === "WhitelistError") {
+		return <WhitelistErrorComponent />;
+	}
 
 	return (
 		<HistoricalProvider>
-			<MusicList data={data} config={config} />
+			<MusicLayout data={data} config={config} />
 			<HistoricalModal promise={getHistoricalArtistRankings} />
 		</HistoricalProvider>
 	);

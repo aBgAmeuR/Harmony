@@ -203,6 +203,7 @@ function SidebarItemRenderer({
 				disable={disable}
 				isActive={isActive}
 				as={SidebarMenuButton}
+				tooltip={item.title}
 				router={router}
 			/>
 		</SidebarMenuItem>
@@ -260,11 +261,14 @@ const SidebarTooltip = ({
 	const pathname = usePathname();
 
 	return (
-		<>
-			<div className="px-2 py-1">
-				<p className="text-sm">{item.title}</p>
+		<div
+			role="tooltip"
+			className="flex flex-col rounded-lg"
+		>
+			<div className="px-2 py-1 font-semibold">
+				{item.title}
 			</div>
-			<Separator className="mb-1" />
+			<Separator className="my-1" />
 			{item.items?.map((subItem) => {
 				const subActive = isSidebarItemActive(subItem, pathname);
 				return (
@@ -273,7 +277,8 @@ const SidebarTooltip = ({
 						isActive={subActive}
 						asChild={true}
 						size="sm"
-						className="group-data-[collapsible=icon]:!size-auto z-10"
+						className="group-data-[collapsible=icon]:!size-auto z-10 rounded-md hover:bg-accent"
+						aria-label={subItem.title}
 					>
 						<SidebarNavButton
 							item={subItem}
@@ -285,6 +290,6 @@ const SidebarTooltip = ({
 					</SidebarMenuButton>
 				);
 			})}
-		</>
+		</div>
 	);
 };

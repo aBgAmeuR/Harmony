@@ -18,7 +18,7 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { NavMain } from "~/components/navbar/nav-main";
 
-import { CommandMenu } from "../command-menu";
+import { CommandMenu } from "./command-menu";
 import { NavHeader } from "./nav-header";
 import { NavSecondary } from "./nav-secondary";
 import { NavUser } from "./nav-user";
@@ -57,9 +57,6 @@ export function AppSidebar({
 					disable={disable}
 					hasPackage={hasPackage}
 				/>
-				{/* {hasPackage ? (
-					<NavMain items={data.advanced} label="Advanced" disable={disable} />
-				) : null} */}
 				<NavMain items={data.settings} label="Settings" disable={disable} />
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>

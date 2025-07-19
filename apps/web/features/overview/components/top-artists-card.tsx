@@ -46,7 +46,7 @@ export const TopArtistsCard = async ({
 						userId={userId}
 						isDemo={isDemo}
 						limit={5}
-						config={{ actionHref: null }}
+						config={{ layout: "list" }}
 					/>
 				</Suspense>
 			</CardContent>

@@ -17,7 +17,7 @@ import {
 	NumbersStatsCards,
 	NumbersStatsCardsSkeleton,
 } from "~/features/numbers/components/numbers-stats-cards";
-import { getUserInfos } from "~/lib/utils";
+import { getUserInfos } from "~/lib/utils-server";
 
 export default async function StatsNumbersPage() {
 	const { userId, isDemo } = await getUserInfos();

@@ -42,6 +42,7 @@ export const TopTracksCard = async ({
 						userId={userId}
 						isDemo={isDemo}
 						limit={5}
+						config={{ layout: "list" }}
 					/>
 				</Suspense>
 			</CardContent>

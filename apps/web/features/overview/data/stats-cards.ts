@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, count, db, desc, sql, sum, tracks } from "@repo/database";
 
 import { getMonthRange } from "~/lib/dal";
 
@@ -16,67 +16,52 @@ export const getStatsCardsData = async (userId: string, isDemo: boolean) => {
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const listeningTimeQuery = prisma.track.aggregate({
-		_sum: { msPlayed: true },
-		where: {
-			userId,
-			timestamp: { gte: monthRange.dateStart, lt: monthRange.dateEnd },
-		},
-	});
+	const totalPlaysAndTimeQuery = db
+		.select({ count: count(), sum: sum(tracks.msPlayed) })
+		.from(tracks)
+		.where(auth(userId, { monthRange }));
 
-	const totalPlaysQuery = prisma.track.count({
-		where: {
-			userId,
-			timestamp: { gte: monthRange.dateStart, lt: monthRange.dateEnd },
-		},
-	});
+	const uniqueArtistsQuery = db
+		.select({
+			count: sql<number>`COUNT(DISTINCT "subquery".unnest)`.mapWith(Number),
+		})
+		.from(
+			db
+				.select({ artist_id: sql<string>`unnest(${tracks.artistIds})` })
+				.from(tracks)
+				.where(auth(userId, { monthRange }))
+				.as("subquery"),
+		);
 
-	const uniqueArtistsQuery = prisma.track.groupBy({
-		by: ["artistIds"],
-		_count: { _all: true },
-		where: {
-			userId,
-			timestamp: { gte: monthRange.dateStart, lt: monthRange.dateEnd },
-		},
-	});
+	const mostActiveDayQuery = db
+		.select({
+			day: sql<string>`TO_CHAR(${tracks.timestamp}, 'YYYY-MM-DD')`,
+			totalmsplayed: sum(tracks.msPlayed),
+			totalcount: count(),
+		})
+		.from(tracks)
+		.where(auth(userId, { monthRange }))
+		.groupBy(({ day }) => day)
+		.orderBy(({ totalmsplayed }) => desc(totalmsplayed))
+		.limit(1);
 
-	const mostActiveDayQuery = prisma.$queryRaw<
-		{
-			day: string;
-			totalmsplayed: number;
-			totalcount: number;
-		}[]
-	>`
-    SELECT 
-      TO_CHAR(timestamp, 'YYYY-MM-DD') AS day,
-      SUM("msPlayed") as totalmsplayed,
-      COUNT(*) as totalcount
-    FROM "Track"
-    WHERE "userId" = ${userId}
-      AND timestamp BETWEEN ${monthRange.dateStart} AND ${monthRange.dateEnd}
-    GROUP BY day
-    ORDER BY totalmsplayed DESC
-    LIMIT 1
-  `;
+	const [totalPlaysAndTime, uniqueArtists, mostActiveDay] = await Promise.all([
+		totalPlaysAndTimeQuery,
+		uniqueArtistsQuery,
+		mostActiveDayQuery,
+	]);
 
-	const [listeningTime, totalPlays, uniqueArtists, mostActiveDay] =
-		await Promise.all([
-			listeningTimeQuery,
-			totalPlaysQuery,
-			uniqueArtistsQuery,
-			mostActiveDayQuery,
-		]);
-
+	const totalPlaysCount = totalPlaysAndTime[0]?.count ?? 0;
 	const totalPlaysPerDay =
-		totalPlays /
+		totalPlaysCount /
 		((monthRange.dateEnd.getTime() - monthRange.dateStart.getTime()) /
 			(1000 * 60 * 60 * 24));
 
 	return {
-		listeningTime: Number(listeningTime?._sum?.msPlayed) || 0,
-		totalPlays: totalPlays || 0,
+		listeningTime: Number(totalPlaysAndTime[0]?.sum) || 0,
+		totalPlays: totalPlaysCount,
 		totalPlaysPerDay: Math.round(totalPlaysPerDay) || 0,
-		uniqueArtists: uniqueArtists.length || 0,
+		uniqueArtists: uniqueArtists[0]?.count ?? 0,
 		mostActiveDay: {
 			day: mostActiveDay[0]?.day ? new Date(mostActiveDay[0].day) : null,
 			timePlayed: Number(mostActiveDay[0]?.totalmsplayed) || 0,

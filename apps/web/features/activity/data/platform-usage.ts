@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import { auth, db, sql, sum, tracks } from "@repo/database";
 
 import { getMonthRange } from "~/lib/dal";
 import { formatMonth } from "~/lib/utils";
@@ -17,17 +17,16 @@ export const getPlatformUsageData = async (userId: string, isDemo: boolean) => {
 
 	const monthRange = await getMonthRange(userId, isDemo);
 
-	const platforms = await prisma.$queryRaw<
-		{ month: string; platform: string; totalmsplayed: number }[]
-	>`
-    SELECT TO_CHAR(timestamp, 'YYYY-MM') as month, "platform", SUM("msPlayed") as totalmsplayed
-    FROM "Track"
-    WHERE "userId" = ${userId} 
-      AND "timestamp" >= ${monthRange.dateStart} 
-      AND "timestamp" < ${monthRange.dateEnd}
-    GROUP BY month, platform
-    ORDER BY month ASC
-  `;
+	const platforms = await db
+		.select({
+			month: sql<string>`TO_CHAR(timestamp, 'YYYY-MM')`,
+			platform: tracks.platform,
+			totalmsplayed: sum(tracks.msPlayed),
+		})
+		.from(tracks)
+		.where(auth(userId, { monthRange }))
+		.groupBy(({ month }) => [month, tracks.platform])
+		.orderBy(({ month }) => month);
 
 	const PLATFORMS: Record<"web" | "mobile" | "desktop", string[]> = {
 		web: ["web"],

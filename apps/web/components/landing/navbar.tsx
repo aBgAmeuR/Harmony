@@ -3,6 +3,8 @@ import Link from "next/link";
 
 import { Button } from "@repo/ui/button";
 
+import { config } from "~/lib/config";
+
 import { GetDemoBtn } from "../get-demo-btn";
 import { Icons } from "../icons";
 import { ThemeToggle } from "../theme-toggle";
@@ -22,7 +24,7 @@ export const Navbar = () => {
 							className="flex items-center gap-2 font-bold text-xl"
 						>
 							<Icons.logo className="size-8" />
-							Harmony
+							{config.appName}
 						</Link>
 						<div className="hidden gap-2 sm:flex">
 							<Button
@@ -32,7 +34,7 @@ export const Navbar = () => {
 								asChild={true}
 							>
 								<Link
-									href="https://github.com/aBgAmeuR/Harmony"
+									href={config.githubRepo}
 									target="_blank"
 								>
 									<Github />

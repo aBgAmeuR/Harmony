@@ -5,7 +5,15 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { prisma } from "@repo/database";
+import {
+	and,
+	arrayOverlaps,
+	auth,
+	count,
+	db,
+	sql,
+	tracks,
+} from "@repo/database";
 
 import { getArtistDetails } from "./utis";
 
@@ -16,14 +24,13 @@ export const getArtistHeaderData = async (artistId: string, userId: string) => {
 
 	const [artist, [{ totalMinutes = 0, totalStreams = 0 }]] = await Promise.all([
 		getArtistDetails(artistId, userId),
-		prisma.$queryRaw<{ totalMinutes: number; totalStreams: number }[]>`
-            SELECT
-            ROUND(SUM("msPlayed")::numeric / 1000 / 60) AS "totalMinutes",
-            COUNT(*) AS "totalStreams"
-            FROM "Track"
-            WHERE "userId" = ${userId}
-            AND ${artistId} = ANY("artistIds")
-      `,
+		db
+			.select({
+				totalMinutes: sql<number>`ROUND(SUM("msPlayed")::numeric / 1000 / 60)`,
+				totalStreams: count(),
+			})
+			.from(tracks)
+			.where(and(auth(userId), arrayOverlaps(tracks.artistIds, [artistId]))),
 	]);
 
 	return {
