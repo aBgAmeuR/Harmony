@@ -5,14 +5,14 @@
 		"build": "turbo run build",
 		"dev": "turbo run dev",
 		"start": "turbo run start",
-		"generate": "turbo run generate",
 		"ui": "pnpm --filter @repo/ui ui",
-		"studio": "turbo run studio",
-		"format-and-lint": "biome check .",
-		"format-and-lint:fix": "biome check . --write",
 		"e2e": "turbo run e2e",
 		"typecheck": "turbo run typecheck",
-		"db:push": "turbo run db:push"
+		"db:generate": "turbo run db:generate",
+		"db:studio": "turbo run db:studio",
+		"db:push": "turbo run db:push",
+		"db:pull": "turbo run db:pull",
+		"db:migrate": "turbo run db:migrate"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "2.0.6",

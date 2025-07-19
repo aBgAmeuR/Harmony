@@ -6,11 +6,10 @@
 	},
 	"scripts": {
 		"dev": "tsup src/* --watch",
-		"generate": "dotenv -e ../../.env -- drizzle-kit generate",
+		"db:generate": "dotenv -e ../../.env -- drizzle-kit generate",
 		"db:push": "dotenv -e ../../.env -- drizzle-kit push",
 		"db:pull": "dotenv -e ../../.env -- drizzle-kit pull",
-		"db:migrate": "dotenv -e ../../.env -- drizzle-kit migrate",
-		"db:studio": "dotenv -e ../../.env -- drizzle-kit studio"
+		"db:migrate": "dotenv -e ../../.env -- drizzle-kit migrate"
 	},
 	"dependencies": {
 		"dotenv": "^16.4.7",

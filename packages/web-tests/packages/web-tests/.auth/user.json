@@ -1,0 +1,55 @@
+{
+  "cookies": [
+    {
+      "name": "authjs.csrf-token",
+      "value": "0c0f5e71063e991be93807ad742e4c3996adb84b0eac993da583d87cf387ae13%7C82eaceab852d759db6be5392c8ead3e7284e5b40a8f954a0b89a1f9eacaf949c",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "authjs.pkce.code_verifier",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoicEpTOURTclNQeXhrTy1iOWVUbmhtbklxTl93MkJsclhDSzZIdm9iVnI4UUk0cGpsZWM1OGJ1dlFoWmtNWTVEbEhreW4xaloyQ1gxNzM2VExzdlpYNVEifQ..R5nolDzxyDOg-JvDt2O7GQ.IzzFNEYypU45PJMRDGBmENclJdX7dzgSA1nLDu4zWGBI-h5DrG0QNuKATQW9cyZUKLZc8LVImlsZsgq9-rfgjKxIMYhRc5q13hqHwjN2WOzSKNE6E8Ejsqx_6P99w8dht0jnyEHqcQ9Y1RZOwNyXerHgpwtZHb17_1BuePtQNbtq5gPXZIhlRpw_Q2P8pReX.vNsEMmZ-AzR5tNuKS46xkP8RErjBs_DWBiYyqvOQi9g",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1752942165.222577,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "__Secure-TPASESSION",
+      "value": "AQDXyIRvmV/OqusRzp3C79leGmw+DZXd8qXnUiUlsJCISP2GTsbNAezDU4mJAYXg2vUoom0XK0nDfznX+HtSSRJqM0VgaD4NMz0=",
+      "domain": ".accounts.spotify.com",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": true,
+      "sameSite": "None"
+    },
+    {
+      "name": "authjs.callback-url",
+      "value": "http%3A%2F%2Flocalhost%3A3000%2Fsettings%2Fabout",
+      "domain": "localhost",
+      "path": "/",
+      "expires": -1,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    },
+    {
+      "name": "authjs.session-token",
+      "value": "eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2Q0JDLUhTNTEyIiwia2lkIjoiVzRNTTFXYUxOblJlRjBIbWlHTDlrT2R1Qzd5Wmk2NlBwdEZCZ2kyd1UyX096TTZLV2NrVFNlUTl5aTVTVTVaMm1WRmZiUm1IUmJ5d2Rzcjk1VG9uRXcifQ.._I5HccIQIBrLkVXL9JkUMA.eo2nUuVkBowcvi92JGlrr44phEL-fHK2SXyquXf3XGdzNDCp0XujB-8WK5QZTtLibY6rgUEIf3irSTetgX0EHuEuihdrBIrwdYliLGmw9SfK4QAgYIG_EtEYis9Ljlz-Ipi_4qfUpA0UJJ5pWUPZssqHJ02-CG6x_lVvvf_cx0upmFUQrxc27v6YyOyYHmkXfLSB7VwJz8P2ojso3lJ4QGeo_imHAheA2-OaXFbk9PEbkLyM-A9CGjNXKogdRarbuL1k3XHKWAq7yQNPpfknIQ.IS0ivt2V1UmVLxKpqQbskSMmUYxiZyxgrWl7ZRvDaGY",
+      "domain": "localhost",
+      "path": "/",
+      "expires": 1755533265.451187,
+      "httpOnly": true,
+      "secure": false,
+      "sameSite": "Lax"
+    }
+  ],
+  "origins": []
+}

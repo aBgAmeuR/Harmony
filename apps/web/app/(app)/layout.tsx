@@ -12,7 +12,7 @@ import ErrorComponent from "../error";
 
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	const cookieStorage = await cookies();
-	const defaultOpen = cookieStorage.get("sidebar_state")?.value === "true";
+	const defaultOpen = cookieStorage.get("sidebar_state")?.value !== "false";
 	const session = await auth();
 
 	return (

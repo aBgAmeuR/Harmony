@@ -6,7 +6,6 @@
 		"dev": "dotenv -e ../../.env -- next dev",
 		"build": "dotenv -e ../../.env -- next build",
 		"start": "dotenv -e ../../.env -- next start",
-		"test": "jest",
 		"typecheck": "tsc --noEmit --emitDeclarationOnly false"
 	},
 	"dependencies": {

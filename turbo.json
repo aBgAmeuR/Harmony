@@ -5,11 +5,11 @@
 	"envMode": "loose",
 	"tasks": {
 		"build": {
-			"dependsOn": ["^generate", "^build"],
+			"dependsOn": ["^db:generate", "^build"],
 			"outputs": ["dist/**", ".next/**", "!.next/cache/**"]
 		},
 		"dev": {
-			"dependsOn": ["^generate"],
+			"dependsOn": ["^db:generate"],
 			"cache": false,
 			"persistent": true
 		},
@@ -17,21 +17,23 @@
 			"cache": false,
 			"persistent": true
 		},
-		"generate": {
-			"cache": false
-		},
-		"studio": {},
-		"format-and-lint": {},
-		"format-and-lint:fix": {
-			"cache": false
-		},
 		"e2e": {
 			"cache": false
 		},
 		"typecheck": {
 			"cache": false
 		},
+		"db:generate": {
+			"cache": false
+		},
+		"db:studio": {},
 		"db:push": {
+			"cache": false
+		},
+		"db:pull": {
+			"cache": false
+		},
+		"db:migrate": {
 			"cache": false
 		}
 	}
