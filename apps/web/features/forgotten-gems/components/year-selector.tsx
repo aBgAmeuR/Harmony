@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Calendar, ChevronDown } from "lucide-react";
+import { ArrowRight, Calendar, ChevronsUpDown } from "lucide-react";
 
 import { Badge } from "@repo/ui/components/ui/badge";
 import { Button } from "@repo/ui/components/ui/button";
@@ -36,23 +36,27 @@ export function YearSelector({
 
     const getCurrentSelection = () => {
         if (selectedYear) {
-            return `${selectedYear}`;
+            return <span>{selectedYear}</span>;
         }
         if (selectedYearRange) {
-            return `${selectedYearRange.start}-${selectedYearRange.end}`;
+            return (
+                <div className="flex items-center gap-1">
+                    <span>{selectedYearRange.start}</span>
+                    <ArrowRight className="size-3" />
+                    <span>{selectedYearRange.end}</span>
+                </div>
+            );
         }
-        return "All Years";
+        return <span>All Years</span>;
     };
 
     const handleYearSelect = (year: number) => {
         if (rangeStart !== null) {
-            // Complete range selection
             const start = Math.min(rangeStart, year);
             const end = Math.max(rangeStart, year);
             onYearRangeChange({ start, end });
             setRangeStart(null);
         } else {
-            // Single year selection
             onYearChange(year);
             onYearRangeChange(undefined);
         }
@@ -76,13 +80,12 @@ export function YearSelector({
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
                 <Button variant="outline" disabled={isLoading} size="sm">
-                    <Calendar className="h-4 w-4" />
+                    <Calendar className="size-4" />
                     {getCurrentSelection()}
-                    <ChevronDown className="h-4 w-4" />
+                    <ChevronsUpDown className="size-4 text-muted-foreground" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-                {/* All years option */}
                 <DropdownMenuItem onClick={clearSelection}>
                     <div className="flex w-full items-center justify-between">
                         <span>All Years</span>
@@ -96,16 +99,14 @@ export function YearSelector({
 
                 <DropdownMenuSeparator />
 
-                {/* Range selection helper */}
                 {rangeStart !== null && (
                     <DropdownMenuItem disabled>
                         <span className="text-muted-foreground text-sm">
-                            Select end year (start: {rangeStart})
+                            Select another year
                         </span>
                     </DropdownMenuItem>
                 )}
 
-                {/* Individual years */}
                 {sortedYears.map((yearOption) => {
                     const isSelected = selectedYear === yearOption.year;
                     const isInRange = selectedYearRange &&
