@@ -1,8 +1,8 @@
-export { middleware } from "@repo/auth";
+export { middleware } from "@repo/auth/middleware";
 
 export const config = {
 	matcher: [
-		"/((?!api|_next/static|_next/image|favicon.ico|demo|images|web-app-manifest-512x512.png|web-app-manifest-192x192.png).*)",
+		"/((?!api|_next/static|_next/image|favicon.ico|site.webmanifest|demo|images|web-app-manifest-512x512.png|web-app-manifest-192x192.png|$).*)",
 	],
 	runtime: "nodejs",
 };

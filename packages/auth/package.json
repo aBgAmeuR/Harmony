@@ -6,6 +6,7 @@
 	"dependencies": {
 		"dotenv": "^16.4.7",
 		"@auth/drizzle-adapter": "^1.9.1",
+		"react": "^19.1.0",
 		"next-auth": "^5.0.0-beta.27"
 	},
 	"devDependencies": {
@@ -21,6 +22,9 @@
 		},
 		"./actions": {
 			"default": "./src/actions.ts"
+		},
+		"./middleware": {
+			"default": "./src/middleware.ts"
 		}
 	}
 }

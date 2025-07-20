@@ -121,14 +121,16 @@ export class AuthManager {
 			return account.access_token;
 		}
 
-		// Create a refresh promise that other calls can wait for
-		try {
-			this.refreshPromise = this.refreshTokenAndUpdate(account);
-			return await this.refreshPromise;
-		} finally {
-			// Clear the promise when done, regardless of success or failure
-			this.refreshPromise = null;
+		if (!this.refreshPromise) {
+			this.refreshPromise = (async () => {
+				try {
+					return await this.refreshTokenAndUpdate(account);
+				} finally {
+					this.refreshPromise = null;
+				}
+			})();
 		}
+		return this.refreshPromise;
 	}
 
 	/**

@@ -18,13 +18,13 @@ declare module "next-auth" {
 }
 
 const result = NextAuth({
-	adapter: DrizzleAdapter(db, {
-		usersTable: users,
-		accountsTable: accounts,
-	}),
-	session: {
-		strategy: "jwt",
+	adapter: {
+		...DrizzleAdapter(db, {
+			usersTable: users,
+			accountsTable: accounts,
+		}),
 	},
+	session: { strategy: "jwt" },
 	...authConfig,
 });
 
