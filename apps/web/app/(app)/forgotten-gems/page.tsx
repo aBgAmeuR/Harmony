@@ -1,8 +1,9 @@
 import { QueryClient } from "@tanstack/react-query";
 
+import { getUser } from "@repo/auth";
+
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { getAvailableYears, getForgottenGems } from "~/features/forgotten-gems/data/forgotten-gems-service";
-import { getUserInfos } from "~/lib/utils-server";
 
 import { ForgottenGemsClient } from "./client";
 
@@ -13,7 +14,7 @@ export const metadata = {
 
 
 export default async function ForgottenGemsPage() {
-    const { userId } = await getUserInfos();
+    const { userId } = await getUser();
     const queryClient = new QueryClient()
 
     await queryClient.prefetchQuery({ queryKey: ['available-years', userId], queryFn: () => getAvailableYears(userId) })

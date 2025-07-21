@@ -1,12 +1,11 @@
+import { getUser } from "@repo/auth";
 import { Skeleton } from "@repo/ui/skeleton";
-
-import { getUserInfos } from "~/lib/utils-server";
 
 import { getDateRange, getMinMaxDateRange } from "./date-range";
 import { DateRangeSelectorClient } from "./date-range-selector-client";
 
 export const DateRangeSelector = async () => {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 
 	const [dateRange, minMaxDateRange] = await Promise.all([
 		getDateRange(userId, isDemo),

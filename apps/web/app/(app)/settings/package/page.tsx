@@ -1,5 +1,6 @@
 import { Clock, Layers, LineChart, Sparkles } from "lucide-react";
 
+import { getUser } from "@repo/auth";
 import {
 	Card,
 	CardDescription,
@@ -10,7 +11,6 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { getUserInfos } from "~/lib/utils-server";
 
 import { Client } from "./client";
 import { DocsModal } from "./docs-modal";
@@ -18,7 +18,7 @@ import { HistoryModal } from "./history-modal";
 import { DemoStep } from "./steps-components/demo-step";
 
 export default async function SettingsPackagePage() {
-	const { isDemo } = await getUserInfos();
+	const { isDemo } = await getUser();
 
 	return (
 		<Layout>

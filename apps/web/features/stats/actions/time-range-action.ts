@@ -2,14 +2,13 @@
 
 import { revalidatePath, revalidateTag } from "next/cache";
 
+import { getUser } from "@repo/auth";
 import { db, eq, users } from "@repo/database";
-
-import { getUserInfos } from "~/lib/utils-server";
 
 import type { TimeRange } from "../types/time-range";
 
 export const setTimeRangeAction = async (timeRange: TimeRange) => {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 
 	if (!userId || isDemo) return null;
 

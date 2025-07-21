@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 
+import { getUser } from "@repo/auth";
+
 import {
 	DateRangeSelector,
 	DateRangeSelectorSkeleton,
@@ -29,10 +31,9 @@ import {
 	TopPlatformsChart,
 	TopPlatformsChartSkeleton,
 } from "~/features/listening-habits/components/top-platforms-chart";
-import { getUserInfos } from "~/lib/utils-server";
 
 export default async function StatsListeningHabitsPage() {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 
 	return (
 		<Layout>

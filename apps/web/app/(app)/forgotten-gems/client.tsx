@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Spinner } from "@repo/ui/spinner";
 
-import { ListSkeleton } from "~/components/list-skeleton";
+import { MusicListSkeleton } from "~/components/lists/music-list/skeleton";
 import { ForgottenGemsListMinimal } from "~/features/forgotten-gems/components/forgotten-gems-list-minimal";
 import { YearSelector } from "~/features/forgotten-gems/components/year-selector";
 import { getAvailableYears, getForgottenGems } from "~/features/forgotten-gems/data/forgotten-gems-service";
@@ -57,7 +57,7 @@ export function ForgottenGemsClient({ userId }: ForgottenGemsClientProps) {
                     />
                 </div>
             </div>
-            {isLoading ? <ListSkeleton length={15} /> : <ForgottenGemsListMinimal gems={gems} />}
+            {isLoading ? <MusicListSkeleton length={15} /> : <ForgottenGemsListMinimal gems={gems} />}
         </div>
     );
 }

@@ -1,14 +1,16 @@
+
 import { Suspense } from "react";
+
+import { getUser } from "@repo/auth";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { SelectListLayout } from "~/features/stats/components/select-list-layout";
 import { TimeRangeInfo } from "~/features/stats/components/time-range-info";
 import { TimeRangeSelect, TimeRangeSelectSkeleton } from "~/features/stats/components/time-range-select";
 import { TopTracks } from "~/features/stats/components/top-tracks";
-import { getUserInfos } from "~/lib/utils-server";
 
 export default async function TopTracksPage() {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 
 	return (
 		<Layout>

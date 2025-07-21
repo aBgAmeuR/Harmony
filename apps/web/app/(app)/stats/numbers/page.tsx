@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 
+import { getUser } from "@repo/auth";
+
 import {
 	DateRangeSelector,
 	DateRangeSelectorSkeleton,
@@ -17,10 +19,9 @@ import {
 	NumbersStatsCards,
 	NumbersStatsCardsSkeleton,
 } from "~/features/numbers/components/numbers-stats-cards";
-import { getUserInfos } from "~/lib/utils-server";
 
 export default async function StatsNumbersPage() {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 
 	return (
 		<Layout>

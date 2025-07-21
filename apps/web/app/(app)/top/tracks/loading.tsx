@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { MusicLayoutSkeleton } from "~/components/lists/music-layout/skeleton";
+import { MusicListSkeleton } from "~/components/lists/music-list/skeleton";
 import { SelectListLayoutSkeleton } from "~/features/stats/components/select-list-layout";
 import { TimeRangeSelectSkeleton } from "~/features/stats/components/time-range-select";
 
@@ -16,7 +16,7 @@ export default async function Loading() {
 				<SelectListLayoutSkeleton />
 			</LayoutHeader>
 			<LayoutContent>
-				<MusicLayoutSkeleton layout={listLayout === "grid" ? "grid" : "list"} />
+				<MusicListSkeleton layout={listLayout === "grid" ? "grid" : "list"} />
 			</LayoutContent>
 		</Layout>
 	);

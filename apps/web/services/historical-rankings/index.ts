@@ -1,5 +1,6 @@
 "use server";
 
+import { getUser } from "@repo/auth";
 import {
 	and,
 	db,
@@ -10,10 +11,9 @@ import {
 import { SpotifyAPI } from "@repo/spotify";
 
 import { getTimeRangeStats } from "~/features/stats/data/utils";
-import { getUserInfos } from "~/lib/utils-server";
 
 export async function getHistoricalTrackRankings(trackId: string) {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 	if (!userId) return [];
 
 	const timeRangeStats = await getTimeRangeStats(userId, isDemo);
@@ -54,7 +54,7 @@ export async function getHistoricalTrackRankings(trackId: string) {
 }
 
 export async function getHistoricalArtistRankings(artistId: string) {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 	if (!userId) return [];
 
 	const timeRangeStats = await getTimeRangeStats(userId, isDemo);

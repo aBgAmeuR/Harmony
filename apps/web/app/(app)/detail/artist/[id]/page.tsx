@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 
+import { getUser } from "@repo/auth";
+
 import {
 	Layout,
 	LayoutContent,
@@ -18,7 +20,6 @@ import {
 	DetailTabs,
 	DetailTabsContent,
 } from "~/features/detail/common/components/detail-tabs";
-import { getUserInfos } from "~/lib/utils-server";
 
 interface PageProps {
 	params: Promise<{ id: string }>;
@@ -26,7 +27,7 @@ interface PageProps {
 
 export default async function DetailArtistPage({ params }: PageProps) {
 	const { id } = await params;
-	const { userId } = await getUserInfos();
+	const { userId } = await getUser();
 
 	return (
 		<Layout>

@@ -9,7 +9,7 @@ import {
 } from "@repo/ui/card";
 import { LinkButton } from "@repo/ui/components/link-button";
 
-import { ListSkeleton } from "~/components/list-skeleton";
+import { MusicListSkeleton } from "~/components/lists/music-list/skeleton";
 import { RankingArtists } from "~/features/rankings/components/ranking-artists";
 import type { getRankingArtistsData } from "~/features/rankings/data/ranking-artists";
 
@@ -40,7 +40,7 @@ export const TopArtistsCard = async ({
 				</LinkButton>
 			</CardHeader>
 			<CardContent>
-				<Suspense fallback={<ListSkeleton length={5} />}>
+				<Suspense fallback={<MusicListSkeleton length={5} />}>
 					<RankingArtists
 						data={data}
 						userId={userId}

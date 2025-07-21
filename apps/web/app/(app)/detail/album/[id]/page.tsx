@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 
+import { getUser } from "@repo/auth";
+
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { AlbumHeader, AlbumHeaderSkeleton } from "~/features/detail/album/components/album-header";
 import { ListeningTab } from "~/features/detail/album/components/listening-tab";
 import { StatsTab, StatsTabSkeleton } from "~/features/detail/album/components/stats-tab";
 import { TracksTab } from "~/features/detail/album/components/tracks-tab";
 import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
-import { getUserInfos } from "~/lib/utils-server";
 
 interface PageProps {
 	params: Promise<{ id: string }>;
@@ -14,7 +15,7 @@ interface PageProps {
 
 export default async function DetailAlbumPage({ params }: PageProps) {
 	const { id } = await params;
-	const { userId } = await getUserInfos();
+	const { userId } = await getUser();
 
 	return (
 		<Layout>
