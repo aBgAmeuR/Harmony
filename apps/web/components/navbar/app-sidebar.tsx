@@ -26,7 +26,7 @@ import { data } from "./sidebar-config";
 import { SidebarOptInForm } from "./sidebar-opt-in-form";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
-	user?: User;
+	user: User | null;
 	disable?: boolean;
 };
 
@@ -46,7 +46,7 @@ export function AppSidebar({
 					<div className="px-2">
 						<CommandMenu
 							hasPackage={hasPackage}
-							isDemo={user?.name === "Demo"}
+							isDemo={user?.isDemo}
 						/>
 					</div>
 				)}
@@ -64,9 +64,9 @@ export function AppSidebar({
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
 			<SidebarFooter>
-				{user?.id ? (
+				{user?.userId ? (
 					<>
-						{user.name === "Demo" ? <SidebarOptInForm /> : null}
+						{user.isDemo ? <SidebarOptInForm /> : null}
 						<NavUser user={user} />
 					</>
 				) : (

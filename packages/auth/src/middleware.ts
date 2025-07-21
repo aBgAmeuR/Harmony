@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 
 import authConfig from "./auth.config";
 
-export const middleware = NextAuth(authConfig).auth(async (req) => {
+export const middleware: any = NextAuth(authConfig).auth(async (req) => {
 	const isMaintenance = process.env.APP_MAINTENANCE === "true";
 	const url = req.nextUrl;
 
@@ -11,7 +11,7 @@ export const middleware = NextAuth(authConfig).auth(async (req) => {
 		return Response.redirect(newUrl);
 	}
 	if (!req.auth && !isMaintenance) {
-		const newUrl = new URL("/api/login", url.origin);
+		const newUrl = new URL("/api/signin", url.origin);
 		newUrl.searchParams.set("callbackUrl", url.pathname);
 
 		return Response.redirect(newUrl);

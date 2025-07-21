@@ -1,4 +1,5 @@
 import { cache } from "react";
+import { redirect } from "next/navigation";
 
 import { auth, signIn as legacySignIn, signOut as legacySignOut } from "./auth";
 import type { User } from "./type";
@@ -6,6 +7,16 @@ import type { User } from "./type";
 const demoId = process.env.DEMO_ID;
 
 export const getUser = cache(async (): Promise<User> => {
+	const user = await getUserOrNull();
+
+	if (!user) {
+		redirect("/api/signin");
+	}
+
+	return user;
+});
+
+export const getUserOrNull = cache(async (): Promise<User | null> => {
 	const session = await auth();
 	const userId = session?.user?.id;
 	const username = session?.user?.name;
@@ -13,8 +24,7 @@ export const getUser = cache(async (): Promise<User> => {
 	const hasPackage = session?.user?.hasPackage;
 
 	if (!userId || !username || !email) {
-		signIn();
-		throw new Error("User not found");
+		return null;
 	}
 
 	return {
@@ -29,6 +39,7 @@ export const getUser = cache(async (): Promise<User> => {
 
 export const signIn = async (callbackUrl?: string) => {
 	await legacySignIn("spotify", {
+		redirect: true,
 		redirectTo: callbackUrl ?? "/",
 	});
 };
@@ -37,6 +48,7 @@ export const signInDemo = async (callbackUrl?: string) => {
 	await legacySignIn("credentials", {
 		username: "demo",
 		password: "demo",
+		redirect: true,
 		redirectTo: callbackUrl ?? "/",
 	});
 };

@@ -15,7 +15,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 
-import { signOut } from "@repo/auth/actions";
+import { signOutClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/button";
 import {
 	CommandDialog,
@@ -32,10 +32,7 @@ import { useSidebar } from "@repo/ui/sidebar";
 import { useUserPreferences } from "~/lib/store";
 
 import { Icons } from "../icons";
-import {
-	type SidebarItem,
-	data as sidebarConfig,
-} from "./sidebar-config";
+import { type SidebarItem, data as sidebarConfig } from "./sidebar-config";
 
 type CommandMenuProps = {
 	hasPackage?: boolean;
@@ -147,13 +144,7 @@ export function CommandMenu({
 						)}
 						<CommandItem
 							className="!py-2 cursor-pointer"
-							onSelect={() =>
-								runCommand(() =>
-									signOut({
-										redirectTo: "/",
-									}),
-								)
-							}
+							onSelect={() => runCommand(() => signOutClient())}
 						>
 							<LogOut />
 							{isDemo ? "Exit Demo" : "Log out"}
@@ -188,7 +179,7 @@ export function CommandMenu({
 							<Github className="!size-4" />
 							Github
 						</CommandItem>
-					</CommandGroup> 
+					</CommandGroup>
 				</CommandList>
 				<div className="absolute bottom-[-0.1px] flex h-10 w-full items-center justify-between rounded-b-lg border-border border-t bg-popover p-2">
 					<div className="flex items-center justify-center gap-1">

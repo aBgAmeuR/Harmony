@@ -1,7 +1,7 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError, UTApi } from "uploadthing/server";
 
-import { auth } from "@repo/auth";
+import { getUserOrNull } from "@repo/auth";
 import { db, packages } from "@repo/database";
 
 const f = createUploadthing();
@@ -25,10 +25,10 @@ export const ourFileRouter: FileRouter = {
 		.middleware(async ({ files }) => {
 			if (!files.length) throw new UploadThingError("File invalid");
 
-			const session = await auth();
-			if (!session?.user?.id) throw new UploadThingError("Unauthorized");
+			const user = await getUserOrNull();
+			if (!user) throw new UploadThingError("Unauthorized");
 
-			return { userId: session.user.id };
+			return { userId: user.userId };
 		})
 		.onUploadComplete(async ({ metadata, file }) => {
 			const newPackage = await db

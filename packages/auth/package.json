@@ -1,12 +1,16 @@
 {
 	"name": "@repo/auth",
 	"version": "0.0.0",
-	"private": true,
 	"type": "module",
+	"scripts": {
+		"dev": "tsc --watch",
+		"build": "tsc"
+	},
 	"dependencies": {
 		"dotenv": "^16.4.7",
 		"@auth/drizzle-adapter": "^1.9.1",
 		"react": "^19.1.0",
+		"next": "canary",
 		"next-auth": "^5.0.0-beta.27"
 	},
 	"devDependencies": {
@@ -20,11 +24,11 @@
 		".": {
 			"default": "./src/index.ts"
 		},
-		"./actions": {
-			"default": "./src/actions.ts"
-		},
 		"./middleware": {
 			"default": "./src/middleware.ts"
+		},
+		"./client": {
+			"default": "./src/client.ts"
 		}
 	}
 }

@@ -1,6 +1,8 @@
+"use client";
+
 import { Info } from "lucide-react";
 
-import { signOut } from "@repo/auth/actions";
+import { signOutClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/button";
 import { CardContent } from "@repo/ui/card";
 
@@ -22,19 +24,9 @@ export const DemoStep = () => {
 							history with Harmony.
 						</p>
 					</div>
-					<form
-						action={async () => {
-							"use server";
-							await signOut({
-								redirect: true,
-								redirectTo: "/",
-							});
-						}}
-					>
-						<Button className="w-full" size="sm" type="submit">
-							Exit demo
-						</Button>
-					</form>
+					<Button size="sm" onClick={() => signOutClient()}>
+						Exit demo
+					</Button>
 				</div>
 			</div>
 		</CardContent>

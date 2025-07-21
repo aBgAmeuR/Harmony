@@ -3,11 +3,8 @@
 import { cache } from "react";
 import { redirect } from "next/navigation";
 
-import { auth, type Session } from "@repo/auth";
+import { getUserOrNull } from "@repo/auth";
 import { db, eq, users } from "@repo/database";
-
-export const isDemo = (session: Session | null) =>
-	session?.user?.name === "Demo";
 
 export const getMonthRange = cache(async (userId: string, isDemo: boolean) => {
 	if (isDemo) {
@@ -32,19 +29,16 @@ export const getMonthRange = cache(async (userId: string, isDemo: boolean) => {
 });
 
 export const getUserInfos = cache(async () => {
-	const session = await auth();
-	const userId = session?.user?.id;
-	const isDemo = session?.user?.name === "Demo";
-	const hasPackage = session?.user?.hasPackage;
+	const user = await getUserOrNull();
 
-	if (!userId) {
-		return redirect("/api/login");
+	if (!user) {
+		return redirect("/api/signin");
 	}
 
 	return {
-		userId,
-		isDemo,
-		hasPackage: hasPackage ?? false,
+		userId: user.userId,
+		isDemo: user.isDemo,
+		hasPackage: user.hasPackage,
 	};
 });
 

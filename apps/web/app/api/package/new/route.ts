@@ -29,7 +29,7 @@ export async function POST(req: Request) {
 	const packageSteamer = new PackageStreamer();
 
 	try {
-		const { id: userId } = await isAuthenticatedOrThrow();
+		const { userId } = await isAuthenticatedOrThrow();
 		// await isRateLimitedOrThrow(userId, ONE_DAY_IN_MS);
 		const { packageId } = z
 			.object({ packageId: z.string() })
