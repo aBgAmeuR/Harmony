@@ -2,24 +2,12 @@ import { Suspense } from "react";
 
 import { getUser } from "@repo/auth";
 
-import {
-	Layout,
-	LayoutContent,
-	LayoutHeader,
-} from "~/components/layouts/layout";
-import {
-	ArtistHeader,
-	ArtistHeaderSkeleton,
-} from "~/features/detail/artist/components/artist-header";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { ArtistHeader, ArtistHeaderSkeleton } from "~/features/detail/artist/components/artist-header";
 import { CatalogTab } from "~/features/detail/artist/components/catalog-tab";
-import {
-	StatsTab,
-	StatsTabSkeleton,
-} from "~/features/detail/artist/components/stats-tab";
-import {
-	DetailTabs,
-	DetailTabsContent,
-} from "~/features/detail/common/components/detail-tabs";
+import { MonthlyTracksTab } from "~/features/detail/artist/components/monthly-tracks-tab";
+import { StatsTab, StatsTabSkeleton } from "~/features/detail/artist/components/stats-tab";
+import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
 
 interface PageProps {
 	params: Promise<{ id: string }>;
@@ -38,19 +26,16 @@ export default async function DetailArtistPage({ params }: PageProps) {
 						<ArtistHeader artistId={id} userId={userId} />
 					</Suspense>
 				</div>
-				<DetailTabs
-					tabs={["Statistics", "Monthly Tracks", "Catalog"]}
-					disabledTabs={["Monthly Tracks"]}
-				>
+				<DetailTabs tabs={["Statistics", "Monthly Tracks", "Catalog"]}>
 					<DetailTabsContent value="Statistics">
 						<Suspense fallback={<StatsTabSkeleton />}>
 							<StatsTab artistId={id} userId={userId} />
 						</Suspense>
 					</DetailTabsContent>
 					<DetailTabsContent value="Monthly Tracks">
-						{/* <Suspense>
-							<MonthlyTopTracks dataPromise={getMonthlyTopTracks(userId, id, 5)} />
-						</Suspense> */}
+						<Suspense>
+							<MonthlyTracksTab artistId={id} userId={userId} />
+						</Suspense>
 					</DetailTabsContent>
 					<DetailTabsContent value="Catalog">
 						<Suspense>
