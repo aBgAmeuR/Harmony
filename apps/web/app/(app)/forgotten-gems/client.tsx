@@ -5,8 +5,8 @@ import { useQuery } from "@tanstack/react-query";
 
 import { Spinner } from "@repo/ui/spinner";
 
+import { MusicList } from "~/components/lists/music-list";
 import { MusicListSkeleton } from "~/components/lists/music-list/skeleton";
-import { ForgottenGemsListMinimal } from "~/features/forgotten-gems/components/forgotten-gems-list-minimal";
 import { YearSelector } from "~/features/forgotten-gems/components/year-selector";
 import { getAvailableYears, getForgottenGems } from "~/features/forgotten-gems/data/forgotten-gems-service";
 
@@ -25,14 +25,11 @@ export function ForgottenGemsClient({ userId }: ForgottenGemsClientProps) {
 
     const { data: gems = [], isLoading } = useQuery({
         queryKey: ["forgotten-gems", userId, selectedYear, selectedYearRange],
-        queryFn: async () => await getForgottenGems(userId, {
-            selectedYear,
-            yearRange: selectedYearRange,
-        }),
+        queryFn: async () => await getForgottenGems(userId, selectedYear, selectedYearRange),
     });
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <div>
                     <h1 className="font-bold text-2xl tracking-tight">Forgotten Gems</h1>
@@ -57,7 +54,7 @@ export function ForgottenGemsClient({ userId }: ForgottenGemsClientProps) {
                     />
                 </div>
             </div>
-            {isLoading ? <MusicListSkeleton length={15} /> : <ForgottenGemsListMinimal gems={gems} />}
+            {isLoading ? <MusicListSkeleton length={15} showRank={false} /> : <MusicList data={gems} config={{ label: "Forgotten Gems", showRank: false }} />}
         </div>
     );
 }

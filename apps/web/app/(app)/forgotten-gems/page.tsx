@@ -18,7 +18,7 @@ export default async function ForgottenGemsPage() {
     const queryClient = new QueryClient()
 
     await queryClient.prefetchQuery({ queryKey: ['available-years', userId], queryFn: () => getAvailableYears(userId) })
-    await queryClient.prefetchQuery({ queryKey: ['forgotten-gems', userId, undefined, undefined], queryFn: () => getForgottenGems(userId, {}) })
+    await queryClient.prefetchQuery({ queryKey: ['forgotten-gems', userId, undefined, undefined], queryFn: () => getForgottenGems(userId, undefined, undefined) })
 
     return (
         <Layout>
