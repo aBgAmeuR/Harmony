@@ -7,7 +7,7 @@ export default async function ForgottenGemsPage() {
     return (
         <Layout>
             <LayoutHeader items={["Advanced", "Forgotten Gems"]} />
-            <LayoutContent className="mx-auto w-full max-w-screen-2xl pt-2">
+            <LayoutContent>
                 <Suspense fallback={null}>
                     <ForgottenGems />
                 </Suspense>

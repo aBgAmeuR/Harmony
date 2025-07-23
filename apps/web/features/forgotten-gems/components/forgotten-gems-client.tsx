@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 
+import { LayoutDescription, LayoutTitle } from "~/components/layouts/layout";
 import { MusicLayout } from "~/components/lists/music-layout";
 import { SelectListLayout } from "~/features/stats/components/select-list-layout";
 
@@ -14,6 +15,7 @@ type ForgottenGemsClientProps = {
 
 export const ForgottenGemsClient = ({ forgottenGems }: ForgottenGemsClientProps) => {
     const [selectedYear, setSelectedYear] = useState<number | undefined>();
+    const [sortBy, _setSortBy] = useState<keyof Pick<ForgottenGem, "msPlayed" | "playCount" | "score">>("msPlayed");
 
     const availableYears = useMemo(() => Array.from(new Set(forgottenGems.map((gem) => gem.year))), [forgottenGems]);
     const filteredForgottenGems = useMemo(() => {
@@ -27,12 +29,10 @@ export const ForgottenGemsClient = ({ forgottenGems }: ForgottenGemsClientProps)
         <div className="space-y-4">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="font-bold text-2xl tracking-tight">Forgotten Gems</h1>
-                    <p className="text-muted-foreground text-sm">
-                        Rediscover tracks you loved but haven't played recently
-                    </p>
+                    <LayoutTitle>Forgotten Gems</LayoutTitle>
+                    <LayoutDescription>Rediscover tracks you loved but haven't played recently</LayoutDescription>
                 </div>
-                <div className="flex items-center justify-end gap-2">
+                <div className="flex items-center justify-end gap-1">
                     <YearSelector
                         availableYears={availableYears}
                         selectedYear={selectedYear}
@@ -41,7 +41,7 @@ export const ForgottenGemsClient = ({ forgottenGems }: ForgottenGemsClientProps)
                     <SelectListLayout />
                 </div>
             </div>
-            <MusicLayout data={filteredForgottenGems} config={{ label: "Forgotten Gems" }} />
+            <MusicLayout data={filteredForgottenGems.sort((a, b) => b[sortBy] - a[sortBy]).slice(0, 50)} config={{ label: "Forgotten Gems", showRank: true }} />
         </div>
     );
 };

@@ -5,58 +5,28 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import {
-	and,
-	auth,
-	count,
-	db,
-	desc,
-	gte,
-	lte,
-	sql,
-	tracks,
-} from "@repo/database";
+import { auth, count, db, gte, sql, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
 import { getMsPlayedInMinutes } from "~/lib/utils";
 
 import type { ForgottenGem } from "../types";
 
-export const getAvailableYears = async (
-	userId: string,
-): Promise<{ year: number; label: string }[]> => {
-	const yearStats = await db
-		.select({
-			year: sql<number>`EXTRACT(YEAR FROM ${tracks.timestamp})`,
-			track_count: count(),
-		})
-		.from(tracks)
-		.where(auth(userId))
-		.groupBy(({ year }) => year)
-		.orderBy(({ year }) => desc(year));
-
-	return yearStats.map((stat) => ({
-		year: Number(stat.year),
-		trackCount: Number(stat.track_count),
-		label: `${stat.year} (${Number(stat.track_count).toLocaleString()} tracks)`,
-	}));
-};
-
-interface TrackYearStats {
+type TrackYearStats = {
 	spotifyId: string;
 	year: number;
 	playCount: number;
 	totalTime: bigint;
-}
+};
 
-interface ScoredTrack {
+type ScoredTrack = {
 	spotifyId: string;
 	year: number;
 	playCount: number;
 	totalTime: bigint;
 	score: number;
 	decayFactor: number;
-}
+};
 
 export const getForgottenGems = async (userId: string) => {
 	// "use cache";
@@ -68,21 +38,7 @@ export const getForgottenGems = async (userId: string) => {
 	const DECAY_THRESHOLD = 0.2;
 	const RESULTS_PER_YEAR = 40;
 
-	const availableYears = await getAvailableYears(userId);
-	const yearsToAnalyze = availableYears.map((y) => y.year);
-
-	if (yearsToAnalyze.length === 0) return [];
-
-	// Get per-track, per-year statistics for current and following years
-	const allYearsToQuery = [
-		...yearsToAnalyze,
-		...yearsToAnalyze.map((y) => y + 1), // Include following years for decay analysis
-		...yearsToAnalyze.map((y) => y + 2), // Include year+2 for deeper analysis
-	];
-
-	const trackYearStats = await getTrackYearStats(userId, allYearsToQuery);
-
-	// Group by year for easier processing
+	const trackYearStats = await getTrackYearStats(userId);
 	const statsByYear = trackYearStats.reduce<Record<number, TrackYearStats[]>>(
 		(acc, stat) => {
 			acc[stat.year] ??= [];
@@ -92,10 +48,9 @@ export const getForgottenGems = async (userId: string) => {
 		{},
 	);
 
-	// Process each target year
 	const allScoredTracks: ScoredTrack[] = [];
 
-	for (const year of yearsToAnalyze) {
+	for (const year of [...new Set(trackYearStats.map((stat) => stat.year))]) {
 		const currentYearStats = statsByYear[year] || [];
 		const nextYearStats = statsByYear[year + 1] || [];
 		const year2Stats = statsByYear[year + 2] || [];
@@ -175,7 +130,10 @@ export const getForgottenGems = async (userId: string) => {
 	const finalTracks = Array.from(topTracksByYear.values())
 		.flat()
 		.sort((a, b) => b.score - a.score)
-		.slice(0, RESULTS_PER_YEAR * yearsToAnalyze.length);
+		.slice(
+			0,
+			RESULTS_PER_YEAR * new Set(trackYearStats.map((stat) => stat.year)).size,
+		);
 
 	if (finalTracks.length === 0) return [];
 
@@ -251,19 +209,10 @@ function scoreTrackWithoutDecay(
 	});
 }
 
-/**
- * Get per-track, per-year statistics from the database
- */
-async function getTrackYearStats(
-	userId: string,
-	years: number[],
-): Promise<TrackYearStats[]> {
+async function getTrackYearStats(userId: string): Promise<TrackYearStats[]> {
 	"use cache";
 	cacheLife("days");
 	cacheTag(userId, "forgotten-gems-all-years");
-
-	const minYear = Math.min(...years);
-	const maxYear = Math.max(...years);
 
 	const results = await db
 		.select({
@@ -273,14 +222,8 @@ async function getTrackYearStats(
 			totalTime: sql<bigint>`SUM(${tracks.msPlayed})`,
 		})
 		.from(tracks)
-		.where(
-			and(
-				auth(userId),
-				gte(sql`EXTRACT(YEAR FROM ${tracks.timestamp})`, minYear),
-				lte(sql`EXTRACT(YEAR FROM ${tracks.timestamp})`, maxYear),
-			),
-		)
-		.groupBy(tracks.spotifyId, sql`EXTRACT(YEAR FROM ${tracks.timestamp})`)
+		.where(auth(userId))
+		.groupBy(({ year }) => [tracks.spotifyId, year])
 		.having(({ playCount }) => gte(playCount, 10));
 
 	return results.map((result) => ({
@@ -482,6 +425,8 @@ async function enrichWithSpotifyData(
 					stat2: `${scoredTrack.playCount} plays`,
 					year: scoredTrack.year,
 					score: scoredTrack.score,
+					msPlayed: Number(scoredTrack.totalTime),
+					playCount: scoredTrack.playCount,
 				};
 			})
 			.filter(Boolean) as ForgottenGem[];
