@@ -1,25 +1,16 @@
-
-
-import { getUser } from "@repo/auth";
+import { Suspense } from "react";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-
-import { ForgottenGemsClient } from "./client";
-
-export const metadata = {
-    title: "Forgotten Gems",
-    description: "Rediscover your favorite tracks that you haven't played in a while",
-};
-
+import { ForgottenGems } from "~/features/forgotten-gems/components/forgotten-gems";
 
 export default async function ForgottenGemsPage() {
-    const { userId } = await getUser();
-
     return (
         <Layout>
             <LayoutHeader items={["Advanced", "Forgotten Gems"]} />
             <LayoutContent className="mx-auto w-full max-w-screen-2xl pt-2">
-                <ForgottenGemsClient userId={userId} />
+                <Suspense fallback={null}>
+                    <ForgottenGems />
+                </Suspense>
             </LayoutContent>
         </Layout>
 

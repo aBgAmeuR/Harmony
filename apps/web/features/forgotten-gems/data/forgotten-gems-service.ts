@@ -18,14 +18,13 @@ import {
 } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
-import type { MusicItemCardProps } from "~/components/cards/music-item-card/type";
 import { getMsPlayedInMinutes } from "~/lib/utils";
 
-import type { YearOption } from "../types";
+import type { ForgottenGem } from "../types";
 
 export const getAvailableYears = async (
 	userId: string,
-): Promise<YearOption[]> => {
+): Promise<{ year: number; label: string }[]> => {
 	const yearStats = await db
 		.select({
 			year: sql<number>`EXTRACT(YEAR FROM ${tracks.timestamp})`,
@@ -59,32 +58,18 @@ interface ScoredTrack {
 	decayFactor: number;
 }
 
-export const getForgottenGems = async (
-	userId: string,
-	selectedYear?: number,
-	yearRange?: { start: number; end: number },
-): Promise<MusicItemCardProps["item"][]> => {
-	"use cache";
-	cacheLife("days");
-	cacheTag(userId, "forgotten-gems");
+export const getForgottenGems = async (userId: string) => {
+	// "use cache";
+	// cacheLife("days");
+	// cacheTag(userId, "forgotten-gems");
 
 	let N_MIN = 10;
 	let N_MAX = 50;
 	const DECAY_THRESHOLD = 0.2;
 	const RESULTS_PER_YEAR = 40;
 
-	let yearsToAnalyze: number[];
-	if (selectedYear) {
-		yearsToAnalyze = [selectedYear];
-	} else if (yearRange) {
-		yearsToAnalyze = Array.from(
-			{ length: yearRange.end - yearRange.start + 1 },
-			(_, i) => yearRange.start + i,
-		);
-	} else {
-		const availableYears = await getAvailableYears(userId);
-		yearsToAnalyze = availableYears.map((y) => y.year);
-	}
+	const availableYears = await getAvailableYears(userId);
+	const yearsToAnalyze = availableYears.map((y) => y.year);
 
 	if (yearsToAnalyze.length === 0) return [];
 
@@ -152,10 +137,14 @@ export const getForgottenGems = async (
 
 		// If no forgotten tracks, use all moderate tracks with decay scoring
 		if (forgottenTracks.length === 0) {
-			const allModerateWithDecay = moderateListeningTracks.map(track => ({
+			const allModerateWithDecay = moderateListeningTracks.map((track) => ({
 				...track,
-				nextYearPlays: nextYearStats.find(s => s.spotifyId === track.spotifyId)?.playCount || 0,
-				year2Plays: year2Stats.find(s => s.spotifyId === track.spotifyId)?.playCount || 0,
+				nextYearPlays:
+					nextYearStats.find((s) => s.spotifyId === track.spotifyId)
+						?.playCount || 0,
+				year2Plays:
+					year2Stats.find((s) => s.spotifyId === track.spotifyId)?.playCount ||
+					0,
 			}));
 			const scoredTracks = scoreTrackAdvanced(allModerateWithDecay, year);
 			allScoredTracks.push(...scoredTracks);
@@ -187,7 +176,6 @@ export const getForgottenGems = async (
 		.flat()
 		.sort((a, b) => b.score - a.score)
 		.slice(0, RESULTS_PER_YEAR * yearsToAnalyze.length);
-
 
 	if (finalTracks.length === 0) return [];
 
@@ -464,7 +452,7 @@ function scoreTrackAdvanced(
 async function enrichWithSpotifyData(
 	scoredTracks: ScoredTrack[],
 	userId: string,
-): Promise<MusicItemCardProps["item"][]> {
+): Promise<ForgottenGem[]> {
 	const spotifyIds = scoredTracks.map((track) => track.spotifyId);
 
 	// Set user context for Spotify API
@@ -492,17 +480,11 @@ async function enrichWithSpotifyData(
 					artists: track.artists.map((artist) => artist.name).join(", "),
 					stat1: `${totalMinutes} minutes`,
 					stat2: `${scoredTrack.playCount} plays`,
-					description: (
-						<span
-							key={`${track.id}-description`}
-							className="text-muted-foreground text-xs"
-						>
-							Score: {scoredTrack.score.toFixed(1)}
-						</span>
-					),
+					year: scoredTrack.year,
+					score: scoredTrack.score,
 				};
 			})
-			.filter(Boolean) as MusicItemCardProps["item"][];
+			.filter(Boolean) as ForgottenGem[];
 	} catch (error) {
 		console.error("Error enriching tracks with Spotify data:", error);
 		return [];
