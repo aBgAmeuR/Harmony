@@ -1,6 +1,11 @@
 'use client';
 
 import { useMemo, useState } from "react";
+import { ArrowDownNarrowWideIcon, ArrowUpWideNarrowIcon } from "lucide-react";
+
+import { Button } from "@repo/ui/button";
+import { ButtonGroup } from "@repo/ui/components/button-group";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/select";
 
 import { LayoutDescription, LayoutTitle } from "~/components/layouts/layout";
 import { MusicLayout } from "~/components/lists/music-layout";
@@ -9,13 +14,16 @@ import { SelectListLayout } from "~/features/stats/components/select-list-layout
 import type { ForgottenGem } from "../types";
 import { YearSelector } from "./year-selector";
 
+type SortBy = keyof Pick<ForgottenGem, "msPlayed" | "playCount" | "score">;
+
 type ForgottenGemsClientProps = {
     forgottenGems: ForgottenGem[];
 };
 
 export const ForgottenGemsClient = ({ forgottenGems }: ForgottenGemsClientProps) => {
     const [selectedYear, setSelectedYear] = useState<number | undefined>();
-    const [sortBy, _setSortBy] = useState<keyof Pick<ForgottenGem, "msPlayed" | "playCount" | "score">>("msPlayed");
+    const [sortBy, setSortBy] = useState<SortBy>("msPlayed");
+    const [order, setOrder] = useState<"asc" | "desc">("desc");
 
     const availableYears = useMemo(() => Array.from(new Set(forgottenGems.map((gem) => gem.year))), [forgottenGems]);
     const filteredForgottenGems = useMemo(() => {
@@ -38,6 +46,21 @@ export const ForgottenGemsClient = ({ forgottenGems }: ForgottenGemsClientProps)
                         selectedYear={selectedYear}
                         onYearChange={setSelectedYear}
                     />
+                    <ButtonGroup size="sm">
+                        <Select value={sortBy} onValueChange={(value) => setSortBy(value as SortBy)}>
+                            <SelectTrigger size="sm">
+                                <SelectValue placeholder="Sort by" />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="msPlayed">Most Played</SelectItem>
+                                <SelectItem value="playCount">Least Played</SelectItem>
+                                <SelectItem value="score">Score</SelectItem>
+                            </SelectContent>
+                        </Select>
+                        <Button variant="outline" size="icon" className="size-8!" onClick={() => setOrder(order === "asc" ? "desc" : "asc")}>
+                            {order === "asc" ? <ArrowUpWideNarrowIcon className="size-4" /> : <ArrowDownNarrowWideIcon className="size-4" />}
+                        </Button>
+                    </ButtonGroup>
                     <SelectListLayout />
                 </div>
             </div>

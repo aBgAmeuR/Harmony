@@ -21,7 +21,7 @@ export const YearSelector = ({
             </SelectTrigger>
             <SelectContent className="[&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2 [&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8">
                 <SelectItem value="all">All Years</SelectItem>
-                <SelectSeparator />
+                {availableYears.length > 1 && <SelectSeparator />}
                 {availableYears.sort((a, b) => b - a).map((year) => (
                     <SelectItem key={year} value={year.toString()}>
                         {year}

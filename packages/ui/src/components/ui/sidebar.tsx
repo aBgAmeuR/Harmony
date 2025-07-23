@@ -3,7 +3,6 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { PanelLeftIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/button";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
@@ -24,6 +23,9 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/tooltip";
+
+import { PanelLeftCloseIcon } from "../icons/panel-left-close";
+import { PanelLeftOpenIcon } from "../icons/panel-left-open";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -275,12 +277,15 @@ function SidebarTrigger({
 					}}
 					{...props}
 				>
-					<PanelLeftIcon />
+					{state === "collapsed" ? <PanelLeftOpenIcon /> : <PanelLeftCloseIcon />}
 					<span className="sr-only">Toggle Sidebar</span>
 				</Button>
 			</TooltipTrigger>
 			<TooltipContent side="bottom" align="center" className="[&_span]:hidden">
-				{state === "collapsed" ? "Expand" : "Collapse"}
+				{state === "collapsed" ? "Expand Sidebar" : "Collapse Sidebar"}
+				<kbd className="-translate-y-px ml-1.5 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] font-medium text-[0.625rem] text-muted-foreground/70">
+					⌘{SIDEBAR_KEYBOARD_SHORTCUT.toUpperCase()}
+				</kbd>
 			</TooltipContent>
 		</Tooltip>
 	);
