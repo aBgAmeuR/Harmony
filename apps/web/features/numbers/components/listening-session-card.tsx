@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { Card } from "@repo/ui/card";
 import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -12,16 +13,12 @@ const getMsToHoursAndMinutes = (ms: number) => {
 };
 
 type ListeningSessionCardProps = {
-	userId: string;
-	isDemo: boolean;
 	data?: Awaited<ReturnType<typeof getListeningSessionData>>;
 };
 
-export const ListeningSessionCard = async ({
-	userId,
-	isDemo,
-	data,
-}: ListeningSessionCardProps) => {
+export const ListeningSessionCard = async ({ data }: ListeningSessionCardProps) => {
+	const { userId, isDemo } = await getUser();
+
 	if (!data) {
 		data = await getListeningSessionData(userId, isDemo);
 		if (!data) return null;

@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import type { ChartConfig } from "@repo/ui/chart";
 import { ReusableRadialBarChart } from "@repo/ui/components/charts/radial-bar-chart";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -11,16 +12,12 @@ import {
 import { getShuffleHabitsData } from "../data/shuffle-habits";
 
 type ShuffleHabitsChartComponentProps = {
-	userId: string;
-	isDemo: boolean;
 	data?: Awaited<ReturnType<typeof getShuffleHabitsData>>;
 };
 
-export const ShuffleHabitsChart = async ({
-	userId,
-	isDemo,
-	data,
-}: ShuffleHabitsChartComponentProps) => {
+export const ShuffleHabitsChart = async ({ data }: ShuffleHabitsChartComponentProps) => {
+	const { userId, isDemo } = await getUser();
+
 	if (!data) {
 		data = await getShuffleHabitsData(userId, isDemo);
 		if (!data) return null;

@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { ReusableAreaChart } from "@repo/ui/components/charts/area-chart";
 import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -13,8 +14,6 @@ import { msToHours } from "~/components/charts/utils/time-formatters";
 import { getPlatformUsageData } from "../data/platform-usage";
 
 interface PlatformUsageChartComponentProps {
-	userId: string;
-	isDemo: boolean;
 	data?: {
 		data: Array<{
 			month: string;
@@ -35,11 +34,9 @@ const chartConfig = {
 	desktop: { label: "Desktop", color: "var(--chart-3)" },
 };
 
-export const PlatformUsageChart = async ({
-	userId,
-	isDemo,
-	data,
-}: PlatformUsageChartComponentProps) => {
+export const PlatformUsageChart = async ({ data }: PlatformUsageChartComponentProps) => {
+	const { userId, isDemo } = await getUser();
+
 	if (!data) {
 		data = await getPlatformUsageData(userId, isDemo);
 	}

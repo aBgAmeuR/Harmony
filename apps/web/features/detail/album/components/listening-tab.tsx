@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { ReusableAreaChart } from "@repo/ui/components/charts/area-chart";
 import { ReusableBarChart } from "@repo/ui/components/charts/bar-chart";
 
@@ -11,10 +12,10 @@ import { getListeningTabData } from "../data/listening-tab";
 
 type ListeningTabProps = {
 	albumId: string;
-	userId: string;
 };
 
-export const ListeningTab = async ({ albumId, userId }: ListeningTabProps) => {
+export const ListeningTab = async ({ albumId }: ListeningTabProps) => {
+	const { userId } = await getUser();
 	const data = await getListeningTabData(albumId, userId);
 
 	return (

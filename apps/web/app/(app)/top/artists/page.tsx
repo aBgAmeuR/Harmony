@@ -1,7 +1,5 @@
 import { Suspense } from "react";
 
-import { getUser } from "@repo/auth";
-
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { SelectListLayout } from "~/features/stats/components/select-list-layout";
 import { TimeRangeInfo } from "~/features/stats/components/time-range-info";
@@ -9,19 +7,17 @@ import { TimeRangeSelect, TimeRangeSelectSkeleton } from "~/features/stats/compo
 import { TopArtists } from "~/features/stats/components/top-artists";
 
 export default async function TopArtistsPage() {
-	const { userId, isDemo } = await getUser();
-
 	return (
 		<Layout>
 			<LayoutHeader items={["Stats", "Top", "Artists"]}>
 				<TimeRangeInfo />
 				<Suspense fallback={<TimeRangeSelectSkeleton />}>
-					<TimeRangeSelect userId={userId} isDemo={isDemo} />
+					<TimeRangeSelect />
 				</Suspense>
 				<SelectListLayout />
 			</LayoutHeader>
 			<LayoutContent>
-				<TopArtists userId={userId} isDemo={isDemo} />
+				<TopArtists />
 			</LayoutContent>
 		</Layout>
 	);
