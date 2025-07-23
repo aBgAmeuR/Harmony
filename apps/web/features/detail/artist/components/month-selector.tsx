@@ -29,7 +29,7 @@ export const MonthSelector = ({
                 onClick={() =>
                     setDate(new Date(date.getFullYear(), date.getMonth() - 1))
                 }
-                disabled={date.getTime() < minDate.getTime()}
+                disabled={date.getTime() <= minDate.getTime()}
             >
                 <ArrowLeft className="size-4" />
             </Button>
@@ -61,7 +61,7 @@ export const MonthSelector = ({
                 onClick={() =>
                     setDate(new Date(date.getFullYear(), date.getMonth() + 1))
                 }
-                disabled={date.getTime() > maxDate.getTime()}
+                disabled={date.getTime() >= maxDate.getTime()}
             >
                 <ArrowRight className="size-4" />
             </Button>

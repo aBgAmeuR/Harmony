@@ -20,7 +20,12 @@ type MonthlyTracksTabClientProps = {
 }
 
 export const MonthlyTracksTabClient = ({ monthlyTrends, chartRace }: MonthlyTracksTabClientProps) => {
-    const [date, setDate] = React.useState<Date>(new Date(`${monthlyTrends[0].month}-01`));
+    const getDateFromMonthStr = (monthStr: string) => {
+        const { monthIndex, year } = DateUtils.getMonthIndex(monthStr);
+        return new Date(year, monthIndex, 1);
+    };
+    const initialDate = getDateFromMonthStr(monthlyTrends[0].month);
+    const [date, setDate] = React.useState<Date>(initialDate);
     const artistName = 'artistName'
 
     const { month, tracks } =
@@ -38,8 +43,8 @@ export const MonthlyTracksTabClient = ({ monthlyTrends, chartRace }: MonthlyTrac
                         <MonthSelector
                             date={date}
                             setDate={setDate}
-                            minDate={new Date(`${monthlyTrends[monthlyTrends.length - 1].month}-01`)}
-                            maxDate={new Date(`${monthlyTrends[0].month}-01`)}
+                            minDate={getDateFromMonthStr(monthlyTrends[monthlyTrends.length - 1].month)}
+                            maxDate={getDateFromMonthStr(monthlyTrends[0].month)}
                         />
                     </ChartCardHeaderContent>
                 </ChartCardHeader>
@@ -80,9 +85,9 @@ export const MonthlyTracksTabClient = ({ monthlyTrends, chartRace }: MonthlyTrac
                     artistName,
                 }}
                 availableYears={Array.from(
-                    new Set(monthlyTrends.map((d) => new Date(`${d.month}-01`).getFullYear())),
+                    new Set(monthlyTrends.map((d) => DateUtils.getMonthIndex(d.month).year)),
                 ).sort((a, b) => b - a)}
-                initialYear={new Date(`${monthlyTrends[0].month}-01`).getFullYear()}
+                initialYear={DateUtils.getMonthIndex(monthlyTrends[0].month).year}
                 className="mt-6"
             />
         </div>
