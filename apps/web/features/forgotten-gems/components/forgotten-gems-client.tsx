@@ -14,7 +14,7 @@ import { SelectListLayout } from "~/features/stats/components/select-list-layout
 import type { ForgottenGem } from "../types";
 import { YearSelector } from "./year-selector";
 
-type SortBy = keyof Pick<ForgottenGem, "msPlayed" | "playCount" | "score">;
+type SortBy = keyof Pick<ForgottenGem, "msPlayed" | "playCount">;
 
 type ForgottenGemsClientProps = {
     forgottenGems: ForgottenGem[];
@@ -35,12 +35,12 @@ export const ForgottenGemsClient = ({ forgottenGems }: ForgottenGemsClientProps)
 
     return (
         <div className="space-y-4">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
                 <div>
                     <LayoutTitle>Forgotten Gems</LayoutTitle>
                     <LayoutDescription>Rediscover tracks you loved but haven't played recently</LayoutDescription>
                 </div>
-                <div className="flex items-center justify-end gap-1">
+                <div className="flex flex-wrap items-center gap-1">
                     <YearSelector
                         availableYears={availableYears}
                         selectedYear={selectedYear}
@@ -52,9 +52,8 @@ export const ForgottenGemsClient = ({ forgottenGems }: ForgottenGemsClientProps)
                                 <SelectValue placeholder="Sort by" />
                             </SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="msPlayed">Most Played</SelectItem>
-                                <SelectItem value="playCount">Least Played</SelectItem>
-                                <SelectItem value="score">Score</SelectItem>
+                                <SelectItem value="msPlayed">Most Listened</SelectItem>
+                                <SelectItem value="playCount">Most Played</SelectItem>
                             </SelectContent>
                         </Select>
                         <Button variant="outline" size="icon" className="size-8!" onClick={() => setOrder(order === "asc" ? "desc" : "asc")}>
@@ -64,7 +63,7 @@ export const ForgottenGemsClient = ({ forgottenGems }: ForgottenGemsClientProps)
                     <SelectListLayout />
                 </div>
             </div>
-            <MusicLayout data={filteredForgottenGems.sort((a, b) => b[sortBy] - a[sortBy]).slice(0, 50)} config={{ label: "Forgotten Gems", showRank: true }} />
+            <MusicLayout data={filteredForgottenGems.sort((a, b) => b[sortBy] - a[sortBy] * (order === "asc" ? 1 : -1)).slice(0, 50)} config={{ label: "Forgotten Gems", showRank: true }} />
         </div>
     );
 };

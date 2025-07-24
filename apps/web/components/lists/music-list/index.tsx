@@ -28,7 +28,7 @@ export const MusicList = ({ data, config }: MusicListProps) => {
 
 	return (
 		<div
-			className={cn(layout === "grid" ? "grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" : "flex flex-col space-y-4")}
+			className={cn(layout === "grid" ? "grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5" : "flex flex-col")}
 		>
 			{data.map((item, index) => (
 				<div
