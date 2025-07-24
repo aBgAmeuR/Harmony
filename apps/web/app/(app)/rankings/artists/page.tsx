@@ -1,15 +1,11 @@
 import { Suspense } from "react";
 
-import { getUser } from "@repo/auth";
-
 import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { RankingArtists } from "~/features/rankings/components/ranking-artists";
 import { SelectListLayout } from "~/features/stats/components/select-list-layout";
 
 export default async function RankingsArtistsPage() {
-	const { userId, isDemo } = await getUser();
-
 	return (
 		<Layout>
 			<LayoutHeader items={["Package", "Rankings", "Artists"]}>
@@ -19,7 +15,7 @@ export default async function RankingsArtistsPage() {
 				<SelectListLayout />
 			</LayoutHeader>
 			<LayoutContent>
-				<RankingArtists userId={userId} isDemo={isDemo} />
+				<RankingArtists />
 			</LayoutContent>
 		</Layout>
 	);

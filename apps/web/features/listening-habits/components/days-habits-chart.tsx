@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { ReusableBarChart } from "@repo/ui/components/charts/bar-chart";
 import { Skeleton } from "@repo/ui/skeleton";
 
@@ -10,16 +11,12 @@ import {
 import { getDaysHabitsData } from "../data/days-habits";
 
 type DaysHabitsChartComponentProps = {
-	userId: string;
-	isDemo: boolean;
 	data?: Awaited<ReturnType<typeof getDaysHabitsData>>;
 };
 
-export const DaysHabitsChart = async ({
-	userId,
-	isDemo,
-	data,
-}: DaysHabitsChartComponentProps) => {
+export const DaysHabitsChart = async ({ data }: DaysHabitsChartComponentProps) => {
+	const { userId, isDemo } = await getUser();
+
 	if (!data) {
 		data = await getDaysHabitsData(userId, isDemo);
 		if (!data) return null;

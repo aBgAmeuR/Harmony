@@ -1,7 +1,4 @@
-
 import { Suspense } from "react";
-
-import { getUser } from "@repo/auth";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { SelectListLayout } from "~/features/stats/components/select-list-layout";
@@ -10,19 +7,17 @@ import { TimeRangeSelect, TimeRangeSelectSkeleton } from "~/features/stats/compo
 import { TopTracks } from "~/features/stats/components/top-tracks";
 
 export default async function TopTracksPage() {
-	const { userId, isDemo } = await getUser();
-
 	return (
 		<Layout>
 			<LayoutHeader items={["Stats", "Top", "Tracks"]}>
 				<TimeRangeInfo />
 				<Suspense fallback={<TimeRangeSelectSkeleton />}>
-					<TimeRangeSelect userId={userId} isDemo={isDemo} />
+					<TimeRangeSelect />
 				</Suspense>
 				<SelectListLayout />
 			</LayoutHeader>
 			<LayoutContent>
-				<TopTracks userId={userId} isDemo={isDemo} />
+				<TopTracks />
 			</LayoutContent>
 		</Layout>
 	);

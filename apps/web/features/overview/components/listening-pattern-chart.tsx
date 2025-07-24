@@ -1,5 +1,6 @@
 import { Brain } from "lucide-react";
 
+import { getUser } from "@repo/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { ReusableRadarChart } from "@repo/ui/components/charts/radar-chart";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -8,16 +9,11 @@ import { getListeningPatternData } from "../data/listening-pattern-chart";
 
 type ListeningPatternChartProps = {
 	data?: Awaited<ReturnType<typeof getListeningPatternData>>;
-	userId: string;
-	isDemo: boolean;
 };
 
-export async function ListeningPatternChart({
-	data,
-	userId,
-	isDemo,
-}: ListeningPatternChartProps) {
+export const ListeningPatternChart = async ({ data }: ListeningPatternChartProps) => {
 	if (!data) {
+		const { userId, isDemo } = await getUser();
 		data = await getListeningPatternData(userId, isDemo);
 		if (!data) return null;
 	}

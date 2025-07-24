@@ -199,35 +199,14 @@ export const Demo = () => {
 									</TooltipProvider>
 								</LayoutHeader>
 								<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
-									<StatsCards
-										userId={user.userId}
-										isDemo={true}
-										data={data.topStats}
-									/>
+									<StatsCards data={data.topStats} />
 									<div className="flex flex-col gap-4 md:flex-row">
-										<TimeListenedChart
-											userId={user.userId}
-											isDemo={true}
-											data={data.timeListened}
-											className="flex-1"
-										/>
-										<ListeningPatternChart
-											userId={user.userId}
-											isDemo={true}
-											data={data.listeningPattern}
-										/>
+										<TimeListenedChart data={data.timeListened} className="flex-1" />
+										<ListeningPatternChart data={data.listeningPattern} />
 									</div>
 									<div className="grid gap-4 lg:grid-cols-2">
-										<TopArtistsCard
-											userId={user.userId}
-											isDemo={true}
-											data={data.topArtists}
-										/>
-										<TopTracksCard
-											userId={user.userId}
-											isDemo={true}
-											data={data.topTracks}
-										/>
+										<TopArtistsCard data={data.topArtists} />
+										<TopTracksCard data={data.topTracks} />
 									</div>
 								</div>
 							</main>

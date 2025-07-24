@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { ReusableBarChart } from "@repo/ui/components/charts/bar-chart";
 import { NumberFlow } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -13,19 +14,16 @@ import { msToHours } from "~/lib/utils";
 import { getTimeListenedData } from "../data/time-listened";
 
 type TimeListenedChartProps = {
-	userId: string;
-	isDemo: boolean;
 	data?: Awaited<ReturnType<typeof getTimeListenedData>>;
 	className?: string;
 };
 
 export const TimeListenedChart = async ({
-	userId,
-	isDemo,
 	data,
 	className,
 }: TimeListenedChartProps) => {
 	if (!data) {
+		const { userId, isDemo } = await getUser();
 		data = await getTimeListenedData(userId, isDemo);
 		if (!data) return null;
 	}

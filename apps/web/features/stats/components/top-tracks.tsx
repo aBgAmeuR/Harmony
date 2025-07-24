@@ -1,3 +1,5 @@
+import { getUser } from "@repo/auth";
+
 import { MusicLayout } from "~/components/lists/music-layout";
 import type { MusicListConfig } from "~/components/lists/music-list";
 import { tryCatch } from "~/lib/utils";
@@ -14,12 +16,9 @@ const config = {
 	showHistoricalRankings: true,
 } satisfies MusicListConfig;
 
-type TopTracksProps = {
-	userId: string;
-	isDemo: boolean;
-};
+export const TopTracks = async () => {
+	const { userId, isDemo } = await getUser();
 
-export const TopTracks = async ({ userId, isDemo }: TopTracksProps) => {
 	const { data, error } = await tryCatch(getTopTracks(userId, isDemo));
 
 	if (error?.name === "WhitelistError") {

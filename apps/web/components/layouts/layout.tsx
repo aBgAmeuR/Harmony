@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react";
-import React, { Suspense } from "react";
+import React from "react";
 
 import {
 	Breadcrumb,
@@ -13,7 +13,6 @@ import { Separator } from "@repo/ui/separator";
 import { SidebarTrigger } from "@repo/ui/sidebar";
 
 import { BackBtn } from "../back-btn";
-import { DemoBadge } from "../demo-badge";
 
 export const Layout = ({ children }: PropsWithChildren) => {
 	return children;
@@ -24,7 +23,7 @@ export const LayoutContent = ({
 	className,
 }: PropsWithChildren<{ className?: string }>) => {
 	return (
-		<main className={cn("flex flex-1 flex-col gap-4 p-4 pt-0", className)}>
+		<main className={cn("mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-0", className)}>
 			{children}
 		</main>
 	);
@@ -39,7 +38,7 @@ export const LayoutHeader = ({
 	demo?: boolean;
 }>) => {
 	return (
-		<header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
+		<header className="mx-auto flex h-16 w-full max-w-screen-2xl shrink-0 items-center justify-between gap-2 px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
 			<div className="flex items-center gap-2 ">
 				<SidebarTrigger className="-ml-1" />
 				<BackBtn />
@@ -66,13 +65,29 @@ export const LayoutHeader = ({
 						</BreadcrumbItem>
 					</BreadcrumbList>
 				</Breadcrumb>
-				{demo && (
+				{/* {demo && (
 					<Suspense fallback={null}>
 						<DemoBadge />
 					</Suspense>
-				)}
+				)} */}
 			</div>
 			<div className="flex items-center gap-1">{children}</div>
 		</header>
+	);
+};
+
+export const LayoutTitle = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+	return (
+		<h1 className={cn("font-bold text-2xl tracking-tight", className)}>
+			{children}
+		</h1>
+	);
+};
+
+export const LayoutDescription = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+	return (
+		<p className={cn("text-muted-foreground text-sm", className)}>
+			{children}
+		</p>
 	);
 };

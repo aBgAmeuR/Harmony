@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { ReusablePieChart } from "@repo/ui/components/charts/pie-chart";
 import { Skeleton } from "@repo/ui/skeleton";
 
@@ -11,16 +12,12 @@ import { getMsPlayedInHours } from "~/components/charts/utils/time-formatters";
 import { getTopPlatformsData } from "../data/top-platforms";
 
 type TopPlatformsChartComponentProps = {
-	userId: string;
-	isDemo: boolean;
 	data?: Awaited<ReturnType<typeof getTopPlatformsData>>;
 };
 
-export const TopPlatformsChart = async ({
-	userId,
-	isDemo,
-	data,
-}: TopPlatformsChartComponentProps) => {
+export const TopPlatformsChart = async ({ data }: TopPlatformsChartComponentProps) => {
+	const { userId, isDemo } = await getUser();
+
 	if (!data) {
 		data = await getTopPlatformsData(userId, isDemo);
 		if (!data) return null;

@@ -13,7 +13,7 @@ import { TopArtistsCard } from "~/features/overview/components/top-artists-card"
 import { TopTracksCard } from "~/features/overview/components/top-tracks-card";
 
 export default async function OverviewPage() {
-	const { userId, isDemo, hasPackage } = await getUser();
+	const { hasPackage } = await getUser();
 
 	if (!hasPackage)
 		return (
@@ -34,23 +34,19 @@ export default async function OverviewPage() {
 			</LayoutHeader>
 			<LayoutContent className="mx-auto w-full max-w-screen-2xl pt-2">
 				<Suspense fallback={<StatsCardsSkeleton />}>
-					<StatsCards userId={userId} isDemo={isDemo} />
+					<StatsCards />
 				</Suspense>
 				<div className="flex flex-col gap-4 md:flex-row">
 					<Suspense fallback={<TimeListenedChartSkeleton className="flex-1" />}>
-						<TimeListenedChart
-							userId={userId}
-							isDemo={isDemo}
-							className="flex-1"
-						/>
+						<TimeListenedChart className="flex-1"/>
 					</Suspense>
 					<Suspense fallback={<ListeningPatternChartSkeleton />}>
-						<ListeningPatternChart userId={userId} isDemo={isDemo} />
+						<ListeningPatternChart />
 					</Suspense>
 				</div>
 				<div className="grid gap-4 lg:grid-cols-2">
-					<TopArtistsCard userId={userId} isDemo={isDemo} />
-					<TopTracksCard userId={userId} isDemo={isDemo} />
+					<TopArtistsCard />
+					<TopTracksCard />
 				</div>
 			</LayoutContent>
 		</Layout>
