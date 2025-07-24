@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { and, auth, count, db, gte, lte, sql, tracks } from "@repo/database";
+import { auth, count, db, sql, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { Track } from "@repo/spotify/types";
 
@@ -25,23 +25,28 @@ export const getForgottenGems = async (
 	cacheLife("days");
 	cacheTag(userId, "forgotten-gems");
 
-	const currentYear = new Date().getFullYear();
-
 	const [percentileMap, trackYearStats] = await Promise.all([
 		getPercentiles(userId),
 		getTrackYearStats(userId),
 	]);
 
-	const filtered = trackYearStats.filter((stat) => {
-		if (stat.year === currentYear) return false;
+	const yearPlayByTrack = trackYearStats.reduce((acc, stat) => {
+		const years = acc.get(stat.spotifyId) ?? [];
+		years.push(stat.year);
+		acc.set(stat.spotifyId, years);
+		return acc;
+	}, new Map<string, number[]>());
 
-		const playedInLaterYear = trackYearStats.some(
-			(s) =>
-				s.spotifyId === stat.spotifyId &&
-				s.year > stat.year &&
-				s.year <= currentYear,
-		);
-		if (playedInLaterYear) return false;
+	const filtered = trackYearStats.filter((stat) => {
+		if (
+			stat.playCount < 10 ||
+			stat.playCount > 100 ||
+			stat.year >= new Date().getFullYear()
+		)
+			return false;
+
+		const yearsPlayed = yearPlayByTrack.get(stat.spotifyId);
+		if (yearsPlayed?.some((year) => year > stat.year)) return false;
 
 		const perc = percentileMap.get(stat.year);
 		if (perc && (stat.playCount < perc.p5 || stat.playCount > perc.p20))
@@ -132,8 +137,7 @@ async function getTrackYearStats(userId: string): Promise<TrackYearStats[]> {
 		})
 		.from(tracks)
 		.where(auth(userId))
-		.groupBy(({ year }) => [tracks.spotifyId, year])
-		.having(({ playCount }) => and(gte(playCount, 10), lte(playCount, 100)));
+		.groupBy(({ year }) => [tracks.spotifyId, year]);
 
 	return results.map((result) => ({
 		spotifyId: result.spotifyId,
