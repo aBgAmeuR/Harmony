@@ -1,4 +1,4 @@
-
+import type { Metadata } from "next";
 import Link from "next/link";
 import { MDXRemote } from 'next-mdx-remote-client/rsc'
 
@@ -10,12 +10,17 @@ import { getAllChangelogEntries, getVersionBadgeVariant } from "~/lib/changelog"
 import { config } from "~/lib/config";
 import { getMDXComponents, } from "~/mdx-components";
 
+export const metadata: Metadata = {
+    title: "Changelog",
+    description: "Track the latest updates and improvements to Harmony",
+};
+
 export default function ChangelogPage() {
     const changelog = getAllChangelogEntries();
 
     return (
         <Layout>
-            <LayoutHeader items={["Settings", "Changelog"]} />
+            <LayoutHeader items={["Settings", "Changelog"]} className="max-w-2xl" />
             <div className="container mx-auto max-w-2xl px-6 py-12">
                 <div className="mb-12">
                     <h1 className="mb-2 font-medium text-2xl">Changelog</h1>

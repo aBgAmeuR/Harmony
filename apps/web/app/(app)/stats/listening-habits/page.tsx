@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
 import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
@@ -8,15 +9,20 @@ import { ShuffleHabitsChart, ShuffleHabitsChartSkeleton } from "~/features/liste
 import { SkippedHabitsChart, SkippedHabitsChartSkeleton } from "~/features/listening-habits/components/skipped-habits-chart";
 import { TopPlatformsChart, TopPlatformsChartSkeleton } from "~/features/listening-habits/components/top-platforms-chart";
 
+export const metadata: Metadata = {
+	title: "Stats Listening Habits",
+	description: "Explore your listening habits and patterns",
+};
+
 export default async function StatsListeningHabitsPage() {
 	return (
 		<Layout>
-			<LayoutHeader items={["Package", "Stats", "Listening Habits"]}>
+			<LayoutHeader items={["Package", "Stats", "Listening Habits"]} metadata={metadata}>
 				<Suspense fallback={<DateRangeSelectorSkeleton />}>
 					<DateRangeSelector />
 				</Suspense>
 			</LayoutHeader>
-			<LayoutContent className="mx-auto w-full max-w-6xl lg:flex-row">
+			<LayoutContent className="lg:flex-row">
 				<div className="flex flex-1 flex-col gap-4">
 					<Suspense fallback={<HoursHabitsChartSkeleton />}>
 						<HoursHabitsChart />

@@ -281,7 +281,7 @@ function SidebarTrigger({
 					<span className="sr-only">Toggle Sidebar</span>
 				</Button>
 			</TooltipTrigger>
-			<TooltipContent side="bottom" align="center" className="[&_span]:hidden">
+			<TooltipContent side="bottom" align="center" className="px-2 py-1 text-xs [&_span]:hidden">
 				{state === "collapsed" ? "Expand Sidebar" : "Collapse Sidebar"}
 				<kbd className="-translate-y-px ml-1.5 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] font-medium text-[0.625rem] text-muted-foreground/70">
 					⌘{SIDEBAR_KEYBOARD_SHORTCUT.toUpperCase()}

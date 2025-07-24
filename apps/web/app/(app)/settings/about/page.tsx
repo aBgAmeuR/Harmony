@@ -1,4 +1,5 @@
 import { Github, } from "lucide-react";
+import type { Metadata } from "next";
 
 import { LinkButton } from "@repo/ui/components/link-button";
 
@@ -6,10 +7,15 @@ import { Icons } from "~/components/icons";
 import { Layout, LayoutHeader } from "~/components/layouts/layout";
 import { config } from "~/lib/config";
 
+export const metadata: Metadata = {
+	title: "About",
+	description: "About Harmony, an open-source application that transforms your Spotify listening data into meaningful insights about your music preferences and habits",
+};
+
 export default async function SettingsAboutPage() {
 	return (
 		<Layout>
-			<LayoutHeader items={["Settings", "About"]} />
+			<LayoutHeader items={["Settings", "About"]} className="max-w-2xl" />
 			<div className="container mx-auto max-w-2xl px-6 py-12">
 				<div className="mb-8 text-center">
 					<div className="flex items-center gap-4">
