@@ -10,6 +10,8 @@ import { AppSidebar } from "~/components/navbar/app-sidebar";
 
 import ErrorComponent from "../error";
 
+export const experimental_ppr = true;
+
 export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	const cookieStorage = await cookies();
 	const defaultOpen = cookieStorage.get("sidebar_state")?.value === "true";

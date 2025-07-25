@@ -177,6 +177,34 @@ const YEARS_2015_TO_CURRENT = Array.from(
 	(_, i) => String(2015 + i),
 );
 
+export const getMonthIndex = (
+	monthStr: string,
+): { monthIndex: number; year: number } => {
+	const match = monthStr.match(/^([A-Za-z]+)\s+(\d{4})$/);
+	if (!match) return { monthIndex: -1, year: 0 };
+	const [, monthName, yearStr] = match;
+	const monthIndex = MONTHS.findIndex((m) => m === monthName);
+	return { monthIndex, year: Number.parseInt(yearStr) };
+};
+
+export const generateMonthRange = (
+	first: { monthIndex: number; year: number },
+	last: { monthIndex: number; year: number },
+): string[] => {
+	const result: string[] = [];
+	let y = first.year;
+	let m = first.monthIndex;
+	while (y < last.year || (y === last.year && m <= last.monthIndex)) {
+		result.push(`${MONTHS[m]} ${y}`);
+		m++;
+		if (m > 11) {
+			m = 0;
+			y++;
+		}
+	}
+	return result;
+};
+
 export const DateUtils = {
 	formatDate,
 	addMonths,
@@ -196,4 +224,6 @@ export const DateUtils = {
 	isDateInRange,
 	MONTHS,
 	YEARS_2015_TO_CURRENT,
+	getMonthIndex,
+	generateMonthRange,
 };

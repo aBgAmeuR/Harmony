@@ -1,5 +1,6 @@
 import { Info } from "lucide-react";
 
+import { getUser } from "@repo/auth";
 import { Alert, AlertDescription, AlertTitle } from "@repo/ui/alert";
 import {
 	Carousel,
@@ -16,10 +17,10 @@ import { getCatalogTabData } from "../data/catalog-tab";
 
 type CatalogTabProps = {
 	artistId: string;
-	userId: string;
 };
 
-export const CatalogTab = async ({ artistId, userId }: CatalogTabProps) => {
+export const CatalogTab = async ({ artistId }: CatalogTabProps) => {
+	const { userId } = await getUser();
 	const data = await getCatalogTabData(artistId, userId);
 
 	return (

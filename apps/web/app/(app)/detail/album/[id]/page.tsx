@@ -1,6 +1,5 @@
 import { Suspense } from "react";
-
-import { getUser } from "@repo/auth";
+import type { Metadata } from "next";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { AlbumHeader, AlbumHeaderSkeleton } from "~/features/detail/album/components/album-header";
@@ -9,9 +8,14 @@ import { StatsTab, StatsTabSkeleton } from "~/features/detail/album/components/s
 import { TracksTab } from "~/features/detail/album/components/tracks-tab";
 import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
 
-interface PageProps {
+export const metadata: Metadata = {
+	title: "Album Details",
+	description: "View detailed statistics, trends, and track information for this album.",
+};
+
+type PageProps = {
 	params: Promise<{ id: string }>;
-}
+};
 
 export default async function DetailAlbumPage({ params }: PageProps) {
 	const { id } = await params;

@@ -88,7 +88,7 @@ export function CommandMenu({
 							size={16}
 							aria-hidden="true"
 						/>
-						<span className="@[150px]:block hidden font-normal text-muted-foreground/70">
+						<span className="ml-1.5 @[150px]:block hidden font-normal text-muted-foreground/70">
 							Search
 						</span>
 					</span>
@@ -122,6 +122,11 @@ export function CommandMenu({
 					<CommandGroupSidebar
 						heading="Settings"
 						items={sidebarConfig.settings}
+						runCommand={runCommand}
+					/>
+					<CommandGroupSidebar
+						heading="Advanced"
+						items={sidebarConfig.advanced}
 						runCommand={runCommand}
 					/>
 					<CommandSeparator />
