@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
 
+import { getUser } from "@repo/auth";
+
 import {
 	DetailHeader,
 	DetailHeaderSkeleton,
@@ -10,10 +12,10 @@ import { getArtistHeaderData } from "../data/artist-header";
 
 type ArtistHeaderProps = {
 	artistId: string;
-	userId: string;
 };
 
-export const ArtistHeader = async ({ artistId, userId }: ArtistHeaderProps) => {
+export const ArtistHeader = async ({ artistId }: ArtistHeaderProps) => {
+	const { userId } = await getUser();
 	const artist = await getArtistHeaderData(artistId, userId);
 	if (!artist || !artist.artist) return notFound();
 

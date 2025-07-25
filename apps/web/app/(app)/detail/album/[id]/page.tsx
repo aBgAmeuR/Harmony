@@ -1,7 +1,5 @@
 import { Suspense } from "react";
 
-import { getUser } from "@repo/auth";
-
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { AlbumHeader, AlbumHeaderSkeleton } from "~/features/detail/album/components/album-header";
 import { ListeningTab } from "~/features/detail/album/components/listening-tab";
