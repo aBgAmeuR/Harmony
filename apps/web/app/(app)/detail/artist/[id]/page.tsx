@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { ArtistHeader, ArtistHeaderSkeleton } from "~/features/detail/artist/components/artist-header";
@@ -7,9 +8,14 @@ import { MonthlyTracksTab } from "~/features/detail/artist/components/monthly-tr
 import { StatsTab, StatsTabSkeleton } from "~/features/detail/artist/components/stats-tab";
 import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
 
-interface PageProps {
+export const metadata: Metadata = {
+	title: "Artist",
+	description: "View detailed statistics, trends, and catalog information for this artist.",
+};
+
+type PageProps = {
 	params: Promise<{ id: string }>;
-}
+};
 
 export default async function DetailArtistPage({ params }: PageProps) {
 	const { id } = await params;
