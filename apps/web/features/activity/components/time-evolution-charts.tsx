@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { ReusableLineChart } from "@repo/ui/components/charts/line-chart";
 import { Skeleton } from "@repo/ui/skeleton";
 
@@ -10,16 +11,14 @@ import {
 import { getTimeEvolutionData } from "../data/time-evolution";
 
 type TimeEvolutionChartsProps = {
-	userId: string;
-	isDemo: boolean;
 	data?: Awaited<ReturnType<typeof getTimeEvolutionData>>;
 };
 
 export const TimeEvolutionCharts = async ({
-	userId,
-	isDemo,
 	data,
 }: TimeEvolutionChartsProps) => {
+	const { userId, isDemo } = await getUser();
+
 	if (!data) {
 		data = await getTimeEvolutionData(userId, isDemo);
 		if (!data) return null;

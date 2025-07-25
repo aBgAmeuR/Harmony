@@ -1,5 +1,6 @@
 import { Calendar, Clock, FastForward, Users } from "lucide-react";
 
+import { getUser } from "@repo/auth";
 import { Badge } from "@repo/ui/badge";
 import { Card } from "@repo/ui/card";
 import { NumberFlow, NumbersFlowDate } from "@repo/ui/components/number";
@@ -13,16 +14,12 @@ import { msToHours } from "~/lib/utils";
 import { getNumbersStatsData } from "../data/numbers-stats";
 
 type NumbersStatsCardsProps = {
-	userId: string;
-	isDemo: boolean;
 	data?: Awaited<ReturnType<typeof getNumbersStatsData>>;
 };
 
-export const NumbersStatsCards = async ({
-	userId,
-	isDemo,
-	data,
-}: NumbersStatsCardsProps) => {
+export const NumbersStatsCards = async ({ data }: NumbersStatsCardsProps) => {
+	const { userId, isDemo } = await getUser();
+
 	if (!data) {
 		data = await getNumbersStatsData(userId, isDemo);
 		if (!data) return null;

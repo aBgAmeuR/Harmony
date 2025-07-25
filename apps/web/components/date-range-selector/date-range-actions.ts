@@ -2,12 +2,12 @@
 
 import { revalidatePath, revalidateTag } from "next/cache";
 
-import { getUserInfos } from "~/lib/utils-server";
+import { getUser } from "@repo/auth";
 
 import { getDateRangeSliderData, setDateRange } from "./date-range";
 
 export const setDateRangeAction = async (dateStart: Date, dateEnd: Date) => {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 
 	if (!userId || isDemo) return;
 
@@ -18,7 +18,7 @@ export const setDateRangeAction = async (dateStart: Date, dateEnd: Date) => {
 };
 
 export const getDateRangeSliderDataAction = async () => {
-	const { userId } = await getUserInfos();
+	const { userId } = await getUser();
 
 	if (!userId) return;
 

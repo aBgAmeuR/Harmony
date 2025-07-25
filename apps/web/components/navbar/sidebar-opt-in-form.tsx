@@ -1,4 +1,4 @@
-import { signOut } from "@repo/auth/actions";
+import { signOutClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/button";
 import {
 	Card,
@@ -29,14 +29,7 @@ export function SidebarOptInForm() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="p-2">
-				<form
-					action={async () => {
-						await signOut({
-							redirect: true,
-							redirectTo: "/",
-						});
-					}}
-				>
+				<form action={async () => await signOutClient()}>
 					<Button className="w-full" size="sm" type="submit">
 						Exit demo
 					</Button>

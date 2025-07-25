@@ -1,6 +1,8 @@
+import { getUser } from "@repo/auth";
+
 import { MusicLayout } from "~/components/lists/music-layout";
-import type { MusicListConfig } from "~/components/lists/music-list/config";
-import { tryCatch } from "~/lib/utils-server";
+import type { MusicListConfig } from "~/components/lists/music-list";
+import { tryCatch } from "~/lib/utils";
 
 import { getRecentlyPlayedData } from "../data/recently-played";
 import { WhitelistError as WhitelistErrorComponent } from "./whitelist-error";
@@ -9,11 +11,9 @@ const config = {
 	label: "tracks",
 } satisfies MusicListConfig;
 
-type RecentlyPlayedProps = {
-	userId: string;
-};
+export const RecentlyPlayed = async () => {
+	const { userId } = await getUser();
 
-export const RecentlyPlayed = async ({ userId }: RecentlyPlayedProps) => {
 	const { data, error } = await tryCatch(getRecentlyPlayedData(userId));
 
 	if (error?.name === "WhitelistError") {

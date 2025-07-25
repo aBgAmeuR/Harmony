@@ -1,12 +1,13 @@
 import { Suspense } from "react";
 
+import { getUser } from "@repo/auth";
+
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { AlbumHeader, AlbumHeaderSkeleton } from "~/features/detail/album/components/album-header";
 import { ListeningTab } from "~/features/detail/album/components/listening-tab";
 import { StatsTab, StatsTabSkeleton } from "~/features/detail/album/components/stats-tab";
 import { TracksTab } from "~/features/detail/album/components/tracks-tab";
 import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
-import { getUserInfos } from "~/lib/utils-server";
 
 interface PageProps {
 	params: Promise<{ id: string }>;
@@ -14,7 +15,6 @@ interface PageProps {
 
 export default async function DetailAlbumPage({ params }: PageProps) {
 	const { id } = await params;
-	const { userId } = await getUserInfos();
 
 	return (
 		<Layout>
@@ -22,23 +22,23 @@ export default async function DetailAlbumPage({ params }: PageProps) {
 			<LayoutContent className="px-0">
 				<div className="mx-auto w-full max-w-7xl px-4">
 					<Suspense fallback={<AlbumHeaderSkeleton />}>
-						<AlbumHeader albumId={id} userId={userId} />
+						<AlbumHeader albumId={id} />
 					</Suspense>
 				</div>
 				<DetailTabs tabs={["Statistics", "Tracks", "Listening Trends"]}>
 					<DetailTabsContent value="Statistics">
 						<Suspense fallback={<StatsTabSkeleton />}>
-							<StatsTab albumId={id} userId={userId} />
+							<StatsTab albumId={id} />
 						</Suspense>
 					</DetailTabsContent>
 					<DetailTabsContent value="Tracks">
 						<Suspense>
-							<TracksTab albumId={id} userId={userId} />
+							<TracksTab albumId={id} />
 						</Suspense>
 					</DetailTabsContent>
 					<DetailTabsContent value="Listening Trends">
 						<Suspense>
-							<ListeningTab albumId={id} userId={userId} />
+							<ListeningTab albumId={id} />
 						</Suspense>
 					</DetailTabsContent>
 				</DetailTabs>

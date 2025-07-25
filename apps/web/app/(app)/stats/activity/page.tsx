@@ -1,49 +1,36 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
-import {
-	DateRangeSelector,
-	DateRangeSelectorSkeleton,
-} from "~/components/date-range-selector/date-range-selector";
-import {
-	Layout,
-	LayoutContent,
-	LayoutHeader,
-} from "~/components/layouts/layout";
-import {
-	PlatformUsageChart,
-	PlatformUsageChartSkeleton,
-} from "~/features/activity/components/platform-usage-chart";
-import {
-	TimeEvolutionCharts,
-	TimeEvolutionChartsSkeleton,
-} from "~/features/activity/components/time-evolution-charts";
-import {
-	TimeListenedChart,
-	TimeListenedChartSkeleton,
-} from "~/features/activity/components/time-listened-chart";
-import { getUserInfos } from "~/lib/utils-server";
+import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { PlatformUsageChart, PlatformUsageChartSkeleton } from "~/features/activity/components/platform-usage-chart";
+import { TimeEvolutionCharts, TimeEvolutionChartsSkeleton } from "~/features/activity/components/time-evolution-charts";
+import { TimeListenedChart, TimeListenedChartSkeleton } from "~/features/activity/components/time-listened-chart";
+
+export const metadata: Metadata = {
+	title: "Stats Activity",
+	description: "Track your listening time, platform usage and discover listening trends",
+};
 
 export default async function StatsActivityPage() {
-	const { userId, isDemo } = await getUserInfos();
-
 	return (
 		<Layout>
-			<LayoutHeader items={["Package", "Stats", "Activity"]}>
+			<LayoutHeader items={["Package", "Stats", "Activity"]} metadata={metadata}>
 				<Suspense fallback={<DateRangeSelectorSkeleton />}>
 					<DateRangeSelector />
 				</Suspense>
 			</LayoutHeader>
-			<LayoutContent className="mx-auto w-full max-w-6xl">
+			<LayoutContent>
 				<Suspense fallback={<TimeListenedChartSkeleton />}>
-					<TimeListenedChart userId={userId} isDemo={isDemo} />
+					<TimeListenedChart />
 				</Suspense>
 
 				<Suspense fallback={<PlatformUsageChartSkeleton />}>
-					<PlatformUsageChart userId={userId} isDemo={isDemo} />
+					<PlatformUsageChart />
 				</Suspense>
 
 				<Suspense fallback={<TimeEvolutionChartsSkeleton />}>
-					<TimeEvolutionCharts userId={userId} isDemo={isDemo} />
+					<TimeEvolutionCharts />
 				</Suspense>
 			</LayoutContent>
 		</Layout>

@@ -1,6 +1,6 @@
 import { DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { ListSkeleton } from "~/components/list-skeleton";
+import { MusicLayoutSkeleton } from "~/components/lists/music-layout/skeleton";
 import { SelectListLayoutSkeleton } from "~/features/stats/components/select-list-layout";
 
 export default function Loading() {
@@ -11,7 +11,7 @@ export default function Loading() {
 				<SelectListLayoutSkeleton />
 			</LayoutHeader>
 			<LayoutContent>
-				<ListSkeleton />
+				<MusicLayoutSkeleton />
 			</LayoutContent>
 		</Layout>
 	);

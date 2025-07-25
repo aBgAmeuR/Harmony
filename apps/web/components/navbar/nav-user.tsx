@@ -14,7 +14,7 @@ import {
 import { useTheme } from "next-themes";
 
 import type { User } from "@repo/auth";
-import { signOut } from "@repo/auth/actions";
+import { signOutClient } from "@repo/auth/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
 import {
@@ -58,16 +58,14 @@ export function NavUser({ user }: NavUserProps) {
 	const [deleteConfirmation, setDeleteConfirmation] = useState("");
 	const { showEmail, setShowEmail } = useUserPreferences();
 	const { list_layout, setListLayout } = useListLayout();
-	const isDemo = user.name === "Demo";
+	const isDemo = user.isDemo;
 	const isMounted = useMounted();
 	const { isMobile } = useSidebar();
 
 	const handleDeleteAccount = async () => {
-		if (deleteConfirmation === user.name) {
+		if (deleteConfirmation === user.username) {
 			// await deleteUserAction();
-			await signOut({
-				redirectTo: "/",
-			});
+			await signOutClient();
 		}
 	};
 
@@ -80,16 +78,16 @@ export function NavUser({ user }: NavUserProps) {
 							<SidebarMenuButton
 								size="lg"
 								className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
-								tooltip={user.name ?? user.email ?? 'User'}
+								tooltip={user.username ?? user.email ?? 'User'}
 							>
 								<Avatar className="size-8 rounded-lg">
-									<AvatarImage src={user.image ?? ""} alt={user.name ?? ""} />
+									<AvatarImage src={user.image ?? ""} alt={user.username} />
 									<AvatarFallback className="rounded-lg">
-										{(user.name || user.id)?.slice(0, 2)}
+										{(user.username || user.userId)?.slice(0, 2)}
 									</AvatarFallback>
 								</Avatar>
 								<div className="grid flex-1 text-left text-sm leading-tight">
-									<span className="truncate font-semibold">{user.name}</span>
+									<span className="truncate font-semibold">{user.username}</span>
 									{isMounted && showEmail && user.email ? (
 										<span className="truncate text-muted-foreground text-xs">
 											{user.email}
@@ -111,13 +109,13 @@ export function NavUser({ user }: NavUserProps) {
 							<DropdownMenuLabel className="p-0 font-normal">
 								<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
 									<Avatar className="size-8 rounded-lg">
-										<AvatarImage src={user.image ?? ""} alt={user.name ?? ""} />
+										<AvatarImage src={user.image ?? ""} alt={user.username} />
 										<AvatarFallback className="rounded-lg">
-											{(user.name || user.id)?.slice(0, 2)}
+											{(user.username || user.userId)?.slice(0, 2)}
 										</AvatarFallback>
 									</Avatar>
 									<div className="grid flex-1 text-left text-sm leading-tight">
-										<span className="truncate font-semibold">{user.name}</span>
+										<span className="truncate font-semibold">{user.username}</span>
 										{isMounted && user.email && showEmail ? (
 											<span className="truncate text-muted-foreground text-xs">
 												{user.email}
@@ -132,11 +130,7 @@ export function NavUser({ user }: NavUserProps) {
 									className="flex w-full cursor-pointer items-center justify-start"
 									variant="ghost"
 									size="sm"
-									onClick={() =>
-										signOut({
-											redirectTo: "/",
-										})
-									}
+									onClick={() => signOutClient()}
 								>
 									<LogOut />
 									Log out
@@ -224,7 +218,7 @@ export function NavUser({ user }: NavUserProps) {
 						<div className="space-y-4 py-4">
 							<p className="text-muted-foreground text-sm">
 								To confirm, please type your nickname:{" "}
-								<span className="font-semibold">{user.name}</span>
+								<span className="font-semibold">{user.username}</span>
 							</p>
 							<Input
 								value={deleteConfirmation}
@@ -240,7 +234,7 @@ export function NavUser({ user }: NavUserProps) {
 							<Button
 								variant="destructive"
 								onClick={handleDeleteAccount}
-								disabled={deleteConfirmation !== user.name}
+								disabled={deleteConfirmation !== user.username}
 							>
 								Delete Account
 							</Button>

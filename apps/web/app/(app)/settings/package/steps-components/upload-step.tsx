@@ -10,12 +10,8 @@ type UploadStepProps = {
 	onClientUploadComplete: (packageId: string) => void;
 };
 
-export const UploadStep = ({
-	onClientUploadComplete: callBackFunction,
-}: UploadStepProps) => {
-	const onClientUploadComplete = async (
-		res: Array<{ serverData: { packageId: string } }>,
-	) => {
+export const UploadStep = ({ onClientUploadComplete: callBackFunction }: UploadStepProps) => {
+	const onClientUploadComplete = async (res: Array<{ serverData: { packageId: string } }>) => {
 		if (res && res.length <= 0) return;
 		callBackFunction(res[0].serverData.packageId);
 	};

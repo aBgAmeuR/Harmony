@@ -6,7 +6,6 @@ import { spotify } from "@repo/spotify";
 import type { ArtistSimplified, Track } from "@repo/spotify/types";
 
 import { extractZipAndGetFiles, parseZipFiles } from "~/lib/zip";
-import type { DataType } from "~/types/data";
 
 import { utapi } from "../../uploadthing/core";
 import {
@@ -19,6 +18,30 @@ import { getPackage, setPackageStatus } from "../package-utils";
 import { PackageStreamer, PackageStreamerError } from "./PackageStreamer";
 import type { ProcessedTrack, TrackInfo } from "./types";
 
+type DataType = {
+	ts: string;
+	username: string;
+	platform: string;
+	ms_played: number;
+	conn_country: string;
+	ip_addr_decrypted: string;
+	user_agent_decrypted: string;
+	master_metadata_track_name: string;
+	master_metadata_album_artist_name: string;
+	master_metadata_album_album_name: string;
+	spotify_track_uri: string;
+	episode_name: string;
+	episode_show_name: string;
+	spotify_episode_uri: string;
+	reason_start: string;
+	reason_end: string;
+	shuffle: boolean | null;
+	skipped: boolean | null;
+	offline: boolean | null;
+	offline_timestamp: number;
+	incognito_mode: boolean | null;
+};
+
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
@@ -29,7 +52,7 @@ export async function POST(req: Request) {
 	const packageSteamer = new PackageStreamer();
 
 	try {
-		const { id: userId } = await isAuthenticatedOrThrow();
+		const { userId } = await isAuthenticatedOrThrow();
 		// await isRateLimitedOrThrow(userId, ONE_DAY_IN_MS);
 		const { packageId } = z
 			.object({ packageId: z.string() })

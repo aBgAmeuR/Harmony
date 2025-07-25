@@ -1,6 +1,8 @@
+import { getUser } from "@repo/auth";
+
 import { MusicLayout } from "~/components/lists/music-layout";
-import type { MusicListConfig } from "~/components/lists/music-list/config";
-import { tryCatch } from "~/lib/utils-server";
+import type { MusicListConfig } from "~/components/lists/music-list";
+import { tryCatch } from "~/lib/utils";
 import { getHistoricalArtistRankings } from "~/services/historical-rankings";
 
 import { getTopArtists } from "../data/top-artists";
@@ -14,12 +16,9 @@ const config = {
 	showHistoricalRankings: true,
 } satisfies MusicListConfig;
 
-type TopArtistsProps = {
-	userId: string;
-	isDemo: boolean;
-};
+export const TopArtists = async () => {
+	const { userId, isDemo } = await getUser();
 
-export const TopArtists = async ({ userId, isDemo }: TopArtistsProps) => {
 	const { data, error } = await tryCatch(getTopArtists(userId, isDemo));
 
 	if (error?.name === "WhitelistError") {

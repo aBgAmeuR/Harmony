@@ -1,12 +1,9 @@
 import {
-	ArrowRightLeft,
 	Binary,
-	CalendarRange,
 	ChartNoAxesCombined,
+	GemIcon,
 	Github,
 	type LucideIcon,
-	Milestone,
-	UsersRound,
 } from "lucide-react";
 
 import { AudioLinesIcon } from "@repo/ui/icons/audio-lines";
@@ -22,8 +19,9 @@ import { TrendingUpIcon } from "@repo/ui/icons/trending-up";
 import { TrendingUpDownIcon } from "@repo/ui/icons/trending-up-down";
 import { UserIcon } from "@repo/ui/icons/user";
 
-import { Icons } from "../icons";
 import { config } from "~/lib/config";
+
+import { Icons } from "../icons";
 
 export type SidebarItem = {
 	title: string;
@@ -135,27 +133,32 @@ export const data: SidebarConfig = {
 	],
 	advanced: [
 		{
-			title: "Milestones",
-			url: "/milestones",
-			icon: Milestone,
+			title: "Forgotten Gems",
+			url: "/forgotten-gems",
+			icon: GemIcon as LucideIcon,
 		},
-		{
-			title: "Comparisons",
-			url: "/comparisons",
-			icon: ArrowRightLeft,
-			items: [
-				{
-					title: "Year-over-Year",
-					url: "/comparisons/year-over-year",
-					icon: CalendarRange,
-				},
-				{
-					title: "Artist vs Artist",
-					url: "/comparisons/artist-vs-artist",
-					icon: UsersRound,
-				},
-			],
-		},
+		// {
+		// 	title: "Milestones",
+		// 	url: "/milestones",
+		// 	icon: Milestone,
+		// },
+		// {
+		// 	title: "Comparisons",
+		// 	url: "/comparisons",
+		// 	icon: ArrowRightLeft,
+		// 	items: [
+		// 		{
+		// 			title: "Year-over-Year",
+		// 			url: "/comparisons/year-over-year",
+		// 			icon: CalendarRange,
+		// 		},
+		// 		{
+		// 			title: "Artist vs Artist",
+		// 			url: "/comparisons/artist-vs-artist",
+		// 			icon: UsersRound,
+		// 		},
+		// 	],
+		// },
 	],
 	settings: [
 		{

@@ -7,6 +7,7 @@ import {
 	TrendingUp,
 } from "lucide-react";
 
+import { getUser } from "@repo/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { Skeleton } from "@repo/ui/skeleton";
 
@@ -16,10 +17,10 @@ import { getStatsTabData } from "../data/stats-tab";
 
 type StatsTabProps = {
 	albumId: string;
-	userId: string;
 };
 
-export const StatsTab = async ({ albumId, userId }: StatsTabProps) => {
+export const StatsTab = async ({ albumId }: StatsTabProps) => {
+	const { userId } = await getUser();
 	const stats = await getStatsTabData(albumId, userId);
 
 	return (

@@ -1,5 +1,6 @@
 import { Clock, Headphones, Music, Users } from "lucide-react";
 
+import { getUser } from "@repo/auth";
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { NumberFlow, NumbersFlowDate } from "@repo/ui/components/number";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -10,12 +11,11 @@ import { getStatsCardsData } from "../data/stats-cards";
 
 type StatsCardsProps = {
 	data?: Awaited<ReturnType<typeof getStatsCardsData>>;
-	userId: string;
-	isDemo: boolean;
 };
 
-export const StatsCards = async ({ data, userId, isDemo }: StatsCardsProps) => {
+export const StatsCards = async ({ data }: StatsCardsProps) => {
 	if (!data) {
+		const { userId, isDemo } = await getUser();
 		data = await getStatsCardsData(userId, isDemo);
 		if (!data) return null;
 	}

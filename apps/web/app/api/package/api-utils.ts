@@ -2,10 +2,8 @@
 
 import { NextResponse } from "next/server";
 
-import { auth, type User } from "@repo/auth";
+import { getUserOrNull } from "@repo/auth";
 import { db } from "@repo/database";
-
-import { isDemo } from "~/lib/utils-server";
 
 export class ApiError extends Error {
 	constructor(
@@ -16,14 +14,14 @@ export class ApiError extends Error {
 	}
 }
 
-export async function isAuthenticatedOrThrow(): Promise<User & { id: string }> {
-	const session = await auth();
+export async function isAuthenticatedOrThrow() {
+	const user = await getUserOrNull();
 
-	if (!session?.user?.id || isDemo(session)) {
+	if (!user || user.isDemo) {
 		throw new ApiError("Not authenticated", 401);
 	}
 
-	return session.user as User & { id: string };
+	return user;
 }
 
 export async function isRateLimitedOrThrow(userId: string, time: number) {

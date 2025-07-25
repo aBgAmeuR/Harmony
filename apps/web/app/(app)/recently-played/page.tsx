@@ -1,18 +1,22 @@
+import type { Metadata } from "next";
+
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { RecentlyPlayed } from "~/features/stats/components/recently-played";
 import { SelectListLayout } from "~/features/stats/components/select-list-layout";
-import { getUserInfos } from "~/lib/utils-server";
+
+export const metadata: Metadata = {
+	title: "Recently Played",
+	description: "Discover your recently played tracks on Spotify",
+};
 
 export default async function RecentlyPlayedPage() {
-	const { userId } = await getUserInfos();
-
 	return (
 		<Layout>
-			<LayoutHeader items={["Stats", "Recently Played"]}>
+			<LayoutHeader items={["Stats", "Recently Played"]} metadata={metadata}>
 				<SelectListLayout />
 			</LayoutHeader>
 			<LayoutContent>
-				<RecentlyPlayed userId={userId} />
+				<RecentlyPlayed />
 			</LayoutContent>
 		</Layout>
 	);

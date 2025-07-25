@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import type { ChartConfig } from "@repo/ui/chart";
 import { ReusableRadialBarChart } from "@repo/ui/components/charts/radial-bar-chart";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -11,16 +12,12 @@ import {
 import { getSkippedHabitsData } from "../data/skipped-habits";
 
 type SkippedHabitsChartComponentProps = {
-	userId: string;
-	isDemo: boolean;
 	data?: Awaited<ReturnType<typeof getSkippedHabitsData>>;
 };
 
-export const SkippedHabitsChart = async ({
-	userId,
-	isDemo,
-	data,
-}: SkippedHabitsChartComponentProps) => {
+export const SkippedHabitsChart = async ({ data }: SkippedHabitsChartComponentProps) => {
+	const { userId, isDemo } = await getUser();
+
 	if (!data) {
 		data = await getSkippedHabitsData(userId, isDemo);
 		if (!data) return null;

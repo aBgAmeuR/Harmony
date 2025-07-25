@@ -3,7 +3,7 @@
 import { useTransition } from "react";
 import { LoaderCircle } from "lucide-react";
 
-import { signIn } from "@repo/auth/actions";
+import { signInDemoClient } from "@repo/auth/client";
 import { Button, type buttonVariants } from "@repo/ui/button";
 import { cn, type VariantProps } from "@repo/ui/lib/utils";
 
@@ -15,16 +15,8 @@ type GetDemoBtnProps = {
 export const GetDemoBtn = ({ label, ...props }: GetDemoBtnProps) => {
 	const [isTransition, transition] = useTransition();
 
-	const onClick = () => {
-		transition(async () => {
-			await signIn("credentials", {
-				username: "demo",
-				password: "demo",
-				redirect: true,
-				redirectTo: "/settings/about",
-			});
-		});
-	};
+	const onClick = () =>
+		transition(async () => await signInDemoClient());
 
 	return (
 		<Button
