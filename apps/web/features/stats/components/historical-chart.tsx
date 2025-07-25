@@ -22,7 +22,7 @@ export function HistoricalChart({ data }: HistoricalChartProps) {
 		<ReusableLineChart
 			data={chartData}
 			xAxisDataKey="date"
-			lineDataKey="rank"
+			lineDataKeys={["rank"]}
 			config={{ rank: { label: "Rank", color: "var(--chart-1)" } }}
 			yAxisReversed={true}
 			yAxisDomain={[1, 50]}

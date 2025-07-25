@@ -52,7 +52,7 @@ export const ListeningTab = async ({ albumId }: ListeningTabProps) => {
 							data={data.timeDistribution}
 							showYAxis={false}
 							xAxisDataKey="hour"
-							barDataKey="msPlayed"
+							barDataKeys={["msPlayed"]}
 							config={{
 								msPlayed: { label: "Time Played", color: "var(--chart-1)" },
 							}}
@@ -74,7 +74,7 @@ export const ListeningTab = async ({ albumId }: ListeningTabProps) => {
 							data={data.topDays}
 							showYAxis={false}
 							xAxisDataKey="date"
-							barDataKey="msPlayed"
+							barDataKeys={["msPlayed"]}
 							config={{
 								msPlayed: { label: "Time Played", color: "var(--chart-2)" },
 							}}

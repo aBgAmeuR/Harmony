@@ -1,8 +1,11 @@
 import {
+	ArrowRightLeft,
 	Binary,
+	CalendarRange,
 	ChartNoAxesCombined,
 	GemIcon,
 	Github,
+	UsersRound,
 	type LucideIcon,
 } from "lucide-react";
 
@@ -142,23 +145,23 @@ export const data: SidebarConfig = {
 		// 	url: "/milestones",
 		// 	icon: Milestone,
 		// },
-		// {
-		// 	title: "Comparisons",
-		// 	url: "/comparisons",
-		// 	icon: ArrowRightLeft,
-		// 	items: [
-		// 		{
-		// 			title: "Year-over-Year",
-		// 			url: "/comparisons/year-over-year",
-		// 			icon: CalendarRange,
-		// 		},
-		// 		{
-		// 			title: "Artist vs Artist",
-		// 			url: "/comparisons/artist-vs-artist",
-		// 			icon: UsersRound,
-		// 		},
-		// 	],
-		// },
+		{
+			title: "Comparisons",
+			url: "/comparisons",
+			icon: ArrowRightLeft,
+			items: [
+				{
+					title: "Year-over-Year",
+					url: "/comparisons/year-over-year",
+					icon: CalendarRange,
+				},
+				{
+					title: "Artist vs Artist",
+					url: "/comparisons/artist-vs-artist",
+					icon: UsersRound,
+				},
+			],
+		},
 	],
 	settings: [
 		{
