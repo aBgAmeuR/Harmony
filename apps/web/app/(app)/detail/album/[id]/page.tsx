@@ -9,7 +9,7 @@ import { TracksTab } from "~/features/detail/album/components/tracks-tab";
 import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
 
 export const metadata: Metadata = {
-	title: "Album",
+	title: "Album Details",
 	description: "View detailed statistics, trends, and track information for this album.",
 };
 

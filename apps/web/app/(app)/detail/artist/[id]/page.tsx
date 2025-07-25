@@ -9,7 +9,7 @@ import { StatsTab, StatsTabSkeleton } from "~/features/detail/artist/components/
 import { DetailTabs, DetailTabsContent } from "~/features/detail/common/components/detail-tabs";
 
 export const metadata: Metadata = {
-	title: "Artist",
+	title: "Artist Details",
 	description: "View detailed statistics, trends, and catalog information for this artist.",
 };
 
