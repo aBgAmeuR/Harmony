@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from "react";
-import { ArrowDownNarrowWideIcon, ArrowUpWideNarrowIcon } from "lucide-react";
+import { ArrowDownWideNarrowIcon, ArrowUpNarrowWideIcon, } from "lucide-react";
 
 import { Button } from "@repo/ui/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
@@ -57,13 +57,13 @@ export const ForgottenGemsClient = ({ forgottenGems }: ForgottenGemsClientProps)
                             </SelectContent>
                         </Select>
                         <Button variant="outline" size="icon" className="size-8!" onClick={() => setOrder(order === "asc" ? "desc" : "asc")}>
-                            {order === "asc" ? <ArrowUpWideNarrowIcon className="size-4" /> : <ArrowDownNarrowWideIcon className="size-4" />}
+                            {order === "asc" ? <ArrowUpNarrowWideIcon className="size-4" /> : <ArrowDownWideNarrowIcon className="size-4" />}
                         </Button>
                     </ButtonGroup>
                     <SelectListLayout />
                 </div>
             </div>
-            <MusicLayout data={filteredForgottenGems.sort((a, b) => b[sortBy] - a[sortBy] * (order === "asc" ? 1 : -1)).slice(0, 50)} config={{ label: "Forgotten Gems", showRank: true }} />
+            <MusicLayout data={[...filteredForgottenGems].sort((a, b) => order === "asc" ? a[sortBy] - b[sortBy] : b[sortBy] - a[sortBy]).slice(0, 50)} config={{ label: "Forgotten Gems", showRank: true }} />
         </div>
     );
 };

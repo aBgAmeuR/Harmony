@@ -1,5 +1,5 @@
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { MusicListSkeleton } from "~/components/lists/music-list/skeleton";
+import { MusicLayoutSkeleton } from "~/components/lists/music-layout/skeleton";
 import { SelectListLayoutSkeleton } from "~/features/stats/components/select-list-layout";
 
 export default function Loading() {
@@ -9,7 +9,7 @@ export default function Loading() {
 				<SelectListLayoutSkeleton />
 			</LayoutHeader>
 			<LayoutContent>
-				<MusicListSkeleton showRank={false} />
+				<MusicLayoutSkeleton showRank={false} />
 			</LayoutContent>
 		</Layout>
 	);

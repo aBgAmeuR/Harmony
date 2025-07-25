@@ -23,7 +23,6 @@ const nextConfig: NextConfig = {
 			dynamic: 30,
 			static: 180,
 		},
-		nodeMiddleware: true,
 		clientSegmentCache: true,
 		reactCompiler: true,
 		cacheComponents: true,
