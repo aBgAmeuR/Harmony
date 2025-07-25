@@ -11,26 +11,26 @@ type TopItemsCardsProps = {
 };
 
 function transformArtistsToMusicItems(artists: YearMetrics['topArtists']): MusicItemCardProps['item'][] {
-    return artists.map((artist, index) => ({
+    return artists.map((artist) => ({
         id: artist.id,
         name: artist.name,
         href: `https://open.spotify.com/artist/${artist.id}`,
         image: artist.image,
         artists: "", // Artists don't have sub-artists
         stat1: `${artist.plays} plays`,
-        stat2: `#${index + 1}`,
+        stat2: `${(artist.msPlayed / 1000 / 60).toFixed(2)} min`,
     }));
 }
 
 function transformTracksToMusicItems(tracks: YearMetrics['topTracks']): MusicItemCardProps['item'][] {
-    return tracks.map((track, index) => ({
+    return tracks.map((track) => ({
         id: track.id,
         name: track.name,
         href: `https://open.spotify.com/track/${track.id}`,
         image: track.image,
         artists: track.artists.join(", "),
         stat1: `${track.plays} plays`,
-        stat2: `#${index + 1}`,
+        stat2: `${(track.msPlayed / 1000 / 60).toFixed(2)} min`,
     }));
 }
 

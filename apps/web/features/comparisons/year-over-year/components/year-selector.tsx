@@ -1,10 +1,13 @@
 'use client';
 
 import { useQuery } from "@tanstack/react-query";
-import { Calendar } from "lucide-react";
+import { ArrowRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { parseAsInteger, useQueryState } from 'nuqs';
 
+import { buttonVariants } from "@repo/ui/button";
+import { ButtonGroup } from "@repo/ui/components/button-group";
+import { cn } from "@repo/ui/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/select";
 import { Skeleton } from "@repo/ui/skeleton";
 
@@ -18,8 +21,8 @@ const useAvailableYears = () => useQuery({
 });
 
 export const YearSelector = () => {
-    const [year1, setYear1] = useQueryState('year1', parseAsInteger);
-    const [year2, setYear2] = useQueryState('year2', parseAsInteger);
+    const [year1, setYear1] = useQueryState('year1', parseAsInteger.withDefault(new Date().getFullYear()));
+    const [year2, setYear2] = useQueryState('year2', parseAsInteger.withDefault(new Date().getFullYear() - 1));
     const { data: availableYears, isLoading } = useAvailableYears();
     const router = useRouter();
 
@@ -27,14 +30,13 @@ export const YearSelector = () => {
     if (!availableYears || availableYears.length < 1) return null;
 
     return (
-        <>
+        <ButtonGroup>
             <Select value={year1?.toString()} onValueChange={(v) => {
                 setYear1(parseInt(v));
                 router.refresh();
             }}>
                 <SelectTrigger size='sm'>
-                    <Calendar className="size-4 text-muted-foreground" />
-                    <SelectValue placeholder="Year 1" />
+                    <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                     {availableYears.map((y) => (
@@ -44,13 +46,15 @@ export const YearSelector = () => {
                     ))}
                 </SelectContent>
             </Select>
+            <div className={cn(buttonVariants({ variant: "outline", size: "icon" }), "flex size-8! items-center justify-center p-0!")}>
+                <ArrowRightIcon className="size-4 text-muted-foreground" />
+            </div>
             <Select value={year2?.toString()} onValueChange={(v) => {
                 setYear2(parseInt(v));
                 router.refresh();
             }}>
                 <SelectTrigger size='sm'>
-                    <Calendar className="size-4 text-muted-foreground" />
-                    <SelectValue placeholder="Year 2" />
+                    <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
                     {availableYears.map((y) => (
@@ -60,7 +64,7 @@ export const YearSelector = () => {
                     ))}
                 </SelectContent>
             </Select>
-        </>
+        </ButtonGroup>
     );
 };
 

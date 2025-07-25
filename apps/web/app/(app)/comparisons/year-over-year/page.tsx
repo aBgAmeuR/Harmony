@@ -11,12 +11,12 @@ export const metadata: Metadata = {
 	description: "Compare your listening habits across years",
 };
 
-export const yearSearchParams = {
-	year1: parseAsInteger,
-	year2: parseAsInteger
+const yearSearchParams = {
+	year1: parseAsInteger.withDefault(new Date().getFullYear()),
+	year2: parseAsInteger.withDefault(new Date().getFullYear() - 1)
 }
 
-export const loadSearchParams = createLoader(yearSearchParams)
+const loadSearchParams = createLoader(yearSearchParams)
 
 export default async function ComparisonsYearOverYearPage({ searchParams }: { searchParams: Promise<{ year1?: string; year2?: string }> }) {
 	const { year1, year2 } = await loadSearchParams(searchParams);

@@ -1,23 +1,27 @@
-import {
-	unstable_cacheLife as cacheLife,
-	unstable_cacheTag as cacheTag,
-} from "next/cache";
-
 import { auth, count, db, desc, sql, sum, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { Artist, Track } from "@repo/spotify/types";
+
+import { DateUtils } from "~/lib/date-utils";
 
 export interface YearMetrics {
 	year: number;
 	totalListeningTime: number;
 	numStreams: number;
-	topArtists: { id: string; name: string; image?: string; plays: number }[];
+	topArtists: {
+		id: string;
+		name: string;
+		image?: string;
+		plays: number;
+		msPlayed: number;
+	}[];
 	topTracks: {
 		id: string;
 		name: string;
 		artists: string[];
 		image?: string;
 		plays: number;
+		msPlayed: number;
 	}[];
 	monthly: { month: string; listeningTime: number; streams: number }[];
 }
@@ -27,9 +31,9 @@ export async function getYearMetrics(
 	year: number,
 	limit = 5,
 ): Promise<YearMetrics> {
-	"use cache";
-	cacheLife("days");
-	cacheTag(userId, `year-metrics-${year}`);
+	// "use cache";
+	// cacheLife("days");
+	// cacheTag(userId, `year-metrics-${year}`);
 
 	const whereClause = auth(userId, {
 		monthRange: {
@@ -104,6 +108,7 @@ export async function getYearMetrics(
 			name: info?.name ?? "",
 			image: info?.images?.[0]?.url,
 			plays: a.plays,
+			msPlayed: Number(a.time ?? 0),
 		};
 	});
 
@@ -118,13 +123,23 @@ export async function getYearMetrics(
 			artists: info?.artists.map((ar) => ar.name) ?? [],
 			image: info?.album.images?.[0]?.url,
 			plays: t.plays,
+			msPlayed: Number(t.time ?? 0),
 		};
 	});
 
-	const monthly = monthlyRaw.map((m) => ({
-		month: m.month,
-		listeningTime: Number(m.time ?? 0),
-		streams: m.streams,
+	const monthlyMap = new Map(
+		monthlyRaw.map((m) => [
+			m.month.trim(),
+			{
+				listeningTime: Number(m.time ?? 0),
+				streams: m.streams,
+			},
+		]),
+	);
+
+	const monthly = DateUtils.MONTHS.map((month) => ({
+		month,
+		...(monthlyMap.get(month) ?? { listeningTime: 0, streams: 0 }),
 	}));
 
 	return {
