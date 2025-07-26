@@ -12,7 +12,7 @@ import {
 	StepperTitle,
 } from "@repo/ui/stepper";
 
-import type { ProcessingStepType } from "~/app/api/package/new/PackageStreamer";
+import type { ProcessingStepType } from "../package-streamer";
 
 type ProcessingStepProps = {
 	processingProgress: number;

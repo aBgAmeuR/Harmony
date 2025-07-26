@@ -47,17 +47,6 @@ export async function isRateLimitedOrThrow(userId: string, time: number) {
 	}
 }
 
-export function createJsonResponse(
-	message: string,
-	status = 200,
-	data?: unknown,
-): NextResponse {
-	return NextResponse.json(
-		{ message, ...(data ? { data } : undefined) },
-		{ status },
-	);
-}
-
 /**
  * Splits an array into batches of specified size
  */

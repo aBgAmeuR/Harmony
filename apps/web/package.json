@@ -37,7 +37,8 @@
 		"recharts": "^2.14.1",
 		"uploadthing": "^7.5.2",
 		"zod": "^3.24.2",
-		"zustand": "^5.0.2"
+		"zustand": "^5.0.2",
+		"hono": "^4.8.9"
 	},
 	"devDependencies": {
 		"@repo/auth": "workspace:*",
@@ -49,6 +50,7 @@
 		"@types/node": "^22",
 		"@types/react": "19.1.0",
 		"@types/react-dom": "19.1.0",
+		"api": "workspace:*",
 		"jest": "^29.7.0",
 		"postcss": "^8",
 		"tailwindcss": "^4.0.8",

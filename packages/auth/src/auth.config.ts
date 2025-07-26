@@ -53,10 +53,8 @@ export default {
 	},
 	pages: {
 		error: "/error",
-		signIn: "/",
-		signOut: "/",
-		newUser: "/",
-		verifyRequest: "/",
+		signIn: "/signin",
+		signOut: "/signout",
 	},
 	session: {
 		strategy: "jwt",

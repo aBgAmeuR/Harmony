@@ -1,13 +1,13 @@
 import { redirect } from "next/navigation";
 
 export const signOutClient = async () => {
-	redirect("/api/signout");
+	redirect("/signout");
 };
 
 export const signInClient = async () => {
-	redirect("/api/signin");
+	redirect("/signin");
 };
 
 export const signInDemoClient = async () => {
-	redirect("/api/signin-demo");
+	redirect("/signin-demo");
 };

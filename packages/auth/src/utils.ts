@@ -10,7 +10,7 @@ export const getUser = cache(async (): Promise<User> => {
 	const user = await getUserOrNull();
 
 	if (!user) {
-		redirect("/api/signin");
+		redirect("/signin");
 	}
 
 	return user;

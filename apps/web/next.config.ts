@@ -16,7 +16,7 @@ const nextConfig: NextConfig = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
-	transpilePackages: ["@repo/ui"],
+	transpilePackages: ["@repo/ui", "api"],
 	env: { DATABASE_URL: process.env.DATABASE_URL },
 	experimental: {
 		staleTimes: {
