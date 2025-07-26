@@ -24,6 +24,13 @@ export interface LineChartProps extends BaseChartProps, AxisTickFormatters {
 	showDots?: boolean;
 	cursor?: boolean;
 	syncId?: string;
+	ticks?: number[];
+	margin?: {
+		left?: number;
+		right?: number;
+		top?: number;
+		bottom?: number;
+	};
 }
 
 export function ReusableLineChart({
@@ -42,6 +49,8 @@ export function ReusableLineChart({
 	showDots = false,
 	cursor = false,
 	syncId,
+	ticks,
+	margin = { left: -38, top: 6, right: 6 }
 }: LineChartProps) {
 	return (
 		<ChartContainer
@@ -50,7 +59,7 @@ export function ReusableLineChart({
 		>
 			<LineChart
 				data={data}
-				margin={{ left: -38, top: 6, right: 6 }}
+				margin={margin}
 				syncId={syncId}
 			>
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
@@ -66,7 +75,7 @@ export function ReusableLineChart({
 					<YAxis
 						tickLine={false}
 						axisLine={false}
-						ticks={[0, 1, 10, 20, 30, 40, 50]}
+						ticks={ticks}
 						tickFormatter={getTickFormatter(yAxisTickFormatter)}
 						reversed={yAxisReversed}
 						domain={yAxisDomain}
@@ -86,7 +95,7 @@ export function ReusableLineChart({
 				{lineDataKeys.map((lineDataKey) => (
 					<Line
 						key={lineDataKey}
-						type="natural"
+						type="monotone"
 						dataKey={lineDataKey}
 						stroke={`var(--color-${lineDataKey})`}
 						strokeWidth={2}

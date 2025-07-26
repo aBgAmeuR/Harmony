@@ -16,14 +16,14 @@ export function LineChartEvolution({ metrics1, metrics2 }: LineChartEvolutionPro
         const m2 = metrics2.monthly[index];
         return {
             month: m1.month,
-            [`year${metrics1.year}`]: Math.round(m1.listeningTime / 3600000),
-            [`year${metrics2.year}`]: m2 ? Math.round(m2.listeningTime / 3600000) : 0,
+            [`year${metrics1.year}`]: m1.listeningTime,
+            [`year${metrics2.year}`]: m2 ? m2.listeningTime : 0,
         };
     });
 
     const config = {
-        [`year${metrics1.year}`]: { label: `${metrics1.year} (hours)`, color: "var(--chart-1)" },
-        [`year${metrics2.year}`]: { label: `${metrics2.year} (hours)`, color: "var(--chart-4)" },
+        [`year${metrics1.year}`]: { label: `${metrics1.year}`, color: "var(--chart-1)" },
+        [`year${metrics2.year}`]: { label: `${metrics2.year}`, color: "var(--chart-4)" },
     };
 
     return (
@@ -35,10 +35,14 @@ export function LineChartEvolution({ metrics1, metrics2 }: LineChartEvolutionPro
             <ChartCardContent>
                 <ReusableLineChart
                     data={combinedData}
+                    className="aspect-[4/1]"
                     xAxisDataKey="month"
                     lineDataKeys={[`year${metrics1.year}`, `year${metrics2.year}`]}
                     config={config}
+                    showYAxis={false}
+                    tooltipValueFormatter="hourSuffix"
                     showDots={true}
+                    margin={{ left: 6, top: 6, right: 6, bottom: 0 }}
                 />
             </ChartCardContent>
         </ChartCard>
