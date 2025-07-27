@@ -9,6 +9,7 @@ import {
 	Grid2x2,
 	LogOut,
 	Moon,
+	Share2Icon,
 	SunMedium,
 } from "lucide-react";
 import { useTheme } from "next-themes";
@@ -17,6 +18,7 @@ import type { User } from "@repo/auth";
 import { signOutClient } from "@repo/auth/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
 import { Button } from "@repo/ui/button";
+import { LinkButton } from "@repo/ui/components/link-button";
 import {
 	Dialog,
 	DialogClose,
@@ -188,8 +190,26 @@ export function NavUser({ user }: NavUserProps) {
 									)}
 								</Button>
 							</DropdownMenuItem>
+
 							{!isDemo ? (
 								<>
+									<DropdownMenuSeparator />
+									<DropdownMenuLabel className="text-muted-foreground text-xs">
+										Social
+									</DropdownMenuLabel>
+									{!isDemo ? (
+										<DropdownMenuItem asChild={true}>
+											<LinkButton
+												href="/social/shareable-links"
+												className="flex w-full cursor-pointer items-center justify-between"
+												variant="ghost"
+												size="sm"
+											>
+												Share profile
+												<Share2Icon size={18} />
+											</LinkButton>
+										</DropdownMenuItem>
+									) : null}
 									<DropdownMenuSeparator />
 									<DialogTrigger asChild={true}>
 										<DropdownMenuItem asChild={true}>
