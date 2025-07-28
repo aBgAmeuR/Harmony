@@ -1,9 +1,10 @@
-import { Calendar, Copy, ExternalLink, MoreHorizontal, Trash2, Users } from "lucide-react";
+import { Calendar, MoreHorizontal, Users } from "lucide-react";
 
 import { getUser } from "@repo/auth";
 import { Badge } from "@repo/ui/badge";
 import { Button } from "@repo/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@repo/ui/dropdown-menu";
+import { cn } from "@repo/ui/lib/utils";
+import { Skeleton } from "@repo/ui/skeleton";
 import {
     Table,
     TableBody,
@@ -16,17 +17,39 @@ import {
 import { DateUtils } from "~/lib/date-utils";
 
 import { getShareableLinks } from "../data/shareable-links";
+import CopyButton from "./copy-button";
+import { ShareableLinksRowActions } from "./shareable-links-row-actions";
 
 const getStatusBadge = (link: Awaited<ReturnType<typeof getShareableLinks>>[0]) => {
-    if (link.revoked) return <Badge variant="secondary">Revoked</Badge>
-    if (link.usageLimit !== Number.POSITIVE_INFINITY && link.usageCount >= link.usageLimit)
-        return <Badge variant="destructive">Limit Reached</Badge>
-    if (link.expiresAt && new Date(link.expiresAt) < new Date()) return <Badge variant="destructive">Expired</Badge>
-    return <Badge variant="default">Active</Badge>
+    type Status = "active" | "expired" | "revoked" | "limit-reached"
+    let status: Status = "active"
+    if (link.revoked) status = "revoked"
+    if (link.usageLimit !== 0 && link.usageCount >= link.usageLimit) status = "limit-reached"
+    if (link.expiresAt && new Date(link.expiresAt) < new Date()) status = "expired"
+    const colorMap: Record<Status, string> = {
+        active: "bg-emerald-500",
+        expired: "bg-amber-500",
+        revoked: "bg-red-500",
+        "limit-reached": "bg-red-500",
+    }
+    const statusMap: Record<Status, string> = {
+        active: "Active",
+        expired: "Expired",
+        revoked: "Revoked",
+        "limit-reached": "Limit Reached",
+    }
+    return (
+        <Badge variant="outline" className="gap-1.5">
+            <span
+                className={cn("size-1.5 rounded-full", colorMap[status])}
+                aria-hidden="true"
+            ></span>
+            {statusMap[status]}
+        </Badge>
+    )
 }
 
 const getUsagePercentage = (usageCount: number, usageLimit: number) => {
-    if (usageLimit === Number.POSITIVE_INFINITY) return 0
     return Math.min((usageCount / usageLimit) * 100, 100)
 }
 
@@ -40,11 +63,11 @@ export async function ShareableLinksTable() {
                 <TableHeader>
                     <TableRow className="bg-muted/50">
                         <TableHead>Link</TableHead>
-                        <TableHead>Status</TableHead>
+                        <TableHead className="w-[150px]">Status</TableHead>
                         <TableHead>Usage</TableHead>
                         <TableHead>Expires</TableHead>
-                        <TableHead>Created</TableHead>
-                        <TableHead className="w-[100px]">Actions</TableHead>
+                        <TableHead className="hidden w-[150px] md:table-cell">Created</TableHead>
+                        <TableHead className="w-[80px]">Actions</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -53,16 +76,9 @@ export async function ShareableLinksTable() {
                             <TableCell>
                                 <div className="flex items-center gap-2">
                                     <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
-                                        /profile/{link.token.substring(0, 8)}...
+                                        /profile/{link.token.substring(0, 12)}...
                                     </code>
-                                    <Button
-                                        variant="ghost"
-                                        size="sm"
-                                        // onClick={() => copyToClipboard(`${window.location.origin}/profile/${link.token}`)}
-                                        className="h-6 w-6 p-0"
-                                    >
-                                        <Copy className="h-3 w-3" />
-                                    </Button>
+                                    <CopyButton text={`/profile/${link.token}`} variant="ghost" className="size-6 p-0" />
                                 </div>
                             </TableCell>
                             <TableCell>{getStatusBadge(link)}</TableCell>
@@ -71,12 +87,12 @@ export async function ShareableLinksTable() {
                                     <div className="flex items-center gap-2 text-sm">
                                         <Users className="h-3 w-3" />
                                         <span>
-                                            {link.usageLimit === Number.POSITIVE_INFINITY
-                                                ? `${link.usageCount} uses (Infinite)`
+                                            {link.usageLimit === 0
+                                                ? `${link.usageCount} uses`
                                                 : `${link.usageCount}/${link.usageLimit} uses`}
                                         </span>
                                     </div>
-                                    {!link.revoked && link.usageLimit !== Number.POSITIVE_INFINITY && (
+                                    {!link.revoked && link.usageLimit !== 0 && (
                                         <div className="h-1.5 w-full rounded-full bg-muted">
                                             <div
                                                 className="h-1.5 rounded-full bg-primary transition-all"
@@ -98,40 +114,11 @@ export async function ShareableLinksTable() {
                                     <span className="text-muted-foreground text-sm">Never</span>
                                 )}
                             </TableCell>
-                            <TableCell>
+                            <TableCell className="hidden md:table-cell">
                                 <span className="text-muted-foreground text-sm">{DateUtils.formatDate(link.createdAt ?? new Date(), "full")}</span>
                             </TableCell>
                             <TableCell>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
-                                            <MoreHorizontal className="h-4 w-4" />
-                                        </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end">
-                                        <DropdownMenuItem
-                                            // onClick={() => window.open(`/profile/${link.token}`, "_blank")}
-                                            disabled={link.revoked}
-                                        >
-                                            <ExternalLink className="mr-2 h-4 w-4" />
-                                            Open Link
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                        // onClick={() => copyToClipboard(`${window.location.origin}/profile/${link.token}`)}
-                                        >
-                                            <Copy className="mr-2 h-4 w-4" />
-                                            Copy Link
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem
-                                            // onClick={() => handleRevokeLink(link.id)}
-                                            disabled={link.revoked}
-                                            className="text-destructive"
-                                        >
-                                            <Trash2 className="mr-2 h-4 w-4" />
-                                            Revoke Link
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
+                                <ShareableLinksRowActions link={link} />
                             </TableCell>
                         </TableRow>
                     ))}
@@ -143,6 +130,45 @@ export async function ShareableLinksTable() {
 
 export function ShareableLinksTableSkeleton() {
     return (
-        <p>Loading...</p>
+        <div className="overflow-hidden rounded-md border bg-background">
+            <Table>
+                <TableHeader>
+                    <TableRow className="bg-muted/50">
+                        <TableHead>Link</TableHead>
+                        <TableHead className="w-[150px]">Status</TableHead>
+                        <TableHead>Usage</TableHead>
+                        <TableHead>Expires</TableHead>
+                        <TableHead className="hidden w-[150px] md:table-cell">Created</TableHead>
+                        <TableHead className="w-[80px]">Actions</TableHead>
+                    </TableRow>
+                </TableHeader>
+                <TableBody>
+                    {Array.from({ length: 6 }).map((_, index) => (
+                        <TableRow key={index}>
+                            <TableCell>
+                                <Skeleton className="h-6 w-full" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="h-6 w-full" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="h-6 w-full" />
+                            </TableCell>
+                            <TableCell>
+                                <Skeleton className="h-6 w-full" />
+                            </TableCell>
+                            <TableCell className="hidden md:table-cell">
+                                <Skeleton className="h-6 w-full" />
+                            </TableCell>
+                            <TableCell>
+                                <Button variant="ghost" size="sm" className="h-6 w-6 p-0">
+                                    <MoreHorizontal className="h-4 w-4" />
+                                </Button>
+                            </TableCell>
+                        </TableRow>
+                    ))}
+                </TableBody>
+            </Table>
+        </div>
     );
 }

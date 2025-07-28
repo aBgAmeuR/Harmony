@@ -1,5 +1,7 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import { getUser } from "@repo/auth";
 
 import {
@@ -32,6 +34,8 @@ export const createShareableLinkAction = async (data: {
 		usageLimit: data.usageLimit,
 		expirationDate: data.expirationDate,
 	});
+
+	revalidatePath("/social/shareable-links");
 
 	return {
 		success: true,
