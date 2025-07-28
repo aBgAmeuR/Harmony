@@ -32,7 +32,9 @@ export const getUserOrNull = cache(async (): Promise<User | null> => {
 		username,
 		email,
 		image: session?.user?.image ?? undefined,
-		isDemo: session?.user?.name === "Demo" && userId === demoId,
+		isDemo:
+			(session?.user?.name === "Demo" && userId === demoId) ||
+			session?.user?.name === "Shareable Link",
 		hasPackage: hasPackage ?? false,
 	};
 });
@@ -45,7 +47,7 @@ export const signIn = async (callbackUrl?: string) => {
 };
 
 export const signInDemo = async (callbackUrl?: string) => {
-	await legacySignIn("credentials", {
+	await legacySignIn("demo", {
 		username: "demo",
 		password: "demo",
 		redirect: true,
@@ -57,5 +59,13 @@ export const signOut = async (callbackUrl?: string) => {
 	await legacySignOut({
 		redirect: true,
 		redirectTo: callbackUrl ?? "/",
+	});
+};
+
+export const signInWithShareableLink = async (token: string) => {
+	await legacySignIn("shareable-link", {
+		token,
+		redirect: true,
+		redirectTo: "/overview",
 	});
 };

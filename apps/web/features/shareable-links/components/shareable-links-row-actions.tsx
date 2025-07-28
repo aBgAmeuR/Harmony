@@ -4,7 +4,9 @@ import { Copy, ExternalLink, MoreHorizontal, TrashIcon } from "lucide-react";
 
 import { Button } from "@repo/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@repo/ui/dropdown-menu";
+import { toast } from "@repo/ui/sonner";
 
+import { deleteShareableLinkAction } from "../actions/shareable-links-actions";
 import type { getShareableLinks } from "../data/shareable-links";
 
 
@@ -13,6 +15,14 @@ type ShareableLinksRowActionsProps = {
 }
 
 export function ShareableLinksRowActions({ link }: ShareableLinksRowActionsProps) {
+    const deleteShareableLink = () => {
+        toast.promise(deleteShareableLinkAction(link.id), {
+            loading: "Deleting shareable link...",
+            success: "Shareable link deleted successfully",
+            error: "Failed to delete shareable link"
+        })
+    }
+
     const copyToClipboard = (text: string) => {
         navigator.clipboard.writeText(text)
     }
@@ -40,7 +50,7 @@ export function ShareableLinksRowActions({ link }: ShareableLinksRowActionsProps
                     </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive" className="cursor-pointer">
+                <DropdownMenuItem variant="destructive" className="cursor-pointer" onClick={() => deleteShareableLink()}>
                     <TrashIcon size={16} aria-hidden="true" />
                     <span>Revoke Link</span>
                 </DropdownMenuItem>

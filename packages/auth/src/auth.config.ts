@@ -2,6 +2,8 @@ import type { NextAuthConfig } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import Spotify from "next-auth/providers/spotify";
 
+import { getUserByShareableLinkToken } from "./queries";
+
 export default {
 	providers: [
 		Spotify({
@@ -27,6 +29,26 @@ export default {
 					};
 				}
 				return null;
+			},
+		}),
+		Credentials({
+			name: "Shareable Link",
+			credentials: {
+				token: { label: "Token", type: "string" },
+			},
+			async authorize(credentials) {
+				const data = await getUserByShareableLinkToken(
+					credentials.token as string,
+				);
+
+				if (!data) return null;
+
+				return {
+					name: "Shareable Link",
+					email: "demo@demo.com",
+					id: data.User.id,
+					hasPackage: data.User.hasPackage ?? false,
+				};
 			},
 		}),
 	],

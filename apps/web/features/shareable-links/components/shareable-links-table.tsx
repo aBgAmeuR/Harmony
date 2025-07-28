@@ -18,6 +18,7 @@ import { DateUtils } from "~/lib/date-utils";
 
 import { getShareableLinks } from "../data/shareable-links";
 import CopyButton from "./copy-button";
+import { CreateShareableLink } from "./create-shareable-link";
 import { ShareableLinksRowActions } from "./shareable-links-row-actions";
 
 const getStatusBadge = (link: Awaited<ReturnType<typeof getShareableLinks>>[0]) => {
@@ -71,57 +72,68 @@ export async function ShareableLinksTable() {
                     </TableRow>
                 </TableHeader>
                 <TableBody>
-                    {data.map((link) => (
-                        <TableRow key={link.id}>
-                            <TableCell>
-                                <div className="flex items-center gap-2">
-                                    <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
-                                        /profile/{link.token.substring(0, 12)}...
-                                    </code>
-                                    <CopyButton text={`/profile/${link.token}`} variant="ghost" className="size-6 p-0" />
+                    {data.length === 0 ? (
+                        <TableRow>
+                            <TableCell colSpan={6} className="py-12 text-center">
+                                <div className="flex flex-col items-center gap-4">
+                                    <span className="text-lg">No shareable links found.</span>
+                                    <CreateShareableLink />
                                 </div>
-                            </TableCell>
-                            <TableCell>{getStatusBadge(link)}</TableCell>
-                            <TableCell>
-                                <div className="space-y-1">
-                                    <div className="flex items-center gap-2 text-sm">
-                                        <Users className="h-3 w-3" />
-                                        <span>
-                                            {link.usageLimit === 0
-                                                ? `${link.usageCount} uses`
-                                                : `${link.usageCount}/${link.usageLimit} uses`}
-                                        </span>
-                                    </div>
-                                    {!link.revoked && link.usageLimit !== 0 && (
-                                        <div className="h-1.5 w-full rounded-full bg-muted">
-                                            <div
-                                                className="h-1.5 rounded-full bg-primary transition-all"
-                                                style={{
-                                                    width: `${getUsagePercentage(link.usageCount, link.usageLimit)}%`,
-                                                }}
-                                            />
-                                        </div>
-                                    )}
-                                </div>
-                            </TableCell>
-                            <TableCell>
-                                {link.expiresAt ? (
-                                    <div className="flex items-center gap-1 text-sm">
-                                        <Calendar className="h-3 w-3" />
-                                        <span>{DateUtils.formatDate(link.expiresAt, "full")}</span>
-                                    </div>
-                                ) : (
-                                    <span className="text-muted-foreground text-sm">Never</span>
-                                )}
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell">
-                                <span className="text-muted-foreground text-sm">{DateUtils.formatDate(link.createdAt ?? new Date(), "full")}</span>
-                            </TableCell>
-                            <TableCell>
-                                <ShareableLinksRowActions link={link} />
                             </TableCell>
                         </TableRow>
-                    ))}
+                    ) : (
+                        data.map((link) => (
+                            <TableRow key={link.id}>
+                                <TableCell>
+                                    <div className="flex items-center gap-2">
+                                        <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
+                                            /profile/{link.token.substring(0, 12)}...
+                                        </code>
+                                        <CopyButton text={`/profile/${link.token}`} variant="ghost" className="size-6 p-0" />
+                                    </div>
+                                </TableCell>
+                                <TableCell>{getStatusBadge(link)}</TableCell>
+                                <TableCell>
+                                    <div className="space-y-1">
+                                        <div className="flex items-center gap-2 text-sm">
+                                            <Users className="h-3 w-3" />
+                                            <span>
+                                                {link.usageLimit === 0
+                                                    ? `${link.usageCount} uses`
+                                                    : `${link.usageCount}/${link.usageLimit} uses`}
+                                            </span>
+                                        </div>
+                                        {!link.revoked && link.usageLimit !== 0 && (
+                                            <div className="h-1.5 w-full rounded-full bg-muted">
+                                                <div
+                                                    className="h-1.5 rounded-full bg-primary transition-all"
+                                                    style={{
+                                                        width: `${getUsagePercentage(link.usageCount, link.usageLimit)}%`,
+                                                    }}
+                                                />
+                                            </div>
+                                        )}
+                                    </div>
+                                </TableCell>
+                                <TableCell>
+                                    {link.expiresAt ? (
+                                        <div className="flex items-center gap-1 text-sm">
+                                            <Calendar className="h-3 w-3" />
+                                            <span>{DateUtils.formatDate(link.expiresAt, "full")}</span>
+                                        </div>
+                                    ) : (
+                                        <span className="text-muted-foreground text-sm">Never</span>
+                                    )}
+                                </TableCell>
+                                <TableCell className="hidden md:table-cell">
+                                    <span className="text-muted-foreground text-sm">{DateUtils.formatDate(link.createdAt ?? new Date(), "full")}</span>
+                                </TableCell>
+                                <TableCell>
+                                    <ShareableLinksRowActions link={link} />
+                                </TableCell>
+                            </TableRow>
+                        ))
+                    )}
                 </TableBody>
             </Table>
         </div>
