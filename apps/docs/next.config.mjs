@@ -7,7 +7,6 @@ const config = {
 	reactStrictMode: true,
 	output: "export",
 	trailingSlash: true,
-	// skipTrailingSlashRedirect: true,
 	assetPrefix: "/docs",
 	distDir: "../web/public/docs",
 };

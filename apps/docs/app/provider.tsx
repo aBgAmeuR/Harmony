@@ -7,11 +7,7 @@ import SearchDialog from '@/components/search';
 
 export function Provider({ children }: { children: ReactNode }) {
     return (
-        <RootProvider
-            search={{
-                SearchDialog,
-            }}
-        >
+        <RootProvider search={{ SearchDialog }}>
             {children}
         </RootProvider>
     );

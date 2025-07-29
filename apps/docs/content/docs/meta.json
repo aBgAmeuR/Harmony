@@ -1,0 +1,6 @@
+{
+	"title": "Introduction",
+	"pages": ["index", "test"],
+	"defaultOpen": true,
+	"root": true
+}

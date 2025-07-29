@@ -11,7 +11,10 @@
 		"fumadocs-core": "15.6.6",
 		"fumadocs-mdx": "11.7.1",
 		"fumadocs-ui": "15.6.6",
+		"lucide-react": "^0.468.0",
+		"mermaid": "^11.9.0",
 		"next": "canary",
+		"next-themes": "^0.4.6",
 		"react": "19.1.0",
 		"react-dom": "19.1.0"
 	},
