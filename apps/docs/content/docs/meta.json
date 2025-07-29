@@ -1,6 +1,11 @@
 {
-	"title": "Introduction",
-	"pages": ["index", "test"],
-	"defaultOpen": true,
-	"root": true
+	"root": true,
+	"pages": [
+		"---Reference---",
+		"index",
+		"faq",
+		"spotify-permissions",
+		"---Setup & Deploy---",
+		"self-hosting"
+	]
 }
