@@ -216,7 +216,7 @@ importers:
         specifier: canary
         version: 15.4.2-canary.18(@babel/core@7.28.0)(@playwright/test@1.54.1)(babel-plugin-react-compiler@19.1.0-rc.2)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next-auth:
-        specifier: ^5.0.0-beta.27
+        specifier: ^5.0.0-beta.29
         version: 5.0.0-beta.29(next@15.4.2-canary.18(@playwright/test@1.54.1)(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react@19.1.0)
       react:
         specifier: ^19.1.0

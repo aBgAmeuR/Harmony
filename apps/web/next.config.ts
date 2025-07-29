@@ -23,6 +23,8 @@ const nextConfig: NextConfig = {
 			dynamic: 30,
 			static: 180,
 		},
+		// @ts-expect-error - Unrecognized key in canary (nextjs#82122)
+		nodeMiddleware: true,
 		clientSegmentCache: true,
 		reactCompiler: true,
 		cacheComponents: true,
