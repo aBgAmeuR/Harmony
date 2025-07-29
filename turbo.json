@@ -6,7 +6,7 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^generate", "^build"],
-			"outputs": ["dist/**", ".next/**", "!.next/cache/**"]
+			"outputs": ["dist/**", ".next/**", "!.next/cache/**", "public/docs/**"]
 		},
 		"dev": {
 			"dependsOn": ["^generate"],
