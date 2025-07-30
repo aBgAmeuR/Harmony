@@ -15,7 +15,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 
-import { signOutClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/button";
 import {
 	CommandDialog,
@@ -149,7 +148,7 @@ export function CommandMenu({
 						)}
 						<CommandItem
 							className="!py-2 cursor-pointer"
-							onSelect={() => runCommand(() => signOutClient())}
+							onSelect={() => runCommand(() => router.push("/signout"))}
 						>
 							<LogOut />
 							{isDemo ? "Exit Demo" : "Log out"}

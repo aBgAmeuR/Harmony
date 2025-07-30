@@ -6,12 +6,9 @@ import { useRouter } from "next/navigation";
 
 import { toast } from "@repo/ui/sonner";
 
-import {
-	PROCESSING_STEPS_NAME,
-	type ProcessingStepType,
-} from "~/app/api/package/new/PackageStreamer";
 import { readStreamResponse } from "~/lib/utils";
 
+import { PROCESSING_STEPS_NAME, type ProcessingStepType } from "./package-streamer";
 import { CompleteStep } from "./steps-components/complete-step";
 import { ProcessingStep } from "./steps-components/processing-step";
 import { UploadStep } from "./steps-components/upload-step";
@@ -46,7 +43,7 @@ export const Client = () => {
 		setErrorMessage(undefined);
 
 		try {
-			const response = await fetch("/api/package/new", {
+			const response = await fetch("/api/package", {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ packageId }),

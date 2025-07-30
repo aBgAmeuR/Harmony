@@ -11,7 +11,7 @@ export const middleware: any = NextAuth(authConfig).auth(async (req) => {
 		return Response.redirect(newUrl);
 	}
 	if (!req.auth && !isMaintenance) {
-		const newUrl = new URL("/api/signin", url.origin);
+		const newUrl = new URL("/signin", url.origin);
 		newUrl.searchParams.set("callbackUrl", url.pathname);
 
 		return Response.redirect(newUrl);

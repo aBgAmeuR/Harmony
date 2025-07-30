@@ -4,7 +4,7 @@ import { Button } from "@repo/ui/button";
 import { CardContent } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
 
-import type { ProcessingStepType } from "~/app/api/package/new/PackageStreamer";
+import type { ProcessingStepType } from "../package-streamer";
 
 type CompleteStepProps = {
 	processingSteps: ProcessingStepType[];
