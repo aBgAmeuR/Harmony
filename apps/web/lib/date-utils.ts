@@ -12,9 +12,9 @@ type FormatDateOptions =
 const formatDate = (date: Date, options: FormatDateOptions): string => {
 	switch (options) {
 		case "full":
-			return `${localeFormat(date, "{MMMM}")} ${format(date, "{d},{yyyy}")}`;
+			return `${localeFormat(date, "{MMMM}")} ${format(date, "{dd},{yyyy}")}`;
 		case "short":
-			return `${localeFormat(date, "{MMM}")} ${format(date, "{d},{yyyy}")}`;
+			return `${localeFormat(date, "{MMM}")} ${format(date, "{dd},{yyyy}")}`;
 		case "month-year":
 			return `${localeFormat(date, "{MMMM}")} ${format(date, "{yyyy}")}`;
 		case "month-year-short":

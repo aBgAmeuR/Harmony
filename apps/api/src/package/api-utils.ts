@@ -1,7 +1,5 @@
 "server-only";
 
-import { NextResponse } from "next/server";
-
 import { getUserOrNull } from "@repo/auth";
 import { db } from "@repo/database";
 
@@ -47,20 +45,6 @@ export async function isRateLimitedOrThrow(userId: string, time: number) {
 	}
 }
 
-export function createJsonResponse(
-	message: string,
-	status = 200,
-	data?: unknown,
-): NextResponse {
-	return NextResponse.json(
-		{ message, ...(data ? { data } : undefined) },
-		{ status },
-	);
-}
-
-/**
- * Splits an array into batches of specified size
- */
 export function batchArray<T>(array: T[], batchSize: number): T[][] {
 	const batches: T[][] = [];
 	for (let i = 0; i < array.length; i += batchSize) {

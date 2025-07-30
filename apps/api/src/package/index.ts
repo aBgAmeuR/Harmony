@@ -1,3 +1,4 @@
+import { Context } from "hono";
 import { revalidateTag } from "next/cache";
 import { z } from "zod";
 
@@ -7,48 +8,15 @@ import type { ArtistSimplified, Track } from "@repo/spotify/types";
 
 import { extractZipAndGetFiles, parseZipFiles } from "~/lib/zip";
 
-import { utapi } from "../../uploadthing/core";
-import {
-	ApiError,
-	batchArray,
-	createJsonResponse,
-	isAuthenticatedOrThrow,
-} from "../api-utils";
-import { getPackage, setPackageStatus } from "../package-utils";
+import { ApiError, batchArray, isAuthenticatedOrThrow } from "./api-utils";
 import { PackageStreamer, PackageStreamerError } from "./PackageStreamer";
-import type { ProcessedTrack, TrackInfo } from "./types";
-
-type DataType = {
-	ts: string;
-	username: string;
-	platform: string;
-	ms_played: number;
-	conn_country: string;
-	ip_addr_decrypted: string;
-	user_agent_decrypted: string;
-	master_metadata_track_name: string;
-	master_metadata_album_artist_name: string;
-	master_metadata_album_album_name: string;
-	spotify_track_uri: string;
-	episode_name: string;
-	episode_show_name: string;
-	spotify_episode_uri: string;
-	reason_start: string;
-	reason_end: string;
-	shuffle: boolean | null;
-	skipped: boolean | null;
-	offline: boolean | null;
-	offline_timestamp: number;
-	incognito_mode: boolean | null;
-};
-
-export const runtime = "nodejs";
-export const maxDuration = 60;
+import { getPackage, setPackageStatus } from "./package-utils";
+import type { DataType, ProcessedTrack, TrackInfo } from "./types";
 
 const MIN_PLAY_DURATION_MS = 10000;
 const TRACK_BATCH_SIZE = 5000;
 
-export async function POST(req: Request) {
+export async function createPackageStream(c: Context) {
 	const packageSteamer = new PackageStreamer();
 
 	try {
@@ -56,7 +24,7 @@ export async function POST(req: Request) {
 		// await isRateLimitedOrThrow(userId, ONE_DAY_IN_MS);
 		const { packageId } = z
 			.object({ packageId: z.string() })
-			.parse(await req.json());
+			.parse(await c.req.json());
 
 		const stream = new ReadableStream({
 			async start(controller) {
@@ -77,12 +45,15 @@ export async function POST(req: Request) {
 			},
 		});
 
-		return new Response(stream, {
+		return c.newResponse(stream, {
 			headers: { "Content-Type": "application/x-ndjson" },
 		});
 	} catch (error) {
-		return createJsonResponse(
-			error instanceof Error ? error.message : "Failed to process package",
+		return c.json(
+			{
+				error:
+					error instanceof Error ? error.message : "Failed to process package",
+			},
 			500,
 		);
 	}
@@ -123,12 +94,6 @@ async function processUserPackage(
 	packageSteamer.emit(90, "Saving your listening history", "processing");
 
 	await setPackageStatus(packageId, "processed");
-
-	if (packageData.fileName) {
-		await utapi.deleteFiles(packageData.fileName).catch((error) => {
-			console.error("Failed to delete file:", error);
-		});
-	}
 
 	await db.update(users).set({ hasPackage: true }).where(eq(users.id, userId));
 

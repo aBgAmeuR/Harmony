@@ -114,6 +114,20 @@ export const historicalArtistRankings = pgTable("HistoricalArtistRanking", {
 	timestamp: timestamp().defaultNow(),
 });
 
+export const profileShareLinks = pgTable("ProfileShareLink", {
+	id: uuid().primaryKey().defaultRandom(),
+	userId: uuid()
+		.notNull()
+		.references(() => users.id, { onDelete: "cascade" }),
+	token: varchar({ length: 64 }).notNull().unique(),
+	usageLimit: integer().notNull().default(1),
+	usageCount: integer().notNull().default(0),
+	expiresAt: timestamp(),
+	revoked: boolean().notNull().default(false),
+	createdAt: timestamp().defaultNow(),
+	updatedAt: timestamp().defaultNow(),
+});
+
 export const usersRelations = relations(users, ({ many }) => ({
 	accounts: many(accounts),
 	packages: many(packages),
@@ -158,6 +172,16 @@ export const historicalArtistRankingsRelations = relations(
 	({ one }) => ({
 		user: one(users, {
 			fields: [historicalArtistRankings.userId],
+			references: [users.id],
+		}),
+	}),
+);
+
+export const profileShareLinksRelations = relations(
+	profileShareLinks,
+	({ one }) => ({
+		user: one(users, {
+			fields: [profileShareLinks.userId],
 			references: [users.id],
 		}),
 	}),

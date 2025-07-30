@@ -4,7 +4,6 @@ import { Suspense } from "react";
 import { AlertCircle, ArrowRight } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-import { signOutClient } from "@repo/auth/client";
 import { Button } from "@repo/ui/button";
 
 import { Icons } from "~/components/icons";
@@ -67,7 +66,7 @@ function ErrorContent({ error, reset }: ErrorProps) {
 							className="group"
 							variant="ghost"
 							aria-label="Go to homepage"
-							onClick={async () => await signOutClient()}
+							onClick={() => router.push("/signout")}
 						>
 							Go to Home
 							<ArrowRight

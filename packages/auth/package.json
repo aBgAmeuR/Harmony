@@ -11,7 +11,7 @@
 		"@auth/drizzle-adapter": "^1.9.1",
 		"react": "^19.1.0",
 		"next": "canary",
-		"next-auth": "^5.0.0-beta.27"
+		"next-auth": "^5.0.0-beta.29"
 	},
 	"devDependencies": {
 		"@repo/database": "workspace:*",

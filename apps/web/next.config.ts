@@ -16,13 +16,15 @@ const nextConfig: NextConfig = {
 	eslint: {
 		ignoreDuringBuilds: true,
 	},
-	transpilePackages: ["@repo/ui"],
+	transpilePackages: ["@repo/ui", "api"],
 	env: { DATABASE_URL: process.env.DATABASE_URL },
 	experimental: {
 		staleTimes: {
 			dynamic: 30,
 			static: 180,
 		},
+		// @ts-expect-error - Unrecognized key in canary (nextjs#82122)
+		nodeMiddleware: true,
 		clientSegmentCache: true,
 		reactCompiler: true,
 		cacheComponents: true,
