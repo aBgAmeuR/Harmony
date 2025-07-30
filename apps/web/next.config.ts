@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
 			afterFiles: [
 				{
 					source: "/docs/:path*",
-					destination: "http://localhost:3001/docs/:path*",
+					destination: process.env.DOCS_URL + "/docs/:path*",
 				},
 			],
 		};
