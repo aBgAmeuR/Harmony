@@ -10,6 +10,16 @@ const config = {
 	skipTrailingSlashRedirect: true,
 	assetPrefix: "/docs",
 	images: { unoptimized: true },
+	async rewrites() {
+		return {
+			beforeFiles: [
+				{
+					source: "/",
+					destination: "/docs",
+				},
+			],
+		};
+	},
 };
 
 export default withMDX(config);
