@@ -9,9 +9,9 @@ icon: Server
 > **Who is this for?**
 > Teams and individuals who want full control over their data or need to deploy Harmony in air-gapped, compliance-sensitive, or cost-optimized environments.
 
-<Callout variant="warning">🛠️  This guide assumes you have basic familiarity with the Linux command line and package managers like **pnpm**.</Callout>
+<Callout type="warn">This guide assumes you have basic familiarity with the Linux command line and package managers like **pnpm**.</Callout>
 
-## 1. Prerequisites
+## Prerequisites
 
 1. **Node.js 20+** and **pnpm 9+**
 2. **PostgreSQL 15+** with a dedicated database & user
@@ -19,7 +19,7 @@ icon: Server
 4. *(Optional)* **Docker** & **Docker Compose** if you prefer containerized deployments
 5. A domain name (e.g., `harmony.example.com`) and HTTPS certificate (we recommend **Caddy** or **Let's Encrypt**)
 
-## 2. Clone & Configure
+## Clone & Configure
 
 ```bash
 # SSH into your server
@@ -38,7 +38,7 @@ cd harmony
 pnpm install
 ```
 
-### 2.1 Environment Variables
+### Environment Variables
 
 Create a `.env` file in the project root:
 
@@ -59,7 +59,7 @@ AUTH_URL="http://localhost:3000"
 
 > **Tip:** Never commit `.env` to version control. Use a secrets manager (Vault, AWS SSM, etc.) in production.
 
-## 3. Running with Docker Compose (Database Only)
+## Running with Docker Compose (Database Only)
 
 The provided `docker-compose.yml` focuses solely on **PostgreSQL** to keep things lightweight. Your application will run on the host (or a separate process manager) and connect to this containerised database.
 
@@ -96,7 +96,7 @@ docker compose logs -f postgres
 
 > **Note:** Feel free to extend the compose file with `web` or `api` services if you prefer a fully containerised setup.
 
-## 4. Run Database Migrations
+## Run Database Migrations
 
 Use Drizzle migration tooling.
 
@@ -107,30 +107,30 @@ pnpm db:generate # Generates SQL
 pnpm db:push     # Applies migrations to the DB
 ```
 
-## 5. Run the app
+## Run the app
 
-### 5.1 Production Build
+### Production Build
 
 ```bash
 # From repo root
 pnpm build
 ```
 
-### 5.2 Production Run
+### Production Run
 
 ```bash
 # From repo root
 pnpm start
 ```
 
-### 5.3 Development
+### Development
 
 ```bash
 # From repo root
 pnpm dev
 ```
 
-## 6. Deploying to Vercel (Cloud Option)
+## Deploying to Vercel (Cloud Option)
 
 1. Push your fork to GitHub.
 2. Import the repo in Vercel → configure the `web` app as **Framework: Next.js**.
@@ -139,7 +139,7 @@ pnpm dev
 5. (Optional) Add a second Vercel project for `apps/api` if you need the REST layer.
 
 
-## 7. Common Issues
+## Common Issues
 
 | Symptom                            | Fix |
 |------------------------------------|------|
@@ -147,10 +147,10 @@ pnpm dev
 | OAuth callback fails               | Verify `NEXTAUTH_URL` and Spotify redirect URI match. |
 | 404 on `/api/upload`               | Make sure `apps/api` is deployed and env var `UPLOADTHING_SECRET` is set. |
 
-## 8. Next Steps
+## Next Steps
 
 - Set up CI/CD with **GitHub Actions** using the included workflow templates.
 - Configure Caddy / Nginx reverse proxy for HTTPS and to forward `web` → port 3000.
 - Read the [FAQ](/faq) for more troubleshooting tips.
 
-<Callout variant="success">🎉  That’s it — you now own the full Harmony stack!</Callout> 
+<Callout>That’s it - you now own the full Harmony stack!</Callout> 

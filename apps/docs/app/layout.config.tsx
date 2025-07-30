@@ -15,7 +15,7 @@ export const baseOptions: BaseLayoutProps = {
       <div className="flex items-center gap-2">
         <Icons.logo className="size-8" />
         <div className="text-left text-xl leading-tight">
-          <span className="truncate font-semibold">Harmony</span>
+          <span className="truncate font-semibold">Harmony Support</span>
         </div>
       </div>
     ),

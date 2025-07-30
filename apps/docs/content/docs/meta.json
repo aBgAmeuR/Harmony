@@ -3,8 +3,12 @@
 	"pages": [
 		"---Reference---",
 		"index",
+		"about",
 		"faq",
 		"spotify-permissions",
+		"---Features---",
+		"getting-package",
+		"share-links",
 		"---Setup & Deploy---",
 		"self-hosting"
 	]

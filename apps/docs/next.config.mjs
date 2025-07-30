@@ -7,8 +7,9 @@ const config = {
 	reactStrictMode: true,
 	output: "export",
 	trailingSlash: true,
+	skipTrailingSlashRedirect: true,
 	assetPrefix: "/docs",
-	distDir: "../web/public/docs",
+	images: { unoptimized: true },
 };
 
 export default withMDX(config);

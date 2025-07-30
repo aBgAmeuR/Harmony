@@ -34,7 +34,7 @@ const nextConfig: NextConfig = {
 			afterFiles: [
 				{
 					source: "/docs/:path*",
-					destination: "/docs/:path*/index.html",
+					destination: "http://localhost:3001/docs/:path*",
 				},
 			],
 		};
