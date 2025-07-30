@@ -1,4 +1,5 @@
 import '@/app/global.css';
+import 'katex/dist/katex.css';
 import type { ReactNode } from 'react';
 import { DocsLayout } from 'fumadocs-ui/layouts/docs';
 import { Inter } from 'next/font/google';
