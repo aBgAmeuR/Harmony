@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
-import { createLoader, parseAsInteger } from 'nuqs/server';
+
+import { getUser } from "@repo/auth";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { ComparisonContent } from "~/features/comparisons/year-over-year/components/comparison-content";
@@ -11,16 +12,7 @@ export const metadata: Metadata = {
 	description: "Compare your listening habits across years",
 };
 
-const yearSearchParams = {
-	year1: parseAsInteger.withDefault(new Date().getFullYear()),
-	year2: parseAsInteger.withDefault(new Date().getFullYear() - 1)
-}
-
-const loadSearchParams = createLoader(yearSearchParams)
-
-export default async function ComparisonsYearOverYearPage({ searchParams }: { searchParams: Promise<{ year1?: string; year2?: string }> }) {
-	const { year1, year2 } = await loadSearchParams(searchParams);
-
+export default async function ComparisonsYearOverYearPage() {
 	// if (availableYears.length < 2) {
 	// 	return (
 	// 		<Layout>
@@ -41,7 +33,7 @@ export default async function ComparisonsYearOverYearPage({ searchParams }: { se
 			</LayoutHeader>
 			<LayoutContent>
 				<Suspense fallback={<div>Loading comparison...</div>}>
-					<ComparisonContent year1={year1} year2={year2} />
+					<ComparisonContent />
 				</Suspense>
 			</LayoutContent>
 		</Layout>

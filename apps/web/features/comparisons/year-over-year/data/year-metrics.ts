@@ -8,6 +8,9 @@ export interface YearMetrics {
 	year: number;
 	totalListeningTime: number;
 	numStreams: number;
+	uniqueTracks: number;
+	uniqueArtists: number;
+	uniqueAlbums: number;
 	topArtists: {
 		id: string;
 		name: string;
@@ -42,7 +45,14 @@ export async function getYearMetrics(
 		},
 	});
 
-	const [totals, topArtistsRaw, topTracksRaw, monthlyRaw] = await Promise.all([
+	const [
+		totals,
+		topArtistsRaw,
+		topTracksRaw,
+		monthlyRaw,
+		uniqueCounts,
+		uniqueArtistsRaw,
+	] = await Promise.all([
 		db
 			.select({ streams: count(), time: sum(tracks.msPlayed) })
 			.from(tracks)
@@ -79,10 +89,27 @@ export async function getYearMetrics(
 			.where(whereClause)
 			.groupBy(({ month }) => month)
 			.orderBy(({ month }) => month),
+		db
+			.select({
+				uniqueTracks: sql<number>`COUNT(DISTINCT ${tracks.spotifyId})`,
+				uniqueAlbums: sql<number>`COUNT(DISTINCT ${tracks.albumId})`,
+			})
+			.from(tracks)
+			.where(whereClause),
+		db
+			.select({
+				uniqueArtists: sql<number>`COUNT(DISTINCT artist_id)`,
+			})
+			.from(
+				sql`(SELECT unnest(${tracks.artistIds}) as artist_id FROM ${tracks} WHERE ${whereClause}) as artists_unnested`,
+			),
 	]);
 
 	const totalListeningTime = Number(totals[0]?.time ?? 0);
 	const numStreams = totals[0]?.streams ?? 0;
+	const uniqueTracks = Number(uniqueCounts[0]?.uniqueTracks ?? 0);
+	const uniqueArtists = Number(uniqueArtistsRaw[0]?.uniqueArtists ?? 0);
+	const uniqueAlbums = Number(uniqueCounts[0]?.uniqueAlbums ?? 0);
 
 	const aggregatedArtists: Record<string, { plays: number; time: number }> = {};
 	topArtistsRaw.forEach((entry) => {
@@ -146,6 +173,9 @@ export async function getYearMetrics(
 		year,
 		totalListeningTime,
 		numStreams,
+		uniqueTracks,
+		uniqueArtists,
+		uniqueAlbums,
 		topArtists,
 		topTracks,
 		monthly,

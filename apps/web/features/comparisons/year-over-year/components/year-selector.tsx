@@ -1,8 +1,7 @@
 'use client';
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowRightIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { parseAsInteger, useQueryState } from 'nuqs';
 
 import { buttonVariants } from "@repo/ui/button";
@@ -24,7 +23,7 @@ export const YearSelector = () => {
     const [year1, setYear1] = useQueryState('year1', parseAsInteger.withDefault(new Date().getFullYear()));
     const [year2, setYear2] = useQueryState('year2', parseAsInteger.withDefault(new Date().getFullYear() - 1));
     const { data: availableYears, isLoading } = useAvailableYears();
-    const router = useRouter();
+    const queryClient = useQueryClient();
 
     if (isLoading) return <YearSelectorSkeleton />;
     if (!availableYears || availableYears.length < 1) return null;
@@ -33,7 +32,7 @@ export const YearSelector = () => {
         <ButtonGroup>
             <Select value={year1?.toString()} onValueChange={(v) => {
                 setYear1(parseInt(v));
-                router.refresh();
+                queryClient.invalidateQueries({ queryKey: ['yearMetrics', year1] });
             }}>
                 <SelectTrigger size='sm'>
                     <SelectValue />
@@ -51,7 +50,7 @@ export const YearSelector = () => {
             </div>
             <Select value={year2?.toString()} onValueChange={(v) => {
                 setYear2(parseInt(v));
-                router.refresh();
+                queryClient.invalidateQueries({ queryKey: ['yearMetrics', year2] });
             }}>
                 <SelectTrigger size='sm'>
                     <SelectValue />
