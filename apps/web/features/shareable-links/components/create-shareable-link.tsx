@@ -47,7 +47,7 @@ export function CreateShareableLink() {
 
     const handleCopy = () => {
         if (shareableLink) {
-            navigator.clipboard.writeText(`https://originui.com/refer/${shareableLink}`)
+            navigator.clipboard.writeText(`${window.location.origin}/profile/${shareableLink}`)
             setCopied(true)
             setTimeout(() => setCopied(false), 1500)
         }
@@ -128,7 +128,7 @@ export function CreateShareableLink() {
                         <div className="w-full *:not-first:mt-2">
                             <Label htmlFor="shareable-link">Your Shareable Link</Label>
                             <Button variant="outline" size="sm" className="grid w-full grid-cols-12 justify-between gap-2 font-normal" onClick={handleCopy} disabled={copied}>
-                                <p className="col-span-11 min-w-0 max-w-full truncate text-left">{`https://originui.com/refer/${shareableLink}`}</p>
+                                <p className="col-span-11 min-w-0 max-w-full truncate text-left">{`${window.location.origin}/profile/${shareableLink}`}</p>
                                 <div className="col-span-1 flex items-center justify-end">
                                     {copied ? <CheckIcon className="size-4" /> : <CopyIcon className="size-4" />}
                                 </div>

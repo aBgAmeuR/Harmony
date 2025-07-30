@@ -89,7 +89,7 @@ export async function ShareableLinksTable() {
                                         <code className="rounded bg-muted px-2 py-1 font-mono text-sm">
                                             /profile/{link.token.substring(0, 12)}...
                                         </code>
-                                        <CopyButton text={`/profile/${link.token}`} variant="ghost" className="size-6 p-0" />
+                                        <CopyButton text={link.token} variant="ghost" className="size-6 p-0" />
                                     </div>
                                 </TableCell>
                                 <TableCell>{getStatusBadge(link)}</TableCell>

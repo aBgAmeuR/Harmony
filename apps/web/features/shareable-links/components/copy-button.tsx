@@ -22,7 +22,7 @@ export default function CopyButton({ text, ...props }: CopyButtonProps) {
 
     const handleCopy = async () => {
         try {
-            await navigator.clipboard.writeText(text)
+            await navigator.clipboard.writeText(`${window.location.origin}/profile/${text}`)
             setCopied(true)
             setTimeout(() => setCopied(false), 1500)
         } catch (err) {
