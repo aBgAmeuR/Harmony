@@ -2,6 +2,7 @@ import { Github } from "lucide-react";
 import Link from "next/link";
 
 import { Button } from "@repo/ui/button";
+import { LinkButton } from "@repo/ui/components/link-button";
 
 import { config } from "~/lib/config";
 
@@ -44,6 +45,9 @@ export const Navbar = () => {
 						</div>
 					</nav>
 					<nav className="flex items-center justify-end gap-4">
+						<LinkButton href="/docs" variant="ghost">
+							Docs
+						</LinkButton>
 						{!isMaintenance ? (
 							<GetDemoBtn label="Get Demo" variant="link" />
 						) : null}
