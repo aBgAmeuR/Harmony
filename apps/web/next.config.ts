@@ -29,6 +29,16 @@ const nextConfig: NextConfig = {
 		useCache: true,
 	},
 	pageExtensions: ["mdx", "ts", "tsx"],
+	async rewrites() {
+		return {
+			afterFiles: [
+				{
+					source: "/docs/:path*",
+					destination: "http://localhost:3001/docs/:path*",
+				},
+			],
+		};
+	},
 };
 
 const config: NextConfig = withMDX(nextConfig);
