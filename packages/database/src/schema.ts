@@ -18,6 +18,12 @@ export const timeRangeStatsEnum = pgEnum("time_range_stats", [
 	"long_term",
 ]);
 
+export const computationMethodEnum = pgEnum("computation_method", [
+	"play_count",
+	"time_played",
+	"custom",
+]);
+
 export const users = pgTable("User", {
 	id: uuid().primaryKey().defaultRandom(),
 	name: varchar({ length: 256 }),
@@ -26,6 +32,7 @@ export const users = pgTable("User", {
 	image: varchar({ length: 256 }),
 	hasPackage: boolean().default(false),
 	timeRangeStats: timeRangeStatsEnum().default("medium_term"),
+	computationMethod: computationMethodEnum().default("play_count"),
 	timeRangeDateStart: timestamp().default(new Date("2010-01-01")),
 	timeRangeDateEnd: timestamp().defaultNow(),
 	createdAt: timestamp().defaultNow(),

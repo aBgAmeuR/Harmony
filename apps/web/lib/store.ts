@@ -57,3 +57,23 @@ export const useUserPreferences = create(
 		},
 	),
 );
+
+interface ComputationMethodStore {
+	computation_method: "play_count" | "time_played" | "custom";
+	setComputationMethod: (
+		computation_method: "play_count" | "time_played" | "custom",
+	) => void;
+}
+
+export const useComputationMethod = create(
+	persist<ComputationMethodStore>(
+		(set) => ({
+			computation_method: "play_count",
+			setComputationMethod: (computation_method) => set({ computation_method }),
+		}),
+		{
+			name: "computation-method",
+			storage: createJSONStorage(() => cookieStorage),
+		},
+	),
+);

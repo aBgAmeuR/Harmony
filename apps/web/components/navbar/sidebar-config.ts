@@ -4,6 +4,7 @@ import {
 	GemIcon,
 	Github,
 	type LucideIcon,
+	Settings,
 } from "lucide-react";
 
 import { AudioLinesIcon } from "@repo/ui/icons/audio-lines";
@@ -161,6 +162,12 @@ export const data: SidebarConfig = {
 		// },
 	],
 	settings: [
+		{
+			title: "Settings",
+			url: "/settings",
+			icon: Settings as LucideIcon,
+			alwaysVisible: true,
+		},
 		{
 			title: "Package",
 			url: "/settings/package",
