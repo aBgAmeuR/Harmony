@@ -3,8 +3,8 @@ import { getUser } from "@repo/auth";
 import { MusicLayout } from "~/components/lists/music-layout";
 import type { MusicListConfig } from "~/components/lists/music-list";
 import { tryCatch } from "~/lib/utils";
-import { getHistoricalTrackRankings } from "~/services/historical-rankings";
 
+import { getHistoricalTrackRankingsAction } from "../actions/historical-rankings-actions";
 import { getTopTracks } from "../data/top-tracks";
 import { HistoricalModal } from "./historical-modal";
 import { HistoricalProvider } from "./historical-provider";
@@ -28,7 +28,7 @@ export const TopTracks = async () => {
 	return (
 		<HistoricalProvider>
 			<MusicLayout data={data} config={config} />
-			<HistoricalModal promise={getHistoricalTrackRankings} />
+			<HistoricalModal promise={getHistoricalTrackRankingsAction} />
 		</HistoricalProvider>
 	);
 };

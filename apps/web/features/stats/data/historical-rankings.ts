@@ -1,4 +1,4 @@
-"use server";
+"server-only";
 
 import { getUser } from "@repo/auth";
 import {
@@ -11,11 +11,47 @@ import {
 import { SpotifyAPI } from "@repo/spotify";
 
 import { getTimeRangeStats } from "~/features/stats/data/utils";
+import { DateUtils } from "~/lib/date-utils";
 
-export async function getHistoricalTrackRankings(trackId: string) {
-	const { userId, isDemo } = await getUser();
-	if (!userId) return [];
+function fillHistoricalTimeline(
+	data: Array<{ timestamp: Date; rank: number | null }>,
+) {
+	if (data.length === 0) return [];
 
+	const sortedData = [...data].sort(
+		(a, b) => a.timestamp.getTime() - b.timestamp.getTime(),
+	);
+
+	const minDate = sortedData[0].timestamp;
+	const maxDate = sortedData[sortedData.length - 1].timestamp;
+
+	const dataMap = new Map(
+		sortedData.map((item) => [item.timestamp.getTime(), item.rank]),
+	);
+
+	const filledData = [];
+
+	const currentDate = new Date(minDate);
+	while (currentDate <= maxDate) {
+		const timestamp = new Date(currentDate);
+		const rank = dataMap.get(timestamp.getTime()) ?? null;
+
+		filledData.push({
+			timestamp: DateUtils.formatDate(timestamp, "full"),
+			rank,
+		});
+
+		currentDate.setDate(currentDate.getDate() + 7);
+	}
+
+	return filledData;
+}
+
+export async function getHistoricalTrackRankings(
+	userId: string,
+	isDemo: boolean,
+	trackId: string,
+) {
 	const timeRangeStats = await getTimeRangeStats(userId, isDemo);
 	if (!timeRangeStats) return [];
 
@@ -47,16 +83,19 @@ export async function getHistoricalTrackRankings(trackId: string) {
 		)
 		.orderBy(distinctTimestamps.timestamp);
 
-	return results.map((row) => ({
+	const mappedResults = results.map((row) => ({
 		timestamp: row.timestamp ? new Date(row.timestamp) : new Date(),
 		rank: row.rank ?? null,
 	}));
+
+	return fillHistoricalTimeline(mappedResults);
 }
 
-export async function getHistoricalArtistRankings(artistId: string) {
-	const { userId, isDemo } = await getUser();
-	if (!userId) return [];
-
+export async function getHistoricalArtistRankings(
+	userId: string,
+	isDemo: boolean,
+	artistId: string,
+) {
 	const timeRangeStats = await getTimeRangeStats(userId, isDemo);
 	if (!timeRangeStats) return [];
 
@@ -88,10 +127,12 @@ export async function getHistoricalArtistRankings(artistId: string) {
 		)
 		.orderBy(distinctTimestamps.timestamp);
 
-	return results.map((row) => ({
+	const mappedResults = results.map((row) => ({
 		timestamp: row.timestamp ? new Date(row.timestamp) : new Date(),
 		rank: row.rank ?? null,
 	}));
+
+	return fillHistoricalTimeline(mappedResults);
 }
 
 export async function updateHistoricalRankings(userId: string) {
