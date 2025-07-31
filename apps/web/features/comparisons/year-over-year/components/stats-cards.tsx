@@ -121,12 +121,12 @@ export const StatsCardsSkeleton = () => {
                         <CardTitle className="font-medium text-sm">{card.title}</CardTitle>
                         <card.icon className="size-4 text-muted-foreground" />
                     </CardHeader>
-                    <CardContent className="space-y-1">
+                    <CardContent className="space-y-2">
                         <div className="font-bold text-2xl">
                             <Skeleton className="h-8 w-20" />
                         </div>
                         <div className="text-xs">
-                            <Skeleton className="h-3 w-16" />
+                            <Skeleton className="h-3 w-28" />
                         </div>
                     </CardContent>
                 </Card>

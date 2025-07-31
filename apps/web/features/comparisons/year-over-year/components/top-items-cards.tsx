@@ -3,7 +3,6 @@
 import { useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Skeleton } from "@repo/ui/skeleton";
 import { Switch } from "@repo/ui/switch";
 
 import type { MusicItemCardProps } from "~/components/cards/music-item-card/type";
@@ -166,7 +165,7 @@ export function TopItemsCardsSkeleton() {
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                    <CardTitle>Top Artists</CardTitle>
+                    <CardTitle className="pt-0.5">Top Artists</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <MusicListSkeleton length={5} layout="list" showRank={true} />
@@ -175,7 +174,7 @@ export function TopItemsCardsSkeleton() {
 
             <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                    <CardTitle>Top Tracks</CardTitle>
+                    <CardTitle className="pt-0.5">Top Tracks</CardTitle>
                 </CardHeader>
                 <CardContent>
                     <MusicListSkeleton length={5} layout="list" showRank={true} />
