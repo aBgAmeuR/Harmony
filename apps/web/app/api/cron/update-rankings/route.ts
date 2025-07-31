@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import { db } from "@repo/database";
 
-import { updateHistoricalRankings } from "~/services/historical-rankings";
+import { updateHistoricalRankings } from "~/features/stats/data/historical-rankings";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
