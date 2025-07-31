@@ -1,7 +1,14 @@
+"use client";
+
+import { useState } from "react";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
+import { Skeleton } from "@repo/ui/skeleton";
+import { Switch } from "@repo/ui/switch";
 
 import type { MusicItemCardProps } from "~/components/cards/music-item-card/type";
 import { MusicList } from "~/components/lists/music-list";
+import { MusicListSkeleton } from "~/components/lists/music-list/skeleton";
 
 import type { YearMetrics } from "../data/year-metrics";
 
@@ -10,103 +17,170 @@ type TopItemsCardsProps = {
     metrics2: YearMetrics;
 };
 
-function transformArtistsToMusicItems(artists: YearMetrics['topArtists']): MusicItemCardProps['item'][] {
-    return artists.map((artist) => ({
-        id: artist.id,
-        name: artist.name,
-        href: `https://open.spotify.com/artist/${artist.id}`,
-        image: artist.image,
-        artists: "", // Artists don't have sub-artists
-        stat1: `${artist.plays} plays`,
-        stat2: `${(artist.msPlayed / 1000 / 60).toFixed(2)} min`,
-    }));
+type RankChange = "up" | "down" | "new";
+
+function calculateRankChanges<T extends { id: string }>(
+    currentList: T[],
+    previousList: T[]
+): Map<string, { rankChange: RankChange; previousRank?: number }> {
+    const previousRanks = new Map(previousList.map((item, index) => [item.id, index + 1]));
+    const rankChanges = new Map<string, { rankChange: RankChange; previousRank?: number }>();
+
+    currentList.forEach((item, currentIndex) => {
+        const currentRank = currentIndex + 1;
+        const previousRank = previousRanks.get(item.id);
+
+        if (previousRank === undefined) {
+            rankChanges.set(item.id, { rankChange: "new" });
+        } else {
+            const change = previousRank > currentRank ? "up" :
+                previousRank < currentRank ? "down" :
+                    undefined;
+            rankChanges.set(item.id, {
+                rankChange: change as RankChange,
+                previousRank
+            });
+        }
+    });
+
+    return rankChanges;
 }
 
-function transformTracksToMusicItems(tracks: YearMetrics['topTracks']): MusicItemCardProps['item'][] {
-    return tracks.map((track) => ({
-        id: track.id,
-        name: track.name,
-        href: `https://open.spotify.com/track/${track.id}`,
-        image: track.image,
-        artists: track.artists.join(", "),
-        stat1: `${track.plays} plays`,
-        stat2: `${(track.msPlayed / 1000 / 60).toFixed(2)} min`,
-    }));
+function transformArtistsToMusicItems(
+    artists: YearMetrics['topArtists'],
+    rankChanges?: Map<string, { rankChange: RankChange; previousRank?: number }>
+): MusicItemCardProps['item'][] {
+    return artists.map((artist) => {
+        const rankChangeInfo = rankChanges?.get(artist.id);
+        return {
+            id: artist.id,
+            name: artist.name,
+            href: `https://open.spotify.com/artist/${artist.id}`,
+            image: artist.image,
+            stat1: `${artist.plays} plays`,
+            stat2: `${(artist.msPlayed / 1000 / 60).toFixed(2)} min`,
+            rankChange: rankChangeInfo?.rankChange,
+        };
+    });
+}
+
+function transformTracksToMusicItems(
+    tracks: YearMetrics['topTracks'],
+    rankChanges?: Map<string, { rankChange: RankChange; previousRank?: number }>
+): MusicItemCardProps['item'][] {
+    return tracks.map((track) => {
+        const rankChangeInfo = rankChanges?.get(track.id);
+        return {
+            id: track.id,
+            name: track.name,
+            href: `https://open.spotify.com/track/${track.id}`,
+            image: track.image,
+            artists: track.artists.join(", "),
+            stat1: `${track.plays} plays`,
+            stat2: `${(track.msPlayed / 1000 / 60).toFixed(2)} min`,
+            rankChange: rankChangeInfo?.rankChange,
+        };
+    });
 }
 
 export function TopItemsCards({ metrics1, metrics2 }: TopItemsCardsProps) {
-    const artists1 = transformArtistsToMusicItems(metrics1.topArtists);
-    const artists2 = transformArtistsToMusicItems(metrics2.topArtists);
-    const tracks1 = transformTracksToMusicItems(metrics1.topTracks);
-    const tracks2 = transformTracksToMusicItems(metrics2.topTracks);
+    const [showYear1Artists, setShowYear1Artists] = useState(true);
+    const [showYear1Tracks, setShowYear1Tracks] = useState(true);
+
+    const artistsRankChanges1 = calculateRankChanges(metrics1.topArtists, metrics2.topArtists);
+    const artistsRankChanges2 = calculateRankChanges(metrics2.topArtists, metrics1.topArtists);
+    const tracksRankChanges1 = calculateRankChanges(metrics1.topTracks, metrics2.topTracks);
+    const tracksRankChanges2 = calculateRankChanges(metrics2.topTracks, metrics1.topTracks);
+
+    const artists1 = transformArtistsToMusicItems(metrics1.topArtists, artistsRankChanges1);
+    const artists2 = transformArtistsToMusicItems(metrics2.topArtists, artistsRankChanges2);
+    const tracks1 = transformTracksToMusicItems(metrics1.topTracks, tracksRankChanges1);
+    const tracks2 = transformTracksToMusicItems(metrics2.topTracks, tracksRankChanges2);
+
+    const currentArtistsData = showYear1Artists ? artists1 : artists2;
+    const currentTracksData = showYear1Tracks ? tracks1 : tracks2;
 
     return (
-        <div className="space-y-4">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Top Artists {metrics1.year}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <MusicList
-                            data={artists1}
-                            config={{
-                                label: "artists",
-                                showRank: true,
-                                layout: "list"
-                            }}
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                    <CardTitle>Top Artists</CardTitle>
+                    <div className="flex items-center gap-3">
+                        <span className={`font-medium text-sm ${showYear1Artists ? 'text-foreground' : 'text-muted-foreground'}`}>
+                            {metrics1.year}
+                        </span>
+                        <Switch
+                            checked={!showYear1Artists}
+                            onCheckedChange={(checked) => setShowYear1Artists(!checked)}
                         />
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Top Artists {metrics2.year}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <MusicList
-                            data={artists2}
-                            config={{
-                                label: "artists",
-                                showRank: true,
-                                layout: "list"
-                            }}
-                        />
-                    </CardContent>
-                </Card>
-            </div>
+                        <span className={`font-medium text-sm ${!showYear1Artists ? 'text-foreground' : 'text-muted-foreground'}`}>
+                            {metrics2.year}
+                        </span>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <MusicList
+                        data={currentArtistsData}
+                        config={{
+                            label: "artists",
+                            showRank: true,
+                            layout: "list"
+                        }}
+                    />
+                </CardContent>
+            </Card>
 
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Top Tracks {metrics1.year}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <MusicList
-                            data={tracks1}
-                            config={{
-                                label: "tracks",
-                                showRank: true,
-                                layout: "list"
-                            }}
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                    <CardTitle>Top Tracks</CardTitle>
+                    <div className="flex items-center gap-3">
+                        <span className={`font-medium text-sm ${showYear1Tracks ? 'text-foreground' : 'text-muted-foreground'}`}>
+                            {metrics1.year}
+                        </span>
+                        <Switch
+                            checked={!showYear1Tracks}
+                            onCheckedChange={(checked) => setShowYear1Tracks(!checked)}
                         />
-                    </CardContent>
-                </Card>
-                <Card>
-                    <CardHeader>
-                        <CardTitle>Top Tracks {metrics2.year}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <MusicList
-                            data={tracks2}
-                            config={{
-                                label: "tracks",
-                                showRank: true,
-                                layout: "list"
-                            }}
-                        />
-                    </CardContent>
-                </Card>
-            </div>
+                        <span className={`font-medium text-sm ${!showYear1Tracks ? 'text-foreground' : 'text-muted-foreground'}`}>
+                            {metrics2.year}
+                        </span>
+                    </div>
+                </CardHeader>
+                <CardContent>
+                    <MusicList
+                        data={currentTracksData}
+                        config={{
+                            label: "tracks",
+                            showRank: true,
+                            layout: "list"
+                        }}
+                    />
+                </CardContent>
+            </Card>
+        </div>
+    );
+}
+
+export function TopItemsCardsSkeleton() {
+    return (
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                    <CardTitle>Top Artists</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <MusicListSkeleton length={5} layout="list" showRank={true} />
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+                    <CardTitle>Top Tracks</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <MusicListSkeleton length={5} layout="list" showRank={true} />
+                </CardContent>
+            </Card>
         </div>
     );
 } 

@@ -1,15 +1,17 @@
 'use client';
 
 import { useQuery } from "@tanstack/react-query";
+import { AlertCircle, RefreshCw } from "lucide-react";
 import { parseAsInteger, useQueryState } from "nuqs";
 
-import { getYearMetrics, } from "../data/year-metrics";
-import { GroupedBarChart } from "./grouped-bar-chart";
-import { LineChartEvolution } from "./line-chart-evolution";
-import { SideBySideTable } from "./side-by-side-table";
-import { TopItemsCards } from "./top-items-cards";
+import { Button } from "@repo/ui/button";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card";
+
 import { getYearMetricsAction } from "../actions/year-metrics-action";
-import { StatsCards } from "./stats-cards";
+import { GroupedBarChart, GroupedBarChartSkeleton } from "./grouped-bar-chart";
+import { LineChartEvolution, LineChartEvolutionSkeleton } from "./line-chart-evolution";
+import { StatsCards, StatsCardsSkeleton } from "./stats-cards";
+import { TopItemsCards, TopItemsCardsSkeleton } from "./top-items-cards";
 
 const useYearMetrics = (year1: number, year2: number) => {
     const metrics1Query = useQuery({
@@ -36,18 +38,59 @@ export function ComparisonContent() {
     const [year2] = useQueryState('year2', parseAsInteger.withDefault(new Date().getFullYear() - 1));
     const { metrics1, metrics2, isLoading, isError } = useYearMetrics(year1, year2);
 
-    if (isLoading) return <div>Loading...</div>;
-    if (!metrics1 || !metrics2 || isError) return <div>Error loading metrics</div>;
+    if (isLoading) return <ComparisonContentSkeleton />;
+    if (!metrics1 || !metrics2 || isError) return <ComparisonContentError />;
 
     return (
         <div className="space-y-4">
             <StatsCards metrics1={metrics1} metrics2={metrics2} />
-            <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                <SideBySideTable metrics1={metrics1} metrics2={metrics2} />
-                <GroupedBarChart metrics1={metrics1} metrics2={metrics2} />
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+                <LineChartEvolution metrics1={metrics1} metrics2={metrics2} className="lg:col-span-3" />
+                <GroupedBarChart metrics1={metrics1} metrics2={metrics2} className="w-full" />
             </div>
-            <LineChartEvolution metrics1={metrics1} metrics2={metrics2} />
             <TopItemsCards metrics1={metrics1} metrics2={metrics2} />
         </div>
     );
-} 
+}
+
+export const ComparisonContentSkeleton = () => {
+    return (
+        <div className="space-y-4">
+            <StatsCardsSkeleton />
+            <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
+                <LineChartEvolutionSkeleton className="lg:col-span-3" />
+                <GroupedBarChartSkeleton className="w-full" />
+            </div>
+            <TopItemsCardsSkeleton />
+        </div>
+    );
+};
+
+const ComparisonContentError = () => {
+    const handleRetry = () => {
+        window.location.reload();
+    };
+
+    return (
+        <div className="flex min-h-[300px] items-center justify-center p-4 sm:min-h-[400px] sm:p-6">
+            <Card className="w-full max-w-sm sm:max-w-md">
+                <CardHeader className="space-y-3 text-center sm:space-y-4">
+                    <div className="mx-auto flex size-10 items-center justify-center rounded-full bg-destructive/10 sm:size-12">
+                        <AlertCircle className="size-5 text-destructive sm:size-6" />
+                    </div>
+                    <CardTitle className="text-lg sm:text-xl">Failed to Load Data</CardTitle>
+                    <CardDescription className="text-sm sm:text-base">
+                        We encountered an error while loading your year-over-year comparison data.
+                        This might be due to a temporary network issue or server problem.
+                    </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-4 text-center">
+                    <Button onClick={handleRetry} className="w-full" size="default">
+                        <RefreshCw className="mr-2 size-4" />
+                        Try Again
+                    </Button>
+                </CardContent>
+            </Card>
+        </div>
+    );
+};

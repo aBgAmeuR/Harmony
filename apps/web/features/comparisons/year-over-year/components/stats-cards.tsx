@@ -3,6 +3,7 @@ import { Clock, Disc3, Music, TrendingDown, TrendingUp, Users } from "lucide-rea
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
 import { Skeleton } from "@repo/ui/skeleton";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@repo/ui/tooltip";
 
 import { msToHours } from "~/lib/utils";
 
@@ -78,19 +79,23 @@ export const StatsCards = ({ metrics1, metrics2 }: StatsCardsProps) => {
                         </CardHeader>
                         <CardContent>
                             <div className="space-y-1">
-                                <div className="font-bold text-sm">
-                                    {metrics1.year}: {stat.value1}
+                                <div className="font-bold text-2xl">
+                                    {stat.value1}
                                 </div>
-                                <div className="font-bold text-muted-foreground text-sm">
-                                    {metrics2.year}: {stat.value2}
-                                </div>
-                                <div className={cn(
-                                    "flex items-center gap-1 font-medium text-xs",
-                                    isPositive ? "text-green-600" : "text-red-600"
-                                )}>
-                                    <TrendIcon className="size-3" />
-                                    {formatPercentage(stat.change)}
-                                </div>
+                                <Tooltip>
+                                    <TooltipTrigger asChild>
+                                        <div className={cn(
+                                            "flex w-fit items-center gap-1 font-medium text-xs",
+                                            isPositive ? "text-green-600" : "text-red-600"
+                                        )}>
+                                            <TrendIcon className="size-3" />
+                                            {formatPercentage(stat.change)} vs {metrics2.year}
+                                        </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                        <p>{metrics2.year}: {stat.value2}</p>
+                                    </TooltipContent>
+                                </Tooltip>
                             </div>
                         </CardContent>
                     </Card>
@@ -117,14 +122,11 @@ export const StatsCardsSkeleton = () => {
                         <card.icon className="size-4 text-muted-foreground" />
                     </CardHeader>
                     <CardContent className="space-y-1">
-                        <div className="font-bold text-sm">
-                            <Skeleton className="h-4 w-20" />
-                        </div>
-                        <div className="font-bold text-sm">
-                            <Skeleton className="h-4 w-20" />
+                        <div className="font-bold text-2xl">
+                            <Skeleton className="h-8 w-20" />
                         </div>
                         <div className="text-xs">
-                            <Skeleton className="h-3 w-12" />
+                            <Skeleton className="h-3 w-16" />
                         </div>
                     </CardContent>
                 </Card>

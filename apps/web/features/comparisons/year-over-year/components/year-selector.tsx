@@ -69,9 +69,6 @@ export const YearSelector = () => {
 
 export const YearSelectorSkeleton = () => {
     return (
-        <>
-            <Skeleton className="h-8 w-[108px]" />
-            <Skeleton className="h-8 w-[108px]" />
-        </>
+        <Skeleton className="h-8 w-[217px]" />
     );
 };
