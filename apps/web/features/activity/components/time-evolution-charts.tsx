@@ -35,7 +35,7 @@ export const TimeEvolutionCharts = async ({
 					<ReusableLineChart
 						data={data.tracks.data}
 						xAxisDataKey="month"
-						lineDataKey="value"
+						lineDataKeys={["value"]}
 						config={{ value: { label: "Tracks", color: "var(--chart-1)" } }}
 						showYAxis={false}
 						className="aspect-video size-full"
@@ -53,7 +53,7 @@ export const TimeEvolutionCharts = async ({
 					<ReusableLineChart
 						data={data.albums.data}
 						xAxisDataKey="month"
-						lineDataKey="value"
+						lineDataKeys={["value"]}
 						config={{ value: { label: "Albums", color: "var(--chart-2)" } }}
 						showYAxis={false}
 						className="aspect-video size-full"
@@ -71,7 +71,7 @@ export const TimeEvolutionCharts = async ({
 					<ReusableLineChart
 						data={data.artists.data}
 						xAxisDataKey="month"
-						lineDataKey="value"
+						lineDataKeys={["value"]}
 						config={{ value: { label: "Artists", color: "var(--chart-3)" } }}
 						showYAxis={false}
 						className="aspect-video size-full"
