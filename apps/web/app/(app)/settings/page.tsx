@@ -1,4 +1,4 @@
-import { InfoIcon, PackageIcon, PaletteIcon, SettingsIcon, Share2Icon, ShieldIcon, UserIcon } from "lucide-react";
+import { InfoIcon, PackageIcon, PaletteIcon, Share2Icon, UserIcon } from "lucide-react";
 import type { Metadata } from "next";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs";
@@ -7,9 +7,7 @@ import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout
 import AboutTabSettings from "~/features/settings/components/about-tab-settings";
 import AccountTabSettings from "~/features/settings/components/account-tab-settings";
 import AppearanceTabSettings from "~/features/settings/components/appearance-tab-settings";
-import ComputationTabSettings from "~/features/settings/components/computation-tab-settings";
 import DataPackageTabSettings from "~/features/settings/components/data-package-tab-settings";
-import PrivacyTabSettings from "~/features/settings/components/privacy-tab-settings";
 import SharingTabSettings from "~/features/settings/components/sharing-tab-settings";
 
 export const metadata: Metadata = {
@@ -18,12 +16,12 @@ export const metadata: Metadata = {
 };
 
 const tabs = [
-    {
-        label: "Computation",
-        value: "computation",
-        icon: <SettingsIcon className="size-4" />,
-        content: <ComputationTabSettings />
-    },
+    // {
+    //     label: "Computation",
+    //     value: "computation",
+    //     icon: <SettingsIcon className="size-4" />,
+    //     content: <ComputationTabSettings />
+    // },
     {
         label: "Data Package",
         value: "data-package",
@@ -35,12 +33,6 @@ const tabs = [
         value: "appearance",
         icon: <PaletteIcon className="size-4" />,
         content: <AppearanceTabSettings />
-    },
-    {
-        label: "Privacy",
-        value: "privacy",
-        icon: <ShieldIcon className="size-4" />,
-        content: <PrivacyTabSettings />
     },
     {
         label: "Sharing",

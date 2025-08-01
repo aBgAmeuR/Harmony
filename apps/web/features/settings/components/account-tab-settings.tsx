@@ -1,24 +1,26 @@
-import { LogOutIcon, UserIcon } from "lucide-react";
+import { EyeIcon, LogOutIcon, UserIcon } from "lucide-react";
 
 import { getUser } from "@repo/auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card";
 import { LinkButton } from "@repo/ui/components/link-button";
+import { Separator } from "@repo/ui/separator";
 
 import { Icons } from "~/components/icons";
+
+import { PrivacySettingsClient } from "./privacy-settings-client";
+import { SettingsTabContent, SettingsTabHeader, SettingsTabLayout } from "./settings-tab-layout";
 
 export default async function AccountTabSettings() {
     const { username, email, image, isDemo } = await getUser();
 
     return (
-        <div className="flex flex-col gap-4">
-            <CardHeader>
-                <CardTitle className="text-xl">Account Settings</CardTitle>
-                <CardDescription>
-                    Manage your account information and preferences
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+        <SettingsTabLayout>
+            <SettingsTabHeader title="Account & Privacy" description="Manage your account information, privacy settings, and preferences" />
+            <SettingsTabContent className="gap-4">
+                <div className="flex items-center gap-2">
+                    <UserIcon className="size-4 text-muted-foreground" />
+                    <h3 className="font-semibold text-sm">Profile Information</h3>
+                </div>
                 <div className="flex items-center space-x-4 rounded-lg border border-input p-4">
                     <Avatar className="size-12">
                         <AvatarImage src={image || ""} alt={username || ""} />
@@ -31,9 +33,9 @@ export default async function AccountTabSettings() {
                         </AvatarFallback>
                     </Avatar>
                     <div className="flex-1">
-                        <h3 className="font-medium text-sm">
+                        <h4 className="font-medium text-sm">
                             {username || "Anonymous User"}
-                        </h3>
+                        </h4>
                         <p className="text-muted-foreground text-xs">
                             {email || "No email provided"}
                         </p>
@@ -59,13 +61,31 @@ export default async function AccountTabSettings() {
                         </LinkButton>
                     </div>
                 )}
+            </SettingsTabContent>
 
-                {!isDemo && (
-                    <div className="space-y-4">
+            <Separator />
+
+            <SettingsTabContent className="gap-4">
+                <div className="flex items-center gap-2">
+                    <EyeIcon className="size-4 text-muted-foreground" />
+                    <h3 className="font-semibold text-sm">Privacy Settings</h3>
+                </div>
+                <PrivacySettingsClient />
+            </SettingsTabContent>
+
+            {!isDemo && (
+                <>
+                    <Separator />
+
+                    <SettingsTabContent className="gap-4">
+                        <div className="flex items-center gap-2">
+                            <LogOutIcon className="size-4 text-muted-foreground" />
+                            <h3 className="font-semibold text-sm">Account Actions</h3>
+                        </div>
                         <div className="rounded-lg border border-muted-foreground/25 border-dashed p-4">
-                            <h4 className="mb-2 font-medium text-sm">Account Actions</h4>
+                            <h4 className="mb-2 font-medium text-sm">Manage Account</h4>
                             <p className="mb-3 text-muted-foreground text-xs">
-                                Manage your account settings and data.
+                                Control your account settings and session.
                             </p>
                             <div className="flex gap-2">
                                 <LinkButton href="/signout" size="sm" variant="outline">
@@ -77,16 +97,16 @@ export default async function AccountTabSettings() {
 
                         <div className="rounded-lg border border-red-200 border-dashed bg-red-50 p-4 dark:border-red-800 dark:bg-red-950">
                             <h4 className="mb-2 font-medium text-red-800 text-sm dark:text-red-200">
-                                Data & Privacy
+                                Data & Privacy Information
                             </h4>
                             <p className="text-red-700 text-xs dark:text-red-300">
                                 Your data is stored securely and is only used to generate your personal
                                 music insights. We never share your data with third parties.
                             </p>
                         </div>
-                    </div>
-                )}
-            </CardContent>
-        </div>
+                    </SettingsTabContent>
+                </>
+            )}
+        </SettingsTabLayout >
     );
 }

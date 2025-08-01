@@ -195,23 +195,6 @@ export function NavUser({ user }: NavUserProps) {
 							{!isDemo ? (
 								<>
 									<DropdownMenuSeparator />
-									<DropdownMenuLabel className="text-muted-foreground text-xs">
-										Social
-									</DropdownMenuLabel>
-									{!isDemo ? (
-										<DropdownMenuItem asChild={true}>
-											<LinkButton
-												href="/social/shareable-links"
-												className="flex w-full cursor-pointer items-center justify-between"
-												variant="ghost"
-												size="sm"
-											>
-												Share profile
-												<Share2Icon size={18} />
-											</LinkButton>
-										</DropdownMenuItem>
-									) : null}
-									<DropdownMenuSeparator />
 									<DialogTrigger asChild={true}>
 										<DropdownMenuItem asChild={true}>
 											<Button

@@ -1,21 +1,17 @@
 import { PackageIcon, UploadIcon } from "lucide-react";
 
 import { getUser } from "@repo/auth";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card";
 import { LinkButton } from "@repo/ui/components/link-button";
+
+import { SettingsTabContent, SettingsTabHeader, SettingsTabLayout } from "./settings-tab-layout";
 
 export default async function DataPackageTabSettings() {
     const { hasPackage, isDemo } = await getUser();
 
     return (
-        <div className="flex flex-col gap-4">
-            <CardHeader>
-                <CardTitle className="text-xl">Spotify Data Package</CardTitle>
-                <CardDescription>
-                    Manage your Spotify data package to generate detailed listening statistics
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+        <SettingsTabLayout>
+            <SettingsTabHeader title="Spotify Data Package" description="Manage your Spotify data package to generate detailed listening statistics" />
+            <SettingsTabContent className="gap-4">
                 <div className="flex items-center justify-between space-x-4 rounded-lg border border-input p-4">
                     <div className="flex items-start gap-3">
                         <div className="rounded-md bg-primary/10 p-2">
@@ -72,7 +68,7 @@ export default async function DataPackageTabSettings() {
                         </p>
                     </div>
                 )}
-            </CardContent>
-        </div>
+            </SettingsTabContent>
+        </SettingsTabLayout>
     );
 }

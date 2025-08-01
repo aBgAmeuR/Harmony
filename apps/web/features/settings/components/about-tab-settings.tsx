@@ -1,21 +1,17 @@
 import { BookTextIcon, Github, InfoIcon } from "lucide-react";
 
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card";
 import { LinkButton } from "@repo/ui/components/link-button";
 
 import { Icons } from "~/components/icons";
 import { config } from "~/lib/config";
 
+import { SettingsTabContent, SettingsTabHeader, SettingsTabLayout } from "./settings-tab-layout";
+
 export default function AboutTabSettings() {
     return (
-        <div className="flex flex-col gap-4">
-            <CardHeader>
-                <CardTitle className="text-xl">About Harmony</CardTitle>
-                <CardDescription>
-                    Learn more about the app and stay updated with the latest changes
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+        <SettingsTabLayout>
+            <SettingsTabHeader title="About Harmony" description="Learn more about the app and stay updated with the latest changes" />
+            <SettingsTabContent className="gap-4">
                 <div className="flex items-center justify-between space-x-4 rounded-lg border border-input p-4">
                     <div className="flex items-start gap-3">
                         <div className="rounded-md bg-primary/10 p-2">
@@ -28,8 +24,25 @@ export default function AboutTabSettings() {
                             </p>
                         </div>
                     </div>
-                    <LinkButton href="/settings/about" size="sm" variant="outline">
+                    <LinkButton href="/docs" size="sm" variant="outline" target="_blank" rel="noopener noreferrer">
                         Learn More
+                    </LinkButton>
+                </div>
+
+                <div className="flex items-center justify-between space-x-4 rounded-lg border border-input p-4">
+                    <div className="flex items-start gap-3">
+                        <div className="rounded-md bg-primary/10 p-2">
+                            <BookTextIcon className="size-4 text-primary" />
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="font-medium text-sm">Documentation</h3>
+                            <p className="mt-1 text-muted-foreground text-xs">
+                                View the official documentation to learn how to use Harmony and explore features.
+                            </p>
+                        </div>
+                    </div>
+                    <LinkButton href="/docs" size="sm" variant="outline" target="_blank" rel="noopener noreferrer">
+                        View Documentation
                     </LinkButton>
                 </div>
 
@@ -65,29 +78,17 @@ export default function AboutTabSettings() {
                         your music preferences and habits.
                     </p>
                     <div className="flex gap-2">
-                        <LinkButton
-                            href={config.githubRepo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            size="sm"
-                            variant="outline"
-                        >
+                        <LinkButton href={config.githubRepo} target="_blank" rel="noopener noreferrer" size="sm" variant="outline">
                             <Github className="size-4" />
                             GitHub
                         </LinkButton>
-                        <LinkButton
-                            href="https://spotify.com"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            size="sm"
-                            variant="outline"
-                        >
+                        <LinkButton href="https://spotify.com" target="_blank" rel="noopener noreferrer" size="sm" variant="outline">
                             <Icons.spotify className="size-4" />
                             Spotify
                         </LinkButton>
                     </div>
                 </div>
-            </CardContent>
-        </div>
+            </SettingsTabContent>
+        </SettingsTabLayout>
     );
 }

@@ -1,11 +1,12 @@
 'use client'
 
 
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card";
 import { Label } from "@repo/ui/label";
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group";
 
 import { useComputationMethod } from "~/lib/store";
+
+import { SettingsTabContent, SettingsTabHeader, SettingsTabLayout } from "./settings-tab-layout";
 
 const computationMethods = [
     {
@@ -32,14 +33,9 @@ export default function ComputationTabSettings() {
     const { computation_method, setComputationMethod } = useComputationMethod();
 
     return (
-        <div className="flex flex-col gap-4">
-            <CardHeader>
-                <CardTitle className="text-xl">Computation Method</CardTitle>
-                <CardDescription>
-                    Choose how your music statistics and rankings are calculated
-                </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
+        <SettingsTabLayout>
+            <SettingsTabHeader title="Computation Method" description="Choose how your music statistics and rankings are calculated" />
+            <SettingsTabContent>
                 <Label className="mb-3 block font-medium text-base">Method</Label>
                 <RadioGroup
                     className="flex flex-col gap-4"
@@ -75,7 +71,7 @@ export default function ComputationTabSettings() {
                 <p className="mt-4 text-muted-foreground text-sm">
                     This setting affects how all your top tracks, artists, and rankings are calculated throughout the app.
                 </p>
-            </CardContent>
-        </div>
+            </SettingsTabContent>
+        </SettingsTabLayout>
     );
 }
