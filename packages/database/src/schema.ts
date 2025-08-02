@@ -107,7 +107,7 @@ export const historicalTrackRankings = pgTable("HistoricalTrackRanking", {
 	trackId: varchar({ length: 256 }).notNull(),
 	rank: integer().notNull(),
 	timeRange: timeRangeStatsEnum().notNull(),
-	timestamp: timestamp().defaultNow(),
+	timestamp: timestamp().defaultNow().notNull(),
 });
 
 export const historicalArtistRankings = pgTable("HistoricalArtistRanking", {
@@ -118,7 +118,7 @@ export const historicalArtistRankings = pgTable("HistoricalArtistRanking", {
 	artistId: varchar({ length: 256 }).notNull(),
 	rank: integer().notNull(),
 	timeRange: timeRangeStatsEnum().notNull(),
-	timestamp: timestamp().defaultNow(),
+	timestamp: timestamp().defaultNow().notNull(),
 });
 
 export const profileShareLinks = pgTable("ProfileShareLink", {
