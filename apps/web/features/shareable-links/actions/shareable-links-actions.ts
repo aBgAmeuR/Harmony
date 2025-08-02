@@ -37,7 +37,7 @@ export const createShareableLinkAction = async (data: {
 		expirationDate: data.expirationDate,
 	});
 
-	revalidatePath("/social/shareable-links");
+	revalidatePath("/settings");
 
 	return {
 		success: true,
@@ -72,7 +72,7 @@ export const deleteShareableLinkAction = async (id: string) => {
 
 	await deleteShareableLink(id);
 
-	revalidatePath("/social/shareable-links");
+	revalidatePath("/settings");
 
 	return {
 		success: true,
