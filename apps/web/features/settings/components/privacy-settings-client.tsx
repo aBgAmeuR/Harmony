@@ -26,7 +26,7 @@ export function PrivacySettingsClient() {
                             Show Email Address
                         </Label>
                         <p className="mt-1 text-muted-foreground text-xs">
-                            Display your email address in your profile and shareable links
+                            Display your email address in your profile
                         </p>
                     </div>
                 </div>
