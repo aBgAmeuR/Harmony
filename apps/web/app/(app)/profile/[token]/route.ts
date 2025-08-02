@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { redirect } from "next/navigation";
 import { after } from "next/server";
 
 import { signInWithShareableLink } from "@repo/auth";
@@ -15,13 +15,12 @@ export async function GET(
 	const { token } = await params;
 
 	const link = await getShareableLinkByToken(token);
-	console.log(link);
 
-	if (!link || link.revoked) return notFound();
+	if (!link || link.revoked) redirect("/error?error=LinkNotFound");
 	if (link.expiresAt && new Date(link.expiresAt) < new Date())
-		return notFound();
+		redirect("/error?error=LinkExpired");
 	if (link.usageLimit !== 0 && link.usageCount >= link.usageLimit)
-		return notFound();
+		redirect("/error?error=LinkMaxUsage");
 
 	after(async () => await incrementShareableLinkUsage(token));
 

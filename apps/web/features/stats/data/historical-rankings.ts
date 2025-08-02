@@ -1,6 +1,5 @@
 "server-only";
 
-import { getUser } from "@repo/auth";
 import {
 	and,
 	db,
@@ -13,9 +12,9 @@ import { SpotifyAPI } from "@repo/spotify";
 import { getTimeRangeStats } from "~/features/stats/data/utils";
 import { DateUtils } from "~/lib/date-utils";
 
-function fillHistoricalTimeline(
-	data: Array<{ timestamp: Date; rank: number | null }>,
-) {
+const fillHistoricalWeeklyTimeline = (
+	data: { timestamp: Date; rank: number }[],
+) => {
 	if (data.length === 0) return [];
 
 	const sortedData = [...data].sort(
@@ -23,29 +22,56 @@ function fillHistoricalTimeline(
 	);
 
 	const minDate = sortedData[0].timestamp;
-	const maxDate = sortedData[sortedData.length - 1].timestamp;
+	const maxDate = DateUtils.getLastDayOfWeek(
+		DateUtils.getWeek(new Date(Date.now())) === 1
+			? 52
+			: DateUtils.getWeek(new Date(Date.now())) - 1,
+		new Date(Date.now()).getFullYear(),
+	);
 
 	const dataMap = new Map(
-		sortedData.map((item) => [item.timestamp.getTime(), item.rank]),
+		sortedData.map((item) => [
+			DateUtils.formatDate(item.timestamp, "full"),
+			item.rank,
+		]),
 	);
 
 	const filledData = [];
+	const minWeek = DateUtils.getWeek(minDate);
+	const maxWeek = DateUtils.getWeek(maxDate);
+	const minYear = minDate.getFullYear();
+	const maxYear = maxDate.getFullYear();
 
-	const currentDate = new Date(minDate);
-	while (currentDate <= maxDate) {
-		const timestamp = new Date(currentDate);
-		const rank = dataMap.get(timestamp.getTime()) ?? null;
+	let currentYear = minYear;
+	let currentWeek = minWeek;
+
+	while (
+		currentYear < maxYear ||
+		(currentYear === maxYear && currentWeek <= maxWeek)
+	) {
+		const lastDayOfWeek = DateUtils.getLastDayOfWeek(currentWeek, currentYear);
+		const formattedDate = DateUtils.formatDate(lastDayOfWeek, "full");
+		const rank = dataMap.get(formattedDate) ?? null;
 
 		filledData.push({
-			timestamp: DateUtils.formatDate(timestamp, "full"),
+			timestamp: formattedDate,
 			rank,
 		});
 
-		currentDate.setDate(currentDate.getDate() + 7);
+		currentWeek++;
+
+		if (currentWeek > 53) {
+			currentWeek = 1;
+			currentYear++;
+		}
+
+		if (lastDayOfWeek > maxDate) {
+			break;
+		}
 	}
 
 	return filledData;
-}
+};
 
 export async function getHistoricalTrackRankings(
 	userId: string,
@@ -55,40 +81,22 @@ export async function getHistoricalTrackRankings(
 	const timeRangeStats = await getTimeRangeStats(userId, isDemo);
 	if (!timeRangeStats) return [];
 
-	const distinctTimestamps = db
-		.selectDistinct({ timestamp: historicalTrackRankings.timestamp })
+	const results = await db
+		.select({
+			timestamp: historicalTrackRankings.timestamp,
+			rank: historicalTrackRankings.rank,
+		})
 		.from(historicalTrackRankings)
 		.where(
 			and(
-				eq(historicalTrackRankings.userId, userId),
-				eq(historicalTrackRankings.timeRange, timeRangeStats),
-			),
-		)
-		.as("distinct_timestamps");
-
-	const results = await db
-		.select({
-			timestamp: distinctTimestamps.timestamp,
-			rank: historicalTrackRankings.rank,
-		})
-		.from(distinctTimestamps)
-		.leftJoin(
-			historicalTrackRankings,
-			and(
-				eq(historicalTrackRankings.timestamp, distinctTimestamps.timestamp),
 				eq(historicalTrackRankings.userId, userId),
 				eq(historicalTrackRankings.trackId, trackId),
 				eq(historicalTrackRankings.timeRange, timeRangeStats),
 			),
 		)
-		.orderBy(distinctTimestamps.timestamp);
+		.orderBy(historicalTrackRankings.timestamp);
 
-	const mappedResults = results.map((row) => ({
-		timestamp: row.timestamp ? new Date(row.timestamp) : new Date(),
-		rank: row.rank ?? null,
-	}));
-
-	return fillHistoricalTimeline(mappedResults);
+	return fillHistoricalWeeklyTimeline(results);
 }
 
 export async function getHistoricalArtistRankings(
@@ -99,40 +107,22 @@ export async function getHistoricalArtistRankings(
 	const timeRangeStats = await getTimeRangeStats(userId, isDemo);
 	if (!timeRangeStats) return [];
 
-	const distinctTimestamps = db
-		.selectDistinct({ timestamp: historicalArtistRankings.timestamp })
+	const results = await db
+		.select({
+			timestamp: historicalArtistRankings.timestamp,
+			rank: historicalArtistRankings.rank,
+		})
 		.from(historicalArtistRankings)
 		.where(
 			and(
-				eq(historicalArtistRankings.userId, userId),
-				eq(historicalArtistRankings.timeRange, timeRangeStats),
-			),
-		)
-		.as("distinct_timestamps");
-
-	const results = await db
-		.select({
-			timestamp: distinctTimestamps.timestamp,
-			rank: historicalArtistRankings.rank,
-		})
-		.from(distinctTimestamps)
-		.leftJoin(
-			historicalArtistRankings,
-			and(
-				eq(historicalArtistRankings.timestamp, distinctTimestamps.timestamp),
 				eq(historicalArtistRankings.userId, userId),
 				eq(historicalArtistRankings.artistId, artistId),
 				eq(historicalArtistRankings.timeRange, timeRangeStats),
 			),
 		)
-		.orderBy(distinctTimestamps.timestamp);
+		.orderBy(historicalArtistRankings.timestamp);
 
-	const mappedResults = results.map((row) => ({
-		timestamp: row.timestamp ? new Date(row.timestamp) : new Date(),
-		rank: row.rank ?? null,
-	}));
-
-	return fillHistoricalTimeline(mappedResults);
+	return fillHistoricalWeeklyTimeline(results);
 }
 
 export async function updateHistoricalRankings(userId: string) {

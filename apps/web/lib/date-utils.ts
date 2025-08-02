@@ -205,6 +205,46 @@ export const generateMonthRange = (
 	return result;
 };
 
+export const getWeek = (date: Date): number => {
+	const target = new Date(date.valueOf());
+	// ISO week date weeks start on monday
+	// so correct the day number
+	const dayNr = (date.getDay() + 6) % 7;
+
+	// Set the target to the thursday of this week so the
+	// target date is in the right year
+	target.setDate(target.getDate() - dayNr + 3);
+
+	// ISO 8601 states that week 1 is the week
+	// with january 4th in it
+	const jan4 = new Date(target.getFullYear(), 0, 4);
+
+	// Number of days between target date and january 4th
+	const dayDiff = (target.getTime() - jan4.getTime()) / 86400000;
+
+	// Calculate week number: Week 1 (january 4th) plus the
+	// number of weeks between target date and january 4th
+	const weekNr = 1 + Math.ceil(dayDiff / 7);
+
+	return weekNr;
+};
+
+export const getLastDayOfWeek = (weekNumber: number, year: number): Date => {
+	// First day of the year
+	const firstDayOfYear = new Date(year, 0, 1);
+	const dayOfWeek = firstDayOfYear.getDay(); // 0 (Sun) to 6 (Sat)
+
+	// Adjust to Monday (ISO week starts on Monday)
+	const daysOffset = dayOfWeek <= 4 ? dayOfWeek - 1 : dayOfWeek - 8;
+	const firstMonday = new Date(year, 0, 1 - daysOffset);
+
+	// Calculate the last day (Sunday) of the given ISO week number
+	const lastDay = new Date(firstMonday);
+	lastDay.setDate(firstMonday.getDate() + (weekNumber - 1) * 7 + 6); // +6 for Sunday
+
+	return lastDay;
+};
+
 export const DateUtils = {
 	formatDate,
 	addMonths,
@@ -226,4 +266,6 @@ export const DateUtils = {
 	YEARS_2015_TO_CURRENT,
 	getMonthIndex,
 	generateMonthRange,
+	getWeek,
+	getLastDayOfWeek,
 };
