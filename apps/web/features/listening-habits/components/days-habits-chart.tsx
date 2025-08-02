@@ -32,7 +32,7 @@ export const DaysHabitsChart = async ({ data }: DaysHabitsChartComponentProps) =
 				<ReusableBarChart
 					data={data}
 					xAxisDataKey="day"
-					barDataKey="msPlayed"
+					barDataKeys={["msPlayed"]}
 					config={{ msPlayed: { label: "Time Played", color: "var(--chart-1)" } }}
 					showYAxis={false}
 					className="aspect-video"

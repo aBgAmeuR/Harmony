@@ -24,7 +24,7 @@ type HistoricalModalProps = {
 	promise: (id: string) => Promise<
 		{
 			rank: number | null;
-			timestamp: Date;
+			timestamp: string;
 		}[]
 	>;
 };

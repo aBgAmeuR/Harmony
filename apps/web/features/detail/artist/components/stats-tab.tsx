@@ -52,7 +52,7 @@ export const StatsTab = async ({ artistId }: StatsTabProps) => {
 					<ReusableBarChart
 						data={data.timeDistribution}
 						xAxisDataKey="hour"
-						barDataKey="msPlayed"
+						barDataKeys={["msPlayed"]}
 						showYAxis={false}
 						config={{
 							msPlayed: { label: "Time Played", color: "var(--chart-1)" },

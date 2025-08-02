@@ -1,16 +1,25 @@
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { Suspense } from "react";
+import type { Metadata } from "next";
 
-export default function ComparisonsYearOverYearPage() {
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { ComparisonContent, ComparisonContentSkeleton } from "~/features/comparisons/year-over-year/components/comparison-content";
+import { YearSelector } from "~/features/comparisons/year-over-year/components/year-selector";
+
+export const metadata: Metadata = {
+	title: "Year-over-Year Comparisons",
+	description: "Compare your listening habits across years",
+};
+
+export default async function ComparisonsYearOverYearPage() {
 	return (
 		<Layout>
-			<LayoutHeader items={["Advanced", "Comparisons", "Year-over-Year"]} />
+			<LayoutHeader items={["Advanced", "Comparisons", "Year-over-Year"]} metadata={metadata}>
+				<YearSelector />
+			</LayoutHeader>
 			<LayoutContent>
-				<div className="grid auto-rows-min gap-4 md:grid-cols-3">
-					<div className="aspect-video rounded-xl bg-muted/50" />
-					<div className="aspect-video rounded-xl bg-muted/50" />
-					<div className="aspect-video rounded-xl bg-muted/50" />
-				</div>
-				<div className="min-h-screen flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+				<Suspense fallback={<ComparisonContentSkeleton />}>
+					<ComparisonContent />
+				</Suspense>
 			</LayoutContent>
 		</Layout>
 	);
