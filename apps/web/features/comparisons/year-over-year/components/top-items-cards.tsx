@@ -3,12 +3,11 @@
 import { useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { Switch } from "@repo/ui/switch";
 
 import type { MusicItemCardProps } from "~/components/cards/music-item-card/type";
-import { MusicList } from "~/components/lists/music-list";
 import { MusicListSkeleton } from "~/components/lists/music-list/skeleton";
 
+import { TopItemsCard } from "../../common/components/top-items-card";
 import type { YearMetrics } from "../data/year-metrics";
 
 type TopItemsCardsProps = {
@@ -101,61 +100,29 @@ export function TopItemsCards({ metrics1, metrics2 }: TopItemsCardsProps) {
 
     return (
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                    <CardTitle>Top Artists</CardTitle>
-                    <div className="flex items-center gap-3">
-                        <span className={`font-medium text-sm ${showYear1Artists ? 'text-foreground' : 'text-muted-foreground'}`}>
-                            {metrics1.year}
-                        </span>
-                        <Switch
-                            checked={!showYear1Artists}
-                            onCheckedChange={(checked) => setShowYear1Artists(!checked)}
-                        />
-                        <span className={`font-medium text-sm ${!showYear1Artists ? 'text-foreground' : 'text-muted-foreground'}`}>
-                            {metrics2.year}
-                        </span>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <MusicList
-                        data={currentArtistsData}
-                        config={{
-                            label: "artists",
-                            showRank: true,
-                            layout: "list"
-                        }}
-                    />
-                </CardContent>
-            </Card>
+            <TopItemsCard
+                title="Top Artists"
+                label="artists"
+                data={currentArtistsData}
+                switch={{
+                    label1: metrics1.year.toString(),
+                    label2: metrics2.year.toString(),
+                    checked: showYear1Artists,
+                    onCheckedChange: setShowYear1Artists
+                }}
+            />
 
-            <Card>
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
-                    <CardTitle>Top Tracks</CardTitle>
-                    <div className="flex items-center gap-3">
-                        <span className={`font-medium text-sm ${showYear1Tracks ? 'text-foreground' : 'text-muted-foreground'}`}>
-                            {metrics1.year}
-                        </span>
-                        <Switch
-                            checked={!showYear1Tracks}
-                            onCheckedChange={(checked) => setShowYear1Tracks(!checked)}
-                        />
-                        <span className={`font-medium text-sm ${!showYear1Tracks ? 'text-foreground' : 'text-muted-foreground'}`}>
-                            {metrics2.year}
-                        </span>
-                    </div>
-                </CardHeader>
-                <CardContent>
-                    <MusicList
-                        data={currentTracksData}
-                        config={{
-                            label: "tracks",
-                            showRank: true,
-                            layout: "list"
-                        }}
-                    />
-                </CardContent>
-            </Card>
+            <TopItemsCard
+                title="Top Tracks"
+                label="tracks"
+                data={currentTracksData}
+                switch={{
+                    label1: metrics1.year.toString(),
+                    label2: metrics2.year.toString(),
+                    checked: showYear1Tracks,
+                    onCheckedChange: setShowYear1Tracks
+                }}
+            />
         </div>
     );
 }

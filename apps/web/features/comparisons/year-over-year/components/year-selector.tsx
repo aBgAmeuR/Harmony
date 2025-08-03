@@ -1,8 +1,7 @@
 'use client';
 
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { atom, useAtom } from 'jotai';
 import { ArrowRightIcon } from "lucide-react";
-import { parseAsInteger, useQueryState } from 'nuqs';
 
 import { buttonVariants } from "@repo/ui/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
@@ -10,30 +9,20 @@ import { cn } from "@repo/ui/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/select";
 import { Skeleton } from "@repo/ui/skeleton";
 
-import { getAvailableYearsAction } from "../actions/available-years-action";
+type YearSelectorProps = {
+    availableYears: number[];
+}
 
-const useAvailableYears = () => useQuery({
-    queryKey: ['available-years'],
-    queryFn: getAvailableYearsAction,
-    staleTime: 1000 * 60 * 60 * 24, // 24 hours
-    gcTime: 1000 * 60 * 60 * 24, // 24 hours
-});
+export const year1Atom = atom(new Date().getFullYear());
+export const year2Atom = atom(new Date().getFullYear() - 1);
 
-export const YearSelector = () => {
-    const [year1, setYear1] = useQueryState('year1', parseAsInteger.withDefault(new Date().getFullYear()));
-    const [year2, setYear2] = useQueryState('year2', parseAsInteger.withDefault(new Date().getFullYear() - 1));
-    const { data: availableYears, isLoading } = useAvailableYears();
-    const queryClient = useQueryClient();
-
-    if (isLoading) return <YearSelectorSkeleton />;
-    if (!availableYears || availableYears.length < 1) return null;
+export const YearSelector = ({ availableYears }: YearSelectorProps) => {
+    const [year1, setYear1] = useAtom(year1Atom);
+    const [year2, setYear2] = useAtom(year2Atom);
 
     return (
         <ButtonGroup>
-            <Select value={year1?.toString()} onValueChange={(v) => {
-                setYear1(parseInt(v));
-                queryClient.invalidateQueries({ queryKey: ['yearMetrics', year1] });
-            }}>
+            <Select value={year1?.toString()} onValueChange={(v) => setYear1(parseInt(v))}>
                 <SelectTrigger size='sm'>
                     <SelectValue />
                 </SelectTrigger>
@@ -48,10 +37,7 @@ export const YearSelector = () => {
             <div className={cn(buttonVariants({ variant: "outline", size: "icon" }), "flex size-8! items-center justify-center p-0!")}>
                 <ArrowRightIcon className="size-4 text-muted-foreground" />
             </div>
-            <Select value={year2?.toString()} onValueChange={(v) => {
-                setYear2(parseInt(v));
-                queryClient.invalidateQueries({ queryKey: ['yearMetrics', year2] });
-            }}>
+            <Select value={year2?.toString()} onValueChange={(v) => setYear2(parseInt(v))}>
                 <SelectTrigger size='sm'>
                     <SelectValue />
                 </SelectTrigger>

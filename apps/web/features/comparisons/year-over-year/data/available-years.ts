@@ -6,9 +6,9 @@ import {
 import { auth, db, desc, sql, tracks } from "@repo/database";
 
 export async function getAvailableYears(userId: string) {
-	"use cache";
-	cacheLife("days");
-	cacheTag(userId, "available-years");
+	// "use cache";
+	// cacheLife("days");
+	// cacheTag(userId, "available-years");
 
 	const results = await db
 		.selectDistinct({

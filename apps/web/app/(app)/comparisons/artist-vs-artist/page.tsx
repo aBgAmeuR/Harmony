@@ -1,24 +1,33 @@
 import type { Metadata } from "next";
 
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { ArtistSelector } from "~/features/comparisons/artist-vs-artist/components/artist-selector";
+import { ComparisonContent } from "~/features/comparisons/artist-vs-artist/components/comparison-content";
+import { ComparisonLayout } from "~/features/comparisons/common/components/comparison-layout";
+import type { ComparisonConfig } from "~/features/comparisons/common/types";
 
 export const metadata: Metadata = {
-	title: "Artists Comparisons",
-	description: "Compare your listening habits with other artists",
+	title: "Artist vs Artist",
+	description: "Compare your listening habits between two artists",
 };
 
-export default function ComparisonsArtistVsArtistPage() {
+export default function ArtistVsArtistPage() {
+	const config: ComparisonConfig = {
+		type: 'artist-vs-artist',
+		label1: '',
+		label2: '',
+		chartTitle: 'Artist Comparison Overview',
+		chartDescription: 'Compare listening metrics between artists',
+		lineChartTitle: 'Monthly Evolution',
+		lineChartDescription: 'Showing the evolution of listening time over months',
+	};
+
 	return (
-		<Layout>
-			<LayoutHeader items={["Advanced", "Comparisons", "Artist vs Artist"]} metadata={metadata} />
-			<LayoutContent>
-				<div className="grid auto-rows-min gap-4 md:grid-cols-3">
-					<div className="aspect-video rounded-xl bg-muted/50" />
-					<div className="aspect-video rounded-xl bg-muted/50" />
-					<div className="aspect-video rounded-xl bg-muted/50" />
-				</div>
-				<div className="min-h-screen flex-1 rounded-xl bg-muted/50 md:min-h-min" />
-			</LayoutContent>
-		</Layout>
+		<ComparisonLayout
+			metadata={metadata}
+			config={config}
+			selector={<ArtistSelector />}
+		>
+			<ComparisonContent />
+		</ComparisonLayout>
 	);
 }

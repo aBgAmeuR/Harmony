@@ -8,6 +8,7 @@ import { getUserOrNull } from "@repo/auth";
 import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 
 import { AppSidebar } from "~/components/navbar/app-sidebar";
+import { QueryClientProvider } from "~/components/providers/query-client-provider";
 
 import ErrorComponent from "../error";
 
@@ -20,21 +21,23 @@ export default async function AppLayout({ children }: Readonly<{ children: React
 
 	return (
 		<ErrorBoundary errorComponent={ErrorComponent}>
-			<NuqsAdapter>
-				<SidebarProvider defaultOpen={defaultOpen}>
-					<AppSidebar user={user} />
-					<SidebarInset>
-						<NextTopLoader
-							color="#5be990"
-							crawl={true}
-							showSpinner={false}
-							height={2}
-							zIndex={9}
-						/>
-						{children}
-					</SidebarInset>
-				</SidebarProvider>
-			</NuqsAdapter>
+			<QueryClientProvider>
+				<NuqsAdapter>
+					<SidebarProvider defaultOpen={defaultOpen}>
+						<AppSidebar user={user} />
+						<SidebarInset>
+							<NextTopLoader
+								color="#5be990"
+								crawl={true}
+								showSpinner={false}
+								height={2}
+								zIndex={9}
+							/>
+							{children}
+						</SidebarInset>
+					</SidebarProvider>
+				</NuqsAdapter>
+			</QueryClientProvider>
 		</ErrorBoundary>
 	);
 }

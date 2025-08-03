@@ -1,8 +1,8 @@
 'use client';
 
-import { useQuery } from "@tanstack/react-query";
+import { useAtom } from 'jotai';
+import { atomWithQuery } from 'jotai-tanstack-query'
 import { AlertCircle, RefreshCw } from "lucide-react";
-import { parseAsInteger, useQueryState } from "nuqs";
 
 import { Button } from "@repo/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card";
@@ -12,34 +12,24 @@ import { GroupedBarChart, GroupedBarChartSkeleton } from "./grouped-bar-chart";
 import { LineChartEvolution, LineChartEvolutionSkeleton } from "./line-chart-evolution";
 import { StatsCards, StatsCardsSkeleton } from "./stats-cards";
 import { TopItemsCards, TopItemsCardsSkeleton } from "./top-items-cards";
+import { year1Atom, year2Atom } from './year-selector';
 
-const useYearMetrics = (year1: number, year2: number) => {
-    const metrics1Query = useQuery({
-        queryKey: ["yearMetrics", year1],
-        queryFn: () => getYearMetricsAction(year1),
-        enabled: !!year1,
-    });
-    const metrics2Query = useQuery({
-        queryKey: ["yearMetrics", year2],
-        queryFn: () => getYearMetricsAction(year2),
-        enabled: !!year2,
-    });
+const metrics1Atom = atomWithQuery((get) => ({
+    queryKey: ["yearMetrics", get(year1Atom)],
+    queryFn: async ({ queryKey: [, year] }) => getYearMetricsAction(year as number),
+}));
 
-    return {
-        metrics1: metrics1Query.data,
-        metrics2: metrics2Query.data,
-        isLoading: metrics1Query.isLoading || metrics2Query.isLoading,
-        isError: metrics1Query.isError || metrics2Query.isError,
-    };
-};
+const metrics2Atom = atomWithQuery((get) => ({
+    queryKey: ["yearMetrics", get(year2Atom)],
+    queryFn: async ({ queryKey: [, year] }) => getYearMetricsAction(year as number),
+}));
 
 export function ComparisonContent() {
-    const [year1] = useQueryState('year1', parseAsInteger.withDefault(new Date().getFullYear()));
-    const [year2] = useQueryState('year2', parseAsInteger.withDefault(new Date().getFullYear() - 1));
-    const { metrics1, metrics2, isLoading, isError } = useYearMetrics(year1, year2);
+    const [{ data: metrics1, isPending: isLoading1, isError: isError1 }] = useAtom(metrics1Atom);
+    const [{ data: metrics2, isPending: isLoading2, isError: isError2 }] = useAtom(metrics2Atom);
 
-    if (isLoading) return <ComparisonContentSkeleton />;
-    if (!metrics1 || !metrics2 || isError) return <ComparisonContentError />;
+    if (isLoading1 || isLoading2) return <ComparisonContentSkeleton />;
+    if (!metrics1 || !metrics2 || isError1 || isError2) return <ComparisonContentError />;
 
     return (
         <div className="space-y-4">
@@ -67,10 +57,6 @@ export const ComparisonContentSkeleton = () => {
 };
 
 const ComparisonContentError = () => {
-    const handleRetry = () => {
-        window.location.reload();
-    };
-
     return (
         <div className="flex min-h-[300px] items-center justify-center p-4 sm:min-h-[400px] sm:p-6">
             <Card className="w-full max-w-sm sm:max-w-md">
@@ -85,7 +71,7 @@ const ComparisonContentError = () => {
                     </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4 text-center">
-                    <Button onClick={handleRetry} className="w-full" size="default">
+                    <Button onClick={() => window.location.reload()} className="w-full" size="default">
                         <RefreshCw className="mr-2 size-4" />
                         Try Again
                     </Button>

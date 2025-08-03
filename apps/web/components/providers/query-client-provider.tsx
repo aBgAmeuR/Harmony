@@ -1,17 +1,20 @@
-"use client";
+'use client'
 
-import { type PropsWithChildren, Suspense, useState } from "react";
+import { type PropsWithChildren, Suspense, } from 'react'
 import {
-	QueryClientProvider as Provider,
-	QueryClient,
-} from "@tanstack/react-query";
+	QueryClientProvider as TanstackQueryClientProvider,
+} from '@tanstack/react-query'
 
-export const QueryClientProvider = ({ children }: PropsWithChildren) => {
-	const [queryClient] = useState(() => new QueryClient());
+import { getQueryClient } from '~/lib/get-query-client'
+
+export function QueryClientProvider({ children }: PropsWithChildren) {
+	const queryClient = getQueryClient()
 
 	return (
 		<Suspense>
-			<Provider client={queryClient}>{children}</Provider>
+			<TanstackQueryClientProvider client={queryClient}>
+				{children}
+			</TanstackQueryClientProvider>
 		</Suspense>
-	);
-};
+	)
+}
