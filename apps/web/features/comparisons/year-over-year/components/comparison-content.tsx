@@ -3,13 +3,13 @@
 import { ComparisonLayout, ComparisonLayoutSkeleton } from "../../common/components/comparison-layout";
 import { useYearsData } from '../hooks/use-years-data';
 
+const labels = ["Listening Time", "Unique Artists", "Unique Tracks", "Unique Albums"];
+const titles = { title1: "Top Artists", title2: "Top Tracks" };
+
 export const ComparisonYearOverYearContent = () => (
-    <ComparisonLayout hook={useYearsData} titles={{ title1: "Top Artists", title2: "Top Tracks" }} />
+    <ComparisonLayout hook={useYearsData} titles={titles} />
 );
 
 export const ComparisonYearOverYearContentSkeleton = () => (
-    <ComparisonLayoutSkeleton
-        labels={["Listening Time", "Unique Artists", "Unique Tracks", "Unique Albums"]}
-        titles={{ title1: "Top Artists", title2: "Top Tracks" }}
-    />
+    <ComparisonLayoutSkeleton labels={labels} titles={titles} />
 );
