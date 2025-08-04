@@ -1,5 +1,5 @@
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { ComparisonContentSkeleton } from "~/features/comparisons/year-over-year/components/comparison-content";
+import { ComparisonYearOverYearContentSkeleton } from "~/features/comparisons/year-over-year/components/comparison-content";
 import { YearSelectorSkeleton } from "~/features/comparisons/year-over-year/components/year-selector";
 
 import { metadata } from "./page";
@@ -13,7 +13,7 @@ export default async function Loading() {
                 <YearSelectorSkeleton />
             </LayoutHeader>
             <LayoutContent>
-                <ComparisonContentSkeleton />
+                <ComparisonYearOverYearContentSkeleton />
             </LayoutContent>
         </Layout>
     );

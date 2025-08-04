@@ -1,8 +1,11 @@
 "server-only";
 
 import { and, auth, count, db, desc, sql, sum, tracks } from "@repo/database";
+import { spotify } from "@repo/spotify";
 
 import { DateUtils } from "~/lib/date-utils";
+
+import type { ComparisonMetrics } from "../../common/types";
 
 export interface ArtistMetrics {
 	total: { streams: number; listeningTime: number };
@@ -16,7 +19,7 @@ export async function getArtistMetrics(
 	userId: string,
 	artistId: string,
 	limit = 5,
-): Promise<ArtistMetrics> {
+): Promise<ComparisonMetrics> {
 	const whereClause = and(
 		auth(userId),
 		sql`${tracks.artistIds} @> ARRAY[${artistId}]::varchar[]`,
@@ -46,7 +49,12 @@ export async function getArtistMetrics(
 					time: sum(tracks.msPlayed),
 				})
 				.from(tracks)
-				.where(whereClause)
+				.where(
+					and(
+						auth(userId),
+						sql`${tracks.albumArtistIds} @> ARRAY[${artistId}]::varchar[]`,
+					),
+				)
 				.groupBy(tracks.albumId)
 				.orderBy(({ time }) => desc(time))
 				.limit(limit),
@@ -72,17 +80,37 @@ export async function getArtistMetrics(
 	const totalListeningTime = Number(totals[0]?.time ?? 0);
 	const numStreams = totals[0]?.streams ?? 0;
 
-	const topTracks = topTracksRaw.map(({ trackId, plays, time }) => ({
-		trackId,
-		plays,
-		time: Number(time) ?? 0,
-	}));
+	spotify.setUserId(userId);
+	const [tracksInfo, albumsInfo] = await Promise.all([
+		spotify.tracks.list(topTracksRaw.map((t) => t.trackId)),
+		spotify.albums.list(topAlbumsRaw.map((a) => a.albumId)),
+	]);
 
-	const topAlbums = topAlbumsRaw.map(({ albumId, plays, time }) => ({
-		albumId,
-		plays,
-		time: Number(time) ?? 0,
-	}));
+	const topTracks = topTracksRaw.map((t) => {
+		const info = tracksInfo.find((i) => i.id === t.trackId);
+		return {
+			id: t.trackId,
+			name: info?.name ?? "",
+			artists: info?.artists.map((ar) => ar.name).join(", ") ?? "",
+			image: info?.album.images?.[0]?.url ?? "",
+			href: info?.external_urls.spotify ?? "",
+			stat1: `${t.plays} plays`,
+			stat2: `${(Number(t.time ?? 0) / 1000 / 60).toFixed(2)} min`,
+		};
+	});
+
+	const topAlbums = topAlbumsRaw.map((a) => {
+		const info = albumsInfo.find((i) => i.id === a.albumId);
+		return {
+			id: a.albumId,
+			name: info?.name ?? "",
+			artists: info?.artists.map((ar) => ar.name).join(", ") ?? "",
+			image: info?.images?.[0]?.url ?? "",
+			href: info?.external_urls.spotify ?? "",
+			stat1: `${a.plays} plays`,
+			stat2: `${(Number(a.time ?? 0) / 1000 / 60).toFixed(2)} min`,
+		};
+	});
 
 	const monthly = monthlyRaw
 		.map(({ month, streams, time }) => ({
@@ -98,13 +126,19 @@ export async function getArtistMetrics(
 		}));
 
 	return {
-		total: { streams: numStreams, listeningTime: totalListeningTime },
-		topTracks,
-		topAlbums,
-		monthly,
-		unique: {
-			tracks: Number(unique[0]?.uniqueTracks ?? 0),
-			albums: Number(unique[0]?.uniqueAlbums ?? 0),
+		label: tracksInfo[0]?.artists[0]?.name ?? "",
+		cards: {
+			"Listening Time": Number(
+				(totalListeningTime / 1000 / 60 / 60).toFixed(2),
+			),
+			"Total Streams": numStreams,
+			"Unique Tracks": unique[0]?.uniqueTracks ?? 0,
+			"Unique Albums": unique[0]?.uniqueAlbums ?? 0,
 		},
+		monthly,
+		totalListeningTime: Number((totalListeningTime / 1000 / 60).toFixed(2)),
+		totalStreams: numStreams,
+		rank1: topTracks,
+		rank2: topAlbums,
 	};
 }

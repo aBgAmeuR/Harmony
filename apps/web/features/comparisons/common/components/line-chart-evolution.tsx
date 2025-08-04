@@ -1,46 +1,46 @@
-'use client';
-
 import { ReusableLineChart } from "@repo/ui/components/charts/line-chart";
 import { Skeleton } from "@repo/ui/skeleton";
 
 import { ChartCard, ChartCardContent, ChartCardHeader } from "~/components/charts/utils/chart-card";
 
-export type LineChartDataPoint = {
-    [key: string]: string | number;
-};
+import type { ComparisonMetrics } from "../types";
 
-type LineChartEvolutionProps = {
-    data: LineChartDataPoint[];
-    xAxisDataKey: string;
-    lineDataKeys: string[];
-    config: Record<string, { label: string; color: string }>;
-    title: string;
-    description: string;
+
+type ComparisonLineChartEvolutionProps = {
+    metrics1: ComparisonMetrics
+    metrics2: ComparisonMetrics
     className?: string;
 };
 
-export function LineChartEvolution({
-    data,
-    xAxisDataKey,
-    lineDataKeys,
-    config,
-    title,
-    description,
+export function ComparisonLineChartEvolution({
+    metrics1,
+    metrics2,
     className
-}: LineChartEvolutionProps) {
+}: ComparisonLineChartEvolutionProps) {
+    const data = metrics1.monthly.map((m1, index) => ({
+        month: m1.month,
+        value1: m1.listeningTime,
+        value2: metrics2.monthly[index]?.listeningTime ?? 0,
+    }));
+
+    const config = {
+        value1: { label: metrics1.label, color: "var(--chart-1)" },
+        value2: { label: metrics2.label, color: "var(--chart-4)" },
+    };
+
     return (
         <ChartCard className={className}>
             <ChartCardHeader
-                title={title}
-                description={description}
+                title="Monthly Evolution"
+                description="Showing the evolution of listening time over time"
                 showSeparator={true}
             />
             <ChartCardContent>
                 <ReusableLineChart
                     data={data}
                     className="aspect-[4/1]"
-                    xAxisDataKey={xAxisDataKey}
-                    lineDataKeys={lineDataKeys}
+                    xAxisDataKey="month"
+                    lineDataKeys={["value1", "value2"]}
                     config={config}
                     showYAxis={false}
                     tooltipValueFormatter="hourSuffix"
@@ -52,12 +52,12 @@ export function LineChartEvolution({
     );
 }
 
-export function LineChartEvolutionSkeleton({ title, description, className }: { title: string; description: string; className?: string }) {
+export function ComparisonLineChartEvolutionSkeleton({ className }: { className?: string }) {
     return (
         <ChartCard className={className}>
             <ChartCardHeader
-                title={title}
-                description={description}
+                title="Monthly Evolution"
+                description="Showing the evolution of listening time over time"
                 showSeparator={true}
             />
             <ChartCardContent>

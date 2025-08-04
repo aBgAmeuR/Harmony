@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { atom, useAtom } from "jotai";
 import { ArrowRight, Check, ChevronsUpDown } from "lucide-react";
-import { parseAsString, useQueryState } from "nuqs";
 
 import { Button, buttonVariants } from "@repo/ui/button";
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@repo/ui/command";
@@ -13,6 +13,9 @@ import { Skeleton } from "@repo/ui/skeleton";
 
 import { searchArtistsAction } from "../actions/search-artists-action";
 import { getTopArtistsAction } from "../actions/top-artists-action";
+
+export const artist1Atom = atom<string | null>(null);
+export const artist2Atom = atom<string | null>(null);
 
 type ArtistComboboxProps = {
     value?: string;
@@ -87,8 +90,8 @@ function ArtistCombobox({ value, onSelect }: ArtistComboboxProps) {
 }
 
 export function ArtistSelector() {
-    const [artist1, setArtist1] = useQueryState("artist1", parseAsString);
-    const [artist2, setArtist2] = useQueryState("artist2", parseAsString);
+    const [artist1, setArtist1] = useAtom(artist1Atom);
+    const [artist2, setArtist2] = useAtom(artist2Atom);
     const queryClient = useQueryClient();
 
     return (

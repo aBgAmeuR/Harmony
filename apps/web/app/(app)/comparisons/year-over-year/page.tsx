@@ -5,7 +5,7 @@ import { getUser } from "@repo/auth";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 import { getYearMetricsAction } from "~/features/comparisons/year-over-year/actions/year-metrics-action";
-import { ComparisonContent, } from "~/features/comparisons/year-over-year/components/comparison-content";
+import { ComparisonYearOverYearContent, } from "~/features/comparisons/year-over-year/components/comparison-content";
 import { YearSelector } from "~/features/comparisons/year-over-year/components/year-selector";
 import { getAvailableYears } from "~/features/comparisons/year-over-year/data/available-years";
 import { getQueryClient } from "~/lib/get-query-client";
@@ -37,7 +37,7 @@ export default async function ComparisonsYearOverYearPage() {
 			</LayoutHeader>
 			<LayoutContent>
 				<HydrationBoundary state={dehydrate(queryClient)}>
-					<ComparisonContent />
+					<ComparisonYearOverYearContent />
 				</HydrationBoundary>
 			</LayoutContent>
 		</Layout>

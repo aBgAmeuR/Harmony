@@ -1,5 +1,6 @@
-// Generic types for comparison data
-export interface ComparisonMetrics {
+import type { MusicItemCardProps } from "~/components/cards/music-item-card/type";
+
+export type ComparisonMetrics2 = {
 	total: {
 		streams: number;
 		listeningTime: number;
@@ -7,7 +8,7 @@ export interface ComparisonMetrics {
 	unique: {
 		tracks: number;
 		albums: number;
-		artists?: number; // Optional for artist-vs-artist comparison
+		artists?: number;
 	};
 	monthly: Array<{
 		month: string;
@@ -47,14 +48,30 @@ export interface ComparisonMetrics {
 	uniqueTracks?: number;
 	uniqueAlbums?: number;
 	uniqueArtists?: number;
-}
+};
 
-export interface ComparisonConfig {
-	type: "year-over-year" | "artist-vs-artist";
-	label1: string;
-	label2: string;
-	chartTitle: string;
-	chartDescription: string;
-	lineChartTitle: string;
-	lineChartDescription: string;
-}
+export type ComparisonMetrics = {
+	label: string;
+	cards: {
+		[key: string]: number;
+	};
+	monthly: {
+		month: string;
+		listeningTime: number;
+		streams: number;
+	}[];
+	totalListeningTime: number;
+	totalStreams: number;
+	rank1: MusicItemCardProps["item"][];
+	rank2: MusicItemCardProps["item"][];
+};
+
+// { title: "Listening Time", icon: Clock },
+//         { title: "Unique Tracks", icon: Music },
+//         { title: "Unique Artists", icon: Users },
+//         { title: "Unique Albums", icon: Disc3 },
+
+// 		{ title: "Listening Time", icon: Clock },
+//         { title: "Total Streams", icon: Music },
+//         { title: "Unique Tracks", icon: Users },
+//         { title: "Unique Albums", icon: Disc3 },

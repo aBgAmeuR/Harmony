@@ -7,7 +7,6 @@ import { buttonVariants } from "@repo/ui/button";
 import { ButtonGroup } from "@repo/ui/components/button-group";
 import { cn } from "@repo/ui/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/select";
-import { Skeleton } from "@repo/ui/skeleton";
 
 type YearSelectorProps = {
     availableYears: number[];
@@ -54,7 +53,34 @@ export const YearSelector = ({ availableYears }: YearSelectorProps) => {
 };
 
 export const YearSelectorSkeleton = () => {
+    const year1 = new Date().getFullYear();
+    const year2 = new Date().getFullYear() - 1;
+
     return (
-        <Skeleton className="h-8 w-[217px]" />
+        <ButtonGroup>
+            <Select value={year1.toString()}>
+                <SelectTrigger size='sm'>
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value={year1.toString()}>
+                        {year1}
+                    </SelectItem>
+                </SelectContent>
+            </Select>
+            <div className={cn(buttonVariants({ variant: "outline", size: "icon" }), "flex size-8! items-center justify-center p-0!")}>
+                <ArrowRightIcon className="size-4 text-muted-foreground" />
+            </div>
+            <Select value={year2.toString()}>
+                <SelectTrigger size='sm'>
+                    <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                    <SelectItem value={year2.toString()}>
+                        {year2}
+                    </SelectItem>
+                </SelectContent>
+            </Select>
+        </ButtonGroup>
     );
 };
