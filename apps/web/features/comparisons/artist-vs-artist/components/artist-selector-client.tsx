@@ -98,11 +98,14 @@ function ArtistCombobox({ value, onSelect, options }: ArtistComboboxProps) {
 
 type ArtistSelectorClientProps = {
     topArtists: Artist[];
+    showWhenEmpty?: boolean;
 }
 
-export function ArtistSelectorClient({ topArtists }: ArtistSelectorClientProps) {
+export function ArtistSelectorClient({ topArtists, showWhenEmpty = false }: ArtistSelectorClientProps) {
     const [artist1, setArtist1] = useAtom(artist1Atom);
     const [artist2, setArtist2] = useAtom(artist2Atom);
+
+    if (!showWhenEmpty && (!artist1 || !artist2)) return null;
 
     return (
         <ButtonGroup size="sm">
