@@ -5,13 +5,13 @@ import { getUser } from "@repo/auth";
 import { getYearMetrics } from "../data/year-metrics";
 
 export async function getYearMetricsAction(year: number) {
-	console.log("calling", year);
-
 	const { userId } = await getUser();
 
+	const time = performance.now();
 	const metrics = await getYearMetrics(userId, year);
+	const endTime = performance.now();
 
-	console.log("returning", metrics?.label);
+	console.log(`getYearMetricsAction took ${endTime - time}ms for ${year}`);
 
 	return metrics;
 }

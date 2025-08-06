@@ -1,3 +1,8 @@
+import {
+	unstable_cacheLife as cacheLife,
+	unstable_cacheTag as cacheTag,
+} from "next/cache";
+
 import { auth, count, db, desc, sql, sum, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { Artist, Track } from "@repo/spotify/types";
@@ -11,9 +16,9 @@ export async function getYearMetrics(
 	year: number,
 	limit = 5,
 ): Promise<ComparisonMetrics> {
-	// "use cache";
-	// cacheLife("days");
-	// cacheTag(userId, `year-metrics-${year}`);
+	"use cache";
+	cacheLife("days");
+	cacheTag(userId, `year-metrics-${year}`);
 
 	const whereClause = auth(userId, {
 		monthRange: {

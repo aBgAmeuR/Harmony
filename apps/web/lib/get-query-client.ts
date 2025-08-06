@@ -1,4 +1,3 @@
-// app/get-query-client.ts
 import {
 	defaultShouldDehydrateQuery,
 	isServer,

@@ -1,5 +1,10 @@
 "server-only";
 
+import {
+	unstable_cacheLife as cacheLife,
+	unstable_cacheTag as cacheTag,
+} from "next/cache";
+
 import { and, auth, count, db, desc, sql, sum, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
@@ -7,19 +12,15 @@ import { DateUtils } from "~/lib/date-utils";
 
 import type { ComparisonMetrics } from "../../common/types";
 
-export interface ArtistMetrics {
-	total: { streams: number; listeningTime: number };
-	topTracks: { trackId: string; plays: number; time: number }[];
-	topAlbums: { albumId: string; plays: number; time: number }[];
-	monthly: { month: string; listeningTime: number; streams: number }[];
-	unique: { tracks: number; albums: number };
-}
-
 export async function getArtistMetrics(
 	userId: string,
 	artistId: string,
 	limit = 5,
 ): Promise<ComparisonMetrics | null> {
+	"use cache";
+	cacheLife("days");
+	cacheTag(userId, `artist-metrics-${artistId}`);
+
 	const whereClause = and(
 		auth(userId),
 		sql`${tracks.artistIds} @> ARRAY[${artistId}]::varchar[]`,

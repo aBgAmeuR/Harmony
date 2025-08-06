@@ -12,12 +12,22 @@ const metrics1Atom = atomWithQuery((get) => ({
 	queryKey: ["yearMetrics", get(year1Atom)],
 	queryFn: async ({ queryKey: [, year] }) =>
 		getYearMetricsAction(year as number),
+	staleTime: 60 * 1000 * 10,
+	refetchOnMount: false,
+	refetchOnReconnect: false,
+	refetchOnWindowFocus: false,
+	gcTime: 60 * 1000 * 10,
 }));
 
 const metrics2Atom = atomWithQuery((get) => ({
 	queryKey: ["yearMetrics", get(year2Atom)],
 	queryFn: async ({ queryKey: [, year] }) =>
 		getYearMetricsAction(year as number),
+	staleTime: 60 * 1000 * 10,
+	refetchOnMount: false,
+	refetchOnReconnect: false,
+	refetchOnWindowFocus: false,
+	gcTime: 60 * 1000 * 10,
 }));
 
 export const useYearsData = () => {
