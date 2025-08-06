@@ -53,7 +53,7 @@ export default function RootLayout({
 				<ErrorBoundary errorComponent={ErrorComponent}>
 					<Providers>{children}</Providers>
 				</ErrorBoundary>
-				<Analytics />
+				<Analytics debug={false} />
 				<Toaster richColors={true} closeButton={true} />
 			</body>
 		</html>

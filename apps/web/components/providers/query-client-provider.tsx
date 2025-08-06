@@ -1,9 +1,9 @@
 'use client'
 
 import { type PropsWithChildren, Suspense, } from 'react'
-import {
-	QueryClientProvider as TanstackQueryClientProvider,
-} from '@tanstack/react-query'
+import { QueryClientProvider as TanstackQueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { Provider as JotaiProvider } from 'jotai'
 
 import { getQueryClient } from '~/lib/get-query-client'
 
@@ -13,7 +13,10 @@ export function QueryClientProvider({ children }: PropsWithChildren) {
 	return (
 		<Suspense>
 			<TanstackQueryClientProvider client={queryClient}>
-				{children}
+				<JotaiProvider>
+						{children}
+				</JotaiProvider>
+				<ReactQueryDevtools />
 			</TanstackQueryClientProvider>
 		</Suspense>
 	)

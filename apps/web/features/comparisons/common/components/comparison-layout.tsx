@@ -11,22 +11,23 @@ import { ComparisonStatsCards, ComparisonStatsCardsSkeleton } from "./stats-card
 import { ComparisonTopItemsCard, ComparisonTopItemsCardSkeleton } from "./top-items-card";
 
 type ComparisonLayoutProps = {
-    hook: () => {
-        metrics1: ComparisonMetrics
-        metrics2: ComparisonMetrics
-        isLoading: boolean
-        isError: boolean
-    }
+    metrics1: ComparisonMetrics
+    metrics2: ComparisonMetrics
+    isLoading: boolean
+    isError: boolean
     titles: { title1: string, title2: string }
+    labels: string[]
 }
 
 export function ComparisonLayout({
-    hook,
-    titles
+    metrics1,
+    metrics2,
+    isLoading,
+    isError,
+    titles,
+    labels
 }: ComparisonLayoutProps) {
-    const { metrics1, metrics2, isLoading, isError } = hook();
-
-    if (isLoading) return <ComparisonLayoutSkeleton labels={["Listening Time", "Total Streams", "Unique Artists", "Unique Albums"]} titles={titles} />;
+    if (isLoading) return <ComparisonLayoutSkeleton labels={labels} titles={titles} />;
     if (isError) return <ComparisonLayoutError />;
 
     return (

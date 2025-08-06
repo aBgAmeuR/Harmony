@@ -6,31 +6,6 @@ import { DateUtils } from "~/lib/date-utils";
 
 import type { ComparisonMetrics } from "../../common/types";
 
-export interface YearMetrics {
-	year: number;
-	totalListeningTime: number;
-	numStreams: number;
-	uniqueTracks: number;
-	uniqueArtists: number;
-	uniqueAlbums: number;
-	topArtists: {
-		id: string;
-		name: string;
-		image?: string;
-		plays: number;
-		msPlayed: number;
-	}[];
-	topTracks: {
-		id: string;
-		name: string;
-		artists: string[];
-		image?: string;
-		plays: number;
-		msPlayed: number;
-	}[];
-	monthly: { month: string; listeningTime: number; streams: number }[];
-}
-
 export async function getYearMetrics(
 	userId: string,
 	year: number,

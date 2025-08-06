@@ -1,6 +1,6 @@
 'use client';
 
-import { atom, useAtom } from 'jotai';
+import { useAtom } from 'jotai';
 import { ArrowRightIcon } from "lucide-react";
 
 import { buttonVariants } from "@repo/ui/button";
@@ -8,19 +8,18 @@ import { ButtonGroup } from "@repo/ui/components/button-group";
 import { cn } from "@repo/ui/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@repo/ui/select";
 
+import { year1Atom, year2Atom } from '../hooks/use-years-data';
+
 type YearSelectorProps = {
     availableYears: number[];
 }
-
-export const year1Atom = atom(new Date().getFullYear());
-export const year2Atom = atom(new Date().getFullYear() - 1);
 
 export const YearSelector = ({ availableYears }: YearSelectorProps) => {
     const [year1, setYear1] = useAtom(year1Atom);
     const [year2, setYear2] = useAtom(year2Atom);
 
     return (
-        <ButtonGroup>
+        <ButtonGroup size="sm">
             <Select value={year1?.toString()} onValueChange={(v) => setYear1(parseInt(v))}>
                 <SelectTrigger size='sm'>
                     <SelectValue />
@@ -57,7 +56,7 @@ export const YearSelectorSkeleton = () => {
     const year2 = new Date().getFullYear() - 1;
 
     return (
-        <ButtonGroup>
+        <ButtonGroup size="sm">
             <Select value={year1.toString()}>
                 <SelectTrigger size='sm'>
                     <SelectValue />

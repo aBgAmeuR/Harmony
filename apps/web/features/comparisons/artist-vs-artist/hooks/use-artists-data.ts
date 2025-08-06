@@ -1,8 +1,12 @@
-import { useAtom } from "jotai";
+"use client";
+
+import { atom, useAtom } from "jotai";
 import { atomWithQuery } from "jotai-tanstack-query";
 
 import { getArtistMetricsAction } from "../actions/artist-metrics-action";
-import { artist1Atom, artist2Atom } from "../components/artist-selector";
+
+export const artist1Atom = atom<string | null>(null);
+export const artist2Atom = atom<string | null>(null);
 
 const metrics1Atom = atomWithQuery((get) => ({
 	queryKey: ["artistMetrics", get(artist1Atom)],
@@ -17,9 +21,9 @@ const metrics2Atom = atomWithQuery((get) => ({
 }));
 
 export const useArtistsData = () => {
-	const [{ data: metrics1, isPending: isLoading1, isError: isError1 }] =
+	const [{ data: metrics1, isLoading: isLoading1, isError: isError1 }] =
 		useAtom(metrics1Atom);
-	const [{ data: metrics2, isPending: isLoading2, isError: isError2 }] =
+	const [{ data: metrics2, isLoading: isLoading2, isError: isError2 }] =
 		useAtom(metrics2Atom);
 
 	return {

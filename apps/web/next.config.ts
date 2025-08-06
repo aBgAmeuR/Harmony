@@ -29,6 +29,7 @@ const nextConfig: NextConfig = {
 		reactCompiler: true,
 		cacheComponents: true,
 		useCache: true,
+		browserDebugInfoInTerminal: true,
 	},
 	pageExtensions: ["mdx", "ts", "tsx"],
 	async rewrites() {

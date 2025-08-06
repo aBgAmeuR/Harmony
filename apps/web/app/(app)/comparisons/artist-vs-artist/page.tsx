@@ -1,8 +1,9 @@
 
+import { Suspense } from "react";
 import type { Metadata } from "next";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { ArtistSelector } from "~/features/comparisons/artist-vs-artist/components/artist-selector";
+import { ArtistSelector, ArtistSelectorSkeleton } from "~/features/comparisons/artist-vs-artist/components/artist-selector";
 import { ComparisonArtistVsArtistContent } from "~/features/comparisons/artist-vs-artist/components/comparison-content";
 
 export const metadata: Metadata = {
@@ -14,7 +15,9 @@ export default async function ArtistVsArtistPage() {
 	return (
 		<Layout>
 			<LayoutHeader items={["Advanced", "Comparisons", "Artist vs Artist"]} metadata={metadata}>
-				<ArtistSelector />
+				<Suspense fallback={<ArtistSelectorSkeleton />}>
+					<ArtistSelector />
+				</Suspense>
 			</LayoutHeader>
 			<LayoutContent>
 				<ComparisonArtistVsArtistContent />

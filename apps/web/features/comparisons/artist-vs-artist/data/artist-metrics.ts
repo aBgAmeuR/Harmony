@@ -19,7 +19,7 @@ export async function getArtistMetrics(
 	userId: string,
 	artistId: string,
 	limit = 5,
-): Promise<ComparisonMetrics> {
+): Promise<ComparisonMetrics | null> {
 	const whereClause = and(
 		auth(userId),
 		sql`${tracks.artistIds} @> ARRAY[${artistId}]::varchar[]`,
