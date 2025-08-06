@@ -21,6 +21,8 @@ export async function getArtistMetrics(
 	cacheLife("days");
 	cacheTag(userId, `artist-metrics-${artistId}`);
 
+	if (!artistId) return null;
+
 	const whereClause = and(
 		auth(userId),
 		sql`${tracks.artistIds} @> ARRAY[${artistId}]::varchar[]`,

@@ -27,9 +27,9 @@ export const useArtistsData = () => {
 		useAtom(metrics2Atom);
 
 	return {
-		isError: isError1 || isError2 || !metrics1 || !metrics2,
+		isError: isError1 || isError2,
 		isLoading: isLoading1 || isLoading2,
-		metrics1: metrics1!,
-		metrics2: metrics2!,
+		metrics1: metrics1 ?? null,
+		metrics2: metrics2 ?? null,
 	};
 };

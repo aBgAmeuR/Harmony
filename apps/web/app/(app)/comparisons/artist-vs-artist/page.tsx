@@ -20,7 +20,11 @@ export default async function ArtistVsArtistPage() {
 				</Suspense>
 			</LayoutHeader>
 			<LayoutContent>
-				<ComparisonArtistVsArtistContent />
+				<ComparisonArtistVsArtistContent>
+					<Suspense fallback={<ArtistSelectorSkeleton />}>
+						<ArtistSelector />
+					</Suspense>
+				</ComparisonArtistVsArtistContent>
 			</LayoutContent>
 		</Layout>
 	);
