@@ -1,11 +1,17 @@
 "server-only";
 
 import {
-	unstable_cacheLife as cacheLife,
-	unstable_cacheTag as cacheTag,
-} from "next/cache";
-
-import { and, auth, count, db, desc, sql, sum, tracks } from "@repo/database";
+	and,
+	arrayOverlaps,
+	auth,
+	count,
+	db,
+	desc,
+	or,
+	sql,
+	sum,
+	tracks,
+} from "@repo/database";
 import { spotify } from "@repo/spotify";
 
 import { DateUtils } from "~/lib/date-utils";
@@ -17,9 +23,9 @@ export async function getArtistMetrics(
 	artistId: string,
 	limit = 5,
 ): Promise<ComparisonMetrics | null> {
-	"use cache";
-	cacheLife("days");
-	cacheTag(userId, `artist-metrics-${artistId}`);
+	// "use cache";
+	// cacheLife("days");
+	// cacheTag(userId, `artist-metrics-${artistId}`);
 
 	if (!artistId) return null;
 
@@ -37,30 +43,35 @@ export async function getArtistMetrics(
 			db
 				.select({
 					trackId: tracks.spotifyId,
-					plays: count(),
 					time: sum(tracks.msPlayed),
+					plays: count(),
 				})
 				.from(tracks)
-				.where(whereClause)
+				.where(
+					and(
+						auth(userId),
+						or(
+							arrayOverlaps(tracks.artistIds, [artistId]),
+							arrayOverlaps(tracks.albumArtistIds, [artistId]),
+						),
+					),
+				)
 				.groupBy(tracks.spotifyId)
 				.orderBy(({ time }) => desc(time))
 				.limit(limit),
 			db
 				.select({
 					albumId: tracks.albumId,
-					plays: count(),
 					time: sum(tracks.msPlayed),
+					plays: count(),
 				})
 				.from(tracks)
 				.where(
-					and(
-						auth(userId),
-						sql`${tracks.albumArtistIds} @> ARRAY[${artistId}]::varchar[]`,
-					),
+					and(auth(userId), arrayOverlaps(tracks.albumArtistIds, [artistId])),
 				)
 				.groupBy(tracks.albumId)
-				.orderBy(({ time }) => desc(time))
-				.limit(limit),
+				.having(sql<number>`COUNT(DISTINCT ${tracks.spotifyId}) >= 2`)
+				.orderBy(({ time }) => desc(time)),
 			db
 				.select({
 					month: sql<string>`TO_CHAR(${tracks.timestamp}, 'Month YYYY')`,
@@ -74,7 +85,6 @@ export async function getArtistMetrics(
 			db
 				.select({
 					uniqueTracks: sql<number>`COUNT(DISTINCT ${tracks.spotifyId})`,
-					uniqueAlbums: sql<number>`COUNT(DISTINCT ${tracks.albumId})`,
 				})
 				.from(tracks)
 				.where(whereClause),
@@ -86,7 +96,7 @@ export async function getArtistMetrics(
 	spotify.setUserId(userId);
 	const [tracksInfo, albumsInfo] = await Promise.all([
 		spotify.tracks.list(topTracksRaw.map((t) => t.trackId)),
-		spotify.albums.list(topAlbumsRaw.map((a) => a.albumId)),
+		spotify.albums.list(topAlbumsRaw.slice(0, limit).map((a) => a.albumId)),
 	]);
 
 	const topTracks = topTracksRaw.map((t) => {
@@ -102,7 +112,7 @@ export async function getArtistMetrics(
 		};
 	});
 
-	const topAlbums = topAlbumsRaw.map((a) => {
+	const topAlbums = topAlbumsRaw.slice(0, limit).map((a) => {
 		const info = albumsInfo.find((i) => i.id === a.albumId);
 		return {
 			id: a.albumId,
@@ -119,7 +129,7 @@ export async function getArtistMetrics(
 		.map(({ month, streams, time }) => ({
 			month: new Date(month),
 			streams,
-			listeningTime: Number(time) ?? 0,
+			listeningTime: Number((Number(time ?? 0) / 1000 / 60).toFixed(2)),
 		}))
 		.sort((a, b) => a.month.getTime() - b.month.getTime())
 		.map(({ month, streams, listeningTime }) => ({
@@ -129,14 +139,16 @@ export async function getArtistMetrics(
 		}));
 
 	return {
-		label: tracksInfo[0]?.artists[0]?.name ?? "",
+		label:
+			tracksInfo[0]?.artists.find((ar) => ar.id === artistId)?.name ??
+			"Unknown artist",
 		cards: {
 			"Listening Time": Number(
 				(totalListeningTime / 1000 / 60 / 60).toFixed(2),
 			),
 			"Total Streams": numStreams,
 			"Unique Tracks": unique[0]?.uniqueTracks ?? 0,
-			"Unique Albums": unique[0]?.uniqueAlbums ?? 0,
+			"Unique Albums": topAlbumsRaw.length ?? 0,
 		},
 		monthly,
 		totalListeningTime: Number((totalListeningTime / 1000 / 60).toFixed(2)),

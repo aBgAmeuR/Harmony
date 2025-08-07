@@ -3,6 +3,7 @@
 import { CircleAlert } from "lucide-react";
 
 import { Button } from "@repo/ui/button";
+import type { ChartTooltipFormatter } from "@repo/ui/components/charts/common/chart-tooltip-formatter";
 
 import type { ComparisonMetrics } from "../types";
 import { ComparisonGroupedBarChart, ComparisonGroupedBarChartSkeleton } from "./grouped-bar-chart";
@@ -17,6 +18,8 @@ type ComparisonLayoutProps = {
     isError: boolean
     titles: { title1: string, title2: string }
     labels: string[]
+    lineChartTooltipValueFormatter?: ChartTooltipFormatter;
+    fillMissingMonths?: boolean;
 }
 
 export function ComparisonLayout({
@@ -25,7 +28,9 @@ export function ComparisonLayout({
     isLoading,
     isError,
     titles,
-    labels
+    labels,
+    lineChartTooltipValueFormatter,
+    fillMissingMonths
 }: ComparisonLayoutProps) {
     if (isLoading) return <ComparisonLayoutSkeleton labels={labels} titles={titles} />;
     if (isError) return <ComparisonLayoutError />;
@@ -34,7 +39,13 @@ export function ComparisonLayout({
         <div className="space-y-4">
             <ComparisonStatsCards metrics1={metrics1} metrics2={metrics2} />
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-4">
-                <ComparisonLineChartEvolution metrics1={metrics1} metrics2={metrics2} className="lg:col-span-3" />
+                <ComparisonLineChartEvolution
+                    metrics1={metrics1}
+                    metrics2={metrics2}
+                    className="lg:col-span-3"
+                    tooltipValueFormatter={lineChartTooltipValueFormatter}
+                    fillMissingMonths={fillMissingMonths}
+                />
                 <ComparisonGroupedBarChart metrics1={metrics1} metrics2={metrics2} className="w-full" />
             </div>
             <ComparisonTopItemsCard metrics1={metrics1} metrics2={metrics2} titles={titles} />

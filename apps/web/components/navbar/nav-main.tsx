@@ -175,21 +175,23 @@ function SidebarItemRenderer({
 							<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
 						</SidebarNavButton>
 					</CollapsibleTrigger>
-					<CollapsibleContent>
-						<SidebarMenuSub>
-							{item.items.map((sub) => (
-								<SidebarMenuSubItem key={sub.title}>
-									<SidebarNavButton
-										item={sub}
-										disable={disable}
-										isActive={isSidebarItemActive(sub, pathname)}
-										as={SidebarMenuSubButton}
-										router={router}
-									/>
-								</SidebarMenuSubItem>
-							))}
-						</SidebarMenuSub>
-					</CollapsibleContent>
+					{isOpen || isCollapsed && (
+						<CollapsibleContent>
+							<SidebarMenuSub>
+								{item.items.map((sub) => (
+									<SidebarMenuSubItem key={sub.title}>
+										<SidebarNavButton
+											item={sub}
+											disable={disable}
+											isActive={isSidebarItemActive(sub, pathname)}
+											as={SidebarMenuSubButton}
+											router={router}
+										/>
+									</SidebarMenuSubItem>
+								))}
+							</SidebarMenuSub>
+						</CollapsibleContent>
+					)}
 				</SidebarMenuItem>
 			</Collapsible>
 		);

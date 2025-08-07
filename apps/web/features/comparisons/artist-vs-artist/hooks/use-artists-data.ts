@@ -12,12 +12,14 @@ const metrics1Atom = atomWithQuery((get) => ({
 	queryKey: ["artistMetrics", get(artist1Atom)],
 	queryFn: async ({ queryKey: [, artist] }) =>
 		getArtistMetricsAction(artist as string),
+	initialData: null,
 }));
 
 const metrics2Atom = atomWithQuery((get) => ({
 	queryKey: ["artistMetrics", get(artist2Atom)],
 	queryFn: async ({ queryKey: [, artist] }) =>
 		getArtistMetricsAction(artist as string),
+	initialData: null,
 }));
 
 export const useArtistsData = () => {

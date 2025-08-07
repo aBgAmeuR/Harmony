@@ -44,7 +44,7 @@ export const ComparisonStatsCards = ({ metrics1, metrics2 }: ComparisonStatsCard
                         <CardContent>
                             <div className="space-y-1">
                                 <div className="font-bold text-2xl">
-                                    {card.value1}
+                                    {card.value1}{card.title === "Listening Time" && "h"}
                                 </div>
                                 <Tooltip>
                                     <TooltipTrigger asChild>
@@ -57,7 +57,7 @@ export const ComparisonStatsCards = ({ metrics1, metrics2 }: ComparisonStatsCard
                                         </div>
                                     </TooltipTrigger>
                                     <TooltipContent>
-                                        <p>{metrics2.label}: {card.value2}</p>
+                                        <p>{metrics2.label}: {card.value2}{card.title === "Listening Time" && "h"}</p>
                                     </TooltipContent>
                                 </Tooltip>
                             </div>
