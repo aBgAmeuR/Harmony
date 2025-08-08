@@ -1,42 +1,24 @@
+import {
+	unstable_cacheLife as cacheLife,
+	unstable_cacheTag as cacheTag,
+} from "next/cache";
+
 import { auth, count, db, desc, sql, sum, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
 import type { Artist, Track } from "@repo/spotify/types";
 
 import { DateUtils } from "~/lib/date-utils";
 
-export interface YearMetrics {
-	year: number;
-	totalListeningTime: number;
-	numStreams: number;
-	uniqueTracks: number;
-	uniqueArtists: number;
-	uniqueAlbums: number;
-	topArtists: {
-		id: string;
-		name: string;
-		image?: string;
-		plays: number;
-		msPlayed: number;
-	}[];
-	topTracks: {
-		id: string;
-		name: string;
-		artists: string[];
-		image?: string;
-		plays: number;
-		msPlayed: number;
-	}[];
-	monthly: { month: string; listeningTime: number; streams: number }[];
-}
+import type { ComparisonMetrics } from "../../common/types";
 
 export async function getYearMetrics(
 	userId: string,
 	year: number,
 	limit = 5,
-): Promise<YearMetrics> {
-	// "use cache";
-	// cacheLife("days");
-	// cacheTag(userId, `year-metrics-${year}`);
+): Promise<ComparisonMetrics> {
+	"use cache";
+	cacheLife("days");
+	cacheTag(userId, `year-metrics-${year}`);
 
 	const whereClause = auth(userId, {
 		monthRange: {
@@ -125,32 +107,33 @@ export async function getYearMetrics(
 		.slice(0, limit);
 
 	spotify.setUserId(userId);
-	const artistsInfo = await spotify.artists.list(
-		sortedArtists.map((a) => a.artistId),
-	);
+	const [artistsInfo, tracksInfo] = await Promise.all([
+		spotify.artists.list(sortedArtists.map((a) => a.artistId)),
+		spotify.tracks.list(topTracksRaw.map((t) => t.trackId)),
+	]);
+
 	const topArtists = sortedArtists.map((a) => {
 		const info = artistsInfo.find((i: Artist) => i.id === a.artistId);
 		return {
 			id: a.artistId,
 			name: info?.name ?? "",
-			image: info?.images?.[0]?.url,
-			plays: a.plays,
-			msPlayed: Number(a.time ?? 0),
+			image: info?.images?.[0]?.url ?? "",
+			href: info?.external_urls.spotify ?? "",
+			stat1: `${a.plays} plays`,
+			stat2: `${(Number(a.time ?? 0) / 1000 / 60).toFixed(2)} min`,
 		};
 	});
 
-	const tracksInfo = await spotify.tracks.list(
-		topTracksRaw.map((t) => t.trackId),
-	);
 	const topTracks = topTracksRaw.map((t) => {
 		const info = tracksInfo.find((i: Track) => i.id === t.trackId);
 		return {
 			id: t.trackId,
 			name: info?.name ?? "",
-			artists: info?.artists.map((ar) => ar.name) ?? [],
-			image: info?.album.images?.[0]?.url,
-			plays: t.plays,
-			msPlayed: Number(t.time ?? 0),
+			artists: info?.artists.map((ar) => ar.name).join(", ") ?? "",
+			image: info?.album.images?.[0]?.url ?? "",
+			href: info?.external_urls.spotify ?? "",
+			stat1: `${t.plays} plays`,
+			stat2: `${(Number(t.time ?? 0) / 1000 / 60).toFixed(2)} min`,
 		};
 	});
 
@@ -170,14 +153,19 @@ export async function getYearMetrics(
 	}));
 
 	return {
-		year,
-		totalListeningTime,
-		numStreams,
-		uniqueTracks,
-		uniqueArtists,
-		uniqueAlbums,
-		topArtists,
-		topTracks,
+		label: year.toString(),
+		cards: {
+			"Listening Time": Number(
+				(totalListeningTime / 1000 / 60 / 60).toFixed(2),
+			),
+			"Unique Tracks": uniqueTracks,
+			"Unique Artists": uniqueArtists,
+			"Unique Albums": uniqueAlbums,
+		},
 		monthly,
+		totalListeningTime: Number((totalListeningTime / 1000 / 60).toFixed(2)),
+		totalStreams: numStreams,
+		rank1: topArtists,
+		rank2: topTracks,
 	};
 }

@@ -7,5 +7,11 @@ import { getYearMetrics } from "../data/year-metrics";
 export async function getYearMetricsAction(year: number) {
 	const { userId } = await getUser();
 
-	return getYearMetrics(userId, year);
+	const time = performance.now();
+	const metrics = await getYearMetrics(userId, year);
+	const endTime = performance.now();
+
+	console.log(`getYearMetricsAction took ${endTime - time}ms for ${year}`);
+
+	return metrics;
 }

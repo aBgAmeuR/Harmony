@@ -18,5 +18,10 @@ export async function getAvailableYears(userId: string) {
 		.where(auth(userId))
 		.orderBy(({ year }) => desc(year));
 
-	return results.map((row) => row.year);
+	const currentYear = new Date().getFullYear();
+	const years = results.map((row) => Number(row.year));
+
+	return [...new Set([currentYear, currentYear - 1, ...years])].sort(
+		(a, b) => b - a,
+	);
 }

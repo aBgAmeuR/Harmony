@@ -38,7 +38,7 @@ const createChartTooltipFormatter =
 										: getMsPlayedInHours(item.value ?? 0, false)
 								}
 								suffix={suffix}
-								className="-translate-y-[3px]"
+								className="part-[suffix]:text-xs"
 							/>
 						</span>
 					</div>
@@ -63,6 +63,7 @@ const msToHours = (ms: number, showDecimals = true): number => {
 };
 
 export const chartTooltipFormatter = {
+	minuteSuffix: createChartTooltipFormatter("min", (value) => value as string),
 	hourSuffix: createChartTooltipFormatter("h"),
 	normal: createChartTooltipFormatter("", (value) => value as string),
 } as const;
