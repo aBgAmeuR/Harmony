@@ -23,9 +23,9 @@ const metrics2Atom = atomWithQuery((get) => ({
 }));
 
 export const useArtistsData = () => {
-	const [{ data: metrics1, isLoading: isLoading1, isError: isError1 }] =
+	const [{ data: metrics1, isFetching: isLoading1, isError: isError1 }] =
 		useAtom(metrics1Atom);
-	const [{ data: metrics2, isLoading: isLoading2, isError: isError2 }] =
+	const [{ data: metrics2, isFetching: isLoading2, isError: isError2 }] =
 		useAtom(metrics2Atom);
 
 	return {

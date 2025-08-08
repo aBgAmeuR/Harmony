@@ -12,7 +12,9 @@ const titles = { title1: "Top Tracks", title2: "Top Albums" };
 export const ComparisonArtistVsArtistContent = ({ children }: PropsWithChildren) => {
     const { metrics1, metrics2, isLoading, isError } = useArtistsData();
 
-    if (!isLoading && (!metrics1 || !metrics2)) return (
+    console.log(isLoading, metrics1, metrics2);
+
+    if ((!metrics1 && !metrics2) || (!isLoading && !metrics1) || (!isLoading && !metrics2)) return (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-4">
             <h2 className="font-bold text-2xl text-foreground">Compare Your Artists</h2>
             <p className="max-w-md text-center text-muted-foreground">

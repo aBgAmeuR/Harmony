@@ -175,7 +175,7 @@ function SidebarItemRenderer({
 							<ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
 						</SidebarNavButton>
 					</CollapsibleTrigger>
-					{isOpen || isCollapsed && (
+					{(isOpen || isCollapsed) && (
 						<CollapsibleContent>
 							<SidebarMenuSub>
 								{item.items.map((sub) => (
