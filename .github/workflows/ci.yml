@@ -35,6 +35,7 @@ jobs:
           APP_MAINTENANCE: ${{ secrets.APP_MAINTENANCE }}
           DEMO_ID: ${{ secrets.DEMO_ID }}
           DOCS_URL: ${{ secrets.DOCS_URL }}
+          DATABASE_CA_CERT: ${{ secrets.DATABASE_CA_CERT }}
       - name: Install Playwright Browsers
         run: pnpm exec playwright install --with-deps
       - name: Run e2e tests
@@ -47,3 +48,4 @@ jobs:
           APP_MAINTENANCE: ${{ secrets.APP_MAINTENANCE }}
           DEMO_ID: ${{ secrets.DEMO_ID }}
           DOCS_URL: ${{ secrets.DOCS_URL }}
+          DATABASE_CA_CERT: ${{ secrets.DATABASE_CA_CERT }}
