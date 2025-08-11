@@ -17,9 +17,9 @@ export const Hero2 = () => {
 				</p>
 
 				<div className="mt-6 flex items-center justify-center gap-3">
-					<GetStartedBtn>Get started free</GetStartedBtn>
+					<GetStartedBtn variant="gradient" size="lg">Get Started</GetStartedBtn>
 					{!isMaintenance ? (
-						<GetDemoBtn label="View demo" />
+						<GetDemoBtn label="View Demo" />
 					) : null}
 				</div>
 

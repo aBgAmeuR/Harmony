@@ -38,7 +38,7 @@ export const Header = () => {
 							<LinkButton href="#" variant="ghost" size="sm">
 								<span>View Demo</span>
 							</LinkButton>
-							<LinkButton href="#" size="sm">
+							<LinkButton href="#" variant="gradient" size="sm" className="border-primary/90 from-primary/70 to-primary/80 hover:border-primary hover:from-primary/80 hover:to-primary/90">
 								<span>Get Started</span>
 							</LinkButton>
 						</div>

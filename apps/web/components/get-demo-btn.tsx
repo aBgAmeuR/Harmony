@@ -19,10 +19,13 @@ export const GetDemoBtn = ({ label, ...props }: GetDemoBtnProps) => {
 	const onClick = () =>
 		transition(async () => await router.push("/signin-demo"));
 
+
+
+
 	return (
 		<Button
 			onClick={onClick}
-			variant="outline"
+			variant="glass"
 			size="lg"
 			className={cn("group", props.className)}
 			data-testid="get-demo-btn"
