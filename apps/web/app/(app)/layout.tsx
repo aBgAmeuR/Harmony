@@ -1,38 +1,43 @@
-import { auth } from "@repo/auth";
-import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
+import type React from "react";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { cookies } from "next/headers";
-import type React from "react";
+import NextTopLoader from "nextjs-toploader";
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
+
+import { getUserOrNull } from "@repo/auth";
+import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 
 import { AppSidebar } from "~/components/navbar/app-sidebar";
+import { QueryClientProvider } from "~/components/providers/query-client-provider";
 
-import NextTopLoader from "nextjs-toploader";
-import Error from "../error";
+import ErrorComponent from "../error";
 
-export default async function AppLayout({
-	children,
-}: Readonly<{
-	children: React.ReactNode;
-}>) {
+export const experimental_ppr = true;
+
+export default async function AppLayout({ children }: Readonly<{ children: React.ReactNode }>) {
 	const cookieStorage = await cookies();
-	const sideBarState = cookieStorage.get("sidebar:state")?.value || "true";
-	const session = await auth();
+	const defaultOpen = cookieStorage.get("sidebar_state")?.value === "true";
+	const user = await getUserOrNull();
 
 	return (
-		<ErrorBoundary errorComponent={Error}>
-			<SidebarProvider defaultOpen={sideBarState === "true"}>
-				<AppSidebar user={session?.user} />
-				<SidebarInset>
-					<NextTopLoader
-						color="#5be990"
-						crawl={true}
-						showSpinner={false}
-						height={2}
-						zIndex={9}
-					/>
-					{children}
-				</SidebarInset>
-			</SidebarProvider>
+		<ErrorBoundary errorComponent={ErrorComponent}>
+			<QueryClientProvider>
+				<NuqsAdapter>
+					<SidebarProvider defaultOpen={defaultOpen}>
+						<AppSidebar user={user} />
+						<SidebarInset>
+							<NextTopLoader
+								color="#5be990"
+								crawl={true}
+								showSpinner={false}
+								height={2}
+								zIndex={9}
+							/>
+							{children}
+						</SidebarInset>
+					</SidebarProvider>
+				</NuqsAdapter>
+			</QueryClientProvider>
 		</ErrorBoundary>
 	);
 }

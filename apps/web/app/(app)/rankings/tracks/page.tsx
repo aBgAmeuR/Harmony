@@ -1,17 +1,28 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
-import { MusicList } from "~/components/lists/music-list";
-import { SelectMonthRange } from "~/components/select-month-range";
+import { Suspense } from "react";
+import type { Metadata } from "next";
 
-export default function RankingsTracksPage() {
+import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { RankingTracks } from "~/features/rankings/components/ranking-tracks";
+import { SelectListLayout } from "~/features/stats/components/select-list-layout";
+
+export const metadata: Metadata = {
+	title: "Rankings Tracks",
+	description: "Discover your most listened to tracks based on your listening history",
+};
+
+export default async function RankingsTracksPage() {
 	return (
-		<>
-			<AppHeader items={["Package", "Rankings", "Tracks"]}>
-				<SelectMonthRange />
-			</AppHeader>
-			<Main>
-				<MusicList type="rankingTracks" />
-			</Main>
-		</>
+		<Layout>
+			<LayoutHeader items={["Package", "Rankings", "Tracks"]} metadata={metadata}>
+				<Suspense fallback={<DateRangeSelectorSkeleton />}>
+					<DateRangeSelector />
+				</Suspense>
+				<SelectListLayout />
+			</LayoutHeader>
+			<LayoutContent>
+				<RankingTracks />
+			</LayoutContent>
+		</Layout>
 	);
 }

@@ -1,7 +1,8 @@
-import { auth } from "@repo/auth";
-import { prisma } from "@repo/database";
-import { type FileRouter, createUploadthing } from "uploadthing/next";
-import { UTApi, UploadThingError } from "uploadthing/server";
+import { createUploadthing, type FileRouter } from "uploadthing/next";
+import { UploadThingError, UTApi } from "uploadthing/server";
+
+import { getUserOrNull } from "@repo/auth";
+import { db, packages } from "@repo/database";
 
 const f = createUploadthing();
 
@@ -24,23 +25,24 @@ export const ourFileRouter: FileRouter = {
 		.middleware(async ({ files }) => {
 			if (!files.length) throw new UploadThingError("File invalid");
 
-			const session = await auth();
-			if (!session?.user?.id) throw new UploadThingError("Unauthorized");
+			const user = await getUserOrNull();
+			if (!user) throw new UploadThingError("Unauthorized");
 
-			return { userId: session.user.id };
+			return { userId: user.userId };
 		})
 		.onUploadComplete(async ({ metadata, file }) => {
-			const newPackage = await prisma.package.create({
-				data: {
+			const newPackage = await db
+				.insert(packages)
+				.values({
 					userId: metadata.userId,
 					tempFileLink: file.ufsUrl,
 					fileSize: `${(file.size / 1024).toFixed(2)} MB`,
 					fileName: file.name,
-				},
-			});
+				})
+				.returning({ id: packages.id });
 
 			return {
-				packageId: newPackage.id,
+				packageId: newPackage[0].id,
 			};
 		}),
 };

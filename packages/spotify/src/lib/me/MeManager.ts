@@ -6,7 +6,6 @@ import type {
 	Track,
 	UserPrivate,
 } from "../../types";
-
 import { Manager } from "../Manager";
 
 export class MeManager extends Manager {
@@ -40,13 +39,14 @@ export class MeManager extends Manager {
 	async top(
 		type: "artists" | "tracks",
 		time_range: "long_term" | "medium_term" | "short_term",
+		options: { limit?: number; offset?: number } = {},
 	): Promise<unknown> {
 		const res = await this.http.get<PagingObject<unknown>>(
 			`/v1/me/top/${type}`,
 			{
 				time_range,
-				limit: "50",
-				offset: "0",
+				limit: options.limit?.toString() ?? "50",
+				offset: options.offset?.toString() ?? "0",
 			},
 		);
 

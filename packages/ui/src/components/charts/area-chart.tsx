@@ -1,31 +1,26 @@
 "use client";
 
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+
 import {
-	type ChartConfig,
 	ChartContainer,
 	ChartLegend,
 	ChartLegendContent,
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@repo/ui/chart";
-import type * as React from "react";
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
-import { createGradientDefs } from "./chart-color-utils";
-import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
 
-export interface AreaChartProps {
-	data: any[];
+import { cn } from "../../lib/utils";
+import type { AxisTickFormatters, BaseChartProps } from "./common";
+import { createGradientDefs } from "./common/chart-color-utils";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import { getTickFormatter } from "./common/tick-formatters";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
+
+export interface AreaChartProps extends BaseChartProps, AxisTickFormatters {
 	xAxisDataKey: string;
 	areaDataKeys: string[];
 	stacked?: boolean;
-	config: ChartConfig;
-	tooltipLabelFormatter?: (value: string, payload: any) => React.ReactNode;
-	tooltipValueFormatter?: React.ComponentProps<
-		typeof ChartTooltipContent
-	>["formatter"];
-	className?: string;
-	yAxisTickFormatter?: (value: any) => string;
-	xAxisTickFormatter?: (value: any) => string;
 	showLegend?: boolean;
 	showYAxis?: boolean;
 }
@@ -34,13 +29,13 @@ export function ReusableAreaChart({
 	data,
 	xAxisDataKey,
 	areaDataKeys,
-	stacked = false,
 	config,
-	tooltipLabelFormatter,
-	tooltipValueFormatter = ChartTooltipFormatter,
-	className = "aspect-[10/3] w-full",
-	yAxisTickFormatter,
-	xAxisTickFormatter,
+	className,
+	stacked = false,
+	tooltipLabelFormatter = "normal",
+	tooltipValueFormatter = "normal",
+	yAxisTickFormatter = "normal",
+	xAxisTickFormatter = "normal",
 	showLegend = false,
 	showYAxis = true,
 }: AreaChartProps) {
@@ -51,7 +46,10 @@ export function ReusableAreaChart({
 	}));
 
 	return (
-		<ChartContainer config={config} className={className}>
+		<ChartContainer
+			config={config}
+			className={cn("aspect-[10/3] w-full", className)}
+		>
 			<AreaChart data={data}>
 				{createGradientDefs(chartItems)}
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
@@ -61,21 +59,23 @@ export function ReusableAreaChart({
 					axisLine={false}
 					tickMargin={8}
 					minTickGap={32}
-					tickFormatter={xAxisTickFormatter}
+					tickFormatter={getTickFormatter(xAxisTickFormatter)}
 				/>
 				{showYAxis && (
 					<YAxis
 						tickLine={false}
 						axisLine={false}
 						tickMargin={8}
-						tickFormatter={yAxisTickFormatter}
+						tickFormatter={getTickFormatter(yAxisTickFormatter)}
 					/>
 				)}
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={tooltipLabelFormatter}
-							formatter={tooltipValueFormatter}
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(tooltipLabelFormatter, label, payload, null)
+							}
+							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
 					cursor={false}

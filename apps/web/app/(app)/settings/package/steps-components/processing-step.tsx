@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import { CardContent } from "@repo/ui/card";
 import { NumberFlow } from "@repo/ui/components/number";
 import { cn } from "@repo/ui/lib/utils";
@@ -9,8 +11,8 @@ import {
 	StepperSeparator,
 	StepperTitle,
 } from "@repo/ui/stepper";
-import React, { useEffect, useState } from "react";
-import type { ProcessingStepType } from "~/app/api/package/new/PackageStreamer";
+
+import type { ProcessingStepType } from "../package-streamer";
 
 type ProcessingStepProps = {
 	processingProgress: number;
@@ -85,7 +87,7 @@ export const ProcessingStep = ({
 										className={cn(
 											"text-sm",
 											step.status === "processing" &&
-												"font-medium text-foreground",
+											"font-medium text-foreground",
 											step.status === "completed" && "text-muted-foreground",
 											step.status === "error" && "text-destructive",
 										)}

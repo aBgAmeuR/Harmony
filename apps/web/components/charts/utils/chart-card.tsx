@@ -1,3 +1,5 @@
+import type { PropsWithChildren, ReactNode } from "react";
+
 import {
 	Card,
 	CardContent,
@@ -6,7 +8,6 @@ import {
 	CardTitle,
 } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
-import type { PropsWithChildren, ReactNode } from "react";
 
 type PropsWithChildrenAndClassName = PropsWithChildren<{
 	className?: string;

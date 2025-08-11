@@ -1,16 +1,17 @@
 "use client";
 
-import { cn } from "@repo/ui/lib/utils";
-import { type VariantProps, cva } from "class-variance-authority";
 import React from "react";
+import { cva, type VariantProps } from "class-variance-authority";
+
+import { cn } from "@repo/ui/lib/utils";
 
 const buttonGroupVariants = cva(
-	"flex sm:items-center max-sm:gap-1 max-sm:flex-col [&>*:focus-within]:ring-1 [&>*:focus-within]:z-10 [&>*]:ring-offset-0 sm:[&>*:not(:first-child)]:rounded-l-none sm:[&>*:not(:last-child)]:rounded-r-none",
+	"flex items-center [&>*:focus-within]:ring-1 [&>*:focus-within]:z-10 [&>*]:ring-offset-0 [&>*:not(:first-child)]:rounded-l-none [&>*:not(:last-child)]:rounded-r-none",
 	{
 		variants: {
 			size: {
 				default: "[&>*]:h-10 [&>*]:px-4 [&>*]:py-2",
-				sm: "[&>*]:h-9 [&>*]:rounded-md [&>*]:px-3",
+				sm: "[&>*]:h-8 [&>*]:rounded-md [&>*]:px-3",
 				lg: "[&>*]:h-11 [&>*]:rounded-md [&>*]:px-8",
 				icon: "[&>*]:h-10 [&>*]:w-10",
 			},
@@ -28,7 +29,7 @@ const buttonGroupVariants = cva(
 
 export interface ButtonGroupProps
 	extends React.HTMLAttributes<HTMLDivElement>,
-		VariantProps<typeof buttonGroupVariants> {
+	VariantProps<typeof buttonGroupVariants> {
 	separated?: boolean;
 }
 

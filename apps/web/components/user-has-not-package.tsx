@@ -1,8 +1,10 @@
+import { BarChart3, Clock, Sparkles, Trophy } from "lucide-react";
+import Link from "next/link";
+
 import { buttonVariants } from "@repo/ui/button";
 import { Card } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
-import { BarChart3, Clock, Sparkles, Trophy } from "lucide-react";
-import Link from "next/link";
+
 import { Icons } from "~/components/icons";
 
 export const UserHasNotPackage = () => {

@@ -1,20 +1,17 @@
+import { CloudUpload, Files, Package } from "lucide-react";
+
 import { CardContent } from "@repo/ui/card";
 import { toast } from "@repo/ui/sonner";
-import { CloudUpload, Files, Package } from "lucide-react";
-import React from "react";
+
 import { UploadButton } from "~/lib/uploadthing";
-import { verifPackage } from "~/services/packages/verif-package";
+import { extractZipAndGetFiles } from "~/lib/zip";
 
 type UploadStepProps = {
 	onClientUploadComplete: (packageId: string) => void;
 };
 
-export const UploadStep = ({
-	onClientUploadComplete: callBackFunction,
-}: UploadStepProps) => {
-	const onClientUploadComplete = async (
-		res: Array<{ serverData: { packageId: string } }>,
-	) => {
+export const UploadStep = ({ onClientUploadComplete: callBackFunction }: UploadStepProps) => {
+	const onClientUploadComplete = async (res: Array<{ serverData: { packageId: string } }>) => {
 		if (res && res.length <= 0) return;
 		callBackFunction(res[0].serverData.packageId);
 	};
@@ -22,17 +19,17 @@ export const UploadStep = ({
 	return (
 		<CardContent className="group/upload mx-6 rounded-xl border-2 border-border border-dashed p-8 text-center transition-transform duration-500 hover:border-muted-foreground hover:duration-200">
 			<div className="isolate flex justify-center">
-				<>
-					<div className="-rotate-6 group-hover/upload:-translate-x-5 group-hover/upload:-rotate-12 group-hover/upload:-translate-y-0.5 relative top-1.5 left-2.5 grid size-12 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:duration-200">
-						<Files className="size-6 text-muted-foreground" />
-					</div>
-					<div className="group-hover/upload:-translate-y-0.5 relative z-10 grid size-12 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:duration-200">
-						<Package className="size-6 text-muted-foreground" />
-					</div>
-					<div className="group-hover/upload:-translate-y-0.5 relative top-1.5 right-2.5 grid size-12 rotate-6 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:translate-x-5 group-hover/upload:rotate-12 group-hover/upload:duration-200">
-						<CloudUpload className="size-6 text-muted-foreground" />
-					</div>
-				</>
+
+				<div className="-rotate-6 group-hover/upload:-translate-x-5 group-hover/upload:-rotate-12 group-hover/upload:-translate-y-0.5 relative top-1.5 left-2.5 grid size-12 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:duration-200">
+					<Files className="size-6 text-muted-foreground" />
+				</div>
+				<div className="group-hover/upload:-translate-y-0.5 relative z-10 grid size-12 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:duration-200">
+					<Package className="size-6 text-muted-foreground" />
+				</div>
+				<div className="group-hover/upload:-translate-y-0.5 relative top-1.5 right-2.5 grid size-12 rotate-6 place-items-center rounded-xl bg-background shadow-lg ring-1 ring-border transition duration-500 group-hover/upload:translate-x-5 group-hover/upload:rotate-12 group-hover/upload:duration-200">
+					<CloudUpload className="size-6 text-muted-foreground" />
+				</div>
+
 			</div>
 			<h2 className="mt-6 font-medium text-foreground">
 				Upload Your Spotify Data Package
@@ -60,3 +57,17 @@ export const UploadStep = ({
 		</CardContent>
 	);
 };
+
+export async function verifPackage(files: File[]) {
+	try {
+		const buffer = await files[0].arrayBuffer();
+		const filesRegexPattern =
+			/Spotify Extended Streaming History\/Streaming_History_Audio_(\d{4}(-\d{4})?)_(\d+)\.json/;
+
+		const filesResult = await extractZipAndGetFiles(buffer, filesRegexPattern);
+
+		return Array.isArray(filesResult) && filesResult.length > 0;
+	} catch (_error) {
+		return false;
+	}
+}

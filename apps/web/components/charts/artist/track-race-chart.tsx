@@ -1,5 +1,7 @@
 "use client";
 
+import * as React from "react";
+
 import {
 	ChartRace,
 	type ChartRaceSeries,
@@ -11,7 +13,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/select";
-import * as React from "react";
+
 import {
 	ChartCard,
 	ChartCardContent,
@@ -76,6 +78,7 @@ export function TrackRaceChartComponent({
 			</ChartCardHeader>
 			<ChartCardContent className="!pl-0">
 				<ChartRace
+					config={{}}
 					series={filteredSeries}
 					xAxisDataKey="month"
 					yAxisDataKey="rank"

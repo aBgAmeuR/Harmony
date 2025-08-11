@@ -1,3 +1,7 @@
+import { Suspense } from "react";
+import { CalendarIcon } from "lucide-react";
+
+import type { User } from "@repo/auth";
 import { Button } from "@repo/ui/button";
 import { SidebarInset, SidebarProvider } from "@repo/ui/sidebar";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -7,15 +11,15 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/tooltip";
-import { CalendarIcon } from "lucide-react";
-import React, { Suspense } from "react";
 
-import { ListeningPatternChart } from "~/app/(app)/overview/listening-pattern-chart";
-import { RankingList } from "~/app/(app)/overview/ranking-list";
-import { TopStatsCards } from "~/app/(app)/overview/top-stats-cards";
-import { AppHeader } from "~/components/app-header";
-import { AppSidebar } from "~/components/navbar/app-sidebar";
-import { TimeListenedChartComponent } from "../charts/activity/time-listened-chart";
+import { TimeListenedChart } from "~/features/activity/components/time-listened-chart";
+import { ListeningPatternChart } from "~/features/overview/components/listening-pattern-chart";
+import { StatsCards } from "~/features/overview/components/stats-cards";
+import { TopArtistsCard } from "~/features/overview/components/top-artists-card";
+import { TopTracksCard } from "~/features/overview/components/top-tracks-card";
+
+import { LayoutHeader } from "../layouts/layout";
+import { AppSidebar } from "../navbar/app-sidebar";
 
 const data = {
 	topStats: {
@@ -144,10 +148,12 @@ const data = {
 };
 
 const user = {
-	name: "Demo",
-	id: process.env.DEMO_ID,
+	userId: process.env.DEMO_ID!,
+	username: "Demo",
+	email: "demo@demo.com",
+	isDemo: true,
 	hasPackage: true,
-};
+} satisfies User;
 
 export const Demo = () => {
 	return (
@@ -165,7 +171,7 @@ export const Demo = () => {
 						/>
 						<SidebarInset className="min-h-full overflow-y-scroll">
 							<main>
-								<AppHeader items={["Package", "Overview"]} demo={false}>
+								<LayoutHeader items={["Package", "Overview"]} demo={false}>
 									<TooltipProvider delayDuration={0}>
 										<Tooltip>
 											<TooltipTrigger
@@ -191,33 +197,16 @@ export const Demo = () => {
 											</TooltipContent>
 										</Tooltip>
 									</TooltipProvider>
-								</AppHeader>
+								</LayoutHeader>
 								<div className="mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4 pt-2">
-									<TopStatsCards demoData={data.topStats} />
+									<StatsCards data={data.topStats} />
 									<div className="flex flex-col gap-4 md:flex-row">
-										<TimeListenedChartComponent
-											data={
-												new Promise((resolve) => resolve(data.timeListened))
-											}
-											className="flex-1"
-										/>
-										<ListeningPatternChart
-											data={
-												new Promise((resolve) => resolve(data.listeningPattern))
-											}
-										/>
+										<TimeListenedChart data={data.timeListened} className="flex-1" />
+										<ListeningPatternChart data={data.listeningPattern} />
 									</div>
 									<div className="grid gap-4 lg:grid-cols-2">
-										<RankingList
-											type="dashboardArtists"
-											className="col-span-1"
-											demoData={data.topArtists}
-										/>
-										<RankingList
-											type="dashboardTracks"
-											className="col-span-1"
-											demoData={data.topTracks}
-										/>
+										<TopArtistsCard data={data.topArtists} />
+										<TopTracksCard data={data.topTracks} />
 									</div>
 								</div>
 							</main>

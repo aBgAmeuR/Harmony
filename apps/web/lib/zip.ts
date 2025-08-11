@@ -1,4 +1,4 @@
-import { type Unzipped, strFromU8, unzip } from "fflate";
+import { strFromU8, type Unzipped, unzip } from "fflate";
 
 /**
  * Extracts relevant JSON files from a provided ZIP buffer.

@@ -1,28 +1,30 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
-import { MusicList } from "~/components/lists/music-list";
-import { HistoricalRankingsModal } from "~/components/modals/historical-rankings";
-import { SelectTimeRange } from "~/components/select-time-range";
-import { SelectTimeRangeInfo } from "~/components/select-time-range-info";
-import { getHistoricalTrackRankings } from "~/services/historical-rankings";
+import { Suspense } from "react";
+import type { Metadata } from "next";
+
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { SelectListLayout } from "~/features/stats/components/select-list-layout";
+import { TimeRangeInfo } from "~/features/stats/components/time-range-info";
+import { TimeRangeSelect, TimeRangeSelectSkeleton } from "~/features/stats/components/time-range-select";
+import { TopTracks } from "~/features/stats/components/top-tracks";
+
+export const metadata: Metadata = {
+	title: "Top Tracks",
+	description: "Discover your most listened to tracks on Spotify, ranked by play count and listening time",
+};
 
 export default async function TopTracksPage() {
 	return (
-		<>
-			<AppHeader items={["Stats", "Top", "Tracks"]}>
-				<SelectTimeRangeInfo />
-				<SelectTimeRange />
-				{/* // TODO: Enable this component when it's ready */}
-				{/* <SelectTopLayout /> */}
-			</AppHeader>
-			<Main>
-				<HistoricalRankingsModal
-					type="track"
-					getHistoricalRankings={getHistoricalTrackRankings}
-				>
-					<MusicList type="topTracks" />
-				</HistoricalRankingsModal>
-			</Main>
-		</>
+		<Layout>
+			<LayoutHeader items={["Stats", "Top", "Tracks"]} metadata={metadata}>
+				<TimeRangeInfo />
+				<Suspense fallback={<TimeRangeSelectSkeleton />}>
+					<TimeRangeSelect />
+				</Suspense>
+				<SelectListLayout />
+			</LayoutHeader>
+			<LayoutContent>
+				<TopTracks />
+			</LayoutContent>
+		</Layout>
 	);
 }

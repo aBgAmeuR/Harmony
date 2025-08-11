@@ -1,6 +1,10 @@
-import { Button } from "@repo/ui/button";
 import { Github } from "lucide-react";
 import Link from "next/link";
+
+import { Button } from "@repo/ui/button";
+import { LinkButton } from "@repo/ui/components/link-button";
+
+import { config } from "~/lib/config";
 
 import { GetDemoBtn } from "../get-demo-btn";
 import { Icons } from "../icons";
@@ -21,7 +25,7 @@ export const Navbar = () => {
 							className="flex items-center gap-2 font-bold text-xl"
 						>
 							<Icons.logo className="size-8" />
-							Harmony
+							{config.appName}
 						</Link>
 						<div className="hidden gap-2 sm:flex">
 							<Button
@@ -31,7 +35,7 @@ export const Navbar = () => {
 								asChild={true}
 							>
 								<Link
-									href="https://github.com/aBgAmeuR/Harmony"
+									href={config.githubRepo}
 									target="_blank"
 								>
 									<Github />
@@ -41,6 +45,9 @@ export const Navbar = () => {
 						</div>
 					</nav>
 					<nav className="flex items-center justify-end gap-4">
+						<LinkButton href="/docs" variant="ghost">
+							Docs
+						</LinkButton>
 						{!isMaintenance ? (
 							<GetDemoBtn label="Get Demo" variant="link" />
 						) : null}

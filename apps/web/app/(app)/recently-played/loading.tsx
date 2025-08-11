@@ -1,14 +1,20 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
-import { ListSkeleton } from "~/components/list-skeleton";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { MusicLayoutSkeleton } from "~/components/lists/music-layout/skeleton";
+import { SelectListLayoutSkeleton } from "~/features/stats/components/select-list-layout";
+
+import { metadata } from "./page";
+
+export { metadata };
 
 export default function Loading() {
 	return (
-		<>
-			<AppHeader items={["Stats", "Recently Played"]} demo={false} />
-			<Main>
-				<ListSkeleton showRank={false} />
-			</Main>
-		</>
+		<Layout>
+			<LayoutHeader items={["Stats", "Recently Played"]} demo={false} metadata={metadata}>
+				<SelectListLayoutSkeleton />
+			</LayoutHeader>
+			<LayoutContent>
+				<MusicLayoutSkeleton showRank={false} />
+			</LayoutContent>
+		</Layout>
 	);
 }

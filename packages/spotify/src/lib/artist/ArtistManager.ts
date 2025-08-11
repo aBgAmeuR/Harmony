@@ -11,7 +11,7 @@ export class ArtistManager extends Manager {
 	async get(id: string): Promise<Artist | null> {
 		try {
 			return await this.http.get<Artist>(`/v1/artists/${id}`);
-		} catch (error) {
+		} catch (_error) {
 			return null;
 		}
 	}
@@ -32,5 +32,23 @@ export class ArtistManager extends Manager {
 		);
 
 		return artists.flat();
+	}
+
+	/**
+	 * Search for artists by query.
+	 * @param query Search query
+	 * @param limit Max number of results
+	 * @returns Promise<Artist[]>
+	 */
+	async search(query: string, limit: number = 10): Promise<Artist[]> {
+		const res = await this.http.get<{ artists: { items: Artist[] } }>(
+			`/v1/search`,
+			{
+				q: query,
+				type: "artist",
+				limit: limit.toString(),
+			},
+		);
+		return res.artists.items;
 	}
 }

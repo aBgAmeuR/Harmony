@@ -1,5 +1,9 @@
 "use client";
 
+import type * as React from "react";
+import { ChevronsUpDown } from "lucide-react";
+
+import type { User } from "@repo/auth";
 import {
 	Sidebar,
 	SidebarContent,
@@ -11,12 +15,10 @@ import {
 	SidebarRail,
 } from "@repo/ui/sidebar";
 import { Skeleton } from "@repo/ui/skeleton";
-import { ChevronsUpDown } from "lucide-react";
-import type * as React from "react";
 
-import type { User } from "@repo/auth";
 import { NavMain } from "~/components/navbar/nav-main";
-import { CommandMenu } from "../command-menu";
+
+import { CommandMenu } from "./command-menu";
 import { NavHeader } from "./nav-header";
 import { NavSecondary } from "./nav-secondary";
 import { NavUser } from "./nav-user";
@@ -24,7 +26,7 @@ import { data } from "./sidebar-config";
 import { SidebarOptInForm } from "./sidebar-opt-in-form";
 
 type AppSidebarProps = React.ComponentProps<typeof Sidebar> & {
-	user?: User;
+	user: User | null;
 	disable?: boolean;
 };
 
@@ -44,7 +46,7 @@ export function AppSidebar({
 					<div className="px-2">
 						<CommandMenu
 							hasPackage={hasPackage}
-							isDemo={user?.name === "Demo"}
+							isDemo={user?.isDemo}
 						/>
 					</div>
 				)}
@@ -55,16 +57,16 @@ export function AppSidebar({
 					disable={disable}
 					hasPackage={hasPackage}
 				/>
-				{/* {hasPackage ? (
+				{hasPackage ? (
 					<NavMain items={data.advanced} label="Advanced" disable={disable} />
-				) : null} */}
+				) : null}
 				<NavMain items={data.settings} label="Settings" disable={disable} />
 				<NavSecondary items={data.navSecondary} className="mt-auto" />
 			</SidebarContent>
 			<SidebarFooter>
-				{user?.id ? (
+				{user?.userId ? (
 					<>
-						{user.name === "Demo" ? <SidebarOptInForm /> : null}
+						{user.isDemo ? <SidebarOptInForm /> : null}
 						<NavUser user={user} />
 					</>
 				) : (

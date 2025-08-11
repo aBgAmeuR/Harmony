@@ -1,10 +1,11 @@
 "use client";
 
-import { signIn } from "@repo/auth/actions";
+import { useTransition } from "react";
+import { ArrowRight, LoaderCircle } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 import { Button, type buttonVariants } from "@repo/ui/button";
 import { type VariantProps, cn } from "@repo/ui/lib/utils";
-import { ArrowRight, LoaderCircle } from "lucide-react";
-import { useTransition } from "react";
 
 type GetDemoBtnProps = {
 	label: string;
@@ -12,18 +13,11 @@ type GetDemoBtnProps = {
 } & VariantProps<typeof buttonVariants>;
 
 export const GetDemoBtn = ({ label, ...props }: GetDemoBtnProps) => {
+	const router = useRouter();
 	const [isTransition, transition] = useTransition();
 
-	const onClick = () => {
-		transition(async () => {
-			await signIn("credentials", {
-				username: "demo",
-				password: "demo",
-				redirect: true,
-				redirectTo: "/settings/about",
-			});
-		});
-	};
+	const onClick = () =>
+		transition(async () => await router.push("/signin-demo"));
 
 	return (
 		<Button

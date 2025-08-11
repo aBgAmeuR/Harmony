@@ -1,5 +1,7 @@
-import { AppHeader } from "~/components/app-header";
+import { Clock, Layers, LineChart, Sparkles } from "lucide-react";
+import type { Metadata } from "next";
 
+import { getUser } from "@repo/auth";
 import {
 	Card,
 	CardDescription,
@@ -8,20 +10,26 @@ import {
 	CardTitle,
 } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
-import { Clock, Layers, LineChart, Sparkles } from "lucide-react";
-import { getUserInfos } from "~/lib/utils";
+
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+
 import { Client } from "./client";
 import { DocsModal } from "./docs-modal";
 import { HistoryModal } from "./history-modal";
 import { DemoStep } from "./steps-components/demo-step";
 
+export const metadata: Metadata = {
+	title: "Package",
+	description: "Upload your Spotify data package to generate your listening stats",
+};
+
 export default async function SettingsPackagePage() {
-	const { isDemo } = await getUserInfos();
+	const { isDemo } = await getUser();
 
 	return (
-		<>
-			<AppHeader items={["Settings", "Package"]} />
-			<div className="flex flex-1 flex-col items-center justify-center gap-4 p-4 pt-0">
+		<Layout>
+			<LayoutHeader items={["Settings", "Package"]} className="max-w-6xl" />
+			<LayoutContent className="items-center justify-center">
 				<div>
 					<div className="mb-8 text-center">
 						<h1 className="mb-3 bg-gradient-to-r from-primary to-primary/70 bg-clip-text font-bold text-3xl text-transparent">
@@ -53,8 +61,8 @@ export default async function SettingsPackagePage() {
 						</CardFooter>
 					</Card>
 				</div>
-			</div>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }
 

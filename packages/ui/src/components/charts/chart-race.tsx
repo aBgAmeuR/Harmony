@@ -1,53 +1,56 @@
 "use client";
 
-import * as React from "react";
 import {
-  type ChartConfig,
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
+	CartesianGrid,
+	type DotProps,
+	Line,
+	LineChart,
+	XAxis,
+	YAxis,
+} from "recharts";
+
+import {
+	ChartContainer,
+	ChartTooltip,
+	ChartTooltipContent,
 } from "@repo/ui/chart";
-import { Line, LineChart, CartesianGrid, XAxis, YAxis, type DotProps } from "recharts";
 import { useScreenSize } from "@repo/ui/hooks/use-screen-size";
 
+import type { AxisTickFormatters, BaseChartProps } from "./common";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import { getTickFormatter } from "./common/tick-formatters";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
+
 export interface ChartRaceSeries {
-  name: string;
-  color: string;
-  data: Array<Record<string, any>>;
+	name: string;
+	color: string;
+	data: Record<string, any>[];
 }
 
-export interface ChartRaceProps {
-  series: ChartRaceSeries[];
-  xAxisDataKey: string;
-  yAxisDataKey: string;
-  config?: ChartConfig;
-  className?: string;
-  yAxisDomain?: [number, number];
-  yAxisReversed?: boolean;
-  xAxisTickFormatter?: (value: any) => string;
-  yAxisTickFormatter?: (value: any) => string;
-  tooltipLabelFormatter?: (value: string, payload: any) => React.ReactNode;
-  tooltipValueFormatter?: React.ComponentProps<typeof ChartTooltipContent>["formatter"];
+export interface ChartRaceProps
+	extends Omit<BaseChartProps, "data">,
+		AxisTickFormatters {
+	series: ChartRaceSeries[];
+	xAxisDataKey: string;
+	yAxisDataKey: string;
+	yAxisDomain?: [number, number];
+	yAxisReversed?: boolean;
 }
 
-/**
- * Composant générique ChartRace (ligne animée type "race") pour Recharts.
- * Permet d'afficher plusieurs séries avec dot personnalisé (ex: image d'album).
- */
 export function ChartRace({
-  series,
-  xAxisDataKey,
-  yAxisDataKey,
-  config = {},
-  className = "w-full",
-  yAxisDomain = [1, 5],
-  yAxisReversed = true,
-  xAxisTickFormatter,
-  yAxisTickFormatter,
-  tooltipLabelFormatter,
-  tooltipValueFormatter,
+	series,
+	xAxisDataKey,
+	yAxisDataKey,
+	config,
+	className,
+	yAxisDomain = [1, 5],
+	yAxisReversed = true,
+	xAxisTickFormatter = "normal",
+	yAxisTickFormatter = "normal",
+	tooltipLabelFormatter = "normal",
+	tooltipValueFormatter = "normal",
 }: ChartRaceProps) {
-  const chartRaceMonths = Array.from(
+	const chartRaceMonths = Array.from(
 		new Set(series.flatMap((s) => s.data.map((d) => d.month))),
 	)
 		.sort(
@@ -55,52 +58,57 @@ export function ChartRace({
 		)
 		.map((month) => ({ month }));
 
-  return (
-    <ChartContainer config={config} className={className}>
-      <LineChart>
-        <CartesianGrid vertical={false} strokeDasharray="3 3" />
-        <XAxis
-          dataKey={xAxisDataKey}
-          type="category"
-          allowDuplicatedCategory={false}
-          padding={{ left: 32, right: 32 }}
-          tickFormatter={xAxisTickFormatter}
-        />
-        <YAxis
-          dataKey={yAxisDataKey}
-          type="number"
-          domain={yAxisDomain}
-          tick={true}
-          allowDecimals={false}
-          reversed={yAxisReversed}
-          padding={{ top: 32, bottom: 32 }}
-          tickFormatter={yAxisTickFormatter}
-        />
-        <ChartTooltip
-          cursor={true}
-          itemSorter={(item) => Number(item.value)}
-          content={<ChartTooltipContent labelFormatter={tooltipLabelFormatter} formatter={tooltipValueFormatter} />}
-        />
-        <Line data={chartRaceMonths} isAnimationActive={false} />
-        {series.map((s) => (
-          <Line
-            key={s.name}
-            dataKey={yAxisDataKey}
-            data={s.data}
-            name={s.name}
-            connectNulls={false}
-            dot={({ key, ...rest }) => (
-							<CustomizedDot key={key} {...rest} />
-						)}
-            activeDot={false}
-            strokeWidth={2}
-            stroke={s.color}
-            isAnimationActive={false}
-          />
-        ))}
-      </LineChart>
-    </ChartContainer>
-  );
+	return (
+		<ChartContainer config={config} className={className}>
+			<LineChart>
+				<CartesianGrid vertical={false} strokeDasharray="3 3" />
+				<XAxis
+					dataKey={xAxisDataKey}
+					type="category"
+					allowDuplicatedCategory={false}
+					padding={{ left: 32, right: 32 }}
+					tickFormatter={getTickFormatter(xAxisTickFormatter)}
+				/>
+				<YAxis
+					dataKey={yAxisDataKey}
+					type="number"
+					domain={yAxisDomain}
+					tick={true}
+					allowDecimals={false}
+					reversed={yAxisReversed}
+					padding={{ top: 32, bottom: 32 }}
+					tickFormatter={getTickFormatter(yAxisTickFormatter)}
+				/>
+				<ChartTooltip
+					cursor={true}
+					itemSorter={(item) => Number(item.value)}
+					content={
+						<ChartTooltipContent
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(tooltipLabelFormatter, label, payload, null)
+							}
+							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
+						/>
+					}
+				/>
+				<Line data={chartRaceMonths} isAnimationActive={false} />
+				{series.map((s) => (
+					<Line
+						key={s.name}
+						dataKey={yAxisDataKey}
+						data={s.data}
+						name={s.name}
+						connectNulls={false}
+						dot={({ key, ...rest }) => <CustomizedDot key={key} {...rest} />}
+						activeDot={false}
+						strokeWidth={2}
+						stroke={s.color}
+						isAnimationActive={false}
+					/>
+				))}
+			</LineChart>
+		</ChartContainer>
+	);
 }
 
 interface CustomizedDotProps extends DotProps {

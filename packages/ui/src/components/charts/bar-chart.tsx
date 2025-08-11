@@ -1,13 +1,6 @@
 "use client";
 
 import {
-	type ChartConfig,
-	ChartContainer,
-	ChartTooltip,
-	ChartTooltipContent,
-} from "@repo/ui/chart";
-import type * as React from "react";
-import {
 	Bar,
 	BarChart,
 	CartesianGrid,
@@ -17,12 +10,25 @@ import {
 	XAxis,
 	YAxis,
 } from "recharts";
-import { ChartTooltipFormatter } from "./chart-tooltip-formatter";
 
-export interface BarChartProps {
-	data: any[];
+import {
+	ChartContainer,
+	ChartTooltip,
+	ChartTooltipContent,
+} from "@repo/ui/chart";
+
+import { cn } from "../../lib/utils";
+import type { AxisTickFormatters, BaseChartProps } from "./common";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import {
+	getTickFormatter,
+	type TickFormatterValues,
+} from "./common/tick-formatters";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
+
+export interface BarChartProps extends BaseChartProps, AxisTickFormatters {
 	xAxisDataKey: string;
-	barDataKey: string;
+	barDataKeys: string[];
 	referenceLine?: {
 		value: number;
 		label: string;
@@ -33,47 +39,35 @@ export interface BarChartProps {
 			| "insideBottom"
 			| "insideBottomLeft";
 	};
-	config?: ChartConfig;
-	tooltipLabelFormatter?: (
-		value: string,
-		payload: any,
-		context?: any,
-	) => React.ReactNode;
-	tooltipValueFormatter?: React.ComponentProps<
-		typeof ChartTooltipContent
-	>["formatter"];
-	className?: string;
-	yAxisTickFormatter?: (value: any) => string;
-	xAxisTickFormatter?: (value: any) => string;
 	showBarLabels?: boolean;
 	showYAxis?: boolean;
-	barLabelFormatter?: (value: any) => string;
+	barLabelFormatter?: TickFormatterValues;
 	barRadius?: number;
+	labelData?: any;
 }
 
 export function ReusableBarChart({
 	data,
 	xAxisDataKey,
-	barDataKey,
+	barDataKeys,
 	referenceLine,
-	config = {
-		[barDataKey]: {
-			label: "Value",
-			color: "var(--chart-1)",
-		},
-	} as ChartConfig,
-	tooltipLabelFormatter,
-	tooltipValueFormatter = ChartTooltipFormatter,
-	className = "aspect-[10/3] w-full",
-	yAxisTickFormatter,
-	xAxisTickFormatter,
+	config,
+	tooltipLabelFormatter = "normal",
+	tooltipValueFormatter = "normal",
+	className,
+	yAxisTickFormatter = "normal",
+	xAxisTickFormatter = "normal",
 	showBarLabels = false,
 	showYAxis = true,
 	barLabelFormatter,
 	barRadius = 4,
+	labelData,
 }: BarChartProps) {
 	return (
-		<ChartContainer config={config} className={className}>
+		<ChartContainer
+			config={config}
+			className={cn("aspect-[10/3] w-full", className)}
+		>
 			<BarChart accessibilityLayer data={data} margin={{ top: 24 }}>
 				<CartesianGrid vertical={false} strokeDasharray="3 3" />
 				<XAxis
@@ -81,39 +75,49 @@ export function ReusableBarChart({
 					tickLine={false}
 					axisLine={false}
 					tickMargin={8}
-					tickFormatter={xAxisTickFormatter}
+					tickFormatter={getTickFormatter(xAxisTickFormatter)}
 				/>
 				{showYAxis && (
 					<YAxis
 						tickLine={false}
 						axisLine={false}
-						tickFormatter={yAxisTickFormatter}
+						tickFormatter={getTickFormatter(yAxisTickFormatter)}
 					/>
 				)}
 				<ChartTooltip
 					content={
 						<ChartTooltipContent
-							labelFormatter={tooltipLabelFormatter}
-							formatter={tooltipValueFormatter}
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(
+									tooltipLabelFormatter,
+									label,
+									payload,
+									labelData,
+								)
+							}
+							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
 					cursor={false}
 				/>
-				<Bar
-					dataKey={barDataKey}
-					fill={`var(--color-${barDataKey})`}
-					radius={barRadius}
-				>
+				{barDataKeys.map((key) => (
+					<Bar
+						key={key}
+						dataKey={key}
+						fill={`var(--color-${key})`}
+						radius={barRadius}
+					>
 					{showBarLabels && (
 						<LabelList
 							position="top"
 							offset={12}
 							className="fill-foreground"
 							fontSize={12}
-							formatter={barLabelFormatter}
+							formatter={getTickFormatter(barLabelFormatter)}
 						/>
 					)}
-				</Bar>
+					</Bar>
+				))}
 
 				{referenceLine && (
 					<ReferenceLine

@@ -1,17 +1,16 @@
 import "@repo/ui/globals.css";
 
-import { cn } from "@repo/ui/lib/utils";
-import { Toaster } from "@repo/ui/sonner";
-import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { Analytics } from "@vercel/analytics/react";
 import type { Metadata } from "next";
 import { ErrorBoundary } from "next/dist/client/components/error-boundary";
 import { Inter } from "next/font/google";
-import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "~/app/api/uploadthing/core";
+
+import { cn } from "@repo/ui/lib/utils";
+import { Toaster } from "@repo/ui/sonner";
+
 import { Providers } from "~/components/providers/providers";
 
-import Error from "./error";
+import ErrorComponent from "./error";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -51,11 +50,10 @@ export default function RootLayout({
 				data-vaul-drawer-wrapper=""
 				className={cn(inter.className, "antialiased")}
 			>
-				<ErrorBoundary errorComponent={Error}>
-					<NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+				<ErrorBoundary errorComponent={ErrorComponent}>
 					<Providers>{children}</Providers>
 				</ErrorBoundary>
-				<Analytics />
+				<Analytics debug={false} />
 				<Toaster richColors={true} closeButton={true} />
 			</body>
 		</html>

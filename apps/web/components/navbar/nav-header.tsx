@@ -1,11 +1,12 @@
 "use client";
 
+import type { ElementType } from "react";
+
 import {
 	SidebarMenu,
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@repo/ui/sidebar";
-import type { ElementType } from "react";
 
 type NavHeaderProps = {
 	Logo: ElementType;

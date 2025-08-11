@@ -1,7 +1,8 @@
-import { buttonVariants } from "@repo/ui/button";
-import { cn } from "@repo/ui/lib/utils";
 import { ArrowRight, GithubIcon } from "lucide-react";
 import Link from "next/link";
+
+import { buttonVariants } from "@repo/ui/button";
+import { cn } from "@repo/ui/lib/utils";
 
 import { GetDemoBtn } from "../get-demo-btn";
 import { Announcement } from "./announcement";
@@ -12,6 +13,7 @@ import {
 	PageHeaderDescription,
 	PageHeaderHeading,
 } from "./page-header";
+import { config } from "~/lib/config";
 
 export const Hero = () => {
 	const isMaintenance = process.env.APP_MAINTENANCE === "true";
@@ -51,7 +53,7 @@ export const Hero = () => {
 					<Link
 						target="\_blank"
 						rel="noreferrer"
-						href="https://github.com/aBgAmeuR/Harmony"
+						href={config.githubRepo}
 						className={cn("group", buttonVariants({ variant: "outline" }))}
 					>
 						<GithubIcon className="size-4" />

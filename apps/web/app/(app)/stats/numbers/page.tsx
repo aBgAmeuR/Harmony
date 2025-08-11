@@ -1,28 +1,32 @@
-import React, { Suspense } from "react";
+import { Suspense } from "react";
+import type { Metadata } from "next";
 
-import { AppHeader } from "~/components/app-header";
-import { SelectMonthRange } from "~/components/select-month-range";
+import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { ListeningSessionCard, ListeningSessionCardSkeleton } from "~/features/numbers/components/listening-session-card";
+import { NumbersStatsCards, NumbersStatsCardsSkeleton } from "~/features/numbers/components/numbers-stats-cards";
 
-import { NumbersStatsCards, NumbersStatsSkeleton } from "./numbers-stats-cards";
-import {
-	NumbersStatsSessionCard,
-	NumbersStatsSessionSkeleton,
-} from "./numbers-stats-sessions-card";
+export const metadata: Metadata = {
+	title: "Stats Numbers",
+	description: "Explore fascinating statistics about your listening habits",
+};
 
-export default function StatsNumbersPage() {
+export default async function StatsNumbersPage() {
 	return (
-		<>
-			<AppHeader items={["Package", "Stats", "Numbers"]}>
-				<SelectMonthRange />
-			</AppHeader>
-			<div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-4 p-4">
-				<Suspense fallback={<NumbersStatsSessionSkeleton />}>
-					<NumbersStatsSessionCard />
+		<Layout>
+			<LayoutHeader items={["Package", "Stats", "Numbers"]} metadata={metadata}>
+				<Suspense fallback={<DateRangeSelectorSkeleton />}>
+					<DateRangeSelector />
 				</Suspense>
-				<Suspense fallback={<NumbersStatsSkeleton />}>
+			</LayoutHeader>
+			<LayoutContent>
+				<Suspense fallback={<ListeningSessionCardSkeleton />}>
+					<ListeningSessionCard />
+				</Suspense>
+				<Suspense fallback={<NumbersStatsCardsSkeleton />}>
 					<NumbersStatsCards />
 				</Suspense>
-			</div>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }

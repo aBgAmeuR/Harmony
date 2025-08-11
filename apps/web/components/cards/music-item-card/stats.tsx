@@ -19,10 +19,10 @@ export const MusicItemCardStats = ({
 		)}
 	>
 		<p className="text-muted-foreground text-sm">
-			{layout === "grid" ? stat1?.replace(" minutes", "min") : stat1}
+			{layout === "grid" ? stat1?.replace(" streams", "x")?.replace(" popularity", " popu")?.replace(" minutes", " min") : stat1}
 		</p>
 		<p className="text-muted-foreground text-sm">
-			{layout === "grid" ? stat2?.replace(" streams", "x") : stat2}
+			{layout === "grid" ? stat2?.replace(" streams", "x")?.replace(" popularity", " popu")?.replace(" minutes", " min") : stat2}
 		</p>
 	</div>
 );

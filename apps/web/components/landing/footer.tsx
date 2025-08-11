@@ -1,6 +1,9 @@
-import { Button } from "@repo/ui/button";
 import { Github } from "lucide-react";
 import Link from "next/link";
+
+import { Button } from "@repo/ui/button";
+
+import { config } from "~/lib/config";
 
 import { GetDemoBtn } from "../get-demo-btn";
 import { ThemeToggle } from "../theme-toggle";
@@ -17,9 +20,9 @@ export const Footer = () => {
 						<p>
 							Built by{" "}
 							<Button variant="link" className="p-0" asChild={true}>
-								<a href="https://github.com/aBgAmeuR">@aBgAmeuR</a>
+								<a href={config.developer.github}>{config.developer.name}</a>
 							</Button>{" "}
-							- <span className="text-muted-foreground">v2.3</span>
+							- <span className="text-muted-foreground">v{config.appVersion}</span>
 						</p>
 						<div className="flex items-center gap-1">
 							<GetStartedBtn
@@ -45,7 +48,7 @@ export const Footer = () => {
 								asChild={true}
 							>
 								<Link
-									href="https://github.com/aBgAmeuR/Harmony"
+									href={config.githubRepo}
 									target="_blank"
 								>
 									<Github />

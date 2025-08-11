@@ -1,15 +1,16 @@
+import type { PropsWithChildren } from "react";
+import { TriangleAlert } from "lucide-react";
+import Link from "next/link";
+
 import { Button, type buttonVariants } from "@repo/ui/button";
+import { cn, type VariantProps } from "@repo/ui/lib/utils";
 import {
 	Tooltip,
 	TooltipContent,
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/tooltip";
-import { TriangleAlert } from "lucide-react";
-import Link from "next/link";
-import type { PropsWithChildren } from "react";
 
-import { type VariantProps, cn } from "@repo/ui/lib/utils";
 import { Icons } from "../icons";
 
 type GetStartedBtnProps = PropsWithChildren<{

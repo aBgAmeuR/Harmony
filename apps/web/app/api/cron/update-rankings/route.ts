@@ -1,6 +1,8 @@
-import { prisma } from "@repo/database";
 import { type NextRequest, NextResponse } from "next/server";
-import { updateHistoricalRankings } from "~/services/historical-rankings";
+
+import { db } from "@repo/database";
+
+import { updateHistoricalRankings } from "~/features/stats/data/historical-rankings";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -14,7 +16,7 @@ export async function GET(request: NextRequest) {
 	}
 
 	try {
-		const users = await prisma.user.findMany();
+		const users = await db.query.users.findMany();
 
 		await Promise.all(users.map((user) => updateHistoricalRankings(user.id)));
 

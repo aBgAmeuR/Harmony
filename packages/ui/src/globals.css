@@ -1,12 +1,12 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+
 @source "../../../apps/**/*.{ts,tsx}";
 @source "../../../components/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
 
-@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
 @plugin "tailwindcss-motion";
-
-@custom-variant dark (&:is(.dark *));
 
 @custom-variant dark (&:is(.dark *));
 
@@ -134,6 +134,8 @@
 		infinite;
 	--animate-pulse-fade: pulse-fade 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 
+	--breakpoint-xs: 30rem;
+
 	@keyframes spinner {
 		from {
 			opacity: 1;
@@ -164,18 +166,22 @@
 	@keyframes collapsible-down {
 		from {
 			height: 0;
+			opacity: 0;
 		}
 		to {
 			height: var(--radix-collapsible-content-height);
+			opacity: 1;
 		}
 	}
 
 	@keyframes collapsible-up {
 		from {
 			height: var(--radix-collapsible-content-height);
+			opacity: 1;
 		}
 		to {
 			height: 0;
+			opacity: 0;
 		}
 	}
 
@@ -311,14 +317,14 @@
 	body {
 		@apply bg-background text-foreground;
 	}
-	button:not(:disabled), [role="button"]:not(:disabled) {
+	button:not(:disabled),
+	[role="button"]:not(:disabled) {
 		cursor: pointer;
 	}
 }
 @layer components {
 	.custom-button {
-		@apply
-			!w-26
+		@apply !w-26
 			!h-8
 			!bg-primary
 			!text-primary-foreground

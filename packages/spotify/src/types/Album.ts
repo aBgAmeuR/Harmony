@@ -1,8 +1,8 @@
 import type { Artist, ArtistSimplified } from "./Artist";
-import type { TrackSimplified } from "./Track";
 import type { ExternalIds, ExternalUrls, PagingObject } from "./shared";
 import type { Copyright } from "./shared/Copyrights";
 import type { Image } from "./shared/Image";
+import type { TrackSimplified } from "./Track";
 
 export interface AlbumBase {
 	/**

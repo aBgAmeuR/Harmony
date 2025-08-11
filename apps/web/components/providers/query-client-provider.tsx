@@ -1,17 +1,21 @@
-"use client";
+'use client'
 
-import {
-	QueryClientProvider as Provider,
-	QueryClient,
-} from "@tanstack/react-query";
-import { type PropsWithChildren, Suspense, useState } from "react";
+import { type PropsWithChildren, Suspense, } from 'react'
+import { QueryClientProvider as TanstackQueryClientProvider } from '@tanstack/react-query'
+import { Provider as JotaiProvider } from 'jotai'
 
-export const QueryClientProvider = ({ children }: PropsWithChildren) => {
-	const [queryClient] = useState(() => new QueryClient());
+import { getQueryClient } from '~/lib/get-query-client'
+
+export function QueryClientProvider({ children }: PropsWithChildren) {
+	const queryClient = getQueryClient()
 
 	return (
 		<Suspense>
-			<Provider client={queryClient}>{children}</Provider>
+			<TanstackQueryClientProvider client={queryClient}>
+				<JotaiProvider>
+					{children}
+				</JotaiProvider>
+			</TanstackQueryClientProvider>
 		</Suspense>
-	);
-};
+	)
+}

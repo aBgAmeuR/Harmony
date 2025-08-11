@@ -10,15 +10,6 @@ type MusicItemCardContentProps = {
 };
 
 export const MusicItemCardContent = ({ item }: MusicItemCardContentProps) => {
-	const nameContent = (
-		<>
-			<p className="line-clamp-2 break-all font-medium text-sm group-hover:underline">
-				{item.name}
-			</p>
-			<ExternalLink className="hidden size-3 group-hover:block" />
-			<span className="sr-only">Open in Spotify</span>
-		</>
-	);
 	return (
 		<div className="flex-1">
 			<div className="inline-flex flex-col gap-1">
@@ -28,7 +19,11 @@ export const MusicItemCardContent = ({ item }: MusicItemCardContentProps) => {
 					target="_blank"
 					rel="noopener noreferrer"
 				>
-					{nameContent}
+					<p className="line-clamp-2 break-all font-medium text-sm group-hover:underline">
+						{item.name}
+					</p>
+					<ExternalLink className="hidden size-3 group-hover:block" />
+					<span className="sr-only">Open in Spotify</span>
 				</a>
 				{item.artists && (
 					<div className="flex items-center gap-1">

@@ -1,34 +1,12 @@
-import { Session, auth } from "@repo/auth";
-import { cache } from "react";
+import { format, localeFormat } from "light-date";
 
 export const getMsPlayedInMinutes = (msPlayed: number | string) =>
 	(Number(msPlayed) / (1000 * 60)).toFixed(2);
 
-export const getMsPlayedInHours = (
-	msPlayed: number | string | (string | number)[],
-	showDecimals = true,
-) => {
-	const hours = Number(msPlayed) / (1000 * 60 * 60);
+export const formatMonth = (date: Date) =>
+	`${localeFormat(date, "{MMMM}")} ${format(date, "{yyyy}")}`;
 
-	if (showDecimals) {
-		return hours.toFixed(2);
-	}
-
-	return Math.floor(hours).toString();
-};
-
-export const getUserInfos = cache(async () => {
-	const session = await auth();
-	const userId = session?.user?.id;
-	const isDemo = session?.user?.name === "Demo";
-	const hasPackage = session?.user?.hasPackage;
-
-	return {
-		userId,
-		isDemo,
-		hasPackage,
-	};
-});
+export const msToHours = (ms: number) => ms / 1000 / 60 / 60;
 
 /**
  * Reads a ReadableStream line by line and processes each JSON line
@@ -74,7 +52,7 @@ export async function readStreamResponse<T>({
 					try {
 						const data = JSON.parse(line) as T;
 						onProgress(data);
-					} catch (e) {}
+					} catch (_e) {}
 				}
 			}
 		} catch (error) {
@@ -90,4 +68,15 @@ export async function readStreamResponse<T>({
 		cancelled = true;
 		await reader.cancel();
 	};
+}
+
+export async function tryCatch<T>(
+	promise: Promise<T>,
+): Promise<{ data: T; error: null } | { data: null; error: Error }> {
+	try {
+		const data = await promise;
+		return { data, error: null };
+	} catch (error) {
+		return { data: null, error: error as Error };
+	}
 }

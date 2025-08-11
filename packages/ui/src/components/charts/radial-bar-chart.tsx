@@ -1,26 +1,20 @@
 "use client";
 
+import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
+
 import {
-	type ChartConfig,
 	ChartContainer,
 	ChartTooltip,
 	ChartTooltipContent,
 } from "@repo/ui/chart";
-import type * as React from "react";
-import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts";
 
-export interface RadialBarChartProps {
-	data: any[];
+import { cn } from "../../lib/utils";
+import type { BaseChartProps } from "./common";
+import { getChartTooltipFormatter } from "./common/chart-tooltip-formatter";
+import { getTooltipFormatter } from "./common/tooltip-formatters";
+
+export interface RadialBarChartProps extends BaseChartProps {
 	barDataKeys: string[];
-	config: ChartConfig;
-	endAngle?: number;
-	innerRadius?: number;
-	outerRadius?: number;
-	tooltipLabelFormatter?: (value: string, payload: any) => React.ReactNode;
-	tooltipValueFormatter?: React.ComponentProps<
-		typeof ChartTooltipContent
-	>["formatter"];
-	className?: string;
 	percentage?: number;
 	centerLabel?: string;
 }
@@ -29,30 +23,32 @@ export function ReusableRadialBarChart({
 	data,
 	barDataKeys,
 	config,
-	endAngle = 180,
-	innerRadius = 80,
-	outerRadius = 130,
-	tooltipLabelFormatter,
-	tooltipValueFormatter,
-	className = "aspect-square min-w-60 w-full",
+	tooltipLabelFormatter = "normal",
+	tooltipValueFormatter = "normal",
+	className,
 	percentage,
 	centerLabel,
 }: RadialBarChartProps) {
 	return (
-		<ChartContainer config={config} className={className}>
+		<ChartContainer
+			config={config}
+			className={cn("aspect-square w-full min-w-60", className)}
+		>
 			<RadialBarChart
 				data={data}
-				endAngle={endAngle}
-				innerRadius={innerRadius}
-				outerRadius={outerRadius}
+				endAngle={180}
+				innerRadius={80}
+				outerRadius={130}
 			>
 				<ChartTooltip
 					cursor={false}
 					content={
 						<ChartTooltipContent
 							hideLabel
-							labelFormatter={tooltipLabelFormatter}
-							formatter={tooltipValueFormatter}
+							labelFormatter={(label, payload) =>
+								getTooltipFormatter(tooltipLabelFormatter, label, payload, null)
+							}
+							formatter={getChartTooltipFormatter(tooltipValueFormatter)}
 						/>
 					}
 				/>
@@ -65,7 +61,7 @@ export function ReusableRadialBarChart({
 										<tspan
 											x={viewBox.cx}
 											y={(viewBox.cy || 0) - 16}
-											className="fill-foreground text-2xl font-bold"
+											className="fill-foreground font-bold text-2xl"
 										>
 											{`${percentage}%`}
 										</tspan>
@@ -89,7 +85,7 @@ export function ReusableRadialBarChart({
 						stackId="a"
 						cornerRadius={5}
 						fill={`var(--color-${key})`}
-						className="stroke-transparent stroke-2"
+						className="stroke-2 stroke-transparent"
 					/>
 				))}
 			</RadialBarChart>

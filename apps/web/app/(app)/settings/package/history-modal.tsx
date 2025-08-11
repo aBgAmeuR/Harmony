@@ -1,10 +1,13 @@
-import { prisma } from "@repo/database";
+import { Suspense } from "react";
+import { History } from "lucide-react";
+
+import { getUser } from "@repo/auth";
+import { db, desc, eq, packages } from "@repo/database";
 import { Button } from "@repo/ui/button";
 import {
 	Dialog,
 	DialogClose,
 	DialogContent,
-	DialogDescription,
 	DialogFooter,
 	DialogHeader,
 	DialogTitle,
@@ -18,9 +21,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/table";
-import { History } from "lucide-react";
-import { Suspense } from "react";
-import { getUserInfos } from "~/lib/utils";
 
 export const HistoryModal = async () => {
 	return (
@@ -55,13 +55,14 @@ export const HistoryModal = async () => {
 };
 
 const getPackageHistory = async () => {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 	if (!userId || isDemo) return null;
 
-	return await prisma.package.findMany({
-		where: { userId: userId },
-		orderBy: { createdAt: "desc" },
-	});
+	return await db
+		.select()
+		.from(packages)
+		.where(eq(packages.userId, userId))
+		.orderBy(desc(packages.createdAt));
 };
 
 const HistoryTable = async () => {
@@ -92,7 +93,9 @@ const HistoryTable = async () => {
 							</p>
 						</TableCell>
 						<TableCell className="text-muted-foreground">
-							{item.createdAt.toLocaleDateString()}
+							{item.createdAt
+								? item.createdAt.toLocaleDateString()
+								: <span className="text-xs italic">Unknown</span>}
 						</TableCell>
 						<TableCell className="text-right text-muted-foreground">
 							{item.fileSize}

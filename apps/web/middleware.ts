@@ -1,6 +1,8 @@
-export { middleware } from "@repo/auth";
+export { middleware } from "@repo/auth/middleware";
 
 export const config = {
-	matcher: ["/((?!api|_next/static|_next/image|favicon.ico|demo|images).*)"],
-	unstable_allowDynamic: ["**/node_modules/@prisma/client/runtime/library.js"],
+	matcher: [
+		"/((?!api|_next/static|_next/image|favicon.ico|favicon-96x96.png|favicon.svg|site.webmanifest|demo|images|web-app-manifest-512x512.png|web-app-manifest-192x192.png|signin|profile|signout|signin-demo|docs|error|$).*)",
+	],
+	runtime: "nodejs",
 };

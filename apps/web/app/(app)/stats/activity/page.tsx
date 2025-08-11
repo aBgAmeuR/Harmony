@@ -1,52 +1,38 @@
 import { Suspense } from "react";
+import type { Metadata } from "next";
 
-import { AppHeader } from "~/components/app-header";
-import { SelectMonthRange } from "~/components/select-month-range";
+import { DateRangeSelector, DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { PlatformUsageChart, PlatformUsageChartSkeleton } from "~/features/activity/components/platform-usage-chart";
+import { TimeEvolutionCharts, TimeEvolutionChartsSkeleton } from "~/features/activity/components/time-evolution-charts";
+import { TimeListenedChart, TimeListenedChartSkeleton } from "~/features/activity/components/time-listened-chart";
 
-import {
-	FirstTimeEvolutionCharts,
-	FirstTimeEvolutionChartsSkeleton,
-} from "~/components/charts/activity/first-time-evolution-charts";
-import {
-	PlatformUsageChartComponent,
-	PlatformUsageChartSkeleton,
-} from "~/components/charts/activity/platform-usage-chart";
-import {
-	TimeListenedChartComponent,
-	TimeListenedChartSkeleton,
-} from "~/components/charts/activity/time-listened-chart";
-import { getUserInfos } from "~/lib/utils";
-import {
-	getFirstTimeListenedData,
-	getMonthlyData,
-	getMonthlyPlatformData,
-} from "~/services/charts/activity";
+export const metadata: Metadata = {
+	title: "Stats Activity",
+	description: "Track your listening time, platform usage and discover listening trends",
+};
 
 export default async function StatsActivityPage() {
-	const { userId, isDemo } = await getUserInfos();
-
 	return (
-		<>
-			<AppHeader items={["Package", "Stats", "Activity"]}>
-				<SelectMonthRange />
-			</AppHeader>
-			<div className="mx-auto flex w-full max-w-6xl flex-1 flex-col gap-4 p-4">
+		<Layout>
+			<LayoutHeader items={["Package", "Stats", "Activity"]} metadata={metadata}>
+				<Suspense fallback={<DateRangeSelectorSkeleton />}>
+					<DateRangeSelector />
+				</Suspense>
+			</LayoutHeader>
+			<LayoutContent>
 				<Suspense fallback={<TimeListenedChartSkeleton />}>
-					<TimeListenedChartComponent data={getMonthlyData(userId, isDemo)} />
+					<TimeListenedChart />
 				</Suspense>
 
 				<Suspense fallback={<PlatformUsageChartSkeleton />}>
-					<PlatformUsageChartComponent
-						data={getMonthlyPlatformData(userId, isDemo)}
-					/>
+					<PlatformUsageChart />
 				</Suspense>
 
-				<Suspense fallback={<FirstTimeEvolutionChartsSkeleton />}>
-					<FirstTimeEvolutionCharts
-						data={getFirstTimeListenedData(userId, isDemo)}
-					/>
+				<Suspense fallback={<TimeEvolutionChartsSkeleton />}>
+					<TimeEvolutionCharts />
 				</Suspense>
-			</div>
-		</>
+			</LayoutContent>
+		</Layout>
 	);
 }

@@ -1,10 +1,13 @@
-import { signOut } from "@repo/auth/actions";
+"use client";
+
+import { Info } from "lucide-react";
+import { useRouter } from "next/navigation";
+
 import { Button } from "@repo/ui/button";
 import { CardContent } from "@repo/ui/card";
-import { Info } from "lucide-react";
-import React from "react";
 
 export const DemoStep = () => {
+	const router = useRouter();
 	return (
 		<CardContent className="mx-6 rounded-lg border border-border bg-background p-4 shadow-black/5 shadow-lg">
 			<div className="flex items-center gap-4">
@@ -22,19 +25,9 @@ export const DemoStep = () => {
 							history with Harmony.
 						</p>
 					</div>
-					<form
-						action={async () => {
-							"use server";
-							await signOut({
-								redirect: true,
-								redirectTo: "/",
-							});
-						}}
-					>
-						<Button className="w-full" size="sm" type="submit">
-							Exit demo
-						</Button>
-					</form>
+					<Button size="sm" onClick={() => router.push("/signout")}>
+						Exit demo
+					</Button>
 				</div>
 			</div>
 		</CardContent>

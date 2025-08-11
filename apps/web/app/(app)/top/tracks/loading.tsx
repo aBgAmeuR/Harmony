@@ -1,17 +1,22 @@
-import { Main } from "@repo/ui/components/main";
-import { AppHeader } from "~/components/app-header";
-import { ListSkeleton } from "~/components/list-skeleton";
-import { SelectTimeRangeSkeleton } from "~/components/select-time-range";
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { MusicLayoutSkeleton } from "~/components/lists/music-layout/skeleton";
+import { SelectListLayoutSkeleton } from "~/features/stats/components/select-list-layout";
+import { TimeRangeSelectSkeleton } from "~/features/stats/components/time-range-select";
 
-export default function Loading() {
+import { metadata } from "./page";
+
+export { metadata };
+
+export default async function Loading() {
 	return (
-		<>
-			<AppHeader items={["Stats", "Top", "Tracks"]} demo={false}>
-				<SelectTimeRangeSkeleton />
-			</AppHeader>
-			<Main>
-				<ListSkeleton />
-			</Main>
-		</>
+		<Layout>
+			<LayoutHeader items={["Stats", "Top", "Tracks"]} demo={false} metadata={metadata}>
+				<TimeRangeSelectSkeleton />
+				<SelectListLayoutSkeleton />
+			</LayoutHeader>
+			<LayoutContent>
+				<MusicLayoutSkeleton />
+			</LayoutContent>
+		</Layout>
 	);
 }

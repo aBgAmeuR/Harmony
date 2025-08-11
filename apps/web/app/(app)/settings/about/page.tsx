@@ -1,231 +1,103 @@
-import { Badge } from "@repo/ui/badge";
-import { buttonVariants } from "@repo/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card";
-import { cn } from "@repo/ui/lib/utils";
-import {
-	BarChart2,
-	Calendar,
-	Code,
-	Database,
-	Github,
-	Heart,
-	ImageIcon,
-	Info,
-	Milestone,
-	Music,
-	Shield,
-	Users,
-} from "lucide-react";
-import Link from "next/link";
+import { Github, } from "lucide-react";
+import type { Metadata } from "next";
 
-import { AppHeader } from "~/components/app-header";
+import { LinkButton } from "@repo/ui/components/link-button";
+
 import { Icons } from "~/components/icons";
+import { Layout, LayoutHeader } from "~/components/layouts/layout";
+import { config } from "~/lib/config";
+
+export const metadata: Metadata = {
+	title: "About",
+	description: "About Harmony, an open-source application that transforms your Spotify listening data into meaningful insights about your music preferences and habits",
+};
 
 export default async function SettingsAboutPage() {
 	return (
-		<>
-			<AppHeader items={["Settings", "About"]} />
-			<div className="flex flex-1 flex-col gap-4 p-4 pt-0">
-				<div className="mx-auto flex w-full max-w-screen-xl flex-col gap-4">
-					<Card>
-						<CardContent className="flex items-center gap-6">
-							<Icons.logo className="size-20" />
-							<div>
-								<h1 className="mb-2 font-bold text-2xl">About Harmony</h1>
-								<p className="text-lg text-muted-foreground">
-									Your personal music insights powered by{" "}
-									<a
-										href="https://spotify.com"
-										target="_blank"
-										rel="noopener noreferrer"
-										className="underline transition-colors hover:text-primary"
-									>
-										Spotify
-										<Icons.spotify className="ml-1 inline size-4" />
-									</a>
-								</p>
-							</div>
-						</CardContent>
-					</Card>
-
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-						<Card>
-							<CardHeader>
-								<CardTitle className="flex items-center gap-2">
-									<Info className="size-5 text-primary" /> App Information
-								</CardTitle>
-							</CardHeader>
-
-							<CardContent className="pt-2">
-								<p className="mb-4">
-									Harmony is an open-source application that generates
-									comprehensive statistics from your Spotify data plan,
-									providing insights into your listening habits and music
-									preferences.
-								</p>
-
-								<div className="mb-4 flex items-center gap-2">
-									<span className="text-muted-foreground">Version</span>
-									<span className="font-medium">2.3</span>
-									<Badge>Stable</Badge>
-								</div>
-
-								<a
-									href="https://github.com/aBgAmeuR/Harmony"
-									className={cn(buttonVariants({ variant: "secondary" }))}
-									target="_blank"
-									rel="noopener noreferrer"
-								>
-									<Github className="size-4" />
-									View on GitHub
-								</a>
-							</CardContent>
-						</Card>
-
-						<Card>
-							<CardHeader>
-								<CardTitle className="flex items-center gap-2">
-									<Shield className="size-5 text-primary" /> Privacy
-								</CardTitle>
-							</CardHeader>
-
-							<CardContent className="pt-2">
-								<p className="mb-4">
-									We take your privacy seriously. Harmony only accesses the
-									Spotify data you explicitly grant permission for and does not
-									store any personal information.
-								</p>
-								<ul className="space-y-2 text-muted-foreground text-sm">
-									<li className="flex items-start gap-2">
-										<span className="mt-0.5 rounded-full bg-green-500/20 p-1 text-primary">
-											<Shield className="h-3 w-3" />
-										</span>
-										No personal data stored
-									</li>
-									<li className="flex items-start gap-2">
-										<span className="mt-0.5 rounded-full bg-green-500/20 p-1 text-primary">
-											<Shield className="h-3 w-3" />
-										</span>
-										Secure OAuth authentication
-									</li>
-									<li className="flex items-start gap-2">
-										<span className="mt-0.5 rounded-full bg-green-500/20 p-1 text-primary">
-											<Shield className="h-3 w-3" />
-										</span>
-										Transparent data usage
-									</li>
-								</ul>
-							</CardContent>
-						</Card>
-					</div>
-
-					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center gap-2">
-								<Music className="size-5 text-primary" /> Features
-							</CardTitle>
-						</CardHeader>
-
-						<CardContent className="grid grid-cols-1 gap-4 pt-2 sm:grid-cols-2 md:grid-cols-3">
-							<FeatureCard
-								icon={<BarChart2 className="size-5 text-primary" />}
-								title="Top Tracks Analysis"
-								description="Discover your most played tracks and artists with detailed statistics"
-							/>
-							<FeatureCard
-								icon={<Calendar className="size-5 text-primary" />}
-								title="Listening History"
-								description="View your recently played tracks with timestamps and patterns"
-							/>
-							<FeatureCard
-								icon={<Users className="size-5 text-primary" />}
-								title="Artist Comparisons"
-								description="Compare listening stats between different artists"
-							/>
-							<FeatureCard
-								icon={<Database className="size-5 text-primary" />}
-								title="Detailed Rankings"
-								description="Get rankings for tracks, albums, and artists based on your listening habits"
-							/>
-							<FeatureCard
-								icon={<Heart className="size-5 text-primary" />}
-								title="Favorite Genres"
-								description="Visualize your music taste with genre distribution charts"
-							/>
-							<FeatureCard
-								icon={<Milestone className="size-5 text-primary" />}
-								title="Listening Milestones"
-								description="Track your journey with listening milestones and achievements"
-							/>
-						</CardContent>
-					</Card>
-
-					<Card>
-						<CardHeader>
-							<CardTitle className="flex items-center gap-2">
-								<Code className="size-5 text-primary" /> Content Guidelines
-							</CardTitle>
-						</CardHeader>
-
-						<CardContent className="mt-2 space-y-4">
-							<ContentSection
-								icon={<Database className="h-5 w-5 text-primary" />}
-								title="Metadata"
-								description="All metadata displayed in Harmony (artist names, track titles, album information) is sourced directly from Spotify's API. We ensure accurate attribution and maintain the integrity of the original metadata."
-							/>
-
-							<ContentSection
-								icon={<ImageIcon className="h-5 w-5 text-primary" />}
-								title="Cover Art"
-								description="Album and playlist artwork displayed in Harmony is sourced directly from Spotify. All cover art remains the property of the respective rights holders and is displayed in accordance with Spotify's Developer Terms."
-							/>
-						</CardContent>
-					</Card>
-
-					<div className="p-4 text-center text-muted-foreground text-sm">
-						<p>
-							Harmony is not affiliated with Spotify AB. Spotify is a trademark
-							of Spotify AB.
-						</p>
+		<Layout>
+			<LayoutHeader items={["Settings", "About"]} className="max-w-2xl" />
+			<div className="container mx-auto max-w-2xl px-6 py-12">
+				<div className="mb-8 text-center">
+					<div className="flex items-center gap-4">
+						<Icons.logo className="size-16" />
+						<h1 className="font-bold text-3xl">{config.appName}</h1>
 					</div>
 				</div>
+
+				<div className="space-y-8">
+					<section className="space-y-4">
+						<h2 className="font-medium text-xl">About</h2>
+						<div className="space-y-3">
+							<p>
+								Harmony is an open-source application that transforms your Spotify
+								listening data into meaningful insights about your music preferences
+								and habits.
+							</p>
+							<p>
+								Discover your top tracks, explore listening patterns, and gain
+								deeper understanding of your musical journey.
+							</p>
+						</div>
+					</section>
+
+					<section className="space-y-4">
+						<h2 className="font-medium text-xl">Features</h2>
+						<ul className="grid list-inside list-disc gap-2 text-sm">
+							<li>Top tracks and artists analysis</li>
+							<li>Listening history and patterns</li>
+							<li>Artist comparisons and rankings</li>
+							<li>Detailed rankings for tracks, albums, and artists</li>
+							<li>Charts and visualizations for your listening habits</li>
+						</ul>
+					</section>
+
+					<section className="space-y-4">
+						<h2 className="font-medium text-xl">Privacy</h2>
+						<div className="space-y-2 text-sm">
+							<p>
+								Your privacy is our priority. Harmony only accesses the Spotify
+								data you explicitly permit and stores no personal information.
+							</p>
+							<p>
+								All data remains secure through OAuth authentication and
+								transparent usage policies.
+							</p>
+						</div>
+					</section>
+
+					<section className="space-y-4">
+						<h2 className="font-medium text-xl">Links</h2>
+						<div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+							<LinkButton
+								variant="outline"
+								size="sm"
+								href={config.githubRepo}
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<Github className="size-4" />
+								Source Code
+							</LinkButton>
+							<LinkButton
+								variant="outline"
+								size="sm"
+								href="https://spotify.com"
+								target="_blank"
+								rel="noopener noreferrer"
+							>
+								<Icons.spotify className="size-4" />
+								Spotify
+							</LinkButton>
+						</div>
+					</section>
+				</div>
+
+				<div className="mt-16 border-t pt-8 text-center">
+					<p className="text-muted-foreground text-sm">
+						{config.appName} is not affiliated with Spotify AB.
+					</p>
+				</div>
 			</div>
-		</>
-	);
-}
-
-interface FeatureCardProps {
-	icon: React.ReactNode;
-	title: string;
-	description: string;
-}
-
-function FeatureCard({ icon, title, description }: FeatureCardProps) {
-	return (
-		<div className="rounded-lg bg-secondary p-4">
-			<div className="mb-2 flex items-center gap-3">
-				{icon}
-				<h3 className="font-medium text-foreground">{title}</h3>
-			</div>
-			<p className="text-muted-foreground text-sm">{description}</p>
-		</div>
-	);
-}
-
-interface ContentSectionProps {
-	icon: React.ReactNode;
-	title: string;
-	description: string;
-}
-
-function ContentSection({ icon, title, description }: ContentSectionProps) {
-	return (
-		<div>
-			<div className="mb-1 flex items-center gap-3">
-				{icon}
-				<h3 className="font-medium text-foreground text-lg">{title}</h3>
-			</div>
-			<p className="mb-4 text-muted-foreground text-sm">{description}</p>
-		</div>
+		</Layout>
 	);
 }

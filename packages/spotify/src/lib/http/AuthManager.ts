@@ -1,8 +1,9 @@
-import { auth } from "@repo/auth";
-import { prisma } from "@repo/database";
+import { getUserOrNull } from "@repo/auth";
+import { accounts, db, eq } from "@repo/database";
+
 import type { SpotifyConfig } from "../../types/SpotifyConfig";
-import type { Logger } from "../Logger";
 import { AuthError } from "../errors";
+import type { Logger } from "../Logger";
 
 interface SpotifyTokenResponse {
 	access_token: string;
@@ -95,16 +96,16 @@ export class AuthManager {
 			return this.refreshPromise;
 		}
 
-		const session = this.config.userId
-			? { user: { id: this.config.userId } }
-			: await auth();
+		const user = this.config.userId
+			? { userId: this.config.userId }
+			: await getUserOrNull();
 
-		if (!session?.user?.id) {
+		if (!user?.userId) {
 			throw new AuthError("No user session found");
 		}
 
-		const account = await prisma.account.findFirst({
-			where: { userId: session.user.id },
+		const account = await db.query.accounts.findFirst({
+			where: eq(accounts.userId, user.userId),
 		});
 
 		if (!account?.refresh_token) {
@@ -120,43 +121,45 @@ export class AuthManager {
 			return account.access_token;
 		}
 
-		// Create a refresh promise that other calls can wait for
-		try {
-			this.refreshPromise = this.refreshTokenAndUpdate(account);
-			return await this.refreshPromise;
-		} finally {
-			// Clear the promise when done, regardless of success or failure
-			this.refreshPromise = null;
+		if (!this.refreshPromise) {
+			this.refreshPromise = (async () => {
+				try {
+					return await this.refreshTokenAndUpdate(account);
+				} finally {
+					this.refreshPromise = null;
+				}
+			})();
 		}
+		return this.refreshPromise;
 	}
 
 	/**
 	 * Refresh the token and update in database
 	 */
-	private async refreshTokenAndUpdate(account: any): Promise<string> {
+	private async refreshTokenAndUpdate(
+		account: typeof accounts.$inferSelect,
+	): Promise<string> {
 		this.logger.log("REFRESHING TOKEN");
 
 		// Refresh the token
-		const data = await this.refreshToken(account.refresh_token);
+		const data = await this.refreshToken(account.refresh_token!);
 		if (!data) {
 			return this.getToken();
 		}
 		const timestamp = Math.floor((Date.now() + data.expires_in * 1000) / 1000);
 
 		// Update the database with new token information
-		await prisma.account.update({
-			where: {
-				provider_providerAccountId: {
-					provider: "spotify",
-					providerAccountId: account.providerAccountId,
-				},
-			},
-			data: {
+		await db
+			.update(accounts)
+			.set({
 				access_token: data.access_token,
 				expires_at: timestamp,
 				refresh_token: data.refresh_token || account.refresh_token, // Only update if new refresh token is provided
-			},
-		});
+			})
+			.where(
+				eq(accounts.provider, "spotify") &&
+					eq(accounts.providerAccountId, account.providerAccountId),
+			);
 
 		return data.access_token;
 	}

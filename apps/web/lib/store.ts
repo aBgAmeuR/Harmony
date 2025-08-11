@@ -1,17 +1,27 @@
-/* eslint-disable no-unused-vars */
-import { cookieStorage } from "@repo/zustand-cookie-storage";
+"use client";
+
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+
+import { cookieStorage } from "@repo/zustand-cookie-storage";
 
 interface ListLayoutStore {
 	list_layout: "grid" | "list";
 	setListLayout: (list_layout: "grid" | "list") => void;
 }
 
-export const useListLayout = create<ListLayoutStore>((set) => ({
-	list_layout: "list",
-	setListLayout: (list_layout) => set({ list_layout }),
-}));
+export const useListLayout = create(
+	persist<ListLayoutStore>(
+		(set) => ({
+			list_layout: "list",
+			setListLayout: (list_layout) => set({ list_layout }),
+		}),
+		{
+			name: "list-layout",
+			storage: createJSONStorage(() => cookieStorage),
+		},
+	),
+);
 
 interface SideBarStore {
 	isSidebarOpen: boolean;
@@ -48,39 +58,22 @@ export const useUserPreferences = create(
 	),
 );
 
-interface ModalsStore {
-	openModals: {
-		[key: string]: {
-			data: any;
-		};
-	};
-	setOpenModals: (openModals: ModalsStore["openModals"]) => void;
-	openModal: (modalId: string, data: unknown) => void;
-	closeModal: (modalId: string) => void;
-	closeAllModals: () => void;
-	getModalOpen: (modalId: string) => { data: any } | undefined;
+interface ComputationMethodStore {
+	computation_method: "play_count" | "time_played" | "custom";
+	setComputationMethod: (
+		computation_method: "play_count" | "time_played" | "custom",
+	) => void;
 }
 
-export const useModals = create<ModalsStore>((set, get) => ({
-	openModals: {},
-	setOpenModals: (openModals: ModalsStore["openModals"]) => set({ openModals }),
-	openModal: (modalId: string, data: any) =>
-		set((state) => ({
-			openModals: {
-				...state.openModals,
-				[modalId]: { data },
-			},
-		})),
-	closeModal: (modalId: string) =>
-		set((state) => ({
-			openModals: {
-				...state.openModals,
-				[modalId]: { data: undefined },
-			},
-		})),
-	closeAllModals: () => set({ openModals: {} }),
-	getModalOpen: (modalId: string) => {
-		const modal = get().openModals[modalId];
-		return modal ? modal.data : undefined;
-	},
-}));
+export const useComputationMethod = create(
+	persist<ComputationMethodStore>(
+		(set) => ({
+			computation_method: "play_count",
+			setComputationMethod: (computation_method) => set({ computation_method }),
+		}),
+		{
+			name: "computation-method",
+			storage: createJSONStorage(() => cookieStorage),
+		},
+	),
+);

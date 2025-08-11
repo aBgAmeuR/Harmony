@@ -1,10 +1,10 @@
+import { CheckCircle2, XCircle } from "lucide-react";
+
 import { Button } from "@repo/ui/button";
 import { CardContent } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
-import { has } from "lodash";
-import { CheckCircle2, XCircle } from "lucide-react";
-import { useRouter } from "next/navigation";
-import type { ProcessingStepType } from "~/app/api/package/new/PackageStreamer";
+
+import type { ProcessingStepType } from "../package-streamer";
 
 type CompleteStepProps = {
 	processingSteps: ProcessingStepType[];
@@ -47,7 +47,7 @@ export const CompleteStep = ({
 					<p className="text-muted-foreground text-sm">
 						{hasError
 							? errorMessage ||
-								"An error occurred during processing. Please try again."
+							"An error occurred during processing. Please try again."
 							: `Total processing time: ${Math.floor(totalTime / 1000)}s`}
 					</p>
 				</div>
