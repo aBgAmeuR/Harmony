@@ -1,95 +1,106 @@
-import { BarChart2, Calendar, Music } from "lucide-react";
+import { BarChart2, Calendar, type LucideIcon, Music, Share2, Shield, Star } from "lucide-react";
 
-import { Card, CardContent, CardFooter, CardHeader } from "@repo/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@repo/ui/card";
 import { cn } from "@repo/ui/lib/utils";
 
 import { ThemeImage } from "../theme-image";
 
-const features = [
+type BentoItem = {
+	title: string;
+	description: string;
+	icon: LucideIcon;
+	className: string;
+	content?: React.ReactNode;
+};
+
+const items: BentoItem[] = [
 	{
 		title: "Music Insights",
-		description:
-			"Discover your most played songs, artists, albums and analyze your music preferences.",
+		description: "Top songs, artists, and albums",
 		icon: Music,
-		component: (
+		className: "md:col-span-3 md:row-span-2",
+		content: (
 			<ThemeImage
 				darkSrc="/images/ranking-dark.png"
 				lightSrc="/images/ranking-light.png"
 				alt="Top songs, artists, albums"
 				height={160 * 2}
 				width={313 * 2}
-				className="w-full"
+				className="h-full w-full rounded-lg object-cover"
 			/>
 		),
-		delay: "delay-300",
 	},
 	{
 		title: "Listening History",
-		description:
-			"Visualize your listening history and track how your taste evolves over time.",
+		description: "Timeline & trends",
 		icon: Calendar,
-		component: (
+		className: "md:col-span-3 md:row-span-1",
+		content: (
 			<ThemeImage
 				darkSrc="/images/activity-dark.png"
 				lightSrc="/images/activity-light.png"
-				alt="Listening History"
+				alt="Listening history"
 				height={160 * 2}
 				width={227 * 2}
-				className="w-full"
+				className="h-full w-full rounded-lg object-cover"
 			/>
 		),
-		delay: "delay-700",
 	},
 	{
 		title: "Advanced Statistics",
-		description:
-			"Dive deep into your listening patterns with advanced analytics and visualizations.",
+		description: "Deep‑dive charts (time‑of‑day, streaks)",
 		icon: BarChart2,
-		component: (
+		className: "md:col-span-2 md:row-span-1",
+		content: (
 			<ThemeImage
 				darkSrc="/images/listening-habits-dark.png"
 				lightSrc="/images/listening-habits-light.png"
-				alt="Listening Habits"
+				alt="Advanced statistics"
 				height={160 * 2}
 				width={269 * 2}
-				className="w-full"
+				className="h-full w-full rounded-lg object-cover"
 			/>
 		),
-		delay: "delay-600",
 	},
-] as const;
+	{
+		title: "Rankings",
+		description: "By play count or time played",
+		icon: Star,
+		className: "md:col-span-2 md:row-span-1",
+	},
+	{
+		title: "Privacy‑first",
+		description: "Read‑only permissions",
+		icon: Shield,
+		className: "md:col-span-2 md:row-span-1",
+	},
+	{
+		title: "Share Links",
+		description: "Secure, time‑limited",
+		icon: Share2,
+		className: "md:col-span-2 md:row-span-1",
+	},
+];
 
 export function Features() {
 	return (
-		<section className="px-4 py-12 sm:py-16 md:py-20">
-			<div className="mx-auto w-full max-w-screen-xl">
-				<h2 className="mb-12 animate-appear text-center font-bold text-2xl opacity-0 delay-200 md:text-3xl">
-					Discover Harmony's Features
+		<section className="px-4 py-16 sm:py-20">
+			<div className="mx-auto w-full max-w-6xl">
+				<h2 className="mb-8 text-center font-bold text-2xl tracking-tight md:text-3xl">
+					Features
 				</h2>
-				<div className="grid grid-cols-1 justify-items-center gap-6 md:grid-cols-3">
-					{features.map((feature, index) => (
-						<Card
-							key={index}
-							className={cn(
-								"flex w-full flex-col overflow-hidden",
-								feature.delay,
-								"animate-appear opacity-0",
-							)}
-						>
-							<CardHeader className="pb-1">
-								<feature.icon className="size-4" strokeWidth={1} />
+
+				<div className="grid grid-cols-1 gap-4 md:auto-rows-[160px] md:grid-cols-6">
+					{items.map((item, idx) => (
+						<Card key={idx} className={cn("gap-2 overflow-hidden transition-colors duration-200 hover:bg-card/40", item.className)}>
+							<CardHeader>
+								<CardTitle className="flex items-center gap-2">
+									<item.icon className="size-4 text-foreground/80" strokeWidth={1.25} />
+									{item.title}
+								</CardTitle>
+								<CardDescription>{item.description}</CardDescription>
 							</CardHeader>
-							<CardContent className="grow text-left">
-								<h3 className="mb-1 font-semibold text-lg">{feature.title}</h3>
-								<p className="text-muted-foreground leading-snug">
-									{feature.description}
-								</p>
-							</CardContent>
-							<CardFooter className="justify-end pr-0 pb-0">
-								<div className="h-40 w-full overflow-hidden rounded-tl-md bg-background p-px">
-									{feature.component}
-								</div>
-							</CardFooter>
+							<CardContent>{item.content}</CardContent>
 						</Card>
 					))}
 				</div>
