@@ -1,6 +1,11 @@
 "server-only";
 
 import {
+	unstable_cacheLife as cacheLife,
+	unstable_cacheTag as cacheTag,
+} from "next/cache";
+
+import {
 	and,
 	arrayOverlaps,
 	auth,
@@ -23,9 +28,9 @@ export async function getArtistMetrics(
 	artistId: string,
 	limit = 5,
 ): Promise<ComparisonMetrics | null> {
-	// "use cache";
-	// cacheLife("days");
-	// cacheTag(userId, `artist-metrics-${artistId}`);
+	"use cache";
+	cacheLife("days");
+	cacheTag(userId, `artist-metrics-${artistId}`);
 
 	if (!artistId) return null;
 
