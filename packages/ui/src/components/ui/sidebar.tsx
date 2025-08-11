@@ -1,9 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-import { PanelLeftIcon } from "lucide-react";
+import { Slot as SlotPrimitive } from "radix-ui";
 
 import { Button } from "@repo/ui/button";
 import { useIsMobile } from "@repo/ui/hooks/use-mobile";
@@ -24,6 +23,9 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "@repo/ui/tooltip";
+
+import { PanelLeftCloseIcon } from "../icons/panel-left-close";
+import { PanelLeftOpenIcon } from "../icons/panel-left-open";
 
 const SIDEBAR_COOKIE_NAME = "sidebar_state";
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7;
@@ -275,12 +277,15 @@ function SidebarTrigger({
 					}}
 					{...props}
 				>
-					<PanelLeftIcon />
+					{state === "collapsed" ? <PanelLeftOpenIcon /> : <PanelLeftCloseIcon />}
 					<span className="sr-only">Toggle Sidebar</span>
 				</Button>
 			</TooltipTrigger>
-			<TooltipContent side="bottom" align="center" className="[&_span]:hidden">
-				{state === "collapsed" ? "Expand" : "Collapse"}
+			<TooltipContent side="bottom" align="center" className="px-2 py-1 text-xs [&_span]:hidden">
+				{state === "collapsed" ? "Expand Sidebar" : "Collapse Sidebar"}
+				<kbd className="-translate-y-px ml-1.5 inline-flex h-5 max-h-full items-center rounded border bg-background px-1 font-[inherit] font-medium text-[0.625rem] text-muted-foreground/70">
+					⌘{SIDEBAR_KEYBOARD_SHORTCUT.toUpperCase()}
+				</kbd>
 			</TooltipContent>
 		</Tooltip>
 	);
@@ -405,7 +410,7 @@ function SidebarGroupLabel({
 	asChild = false,
 	...props
 }: React.ComponentProps<"div"> & { asChild?: boolean }) {
-	const Comp = asChild ? Slot : "div";
+	const Comp = asChild ? SlotPrimitive.Slot : "div";
 
 	return (
 		<Comp
@@ -426,7 +431,7 @@ function SidebarGroupAction({
 	asChild = false,
 	...props
 }: React.ComponentProps<"button"> & { asChild?: boolean }) {
-	const Comp = asChild ? Slot : "button";
+	const Comp = asChild ? SlotPrimitive.Slot : "button";
 
 	return (
 		<Comp
@@ -515,7 +520,7 @@ function SidebarMenuButton({
 	isActive?: boolean;
 	tooltip?: string | React.ComponentProps<typeof TooltipContent>;
 } & VariantProps<typeof sidebarMenuButtonVariants>) {
-	const Comp = asChild ? Slot : "button";
+	const Comp = asChild ? SlotPrimitive.Slot : "button";
 	const { isMobile, state } = useSidebar();
 
 	const button = (
@@ -561,7 +566,7 @@ function SidebarMenuAction({
 	asChild?: boolean;
 	showOnHover?: boolean;
 }) {
-	const Comp = asChild ? Slot : "button";
+	const Comp = asChild ? SlotPrimitive.Slot : "button";
 
 	return (
 		<Comp
@@ -684,7 +689,7 @@ function SidebarMenuSubButton({
 	size?: "sm" | "md";
 	isActive?: boolean;
 }) {
-	const Comp = asChild ? Slot : "a";
+	const Comp = asChild ? SlotPrimitive.Slot : "a";
 
 	return (
 		<Comp

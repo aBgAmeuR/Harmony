@@ -47,7 +47,7 @@ export const MusicItemCard = ({
 							/>
 						</AspectRatio>
 					</div>
-					<Content item={item} />
+					<Content item={item} key={`${item.id}-content`} />
 					<Stats stat1={item.stat1} stat2={item.stat2} layout={layout} />
 				</>
 			) : (
@@ -59,7 +59,7 @@ export const MusicItemCard = ({
 						href={item.href}
 						layout={layout}
 					/>
-					<Content item={item} />
+					<Content item={item} key={`${item.id}-content`} />
 					{showHistoricalRankings && <HistoricalRankings item={item} />}
 					<Stats stat1={item.stat1} stat2={item.stat2} layout={layout} />
 					{showAction && <Action href={actionHref ? ACTIONS_HREF[actionHref](item.id) : undefined} layout={layout} />}

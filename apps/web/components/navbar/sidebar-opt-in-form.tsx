@@ -1,4 +1,5 @@
-import { signOut } from "@repo/auth/actions";
+import { useRouter } from "next/navigation";
+
 import { Button } from "@repo/ui/button";
 import {
 	Card,
@@ -12,6 +13,7 @@ import { useSidebar } from "@repo/ui/sidebar";
 
 export function SidebarOptInForm() {
 	const { open } = useSidebar();
+	const router = useRouter();
 
 	return (
 		<Card
@@ -29,14 +31,7 @@ export function SidebarOptInForm() {
 				</CardDescription>
 			</CardHeader>
 			<CardContent className="p-2">
-				<form
-					action={async () => {
-						await signOut({
-							redirect: true,
-							redirectTo: "/",
-						});
-					}}
-				>
+				<form action={() => router.push("/signout")}>
 					<Button className="w-full" size="sm" type="submit">
 						Exit demo
 					</Button>

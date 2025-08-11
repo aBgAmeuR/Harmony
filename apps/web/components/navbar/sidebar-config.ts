@@ -3,10 +3,11 @@ import {
 	Binary,
 	CalendarRange,
 	ChartNoAxesCombined,
+	GemIcon,
 	Github,
-	type LucideIcon,
-	Milestone,
 	UsersRound,
+	type LucideIcon,
+	Settings,
 } from "lucide-react";
 
 import { AudioLinesIcon } from "@repo/ui/icons/audio-lines";
@@ -14,7 +15,6 @@ import { BookTextIcon } from "@repo/ui/icons/book-text";
 import { ChartLineIcon } from "@repo/ui/icons/chart-line";
 import { Disc3Icon } from "@repo/ui/icons/disc-3";
 import { HistoryIcon } from "@repo/ui/icons/history";
-import { InfoIcon } from "@repo/ui/icons/info";
 import { LayoutPanelTopIcon } from "@repo/ui/icons/layout-panel-top";
 import { ListOrderedIcon } from "@repo/ui/icons/list-ordered";
 import { PackageIcon } from "@repo/ui/icons/package";
@@ -22,8 +22,9 @@ import { TrendingUpIcon } from "@repo/ui/icons/trending-up";
 import { TrendingUpDownIcon } from "@repo/ui/icons/trending-up-down";
 import { UserIcon } from "@repo/ui/icons/user";
 
-import { Icons } from "../icons";
 import { config } from "~/lib/config";
+
+import { Icons } from "../icons";
 
 export type SidebarItem = {
 	title: string;
@@ -32,6 +33,7 @@ export type SidebarItem = {
 	items?: SidebarItem[];
 	anotherUrl?: string;
 	alwaysVisible?: boolean;
+	external?: boolean;
 };
 
 type SidebarConfig = {
@@ -135,10 +137,15 @@ export const data: SidebarConfig = {
 	],
 	advanced: [
 		{
-			title: "Milestones",
-			url: "/milestones",
-			icon: Milestone,
+			title: "Forgotten Gems",
+			url: "/forgotten-gems",
+			icon: GemIcon as LucideIcon,
 		},
+		// {
+		// 	title: "Milestones",
+		// 	url: "/milestones",
+		// 	icon: Milestone,
+		// },
 		{
 			title: "Comparisons",
 			url: "/comparisons",
@@ -165,11 +172,6 @@ export const data: SidebarConfig = {
 			alwaysVisible: true,
 		},
 		{
-			title: "About",
-			url: "/settings/about",
-			icon: InfoIcon as LucideIcon,
-		},
-		{
 			title: "Changelog",
 			url: "/changelog",
 			icon: BookTextIcon as LucideIcon,
@@ -177,9 +179,20 @@ export const data: SidebarConfig = {
 	],
 	navSecondary: [
 		{
+			title: "Settings",
+			url: "/settings",
+			icon: Settings as LucideIcon,
+		},
+		{
+			title: "Documentation",
+			url: "/docs",
+			icon: BookTextIcon as LucideIcon,
+		},
+		{
 			title: "Github",
 			url: config.githubRepo,
 			icon: Github,
+			external: true,
 		},
 	],
 };

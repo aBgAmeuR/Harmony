@@ -18,6 +18,12 @@ export const timeRangeStatsEnum = pgEnum("time_range_stats", [
 	"long_term",
 ]);
 
+export const computationMethodEnum = pgEnum("computation_method", [
+	"play_count",
+	"time_played",
+	"custom",
+]);
+
 export const users = pgTable("User", {
 	id: uuid().primaryKey().defaultRandom(),
 	name: varchar({ length: 256 }),
@@ -26,6 +32,7 @@ export const users = pgTable("User", {
 	image: varchar({ length: 256 }),
 	hasPackage: boolean().default(false),
 	timeRangeStats: timeRangeStatsEnum().default("medium_term"),
+	computationMethod: computationMethodEnum().default("play_count"),
 	timeRangeDateStart: timestamp().default(new Date("2010-01-01")),
 	timeRangeDateEnd: timestamp().defaultNow(),
 	createdAt: timestamp().defaultNow(),
@@ -100,7 +107,7 @@ export const historicalTrackRankings = pgTable("HistoricalTrackRanking", {
 	trackId: varchar({ length: 256 }).notNull(),
 	rank: integer().notNull(),
 	timeRange: timeRangeStatsEnum().notNull(),
-	timestamp: timestamp().defaultNow(),
+	timestamp: timestamp().defaultNow().notNull(),
 });
 
 export const historicalArtistRankings = pgTable("HistoricalArtistRanking", {
@@ -111,7 +118,21 @@ export const historicalArtistRankings = pgTable("HistoricalArtistRanking", {
 	artistId: varchar({ length: 256 }).notNull(),
 	rank: integer().notNull(),
 	timeRange: timeRangeStatsEnum().notNull(),
-	timestamp: timestamp().defaultNow(),
+	timestamp: timestamp().defaultNow().notNull(),
+});
+
+export const profileShareLinks = pgTable("ProfileShareLink", {
+	id: uuid().primaryKey().defaultRandom(),
+	userId: uuid()
+		.notNull()
+		.references(() => users.id, { onDelete: "cascade" }),
+	token: varchar({ length: 64 }).notNull().unique(),
+	usageLimit: integer().notNull().default(1),
+	usageCount: integer().notNull().default(0),
+	expiresAt: timestamp(),
+	revoked: boolean().notNull().default(false),
+	createdAt: timestamp().defaultNow(),
+	updatedAt: timestamp().defaultNow(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -158,6 +179,16 @@ export const historicalArtistRankingsRelations = relations(
 	({ one }) => ({
 		user: one(users, {
 			fields: [historicalArtistRankings.userId],
+			references: [users.id],
+		}),
+	}),
+);
+
+export const profileShareLinksRelations = relations(
+	profileShareLinks,
+	({ one }) => ({
+		user: one(users, {
+			fields: [profileShareLinks.userId],
 			references: [users.id],
 		}),
 	}),

@@ -64,7 +64,7 @@ export const TimeRangeSelectClient = ({
 						</Select>
 					</span>
 				</TooltipTrigger>
-				<TooltipContent>
+				<TooltipContent className="px-2 py-1 text-xs">
 					<p>This feature is not available in demo mode</p>
 				</TooltipContent>
 			</Tooltip>

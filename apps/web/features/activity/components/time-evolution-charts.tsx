@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { ReusableLineChart } from "@repo/ui/components/charts/line-chart";
 import { Skeleton } from "@repo/ui/skeleton";
 
@@ -10,16 +11,14 @@ import {
 import { getTimeEvolutionData } from "../data/time-evolution";
 
 type TimeEvolutionChartsProps = {
-	userId: string;
-	isDemo: boolean;
 	data?: Awaited<ReturnType<typeof getTimeEvolutionData>>;
 };
 
 export const TimeEvolutionCharts = async ({
-	userId,
-	isDemo,
 	data,
 }: TimeEvolutionChartsProps) => {
+	const { userId, isDemo } = await getUser();
+
 	if (!data) {
 		data = await getTimeEvolutionData(userId, isDemo);
 		if (!data) return null;
@@ -36,7 +35,7 @@ export const TimeEvolutionCharts = async ({
 					<ReusableLineChart
 						data={data.tracks.data}
 						xAxisDataKey="month"
-						lineDataKey="value"
+						lineDataKeys={["value"]}
 						config={{ value: { label: "Tracks", color: "var(--chart-1)" } }}
 						showYAxis={false}
 						className="aspect-video size-full"
@@ -54,7 +53,7 @@ export const TimeEvolutionCharts = async ({
 					<ReusableLineChart
 						data={data.albums.data}
 						xAxisDataKey="month"
-						lineDataKey="value"
+						lineDataKeys={["value"]}
 						config={{ value: { label: "Albums", color: "var(--chart-2)" } }}
 						showYAxis={false}
 						className="aspect-video size-full"
@@ -72,7 +71,7 @@ export const TimeEvolutionCharts = async ({
 					<ReusableLineChart
 						data={data.artists.data}
 						xAxisDataKey="month"
-						lineDataKey="value"
+						lineDataKeys={["value"]}
 						config={{ value: { label: "Artists", color: "var(--chart-3)" } }}
 						showYAxis={false}
 						className="aspect-video size-full"

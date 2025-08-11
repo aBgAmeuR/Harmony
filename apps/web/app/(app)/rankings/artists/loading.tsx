@@ -1,17 +1,21 @@
 import { DateRangeSelectorSkeleton } from "~/components/date-range-selector/date-range-selector";
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { ListSkeleton } from "~/components/list-skeleton";
+import { MusicLayoutSkeleton } from "~/components/lists/music-layout/skeleton";
 import { SelectListLayoutSkeleton } from "~/features/stats/components/select-list-layout";
+
+import { metadata } from "./page";
+
+export { metadata };
 
 export default function Loading() {
 	return (
 		<Layout>
-			<LayoutHeader items={["Package", "Rankings", "Artists"]} demo={false}>
+			<LayoutHeader items={["Package", "Rankings", "Artists"]} demo={false} metadata={metadata}>
 				<DateRangeSelectorSkeleton />
 				<SelectListLayoutSkeleton />
 			</LayoutHeader>
 			<LayoutContent>
-				<ListSkeleton />
+				<MusicLayoutSkeleton />
 			</LayoutContent>
 		</Layout>
 	);

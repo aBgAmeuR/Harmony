@@ -1,5 +1,6 @@
 import type { PropsWithChildren } from "react";
-import React, { Suspense } from "react";
+import React from "react";
+import type { Metadata } from "next";
 
 import {
 	Breadcrumb,
@@ -13,7 +14,6 @@ import { Separator } from "@repo/ui/separator";
 import { SidebarTrigger } from "@repo/ui/sidebar";
 
 import { BackBtn } from "../back-btn";
-import { DemoBadge } from "../demo-badge";
 
 export const Layout = ({ children }: PropsWithChildren) => {
 	return children;
@@ -24,7 +24,7 @@ export const LayoutContent = ({
 	className,
 }: PropsWithChildren<{ className?: string }>) => {
 	return (
-		<main className={cn("flex flex-1 flex-col gap-4 p-4 pt-0", className)}>
+		<main className={cn("mx-auto flex w-full max-w-screen-2xl flex-1 flex-col gap-4 p-4", className)}>
 			{children}
 		</main>
 	);
@@ -34,13 +34,17 @@ export const LayoutHeader = ({
 	items,
 	demo = true,
 	children,
+	metadata,
+	className,
 }: PropsWithChildren<{
 	items: string[];
 	demo?: boolean;
+	metadata?: Metadata;
+	className?: string;
 }>) => {
 	return (
-		<header className="flex h-16 shrink-0 items-center justify-between gap-2 px-4 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
-			<div className="flex items-center gap-2 ">
+		<header className={cn("mx-auto flex w-full max-w-screen-2xl shrink-0 gap-2 px-4 pt-2", metadata ? "flex-col" : "justify-between", className)}>
+			<div className="flex h-8 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-8 sm:h-10">
 				<SidebarTrigger className="-ml-1" />
 				<BackBtn />
 				<Separator
@@ -66,13 +70,38 @@ export const LayoutHeader = ({
 						</BreadcrumbItem>
 					</BreadcrumbList>
 				</Breadcrumb>
-				{demo && (
-					<Suspense fallback={null}>
-						<DemoBadge />
-					</Suspense>
-				)}
 			</div>
-			<div className="flex items-center gap-1">{children}</div>
+			{metadata ? (
+				<div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+					<div>
+						<LayoutTitle>{metadata.title?.toString()}</LayoutTitle>
+						<LayoutDescription>{metadata.description?.toString()}</LayoutDescription>
+					</div>
+					<div className="flex flex-wrap items-center gap-1 lg:flex-nowrap">
+						{children}
+					</div>
+				</div>
+			) : (
+				<div className="flex flex-nowrap items-center gap-1">
+					{children}
+				</div>
+			)}
 		</header>
+	);
+};
+
+export const LayoutTitle = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+	return (
+		<h1 className={cn("font-bold text-2xl tracking-tight", className)}>
+			{children}
+		</h1>
+	);
+};
+
+export const LayoutDescription = ({ children, className }: PropsWithChildren<{ className?: string }>) => {
+	return (
+		<p className={cn("text-muted-foreground text-sm", className)}>
+			{children}
+		</p>
 	);
 };

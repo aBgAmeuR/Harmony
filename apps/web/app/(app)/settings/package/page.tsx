@@ -1,5 +1,7 @@
 import { Clock, Layers, LineChart, Sparkles } from "lucide-react";
+import type { Metadata } from "next";
 
+import { getUser } from "@repo/auth";
 import {
 	Card,
 	CardDescription,
@@ -10,19 +12,23 @@ import {
 import { cn } from "@repo/ui/lib/utils";
 
 import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
-import { getUserInfos } from "~/lib/utils-server";
 
 import { Client } from "./client";
-import { DemoStep } from "./steps-components/demo-step";
 import { DocsModal } from "./docs-modal";
 import { HistoryModal } from "./history-modal";
+import { DemoStep } from "./steps-components/demo-step";
+
+export const metadata: Metadata = {
+	title: "Package",
+	description: "Upload your Spotify data package to generate your listening stats",
+};
 
 export default async function SettingsPackagePage() {
-	const { isDemo } = await getUserInfos();
+	const { isDemo } = await getUser();
 
 	return (
 		<Layout>
-			<LayoutHeader items={["Settings", "Package"]} />
+			<LayoutHeader items={["Settings", "Package"]} className="max-w-6xl" />
 			<LayoutContent className="items-center justify-center">
 				<div>
 					<div className="mb-8 text-center">

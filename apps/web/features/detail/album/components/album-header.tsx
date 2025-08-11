@@ -1,6 +1,8 @@
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 
+import { getUser } from "@repo/auth";
+
 import {
 	DetailHeader,
 	DetailHeaderSkeleton,
@@ -11,10 +13,10 @@ import { getAlbumHeaderData } from "../data/album-header";
 
 type AlbumHeaderProps = {
 	albumId: string;
-	userId: string;
 };
 
-export const AlbumHeader = async ({ albumId, userId }: AlbumHeaderProps) => {
+export const AlbumHeader = async ({ albumId }: AlbumHeaderProps) => {
+	const { userId } = await getUser();
 	const album = await getAlbumHeaderData(albumId, userId);
 	if (!album) return notFound();
 

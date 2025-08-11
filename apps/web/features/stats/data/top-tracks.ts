@@ -5,7 +5,7 @@ import {
 	unstable_cacheTag as cacheTag,
 } from "next/cache";
 
-import { db, desc, eq, historicalTrackRankings } from "@repo/database";
+import { and, db, desc, eq, historicalTrackRankings } from "@repo/database";
 import { spotify } from "@repo/spotify";
 
 import { getMsPlayedInMinutes } from "~/lib/utils";
@@ -27,7 +27,12 @@ export const getTopTracks = async (userId: string, isDemo: boolean) => {
 				rank: historicalTrackRankings.rank,
 			})
 			.from(historicalTrackRankings)
-			.where(eq(historicalTrackRankings.userId, userId))
+			.where(
+				and(
+					eq(historicalTrackRankings.userId, userId),
+					eq(historicalTrackRankings.timeRange, timeRange),
+				),
+			)
 			.orderBy(desc(historicalTrackRankings.timestamp))
 			.limit(50),
 		spotify.me.top("tracks", timeRange),

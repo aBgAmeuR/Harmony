@@ -9,6 +9,7 @@ export default {
 				"https://accounts.spotify.com/authorize?scope=user-read-recently-played%20user-top-read%20user-read-email",
 		}),
 		Credentials({
+			id: "demo",
 			name: "Demo",
 			credentials: {
 				username: { label: "Username", type: "text" },
@@ -21,6 +22,7 @@ export default {
 				) {
 					return {
 						name: "Demo",
+						email: "demo@demo.com",
 						id: process.env.DEMO_ID,
 						hasPackage: true,
 					};
@@ -52,10 +54,8 @@ export default {
 	},
 	pages: {
 		error: "/error",
-		signIn: "/",
-		signOut: "/",
-		newUser: "/",
-		verifyRequest: "/",
+		signIn: "/signin",
+		signOut: "/signout",
 	},
 	session: {
 		strategy: "jwt",

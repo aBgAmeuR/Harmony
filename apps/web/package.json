@@ -3,7 +3,7 @@
 	"name": "web",
 	"version": "1.0.0",
 	"scripts": {
-		"dev": "dotenv -e ../../.env -- next dev",
+		"dev": "dotenv -e ../../.env -- next dev --turbopack",
 		"build": "dotenv -e ../../.env -- next build",
 		"start": "dotenv -e ../../.env -- next start",
 		"typecheck": "tsc --noEmit --emitDeclarationOnly false"
@@ -14,7 +14,8 @@
 		"@next/bundle-analyzer": "^15.3.0",
 		"@next/mdx": "^15.3.4",
 		"@repo/ui": "workspace:*",
-		"@tanstack/react-query": "^5.62.7",
+		"@tanstack/react-query": "^5.84.1",
+		"@tanstack/react-query-devtools": "^5.84.1",
 		"@types/mdx": "^2.0.13",
 		"@uploadthing/react": "^7.3.0",
 		"@vercel/analytics": "^1.5.0",
@@ -23,6 +24,9 @@
 		"fflate": "^0.8.2",
 		"fumadocs-ui": "^15.6.0",
 		"gray-matter": "^4.0.3",
+		"hono": "^4.8.9",
+		"jotai": "^2.12.5",
+		"jotai-tanstack-query": "^0.11.0",
 		"light-date": "^1.2.0",
 		"lodash": "^4.17.21",
 		"lucide-react": "^0.468.0",
@@ -30,6 +34,7 @@
 		"next-mdx-remote-client": "^2.1.2",
 		"next-themes": "^0.4.4",
 		"nextjs-toploader": "^3.8.16",
+		"nuqs": "^2.4.3",
 		"react": "19.1.0",
 		"react-dom": "19.1.0",
 		"react-wrap-balancer": "^1.1.1",
@@ -48,9 +53,10 @@
 		"@types/node": "^22",
 		"@types/react": "19.1.0",
 		"@types/react-dom": "19.1.0",
+		"api": "workspace:*",
 		"jest": "^29.7.0",
 		"postcss": "^8",
-		"tailwindcss": "^4.0.8",
+		"tailwindcss": "^4.1.11",
 		"typescript": "5"
 	}
 }

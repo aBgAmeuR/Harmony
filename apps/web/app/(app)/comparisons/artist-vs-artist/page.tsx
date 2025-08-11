@@ -1,16 +1,30 @@
-import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
 
-export default function ComparisonsArtistVsArtistPage() {
+import { Suspense } from "react";
+import type { Metadata } from "next";
+
+import { Layout, LayoutContent, LayoutHeader } from "~/components/layouts/layout";
+import { ArtistSelector, ArtistSelectorSkeleton } from "~/features/comparisons/artist-vs-artist/components/artist-selector";
+import { ComparisonArtistVsArtistContent } from "~/features/comparisons/artist-vs-artist/components/comparison-content";
+
+export const metadata: Metadata = {
+	title: "Artist vs Artist",
+	description: "Compare your listening habits between two artists",
+};
+
+export default async function ArtistVsArtistPage() {
 	return (
 		<Layout>
-			<LayoutHeader items={["Advanced", "Comparisons", "Artist vs Artist"]} />
+			<LayoutHeader items={["Advanced", "Comparisons", "Artist vs Artist"]} metadata={metadata}>
+				<Suspense fallback={<ArtistSelectorSkeleton />}>
+					<ArtistSelector />
+				</Suspense>
+			</LayoutHeader>
 			<LayoutContent>
-				<div className="grid auto-rows-min gap-4 md:grid-cols-3">
-					<div className="aspect-video rounded-xl bg-muted/50" />
-					<div className="aspect-video rounded-xl bg-muted/50" />
-					<div className="aspect-video rounded-xl bg-muted/50" />
-				</div>
-				<div className="min-h-screen flex-1 rounded-xl bg-muted/50 md:min-h-min" />
+				<ComparisonArtistVsArtistContent>
+					<Suspense fallback={<ArtistSelectorSkeleton />}>
+						<ArtistSelector showWhenEmpty={true} />
+					</Suspense>
+				</ComparisonArtistVsArtistContent>
 			</LayoutContent>
 		</Layout>
 	);

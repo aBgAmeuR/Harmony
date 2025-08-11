@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { ReusableAreaChart } from "@repo/ui/components/charts/area-chart";
 import { ReusableBarChart } from "@repo/ui/components/charts/bar-chart";
 import { Skeleton } from "@repo/ui/skeleton";
@@ -12,10 +13,10 @@ import { getStatsTabData } from "../data/stats-tab";
 
 type StatsTabProps = {
 	artistId: string;
-	userId: string;
 };
 
-export const StatsTab = async ({ artistId, userId }: StatsTabProps) => {
+export const StatsTab = async ({ artistId }: StatsTabProps) => {
+	const { userId } = await getUser();
 	const data = await getStatsTabData(artistId, userId);
 
 	return (
@@ -51,7 +52,7 @@ export const StatsTab = async ({ artistId, userId }: StatsTabProps) => {
 					<ReusableBarChart
 						data={data.timeDistribution}
 						xAxisDataKey="hour"
-						barDataKey="msPlayed"
+						barDataKeys={["msPlayed"]}
 						showYAxis={false}
 						config={{
 							msPlayed: { label: "Time Played", color: "var(--chart-1)" },

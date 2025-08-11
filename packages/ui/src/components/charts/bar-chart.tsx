@@ -28,7 +28,7 @@ import { getTooltipFormatter } from "./common/tooltip-formatters";
 
 export interface BarChartProps extends BaseChartProps, AxisTickFormatters {
 	xAxisDataKey: string;
-	barDataKey: string;
+	barDataKeys: string[];
 	referenceLine?: {
 		value: number;
 		label: string;
@@ -49,7 +49,7 @@ export interface BarChartProps extends BaseChartProps, AxisTickFormatters {
 export function ReusableBarChart({
 	data,
 	xAxisDataKey,
-	barDataKey,
+	barDataKeys,
 	referenceLine,
 	config,
 	tooltipLabelFormatter = "normal",
@@ -100,11 +100,13 @@ export function ReusableBarChart({
 					}
 					cursor={false}
 				/>
-				<Bar
-					dataKey={barDataKey}
-					fill={`var(--color-${barDataKey})`}
-					radius={barRadius}
-				>
+				{barDataKeys.map((key) => (
+					<Bar
+						key={key}
+						dataKey={key}
+						fill={`var(--color-${key})`}
+						radius={barRadius}
+					>
 					{showBarLabels && (
 						<LabelList
 							position="top"
@@ -114,7 +116,8 @@ export function ReusableBarChart({
 							formatter={getTickFormatter(barLabelFormatter)}
 						/>
 					)}
-				</Bar>
+					</Bar>
+				))}
 
 				{referenceLine && (
 					<ReferenceLine

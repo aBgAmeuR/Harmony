@@ -1,4 +1,4 @@
-import { auth } from "@repo/auth";
+import { getUserOrNull } from "@repo/auth";
 import { accounts, db, eq } from "@repo/database";
 
 import type { SpotifyConfig } from "../../types/SpotifyConfig";
@@ -96,16 +96,16 @@ export class AuthManager {
 			return this.refreshPromise;
 		}
 
-		const session = this.config.userId
-			? { user: { id: this.config.userId } }
-			: await auth();
+		const user = this.config.userId
+			? { userId: this.config.userId }
+			: await getUserOrNull();
 
-		if (!session?.user?.id) {
+		if (!user?.userId) {
 			throw new AuthError("No user session found");
 		}
 
 		const account = await db.query.accounts.findFirst({
-			where: eq(accounts.userId, session.user.id),
+			where: eq(accounts.userId, user.userId),
 		});
 
 		if (!account?.refresh_token) {
@@ -121,14 +121,16 @@ export class AuthManager {
 			return account.access_token;
 		}
 
-		// Create a refresh promise that other calls can wait for
-		try {
-			this.refreshPromise = this.refreshTokenAndUpdate(account);
-			return await this.refreshPromise;
-		} finally {
-			// Clear the promise when done, regardless of success or failure
-			this.refreshPromise = null;
+		if (!this.refreshPromise) {
+			this.refreshPromise = (async () => {
+				try {
+					return await this.refreshTokenAndUpdate(account);
+				} finally {
+					this.refreshPromise = null;
+				}
+			})();
 		}
+		return this.refreshPromise;
 	}
 
 	/**

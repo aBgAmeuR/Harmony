@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import { History } from "lucide-react";
 
+import { getUser } from "@repo/auth";
 import { db, desc, eq, packages } from "@repo/database";
 import { Button } from "@repo/ui/button";
 import {
@@ -20,8 +21,6 @@ import {
 	TableHeader,
 	TableRow,
 } from "@repo/ui/table";
-
-import { getUserInfos } from "~/lib/utils-server";
 
 export const HistoryModal = async () => {
 	return (
@@ -56,7 +55,7 @@ export const HistoryModal = async () => {
 };
 
 const getPackageHistory = async () => {
-	const { userId, isDemo } = await getUserInfos();
+	const { userId, isDemo } = await getUser();
 	if (!userId || isDemo) return null;
 
 	return await db

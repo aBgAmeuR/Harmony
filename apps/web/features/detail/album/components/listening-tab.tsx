@@ -1,3 +1,4 @@
+import { getUser } from "@repo/auth";
 import { ReusableAreaChart } from "@repo/ui/components/charts/area-chart";
 import { ReusableBarChart } from "@repo/ui/components/charts/bar-chart";
 
@@ -11,10 +12,10 @@ import { getListeningTabData } from "../data/listening-tab";
 
 type ListeningTabProps = {
 	albumId: string;
-	userId: string;
 };
 
-export const ListeningTab = async ({ albumId, userId }: ListeningTabProps) => {
+export const ListeningTab = async ({ albumId }: ListeningTabProps) => {
+	const { userId } = await getUser();
 	const data = await getListeningTabData(albumId, userId);
 
 	return (
@@ -51,7 +52,7 @@ export const ListeningTab = async ({ albumId, userId }: ListeningTabProps) => {
 							data={data.timeDistribution}
 							showYAxis={false}
 							xAxisDataKey="hour"
-							barDataKey="msPlayed"
+							barDataKeys={["msPlayed"]}
 							config={{
 								msPlayed: { label: "Time Played", color: "var(--chart-1)" },
 							}}
@@ -73,7 +74,7 @@ export const ListeningTab = async ({ albumId, userId }: ListeningTabProps) => {
 							data={data.topDays}
 							showYAxis={false}
 							xAxisDataKey="date"
-							barDataKey="msPlayed"
+							barDataKeys={["msPlayed"]}
 							config={{
 								msPlayed: { label: "Time Played", color: "var(--chart-2)" },
 							}}

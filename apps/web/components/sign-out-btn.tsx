@@ -1,18 +1,13 @@
 "use client";
 
-import { signOut } from "@repo/auth/actions";
+import { useRouter } from "next/navigation";
+
 import { Button } from "@repo/ui/button";
 
 export function SignOutBtn() {
+    const router = useRouter();
     return (
-        <form
-            action={async () => {
-                await signOut({
-                    redirect: true,
-                    redirectTo: "/",
-                });
-            }}
-        >
+        <form action={() => router.push("/signout")}>
             <Button className="w-full" size="sm" type="submit">
                 Exit demo
             </Button>
