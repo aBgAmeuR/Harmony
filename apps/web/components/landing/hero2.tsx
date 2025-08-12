@@ -17,7 +17,7 @@ export const Hero2 = () => {
 				</p>
 
 				<div className="mt-6 flex items-center justify-center gap-3">
-					<GetStartedBtn variant="gradient" size="lg">Get Started</GetStartedBtn>
+					<GetStartedBtn variant="gradient" size="lg" className="border-foreground/80 from-foreground/90 to-foreground px-4 text-secondary hover:border-foreground hover:from-foreground hover:to-foreground">Get Started</GetStartedBtn>
 					{!isMaintenance ? (
 						<GetDemoBtn label="View Demo" />
 					) : null}
