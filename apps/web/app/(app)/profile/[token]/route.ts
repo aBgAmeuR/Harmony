@@ -1,12 +1,13 @@
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 
-import { signInWithShareableLink } from "@repo/auth";
+import { getUser, signInWithShareableLink } from "@repo/auth";
 
 import {
 	getShareableLinkByToken,
 	incrementShareableLinkUsage,
 } from "~/features/shareable-links/data/shareable-links";
+import { preloadUserData } from "~/features/common/preload";
 
 export async function GET(
 	_request: Request,
@@ -22,7 +23,10 @@ export async function GET(
 	if (link.usageLimit !== 0 && link.usageCount >= link.usageLimit)
 		redirect("/error?error=LinkMaxUsage");
 
-	after(async () => await incrementShareableLinkUsage(token));
+	after(async () => {
+		await incrementShareableLinkUsage(token);
+		await preloadUserData(link.userId);
+	});
 
 	await signInWithShareableLink(token);
 }
