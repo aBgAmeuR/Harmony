@@ -8,7 +8,7 @@ import { ValueProps } from "~/components/landing/value-props";
 
 export default async function HomePage() {
 	return (
-		<div className="flex h-full min-h-screen flex-col">
+		<div className="dark flex h-full min-h-screen flex-col bg-background text-foreground">
 			<Header />
 			<Hero2 />
 			<ValueProps />
