@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { LinkButton } from "@repo/ui/components/link-button";
+import { cn } from "@repo/ui/lib/utils";
 
 import { Icons } from "../icons";
 
@@ -24,9 +25,9 @@ export const Header = () => {
 							<Icons.logo className="size-8" />
 							Harmony
 						</Link>
-						<ul className="inline-flex flex-1 gap-2">
+						<ul className="xs:inline-flex hidden flex-1 gap-2">
 							{menuItems.map((item, index) => (
-								<li key={index}>
+								<li key={index} className={cn(index === menuItems.length - 1 ? "block" : "hidden md:block")}>
 									<LinkButton href={item.href} variant="ghost" size="sm">
 										<span>{item.name}</span>
 									</LinkButton>
@@ -34,7 +35,7 @@ export const Header = () => {
 							))}
 						</ul>
 
-						<div className="flex w-full flex-col space-y-3 sm:flex-row sm:gap-3 sm:space-y-0 md:w-fit">
+						<div className="hidden gap-2 min-[400px]:flex">
 							<LinkButton href="#" variant="ghost" size="sm">
 								<span>View Demo</span>
 							</LinkButton>

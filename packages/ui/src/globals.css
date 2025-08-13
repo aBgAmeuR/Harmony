@@ -353,3 +353,169 @@
 		@apply !hidden;
 	}
 }
+
+@layer utilities {
+	/* Mask utilities for fade effects */
+	.mask-fade-left {
+		--mask-invisible: rgba(0, 0, 0, 0);
+		--mask-visible: rgba(0, 0, 0, 1);
+		--mask-left: linear-gradient(
+			to right,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		-webkit-mask-image: var(--mask-left);
+		mask-image: var(--mask-left);
+	}
+
+	.mask-fade-right {
+		--mask-invisible: rgba(0, 0, 0, 0);
+		--mask-visible: rgba(0, 0, 0, 1);
+		--mask-right: linear-gradient(
+			to left,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		-webkit-mask-image: var(--mask-right);
+		mask-image: var(--mask-right);
+	}
+
+	.mask-fade-top {
+		--mask-invisible: rgba(0, 0, 0, 0);
+		--mask-visible: rgba(0, 0, 0, 1);
+		--mask-top: linear-gradient(
+			to bottom,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		-webkit-mask-image: var(--mask-top);
+		mask-image: var(--mask-top);
+	}
+
+	.mask-fade-bottom {
+		--mask-invisible: rgba(0, 0, 0, 0);
+		--mask-visible: rgba(0, 0, 0, 1);
+		--mask-bottom: linear-gradient(
+			to top,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		-webkit-mask-image: var(--mask-bottom);
+		mask-image: var(--mask-bottom);
+	}
+
+	/* Combined mask utilities */
+	.mask-fade-horizontal {
+		--mask-invisible: rgba(0, 0, 0, 0);
+		--mask-visible: rgba(0, 0, 0, 1);
+		--mask-left: linear-gradient(
+			to right,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		--mask-right: linear-gradient(
+			to left,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		-webkit-mask-image: var(--mask-left), var(--mask-right);
+		mask-image: var(--mask-left), var(--mask-right);
+		-webkit-mask-composite: source-in;
+		mask-composite: intersect;
+	}
+
+	.mask-fade-vertical {
+		--mask-invisible: rgba(0, 0, 0, 0);
+		--mask-visible: rgba(0, 0, 0, 1);
+		--mask-top: linear-gradient(
+			to bottom,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		--mask-bottom: linear-gradient(
+			to top,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		-webkit-mask-image: var(--mask-top), var(--mask-bottom);
+		mask-image: var(--mask-top), var(--mask-bottom);
+		-webkit-mask-composite: source-in;
+		mask-composite: intersect;
+	}
+
+	.mask-fade-bottom-right {
+		--mask-invisible: rgba(0, 0, 0, 0);
+		--mask-visible: rgba(0, 0, 0, 1);
+		--mask-bottom: linear-gradient(
+			to top,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%
+		);
+		--mask-right: linear-gradient(
+			to left,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%
+		);
+		-webkit-mask-image: var(--mask-bottom), var(--mask-right);
+		mask-image: var(--mask-bottom), var(--mask-right);
+		-webkit-mask-composite: source-in;
+		mask-composite: intersect;
+	}
+
+	.mask-fade-all {
+		--mask-invisible: rgba(0, 0, 0, 0);
+		--mask-visible: rgba(0, 0, 0, 1);
+		--mask-left: linear-gradient(
+			to right,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		--mask-top: linear-gradient(
+			to bottom,
+			var(--mask-invisible) 0%,
+			var(--mask-visible) 20%,
+			var(--mask-visible) 80%,
+			var(--mask-invisible) 100%
+		);
+		-webkit-mask-image: var(--mask-top), var(--mask-left);
+		mask-image: var(--mask-top), var(--mask-left);
+		-webkit-mask-composite: source-in;
+		mask-composite: intersect;
+	}
+
+	/* Customizable mask utilities with CSS variables */
+	.mask-fade-custom {
+		--mask-invisible: rgba(0, 0, 0, 0);
+		--mask-visible: rgba(0, 0, 0, 1);
+		--mask-fade-start: 20%;
+		--mask-fade-end: 80%;
+		--mask-direction: to right;
+		--mask-gradient: linear-gradient(
+			var(--mask-direction),
+			var(--mask-invisible) 0%,
+			var(--mask-visible) var(--mask-fade-start),
+			var(--mask-visible) var(--mask-fade-end),
+			var(--mask-invisible) 100%
+		);
+		-webkit-mask-image: var(--mask-gradient);
+		mask-image: var(--mask-gradient);
+	}
+}

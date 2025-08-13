@@ -55,7 +55,7 @@ export function ReusableLineChart({
 	return (
 		<ChartContainer
 			config={config}
-			className={cn("aspect-[10/3] w-full", className)}
+			className={cn("w-full", className)}
 		>
 			<LineChart
 				data={data}

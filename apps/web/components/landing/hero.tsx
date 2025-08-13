@@ -4,6 +4,8 @@ import Link from "next/link";
 import { buttonVariants } from "@repo/ui/button";
 import { cn } from "@repo/ui/lib/utils";
 
+import { config } from "~/lib/config";
+
 import { GetDemoBtn } from "../get-demo-btn";
 import { Announcement } from "./announcement";
 import { GetStartedBtn } from "./get-started-btn";
@@ -13,7 +15,6 @@ import {
 	PageHeaderDescription,
 	PageHeaderHeading,
 } from "./page-header";
-import { config } from "~/lib/config";
 
 export const Hero = () => {
 	const isMaintenance = process.env.APP_MAINTENANCE === "true";
