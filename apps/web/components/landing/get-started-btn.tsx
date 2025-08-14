@@ -28,10 +28,6 @@ export const GetStartedBtn = ({ ...props }: GetStartedBtnProps) => {
 					<TooltipTrigger className="cursor-not-allowed" asChild={true}>
 						<span tabIndex={0}>
 							<Button
-								className={cn(
-									"bg-foreground text-secondary hover:bg-foreground/90",
-									props.className,
-								)}
 								aria-label="Get Started"
 								data-testid="get-started-btn"
 								disabled={true}

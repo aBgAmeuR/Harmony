@@ -1,6 +1,6 @@
 export const config = {
 	appName: "Harmony",
-	appVersion: "2.4.0",
+	appVersion: "2.5.0",
 	developer: {
 		name: "@aBgAmeuR",
 		github: "https://github.com/aBgAmeuR",

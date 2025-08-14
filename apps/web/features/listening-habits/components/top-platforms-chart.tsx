@@ -34,7 +34,7 @@ export const TopPlatformsChart = async ({ data }: TopPlatformsChartComponentProp
 				title="Top Platforms"
 				description="Most used platforms"
 			/>
-			<ChartCardContent>
+			<ChartCardContent className="pt-0 sm:pt-0">
 				<ReusablePieChart
 					config={{ msPlayed: { label: "Time Played", color: "var(--chart-1)" } }}
 					data={data}
@@ -56,7 +56,7 @@ export const TopPlatformsChartSkeleton = () => {
 				title="Top Platforms"
 				description="Most used platforms"
 			/>
-			<ChartCardContent>
+			<ChartCardContent className="pt-0 sm:pt-0">
 				<Skeleton className="size-full h-[240px] w-[240px]" />
 			</ChartCardContent>
 		</ChartCard>

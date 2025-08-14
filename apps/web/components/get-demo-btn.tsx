@@ -1,11 +1,11 @@
 "use client";
 
 import { useTransition } from "react";
-import { LoaderCircle } from "lucide-react";
+import { ArrowRight, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button, type buttonVariants } from "@repo/ui/button";
-import { cn, type VariantProps } from "@repo/ui/lib/utils";
+import { type VariantProps, cn } from "@repo/ui/lib/utils";
 
 type GetDemoBtnProps = {
 	label: string;
@@ -16,14 +16,12 @@ export const GetDemoBtn = ({ label, ...props }: GetDemoBtnProps) => {
 	const router = useRouter();
 	const [isTransition, transition] = useTransition();
 
-	const onClick = () =>
-		transition(async () => await router.push("/signin-demo"));
-
 	return (
 		<Button
-			onClick={onClick}
-			variant="link"
-			className={cn("p-0 text-primary", props.className)}
+			onClick={() => transition(async () => await router.push("/signin-demo"))}
+			variant="glass"
+			size="lg"
+			className={cn("group", props.className)}
 			data-testid="get-demo-btn"
 			disabled={isTransition}
 			{...props}
@@ -37,6 +35,12 @@ export const GetDemoBtn = ({ label, ...props }: GetDemoBtnProps) => {
 				/>
 			) : null}
 			{label}
+			<ArrowRight
+				className="opacity-60 transition-transform group-hover:translate-x-0.5"
+				size={16}
+				strokeWidth={2}
+				aria-hidden="true"
+			/>
 		</Button>
 	);
 };

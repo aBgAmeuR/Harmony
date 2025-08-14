@@ -28,7 +28,7 @@ export const DaysHabitsChart = async ({ data }: DaysHabitsChartComponentProps) =
 				title="Listening by Day"
 				description="When you listen most during the week"
 			/>
-			<ChartCardContent>
+			<ChartCardContent className="pt-0 sm:pt-0">
 				<ReusableBarChart
 					data={data}
 					xAxisDataKey="day"
@@ -54,7 +54,7 @@ export const DaysHabitsChartSkeleton = () => {
 				title="Listening by Day"
 				description="When you listen most during the week"
 			/>
-			<ChartCardContent>
+			<ChartCardContent className="pt-0 sm:pt-0">
 				<Skeleton className="aspect-video" />
 			</ChartCardContent>
 		</ChartCard>
