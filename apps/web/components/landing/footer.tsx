@@ -1,7 +1,7 @@
 import { Github } from "lucide-react";
-import Link from "next/link";
 
 import { Button } from "@repo/ui/button";
+import { LinkButton } from "@repo/ui/components/link-button";
 
 import { config } from "~/lib/config";
 
@@ -19,9 +19,9 @@ export const FooterSection = () => {
 					<div className="flex flex-col items-center justify-between gap-4 border-t pt-4 text-muted-foreground text-xs sm:flex-col md:flex-row">
 						<p>
 							Built by{" "}
-							<Button variant="link" className="p-0" asChild={true}>
-								<a href={config.developer.github}>{config.developer.name}</a>
-							</Button>{" "}
+							<LinkButton href={config.developer.github} target="_blank" variant="link" className="p-0">
+								{config.developer.name}
+							</LinkButton>{" "}
 							- <span className="text-muted-foreground">v{config.appVersion}</span>
 						</p>
 						<div className="flex items-center gap-1">
@@ -41,19 +41,15 @@ export const FooterSection = () => {
 								/>
 							) : null}
 							<p className="mx-2">|</p>
-							<Button
+							<LinkButton
+								href={config.githubRepo}
+								target="_blank"
 								variant="ghost"
 								size="icon"
 								aria-label="View on Github"
-								asChild={true}
 							>
-								<Link
-									href={config.githubRepo}
-									target="_blank"
-								>
-									<Github />
-								</Link>
-							</Button>
+								<Github />
+							</LinkButton>
 							<ThemeToggle />
 						</div>
 					</div>

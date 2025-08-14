@@ -5,6 +5,8 @@ import Balancer from "react-wrap-balancer";
 
 import { Badge } from "@repo/ui/badge";
 
+import { config } from "~/lib/config";
+
 import { GetDemoBtn } from "../get-demo-btn";
 import { GetStartedBtn } from "./get-started-btn";
 
@@ -112,10 +114,12 @@ export const ClosingCTASection = () => {
 
             <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center justify-start text-center">
                 <div className="mb-4">
-                    <Badge variant="secondary" className="mb-4">
-                        <Github className="mr-2 size-4" />
-                        Open-source (GPL-3.0)
-                    </Badge>
+                    <a href={config.githubRepo} target="_blank" rel="noopener noreferrer">
+                        <Badge variant="secondary" className="mb-4">
+                            <Github className="mr-2 size-4" />
+                            Open-source (GPL-3.0)
+                        </Badge>
+                    </a>
                     <h2 className="mb-4 font-bold text-4xl leading-tight md:text-5xl">
                         Unlock Your Musical Journey
                     </h2>

@@ -56,7 +56,7 @@ const items = [
 
 export const FAQSection = () => {
 	return (
-		<section className="px-4 py-12 sm:py-16 md:py-20">
+		<section className="px-6 py-12 sm:py-16 md:py-20">
 			<div className="mx-auto w-full max-w-3xl">
 				<h2 className="mb-8 animate-appear text-center font-bold text-2xl opacity-0 delay-500 sm:mb-10 md:mb-12 md:text-3xl">
 					Frequently Asked Questions
