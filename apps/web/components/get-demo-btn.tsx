@@ -16,15 +16,9 @@ export const GetDemoBtn = ({ label, ...props }: GetDemoBtnProps) => {
 	const router = useRouter();
 	const [isTransition, transition] = useTransition();
 
-	const onClick = () =>
-		transition(async () => await router.push("/signin-demo"));
-
-
-
-
 	return (
 		<Button
-			onClick={onClick}
+			onClick={() => transition(async () => await router.push("/signin-demo"))}
 			variant="glass"
 			size="lg"
 			className={cn("group", props.className)}

@@ -43,7 +43,7 @@ export const SkippedHabitsChart = async ({ data }: SkippedHabitsChartComponentPr
 				title="Skipped Tracks"
 				description="How often you skip tracks"
 			/>
-			<ChartCardContent>
+			<ChartCardContent className="pt-0 sm:pt-0">
 				<div className="flex h-40 w-full min-w-60 items-start justify-center overflow-hidden">
 					<ReusableRadialBarChart
 						data={[data]}
@@ -65,7 +65,7 @@ export const SkippedHabitsChartSkeleton = () => {
 				title="Skipped Tracks"
 				description="How often you skip tracks"
 			/>
-			<ChartCardContent>
+			<ChartCardContent className="pt-0 sm:pt-0">
 				<Skeleton className="size-full h-[160px] w-[240px]" />
 			</ChartCardContent>
 		</ChartCard>

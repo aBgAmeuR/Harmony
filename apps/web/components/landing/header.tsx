@@ -1,14 +1,13 @@
 import Link from "next/link";
 
 import { LinkButton } from "@repo/ui/components/link-button";
-import { cn } from "@repo/ui/lib/utils";
+
+import { config } from "~/lib/config";
 
 import { Icons } from "../icons";
 
 const menuItems = [
-	{ name: "Features", href: "#features" },
-	{ name: "How it works", href: "#how-it-works" },
-	{ name: "Privacy", href: "#privacy" },
+	{ name: "Github", href: config.githubRepo },
 	{ name: "Docs", href: "/docs" },
 ];
 
@@ -25,9 +24,9 @@ export const Header = () => {
 							<Icons.logo className="size-8" />
 							Harmony
 						</Link>
-						<ul className="xs:inline-flex hidden flex-1 gap-2">
+						<ul className="hidden flex-1 gap-2 sm:inline-flex">
 							{menuItems.map((item, index) => (
-								<li key={index} className={cn(index === menuItems.length - 1 ? "block" : "hidden md:block")}>
+								<li key={index}>
 									<LinkButton href={item.href} variant="ghost" size="sm">
 										<span>{item.name}</span>
 									</LinkButton>

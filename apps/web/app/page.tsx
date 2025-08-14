@@ -1,9 +1,11 @@
-import { CTASection } from "~/components/landing/cta";
+import { ClosingCTA } from "~/components/landing/closing-cta";
 import { FAQ } from "~/components/landing/faq";
-import { FeaturesV2 } from "~/components/landing/features-v2";
+import { Features } from "~/components/landing/features";
 import { Footer } from "~/components/landing/footer";
 import { Header } from "~/components/landing/header";
 import { Hero2 } from "~/components/landing/hero2";
+import { HowItWorks } from "~/components/landing/how-it-works";
+import { PrivacySecurity } from "~/components/landing/privacy-security";
 import { ValueProps } from "~/components/landing/value-props";
 
 export default async function HomePage() {
@@ -12,9 +14,11 @@ export default async function HomePage() {
 			<Header />
 			<Hero2 />
 			<ValueProps />
-			<FeaturesV2 />
+			<Features />
+			<HowItWorks />
+			<PrivacySecurity />
 			<FAQ />
-			<CTASection />
+			<ClosingCTA />
 			<Footer />
 		</div>
 	);
