@@ -11,7 +11,7 @@ const menuItems = [
 	{ name: "Docs", href: "/docs" },
 ];
 
-export const Header = () => {
+export const HeaderSection = () => {
 	return (
 		<header>
 			<nav className="fixed z-20 w-full border-black/5 border-b bg-background/75 backdrop-blur-lg">

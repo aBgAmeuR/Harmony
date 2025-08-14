@@ -8,7 +8,7 @@ import { Badge } from "@repo/ui/badge";
 import { GetDemoBtn } from "../get-demo-btn";
 import { GetStartedBtn } from "./get-started-btn";
 
-export const ClosingCTA = () => {
+export const ClosingCTASection = () => {
     return (
 
         <section className="relative flex w-full flex-col items-center justify-center overflow-visible px-5 pt-20 pb-10 md:pt-32 md:pb-20 lg:pt-40">

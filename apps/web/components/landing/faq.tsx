@@ -54,7 +54,7 @@ const items = [
 	},
 ];
 
-export function FAQ() {
+export const FAQSection = () => {
 	return (
 		<section className="px-4 py-12 sm:py-16 md:py-20">
 			<div className="mx-auto w-full max-w-3xl">

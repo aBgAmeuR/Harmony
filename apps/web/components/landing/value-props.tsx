@@ -27,7 +27,7 @@ const items = [
     },
 ] as const;
 
-export function ValueProps() {
+export const ValuePropsSection = () => {
     return (
         <section className="bg-card px-6 py-16 sm:py-20">
             <div className="mx-auto grid w-full max-w-5xl grid-cols-1 gap-4 md:grid-cols-3">

@@ -9,7 +9,7 @@ import { GetDemoBtn } from "../get-demo-btn";
 import { ThemeToggle } from "../theme-toggle";
 import { GetStartedBtn } from "./get-started-btn";
 
-export const Footer = () => {
+export const FooterSection = () => {
 	const isMaintenance = process.env.APP_MAINTENANCE === "true";
 
 	return (

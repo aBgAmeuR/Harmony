@@ -1,6 +1,6 @@
 import { ChartNoAxesColumn, CloudUploadIcon, ZapIcon } from "lucide-react"
 
-export const HowItWorks = () => {
+export const HowItWorksSection = () => {
     return (
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-8 px-6 py-12">
             <div className="flex flex-col gap-2 text-center">
