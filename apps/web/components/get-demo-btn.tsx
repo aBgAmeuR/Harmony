@@ -5,7 +5,7 @@ import { ArrowRight, LoaderCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 import { Button, type buttonVariants } from "@repo/ui/button";
-import { type VariantProps, cn } from "@repo/ui/lib/utils";
+import { cn, type VariantProps } from "@repo/ui/lib/utils";
 
 type GetDemoBtnProps = {
 	label: string;
@@ -18,7 +18,7 @@ export const GetDemoBtn = ({ label, ...props }: GetDemoBtnProps) => {
 
 	return (
 		<Button
-			onClick={() => transition(async () => await router.push("/signin-demo"))}
+			onClick={() => transition(async () => router.push("/signin-demo"))}
 			variant="glass"
 			size="lg"
 			className={cn("group", props.className)}

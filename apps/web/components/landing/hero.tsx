@@ -29,7 +29,7 @@ export const HeroSection = () => {
 				<div className="mx-auto mt-2 w-full max-w-5xl translate-y-12">
 					<div className="rounded-2xl border border-foreground/10 bg-card shadow-2xl ring-5 ring-foreground/10">
 						<Image
-							src="/images/home.png"
+							src="/images/home-min.jpg"
 							alt="Harmony dashboard"
 							width={1908}
 							height={1064}
