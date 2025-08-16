@@ -1,75 +1,44 @@
-import { ArrowRight, GithubIcon } from "lucide-react";
-import Link from "next/link";
-
-import { buttonVariants } from "@repo/ui/button";
-import { cn } from "@repo/ui/lib/utils";
+import Image from "next/image";
+import Balancer from "react-wrap-balancer";
 
 import { GetDemoBtn } from "../get-demo-btn";
-import { Announcement } from "./announcement";
 import { GetStartedBtn } from "./get-started-btn";
-import {
-	PageActions,
-	PageHeader,
-	PageHeaderDescription,
-	PageHeaderHeading,
-} from "./page-header";
-import { config } from "~/lib/config";
 
-export const Hero = () => {
+export const HeroSection = () => {
 	const isMaintenance = process.env.APP_MAINTENANCE === "true";
 
 	return (
-		<PageHeader>
-			{/* <InteractiveGridPattern
-        className={cn(
-          "[mask-image:radial-gradient(800px_circle_at_center,rgba(255,255,255,0.8),transparent)]",
-          "animate-appear-zoom opacity-0 delay-600",
-        )}
-        width={50}
-        height={50}
-        squares={[80, 80]}
-        strokeDasharray={"4 2"}
-        squaresClassName="hover:fill-chart-1"
-      /> */}
-			<Announcement className="z-10 animate-appear" />
-			<div
-				aria-hidden="true"
-				className="-top-96 -translate-x-1/2 absolute start-1/2 flex max-w-full overflow-hidden"
-			>
-				<div className="-translate-x-40 h-[44rem] w-[25rem] max-w-full rotate-[-60deg] bg-gradient-to-r from-background/50 to-background blur-3xl" />
-				<div className="-rotate-12 -translate-x-60 h-[50rem] w-[90rem] max-w-full origin-top-left rounded-full bg-gradient-to-tl from-primary-foreground via-primary-foreground to-background blur-3xl" />
-			</div>
-			<PageHeaderHeading className="animate-appear opacity-0 delay-100">
-				Discover Your Listening Story
-			</PageHeaderHeading>
-			<PageHeaderDescription className=" animate-appear opacity-0 delay-200">
-				Get statistics on your Spotify account. Upload your Spotify data and get
-				insights on your listening habits and more detailed information about
-				your account.
-			</PageHeaderDescription>
-			<PageActions className="animate-appear flex-col opacity-0 delay-300">
-				<div className="flex items-center justify-center space-x-4">
-					<GetStartedBtn>Get Started</GetStartedBtn>
-					<Link
-						target="\_blank"
-						rel="noreferrer"
-						href={config.githubRepo}
-						className={cn("group", buttonVariants({ variant: "outline" }))}
-					>
-						<GithubIcon className="size-4" />
-						Github
-						<ArrowRight
-							className="opacity-60 transition-transform group-hover:translate-x-0.5"
-							size={16}
-							strokeWidth={2}
-							aria-hidden="true"
-						/>
-					</Link>
+		<section className="relative overflow-hidden bg-gradient-to-b from-background to-green-100 dark:to-green-900">
+			<div className="relative mx-auto w-full max-w-5xl px-6 pt-24 text-center sm:pt-32 md:pt-48">
+				<h1 className="mx-auto max-w-md text-balance font-extrabold text-2xl leading-[1.05] tracking-tight sm:max-w-xl sm:text-3xl md:max-w-4xl md:text-4xl lg:text-5xl xl:text-6xl">
+					<Balancer>
+						Elevate Your Music Analytics with <span className="text-primary">Harmony</span>
+					</Balancer>
+				</h1>
+				<Balancer className="mx-auto mt-4 max-w-2xl text-balance text-base text-muted-foreground/90 leading-relaxed md:mt-5 md:text-lg">
+					Streamline, analyze, and share your listening insights with our open-source Spotify dashboard.
+				</Balancer>
+
+				<div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+					<GetStartedBtn variant="gradient" size="lg" className="border-foreground/80 from-foreground/90 to-foreground px-4 text-secondary hover:border-foreground hover:from-foreground hover:to-foreground">Get Started</GetStartedBtn>
+					{!isMaintenance ? (
+						<GetDemoBtn label="View Demo" />
+					) : null}
 				</div>
-				{!isMaintenance ? (
-					<GetDemoBtn label="Get a demo of Harmony" className="mt-2" />
-				) : null}
-			</PageActions>
-		</PageHeader>
+
+				<div className="mx-auto mt-2 w-full max-w-5xl translate-y-12">
+					<div className="rounded-2xl border border-foreground/10 bg-card shadow-2xl ring-5 ring-foreground/10">
+						<Image
+							src="/images/home-min.jpg"
+							alt="Harmony dashboard"
+							width={1908}
+							height={1064}
+							className="h-auto w-full rounded-2xl object-cover"
+							priority={true}
+						/>
+					</div>
+				</div>
+			</div>
+		</section>
 	);
 };

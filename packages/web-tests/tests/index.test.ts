@@ -3,9 +3,7 @@ import { expect, test } from "@playwright/test";
 test("homepage has a h1", async ({ page }) => {
 	await page.goto("http://localhost:3000");
 
-	const h1 = await page.waitForSelector("h1");
-
-	expect(await h1.textContent()).toBe("Discover Your Listening Story");
+	await expect(page.getByText("Elevate Your Music Analytics with Harmony").first()).toBeVisible();
 });
 
 test("when maintenance: btn is disabled or enabled", async ({ page }) => {

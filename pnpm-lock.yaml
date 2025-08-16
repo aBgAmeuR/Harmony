@@ -407,7 +407,7 @@ importers:
         specifier: ^0.468.0
         version: 0.468.0(react@19.1.0)
       motion:
-        specifier: ^12.18.1
+        specifier: ^12.23.3
         version: 12.23.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       next:
         specifier: canary

@@ -1,8 +1,8 @@
 import type { PropsWithChildren } from "react";
 import { TriangleAlert } from "lucide-react";
-import Link from "next/link";
 
 import { Button, type buttonVariants } from "@repo/ui/button";
+import { LinkButton } from "@repo/ui/components/link-button";
 import { cn, type VariantProps } from "@repo/ui/lib/utils";
 import {
 	Tooltip,
@@ -28,10 +28,6 @@ export const GetStartedBtn = ({ ...props }: GetStartedBtnProps) => {
 					<TooltipTrigger className="cursor-not-allowed" asChild={true}>
 						<span tabIndex={0}>
 							<Button
-								className={cn(
-									"bg-foreground text-secondary hover:bg-foreground/90",
-									props.className,
-								)}
 								aria-label="Get Started"
 								data-testid="get-started-btn"
 								disabled={true}
@@ -66,20 +62,19 @@ export const GetStartedBtn = ({ ...props }: GetStartedBtnProps) => {
 	}
 
 	return (
-		<Button
+		<LinkButton
+			href="/overview"
+			prefetch={false}
 			className={cn(
 				"bg-foreground text-secondary hover:bg-foreground/90",
 				props.className,
 			)}
 			aria-label="Get Started"
 			data-testid="get-started-btn"
-			asChild={true}
 			{...props}
 		>
-			<Link href="/overview">
-				<Icons.spotify />
-				{props.children}
-			</Link>
-		</Button>
+			<Icons.spotify />
+			{props.children}
+		</LinkButton>
 	);
 };
