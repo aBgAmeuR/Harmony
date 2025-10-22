@@ -20,8 +20,8 @@ export const setTimeRangeAction = async (timeRange: TimeRange) => {
 		.set({ timeRangeStats: timeRange })
 		.where(eq(users.id, userId));
 
-	revalidateTag(`time-range-${userId}`);
-	revalidateTag(`top-artists-${userId}`);
-	revalidateTag(`top-tracks-${userId}`);
+	revalidateTag(`time-range-${userId}`, "hours");
+	revalidateTag(`top-artists-${userId}`, "hours");
+	revalidateTag(`top-tracks-${userId}`, "hours");
 	revalidatePath("/top");
 };

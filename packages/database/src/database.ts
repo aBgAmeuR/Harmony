@@ -10,6 +10,9 @@ const getEnvVariable = (name: string) => {
 	return value;
 };
 
-export const pool = postgres(getEnvVariable("DATABASE_URL"), { max: 1 });
+export const pool = postgres(getEnvVariable("DATABASE_URL"), {
+	max: 1,
+	ssl: 'require'
+});
 
 export const db = drizzle(pool, { schema });

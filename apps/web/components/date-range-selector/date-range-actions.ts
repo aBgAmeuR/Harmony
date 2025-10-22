@@ -13,7 +13,7 @@ export const setDateRangeAction = async (dateStart: Date, dateEnd: Date) => {
 
 	await setDateRange(userId, dateStart, dateEnd);
 
-	revalidateTag(userId);
+	revalidateTag(userId, "hours");
 	revalidatePath("/(app)/");
 };
 

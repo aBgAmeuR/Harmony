@@ -1,10 +1,7 @@
 "server-only";
 
 import { formatDistanceToNowStrict } from "date-fns";
-import {
-	unstable_cacheLife as cacheLife,
-	unstable_cacheTag as cacheTag,
-} from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 import { spotify } from "@repo/spotify";
 

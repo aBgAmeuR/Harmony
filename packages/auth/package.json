@@ -9,23 +9,23 @@
 	"dependencies": {
 		"dotenv": "^16.4.7",
 		"@auth/drizzle-adapter": "^1.9.1",
-		"react": "^19.1.0",
-		"next": "canary",
+		"react": "catalog:react",
+		"next": "catalog:",
 		"next-auth": "^5.0.0-beta.29"
 	},
 	"devDependencies": {
 		"@repo/database": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
-		"@types/node": "^22",
-		"@types/react": "19.1.0",
-		"typescript": "^5"
+		"@types/node": "catalog:",
+		"@types/react": "catalog:react",
+		"typescript": "catalog:"
 	},
 	"exports": {
 		".": {
 			"default": "./src/index.ts"
 		},
-		"./middleware": {
-			"default": "./src/middleware.ts"
+		"./proxy": {
+			"default": "./src/proxy.ts"
 		},
 		"./client": {
 			"default": "./src/client.ts"

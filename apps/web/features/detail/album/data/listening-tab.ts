@@ -2,10 +2,7 @@
 
 import { cache } from "react";
 import { format } from "date-fns";
-import {
-	unstable_cacheLife as cacheLife,
-	unstable_cacheTag as cacheTag,
-} from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 import { and, auth, db, eq, sum, tracks } from "@repo/database";
 

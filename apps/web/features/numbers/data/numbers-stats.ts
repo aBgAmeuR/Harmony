@@ -1,10 +1,7 @@
 "server-only";
 
 import { format } from "light-date";
-import {
-	unstable_cacheLife as cacheLife,
-	unstable_cacheTag as cacheTag,
-} from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 import { auth, db, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";
