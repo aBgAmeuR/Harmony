@@ -40,7 +40,7 @@ export async function createPackageStream(c: Context) {
 				} finally {
 					controller.enqueue(new TextEncoder().encode("{}\n"));
 					controller.close();
-					revalidateTag(userId);
+					revalidateTag(userId, "hours");
 				}
 			},
 		});

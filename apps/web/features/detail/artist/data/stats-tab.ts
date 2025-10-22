@@ -1,9 +1,6 @@
 "server-only";
 
-import {
-	unstable_cacheLife as cacheLife,
-	unstable_cacheTag as cacheTag,
-} from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 import { and, arrayOverlaps, auth, db, sql, sum, tracks } from "@repo/database";
 

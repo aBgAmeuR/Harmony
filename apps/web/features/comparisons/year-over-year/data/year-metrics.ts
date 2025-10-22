@@ -1,7 +1,4 @@
-import {
-	unstable_cacheLife as cacheLife,
-	unstable_cacheTag as cacheTag,
-} from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 import { auth, count, db, desc, sql, sum, tracks } from "@repo/database";
 import { spotify } from "@repo/spotify";

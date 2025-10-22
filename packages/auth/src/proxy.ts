@@ -2,7 +2,7 @@ import NextAuth from "next-auth";
 
 import authConfig from "./auth.config";
 
-export const middleware: any = NextAuth(authConfig).auth(async (req) => {
+export const proxy: unknown = NextAuth(authConfig).auth(async (req) => {
 	const isMaintenance = process.env.APP_MAINTENANCE === "true";
 	const url = req.nextUrl;
 

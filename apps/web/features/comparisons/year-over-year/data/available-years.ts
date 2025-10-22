@@ -1,7 +1,4 @@
-import {
-	unstable_cacheLife as cacheLife,
-	unstable_cacheTag as cacheTag,
-} from "next/cache";
+import { cacheLife, cacheTag } from "next/cache";
 
 import { auth, db, desc, sql, tracks } from "@repo/database";
 

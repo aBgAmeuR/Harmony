@@ -1,4 +1,4 @@
-export { middleware } from "@repo/auth/middleware";
+export { proxy } from "@repo/auth/proxy";
 
 export const config = {
 	matcher: [
@@ -14,5 +14,4 @@ export const config = {
 		"/stats/:path*",
 		"/top/:path*",
 	],
-	runtime: "nodejs",
 };

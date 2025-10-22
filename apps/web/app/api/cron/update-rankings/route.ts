@@ -4,7 +4,6 @@ import { db } from "@repo/database";
 
 import { updateHistoricalRankings } from "~/features/stats/data/historical-rankings";
 
-export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function GET(request: NextRequest) {

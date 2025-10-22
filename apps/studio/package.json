@@ -8,6 +8,6 @@
 	},
 	"devDependencies": {
 		"drizzle-kit": "^0.31.1",
-		"@types/node": "^22"
+		"@types/node": "catalog:"
 	}
 }

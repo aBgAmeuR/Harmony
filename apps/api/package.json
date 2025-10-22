@@ -8,12 +8,12 @@
 		"@repo/database": "workspace:*",
 		"@repo/typescript-config": "workspace:*",
 		"@repo/spotify": "workspace:*",
-		"@types/node": "^22",
-		"typescript": "^5"
+		"@types/node": "catalog:",
+		"typescript": "catalog:"
 	},
 	"dependencies": {
 		"hono": "^4.8.9",
-		"next": "canary",
+		"next": "catalog:",
 		"zod": "^3.24.2"
 	},
 	"exports": {

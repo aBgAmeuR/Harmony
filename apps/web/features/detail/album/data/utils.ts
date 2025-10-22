@@ -1,7 +1,7 @@
 "server-only";
 
 import { cache } from "react";
-import { unstable_cacheLife as cacheLife } from "next/cache";
+import { cacheLife } from "next/cache";
 
 import { spotify } from "@repo/spotify";
 

@@ -17,6 +17,6 @@
 	"devDependencies": {
 		"@repo/typescript-config": "workspace:*",
 		"@types/js-cookie": "^3.0.6",
-		"typescript": "^5"
+		"typescript": "catalog:"
 	}
 }
