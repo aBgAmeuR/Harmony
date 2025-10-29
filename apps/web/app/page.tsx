@@ -1,11 +1,10 @@
 import { ClosingCTASection } from "~/components/landing/closing-cta";
 import { FAQSection } from "~/components/landing/faq";
 import { FeaturesSection } from "~/components/landing/features";
+import { Features2 } from "~/components/landing/features2";
 import { FooterSection } from "~/components/landing/footer";
 import { HeaderSection } from "~/components/landing/header";
 import { HeroSection } from "~/components/landing/hero";
-import { HowItWorksSection } from "~/components/landing/how-it-works";
-import { PrivacySecuritySection } from "~/components/landing/privacy-security";
 import { ValuePropsSection } from "~/components/landing/value-props";
 
 export default async function HomePage() {
@@ -13,10 +12,8 @@ export default async function HomePage() {
 		<div className="dark flex h-full min-h-screen flex-col bg-background text-foreground">
 			<HeaderSection />
 			<HeroSection />
-			<ValuePropsSection />
-			<FeaturesSection />
-			<HowItWorksSection />
-			<PrivacySecuritySection />
+			{/* <ValuePropsSection /> */}
+			<Features2 />
 			<FAQSection />
 			<ClosingCTASection />
 			<FooterSection />

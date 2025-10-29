@@ -16,7 +16,7 @@ export const HeaderSection = () => {
 		<header>
 			<nav className="fixed z-20 w-full border-black/5 border-b bg-background/75 backdrop-blur-lg">
 				<div className="mx-auto max-w-5xl px-6">
-					<div className="relative flex items-center justify-between gap-0 gap-6 py-3">
+					<div className="relative flex items-center justify-between gap-6 py-3">
 						<Link
 							href="/"
 							className="flex items-center gap-2 font-bold text-xl"
