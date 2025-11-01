@@ -47,35 +47,44 @@ const items = [
 
 export const FAQSection = () => {
 	return (
-		<div className="relative mx-auto min-h-screen w-full max-w-5xl lg:border-x">
-			<div className="-translate-x-1/2 -top-px pointer-events-none absolute left-1/2 w-screen border-t" />
-			<div className="grid h-screen grid-cols-1 md:grid-cols-2">
-				<div className="space-y-4 px-4 pt-12 pb-4 md:border-r">
-					<h2 className="font-bold text-3xl md:text-4xl">FAQs</h2>
-					<p className="text-muted-foreground">
-						Here are some common questions and answers that you might encounter
-						when using Harmony.
-					</p>
-				</div>
-				<div className="place-content-center">
-					<Accordion collapsible defaultValue="item-1" type="single">
-						{items.map((item) => (
-							<AccordionItem
-								className="first:border-t last:border-b data-[state=open]:bg-card"
-								key={item.id}
-								value={item.id}
-							>
-								<AccordionTrigger className="px-4 py-4 text-[15px] leading-6 hover:no-underline">
-									{item.title}
-								</AccordionTrigger>
-								<AccordionContent className="px-4 pb-4 text-muted-foreground">
-									{item.content}
-								</AccordionContent>
-							</AccordionItem>
-						))}
-					</Accordion>
-				</div>
+		<div className="mx-auto w-full max-w-3xl space-y-7 px-4 pt-16">
+			<div className="space-y-2">
+				<h2 className="font-semibold text-3xl md:text-4xl">
+					Frequently Asked Questions
+				</h2>
+				<p className="max-w-2xl text-muted-foreground">
+					Here are some common questions and answers that you might encounter
+					when using Harmony.
+				</p>
 			</div>
+			<Accordion
+				className="-space-y-px w-full rounded-lg bg-card shadow dark:bg-card/50"
+				collapsible
+				defaultValue="item-1"
+				type="single"
+			>
+				{items.map((item) => (
+					<AccordionItem
+						className="relative border-x first:rounded-t-lg first:border-t last:rounded-b-lg last:border-b"
+						key={item.id}
+						value={item.id}
+					>
+						<AccordionTrigger className="px-4 py-4 text-[15px] leading-6 hover:no-underline">
+							{item.title}
+						</AccordionTrigger>
+						<AccordionContent className="px-4 pb-4 text-muted-foreground">
+							{item.content}
+						</AccordionContent>
+					</AccordionItem>
+				))}
+			</Accordion>
 		</div>
 	);
 }
+
+
+{/* <h2 className="font-bold text-3xl md:text-4xl">FAQs</h2>
+					<p className="text-muted-foreground">
+						Here are some common questions and answers that you might encounter
+						when using Harmony.
+					</p> */}
