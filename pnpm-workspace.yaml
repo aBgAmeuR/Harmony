@@ -8,16 +8,16 @@ ignoredBuiltDependencies:
 catalog:
   typescript: ^5.9
   "@types/node": ^22
-  next: ^16.0
+  next: ^16.0.10
 
 catalogs:
   react:
-    react: ^19.2.0
-    react-dom: ^19.2.0
-    "@types/react": ^19.2.0
-    "@types/react-dom": ^19.2.0
+    react: ^19.2.3
+    react-dom: ^19.2.3
+    "@types/react": ^19.2.3
+    "@types/react-dom": ^19.2.3
 
   tailwind:
-    tailwindcss: ^4.1.11
+    tailwindcss: ^4.1.18
     postcss: ^8
-    "@tailwindcss/postcss": ^4.1.11
+    "@tailwindcss/postcss": ^4.1.18
