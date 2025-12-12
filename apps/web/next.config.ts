@@ -21,7 +21,6 @@ const nextConfig: NextConfig = {
 			dynamic: 30,
 			static: 180,
 		},
-		clientSegmentCache: true,
 		browserDebugInfoInTerminal: true,
 	},
 	pageExtensions: ["mdx", "ts", "tsx"],
