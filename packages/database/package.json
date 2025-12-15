@@ -19,7 +19,7 @@
 		"postgres": "^3.4.7"
 	},
 	"devDependencies": {
-		"@repo/typescript-config": "workspace:*",
+		"@repo/tsconfig": "workspace:*",
 		"@types/node": "catalog:",
 		"@types/pg": "^8.15.4",
 		"drizzle-kit": "^0.31.1",

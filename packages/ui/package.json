@@ -7,7 +7,7 @@
 		"ui": "pnpm dlx shadcn@latest"
 	},
 	"devDependencies": {
-		"@repo/typescript-config": "workspace:*",
+		"@repo/tsconfig": "workspace:*",
 		"@tailwindcss/postcss": "^4.1.11",
 		"@tailwindcss/typography": "^0.5.16",
 		"@turbo/gen": "^2.4.2",

@@ -24,16 +24,16 @@ const nextConfig: NextConfig = {
 		browserDebugInfoInTerminal: true,
 	},
 	pageExtensions: ["mdx", "ts", "tsx"],
-	async rewrites() {
-		return {
-			afterFiles: [
-				{
-					source: "/docs/:path*",
-					destination: process.env.DOCS_URL + "/docs/:path*",
-				},
-			],
-		};
-	},
+	// async rewrites() {
+	// 	return {
+	// 		afterFiles: [
+	// 			{
+	// 				source: "/docs/:path*",
+	// 				destination: process.env.DOCS_URL + "/docs/:path*",
+	// 			},
+	// 		],
+	// 	};
+	// },
 };
 
 const config: NextConfig = withMDX(nextConfig);

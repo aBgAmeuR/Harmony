@@ -1,14 +1,14 @@
+import { docs } from 'fumadocs-mdx:collections/server'
+import { toFumadocsSource } from 'fumadocs-mdx/runtime/server';
 import { createElement } from "react";
-import { loader } from "fumadocs-core/source";
 import { icons } from "lucide-react";
-
-import { docs } from "@/.source";
+import { loader } from 'fumadocs-core/source';
 
 // See https://fumadocs.vercel.app/docs/headless/source-api for more info
 export const source = loader({
 	// it assigns a URL to your pages
 	baseUrl: "/docs",
-	source: docs.toFumadocsSource(),
+	source: toFumadocsSource(docs, []),
 	icon(icon) {
 		if (!icon) {
 			// You may set a default icon

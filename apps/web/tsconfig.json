@@ -1,19 +1,9 @@
 {
-	"extends": "@repo/typescript-config/nextjs.json",
+	"extends": "@repo/tsconfig/nextjs.json",
 	"compilerOptions": {
-		"plugins": [{ "name": "next" }],
-		"moduleResolution": "bundler",
 		"paths": {
 			"@repo/*": ["../../packages/*/src"],
 			"~/*": ["./*"]
 		}
-	},
-	"include": [
-		"next-env.d.ts",
-		"next.config.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		".next/types/**/*.ts"
-	],
-	"exclude": ["node_modules"]
+	}
 }

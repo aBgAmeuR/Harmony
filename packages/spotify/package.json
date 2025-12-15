@@ -21,7 +21,7 @@
 	"devDependencies": {
 		"@repo/auth": "workspace:*",
 		"@repo/database": "workspace:*",
-		"@repo/typescript-config": "workspace:*",
+		"@repo/tsconfig": "workspace:*",
 		"typescript": "catalog:"
 	}
 }
