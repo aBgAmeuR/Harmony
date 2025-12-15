@@ -9,10 +9,11 @@ import remarkMath from "remark-math";
 
 // You can customise Zod schemas for frontmatter and `meta.json` here
 // see https://fumadocs.vercel.app/docs/mdx/collections#define-docs
-export const docs = defineDocs({
+export const docs: ReturnType<typeof defineDocs> = defineDocs({
 	dir: "content/docs",
 	docs: {
 		schema: frontmatterSchema,
+		async: true
 	},
 	meta: {
 		schema: metaSchema,

@@ -11,7 +11,7 @@
 		"web": "workspace:*"
 	},
 	"devDependencies": {
-		"@repo/typescript-config": "workspace:*",
+		"@repo/tsconfig": "workspace:*",
 		"typescript": "catalog:",
 		"@types/node": "catalog:",
 		"@playwright/test": "^1"
